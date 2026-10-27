@@ -1,0 +1,1 @@
+{"background_color":"#fbf8f1","description":"Scan a bin of loose LEGO and generate new build guides using only the pieces you already own.","display":"standalone","icons":[{"purpose":"any","sizes":"512x512","src":"icon.svg","type":"image/svg+xml"}],"name":"BinBuild","orientation":"portrait","scope":".","short_name":"BinBuild","start_url":".","theme_color":"#ffd500"}

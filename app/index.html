@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffd500">
+  <meta name="description" content="BinBuild — scan a bin of loose LEGO and generate new build guides using only the pieces you already own.">
+  <title>BinBuild</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <style>
+    :root { --yellow: #ffd500; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e4e0d5; --bg: #fbf8f1; --card: #fff; --green: #1f8a4c; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
+    header { background: var(--yellow); padding: 18px 16px 14px; }
+    header h1 { margin: 0; font-size: 28px; letter-spacing: -0.5px; }
+    header p { margin: 4px 0 0; color: #4d4300; font-size: 14px; }
+    main { padding: 16px; max-width: 640px; margin: 0 auto; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+    .card h2 { margin: 0 0 6px; font-size: 18px; }
+    .card p { margin: 0 0 12px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .btn { display: block; width: 100%; padding: 14px; margin: 8px 0; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; text-align: center; }
+    .btn-primary { background: var(--yellow); color: var(--ink); }
+    .btn-secondary { background: #efebe0; color: var(--ink); }
+    .btn-done { background: var(--green); color: #fff; }
+    .btn:disabled { opacity: 0.45; cursor: default; }
+    .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+    .thumb { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #eee; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb button { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(0,0,0,0.65); color: #fff; font-size: 14px; line-height: 1; cursor: pointer; }
+    .thumb .tag { position: absolute; left: 4px; bottom: 4px; background: rgba(0,0,0,0.65); color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 6px; }
+    #status { min-height: 20px; font-size: 14px; color: var(--muted); margin: 4px 0 0; }
+    #status.error { color: #b3261e; }
+    .step { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; }
+    .step .n { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--yellow); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .step p { margin: 3px 0 0; }
+    .hidden { display: none; }
+    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 16px 24px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🧱 BinBuild</h1>
+    <p>Your spare parts are a LEGO set you haven't opened yet.</p>
+  </header>
+
+  <main>
+    <!-- Capture + batch loop -->
+    <section id="capture-view">
+      <div class="card">
+        <h2>1. Snap a handful</h2>
+        <p>Scatter a handful of pieces on the table — one flat layer, no stacking — then take a photo. One top shot plus four side shots per batch.</p>
+        <label class="btn btn-primary" for="camera-input">📷 Take a photo</label>
+        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+        <label class="btn btn-secondary" for="gallery-input">🖼 Choose from gallery</label>
+        <input id="gallery-input" type="file" accept="image/*" multiple hidden>
+        <p id="status" role="status"></p>
+      </div>
+
+      <div class="card" id="batch-card">
+        <h2>2. This batch <span id="batch-count">(0 photos)</span></h2>
+        <p>Photos in this batch. Tap ✕ to drop one.</p>
+        <div class="thumbs" id="thumbs"></div>
+        <button class="btn btn-primary" id="confirm-btn" disabled>✓ Confirm batch</button>
+        <p id="review-note">After confirming, sweep these pieces aside and snap the next handful.</p>
+      </div>
+
+      <div class="card">
+        <h2>3. Finished?</h2>
+        <p>When the whole bin is inventoried, tap Finished to see the summary and ask for a build.</p>
+        <button class="btn btn-done" id="finished-btn" disabled>Finished — show my inventory</button>
+      </div>
+
+      <div class="card">
+        <h2>How it works</h2>
+        <div class="step"><span class="n">1</span><p><strong>Snap</strong> a handful of pieces.</p></div>
+        <div class="step"><span class="n">2</span><p><strong>Review</strong> what the app found — correct or rescan.</p></div>
+        <div class="step"><span class="n">3</span><p><strong>Confirm</strong> the batch into the running inventory.</p></div>
+        <div class="step"><span class="n">4</span><p><strong>Finished</strong> — then ask for a brand-new build from your exact pieces.</p></div>
+      </div>
+    </section>
+
+    <!-- Finished state -->
+    <section id="finished-view" class="hidden">
+      <div class="card">
+        <h2>🎉 Inventory complete</h2>
+        <p id="finished-summary">Batches confirmed. The full inventory summary will appear here once the backend is wired up.</p>
+        <button class="btn btn-primary" id="ask-build-btn">Ask for a build</button>
+        <button class="btn btn-secondary" id="back-btn">← Back to scanning</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>BinBuild · Meta Global AI Developer Hackathon · Not affiliated with the LEGO Group.</footer>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(function (reg) { console.log('BinBuild service worker registered:', reg.scope); })
+        .catch(function (err) { console.log('BinBuild service worker failed:', err); });
+    }
+  </script>
+</body>
+</html>
