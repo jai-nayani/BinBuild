@@ -26,8 +26,14 @@ nearest brick category.
 
 ```
 backend/        FastAPI backend (inventory + generation API)
-  main.py       App factory, health check, batch upload, API route stubs
+  main.py       App factory, health check, batch upload, inventory loop endpoints
+  inventory_db.py        SQLite inventory (binbuild.db, git-ignored)
+  inventory_vocab.py     Generator types, families, colour names
+  segmenter.py           Segmenter interface + whole-photo stub (SAM 3.1 later)
+  spark_client.py        Muse Spark via Baseten (key from .env, never logged)
+  inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
   requirements.txt
+tests/          Standard-library unit tests (python3 -m unittest discover -s tests)
 app/            Phone client (PWA, no build step)
   index.html    Capture loop: snap → review → confirm → Finished
   app.js        5-photo batches, upload to the backend (BACKEND_URL at the top)
@@ -77,6 +83,9 @@ saved under `data/batches/` (git-ignored). Step-by-step phone test:
 
 ## Status
 
-Scaffold only: the FastAPI skeleton and the PWA shell are in place. SAM 3.1,
-Muse Spark, and BrickGPT integration land in the Oct 26–27 spike. No API keys
-or secrets live in this repo.
+The capture loop and the inventory loop work end to end on a real batch:
+upload, classify with Muse Spark (whole-photo stub segmenter until SAM 3.1),
+review, confirm into SQLite, undo, summary. Results and API:
+[INVENTORY-LOOP.md](INVENTORY-LOOP.md). BrickGPT generation is still a stub.
+No API keys or secrets live in this repo: the Baseten key is read from the
+git-ignored `.env` (`BASETEN_API_KEY`).
