@@ -47,6 +47,16 @@
     .backend button { font-size: 12px; margin-left: 6px; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
     ul.batches { margin: 8px 0 12px; padding-left: 20px; font-size: 14px; }
     ul.batches code { font-size: 13px; }
+    .thumb.failed { border: 3px solid var(--red); }
+    .thumb.failed .tag { background: var(--red); }
+    .modal { position: fixed; inset: 0; background: rgba(20, 18, 10, 0.72); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
+    .modal-card { background: var(--card); border-radius: 16px; padding: 18px 16px 12px; width: 100%; max-width: 420px; max-height: 100%; overflow-y: auto; border-top: 6px solid var(--red); }
+    .modal-card h2 { margin: 0 0 8px; font-size: 21px; }
+    .modal-card p { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
+    .modal-card .count { color: var(--red); font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+    .modal-card .reason { font-weight: 600; }
+    .modal-card .hint { color: var(--muted); font-size: 14px; }
+    #retake-img { width: 100%; max-height: 34vh; object-fit: contain; border-radius: 10px; background: #111; display: block; margin: 4px 0 10px; }
     .hidden { display: none; }
     footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 16px 24px; }
   </style>
@@ -63,6 +73,8 @@
     <!-- Native camera inputs, shared by every view. capture="environment" opens the rear camera. -->
     <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
     <input id="gallery-input" type="file" accept="image/*" hidden>
+    <!-- Retakes one failed photo of an uploaded batch, from the pop-up below. -->
+    <input id="retake-input" type="file" accept="image/*" capture="environment" hidden>
 
     <!-- 1. Snap: the next photo the batch needs -->
     <section id="capture-view">
@@ -74,6 +86,7 @@
         <div class="thumbs" id="thumbs"></div>
         <button class="btn btn-primary" id="upload-btn" disabled>⬆ Upload batch (0/5)</button>
         <progress id="upload-progress" class="hidden" max="100" value="0"></progress>
+        <button class="btn btn-done hidden" id="identify-btn">🔍 Identify pieces</button>
         <p class="status" id="status" role="status" aria-live="polite"></p>
       </div>
 
@@ -109,6 +122,20 @@
       </div>
     </section>
   </main>
+
+  <!-- Pop-up for a photo that failed the check: names the view and retakes only that photo. -->
+  <div class="modal hidden" id="retake-modal" role="alertdialog" aria-modal="true" aria-labelledby="retake-title" aria-describedby="retake-reason retake-text">
+    <div class="modal-card">
+      <p class="count" id="retake-count"></p>
+      <h2 id="retake-title">The top photo is unclear</h2>
+      <img id="retake-img" alt="The photo that needs a retake">
+      <p class="reason" id="retake-reason"></p>
+      <p id="retake-text"></p>
+      <p class="hint" id="retake-hint"></p>
+      <label class="btn btn-primary" for="retake-input" id="retake-btn">📷 Retake top photo</label>
+      <p class="status" id="retake-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
 
   <footer>BinBuild · Meta Global AI Developer Hackathon · Not affiliated with the LEGO Group.</footer>
 

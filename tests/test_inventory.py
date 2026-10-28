@@ -22,7 +22,9 @@ VIEWS = ("top", "front", "right", "back", "left")
 
 
 def photos(tag):
-    return [{"view": v, "file": f"{n}-{v}.jpg", "sha256": f"{tag}{n}", "bytes": 100 + n}
+    """Five photos that already passed the photo gate (see test_photo_gate for the gate itself)."""
+    return [{"view": v, "file": f"{n}-{v}.jpg", "sha256": f"{tag}{n}", "bytes": 100 + n,
+             "gate": {"passed": True, "reasons": [], "metrics": {}}}
             for n, v in enumerate(VIEWS, 1)]
 
 
@@ -320,8 +322,8 @@ class TestSparkClient(unittest.TestCase):
 
     def test_request_shape(self):
         client = spark_client.SparkClient(self.KEY, retries=0)
-        reply = {"choices": [{"message": {"content": '```json\n{"pieces": [], "total": 0}\n```'},
-                              "finish_reason": "stop"}], "usage": {"total_tokens": 5}}
+        content = '```json\n{"checks": [{"image": 1, "real_lego": "yes"}], "pieces": [], "total": 0}\n```'
+        reply = {"choices": [{"message": {"content": content}, "finish_reason": "stop"}], "usage": {"total_tokens": 5}}
         seen = {}
 
         def fake_urlopen(request, timeout):
@@ -331,12 +333,26 @@ class TestSparkClient(unittest.TestCase):
 
         with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
             data, _ = client.identify_pieces(b"jpeg", [("front", b"jpeg2")])
-        self.assertEqual(data, {"pieces": [], "total": 0})
+        self.assertEqual(data["pieces"], [])
         self.assertEqual(seen["url"], "https://inference.baseten.co/v1/chat/completions")
         self.assertEqual(seen["body"]["model"], "meta-models/muse-spark-open-1026")
         self.assertEqual(seen["auth"], f"Api-Key {self.KEY}")
         images = [p for p in seen["body"]["messages"][0]["content"] if p["type"] == "image_url"]
         self.assertEqual(len(images), 2)
+
+    def test_reply_without_checks_is_an_error(self):
+        client = spark_client.SparkClient(self.KEY, retries=0)
+        reply = {"choices": [{"message": {"content": '{"pieces": [], "total": 0}'}, "finish_reason": "stop"}]}
+        with mock.patch("urllib.request.urlopen", return_value=io.BytesIO(json.dumps(reply).encode())):
+            with self.assertRaises(spark_client.SparkError):
+                client.identify_pieces(b"jpeg")
+
+    def test_image_checks(self):
+        data = {"checks": [{"image": 1, "real_lego": "Yes"}, {"image": "2", "real_lego": "no", "reason": "a screen"},
+                           {"image": 3, "real_lego": "probably"}, "junk"]}
+        answers = spark_client.image_checks(data, 4)
+        self.assertEqual([answers[n]["answer"] for n in (1, 2, 3, 4)], ["yes", "no", "uncertain", "uncertain"])
+        self.assertEqual(answers[2]["reason"], "a screen")
 
     def test_cut_off_reply_is_an_error(self):
         client = spark_client.SparkClient(self.KEY, retries=0)

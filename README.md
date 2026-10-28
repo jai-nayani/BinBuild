@@ -32,11 +32,12 @@ backend/        FastAPI backend (inventory + generation API)
   segmenter.py           Segmenter interface + whole-photo stub (SAM 3.1 later)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
   inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
+  photo_gate.py          Per-photo checks before any Spark call (blur, light, pieces, fakes)
   requirements.txt
 tests/          Standard-library unit tests (python3 -m unittest discover -s tests)
 app/            Phone client (PWA, no build step)
   index.html    Capture loop: snap → review → confirm → Finished
-  app.js        5-photo batches, upload to the backend (BACKEND_URL at the top)
+  app.js        5-photo batches, upload, retake pop-up, Identify (BACKEND_URL at the top)
   manifest.json PWA manifest
   sw.js         Service worker (offline app shell)
   icon.svg      App icon
@@ -86,6 +87,8 @@ saved under `data/batches/` (git-ignored). Step-by-step phone test:
 The capture loop and the inventory loop work end to end on a real batch:
 upload, classify with Muse Spark (whole-photo stub segmenter until SAM 3.1),
 review, confirm into SQLite, undo, summary. Results and API:
-[INVENTORY-LOOP.md](INVENTORY-LOOP.md). BrickGPT generation is still a stub.
+[INVENTORY-LOOP.md](INVENTORY-LOOP.md). Every photo is checked before any
+Spark call, and a failed photo is retaken on its own:
+[IMAGE-GUARDRAILS.md](IMAGE-GUARDRAILS.md). BrickGPT generation is still a stub.
 No API keys or secrets live in this repo: the Baseten key is read from the
 git-ignored `.env` (`BASETEN_API_KEY`).

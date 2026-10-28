@@ -16,8 +16,14 @@ Idempotency:
   a second batch.
 Undo removes the most recently confirmed batch's inventory rows and reopens
 the batch for review, so it can be corrected and confirmed again.
+
+Photo gate: every photo carries the result of the local checks (and of
+Spark's "is this real LEGO?" check). A batch can't be classified or confirmed
+while any photo is failed or unchecked; a retake replaces one view's photo,
+clears only that photo's result and drops proposals made from the old photos.
 """
 
+import hashlib
 import json
 import os
 import sqlite3
@@ -50,6 +56,11 @@ CREATE TABLE IF NOT EXISTS batch_photos (
     file     TEXT NOT NULL,
     sha256   TEXT NOT NULL,
     bytes    INTEGER NOT NULL,
+    gate_status     TEXT,         -- 'passed' / 'failed'; NULL: not checked yet
+    gate_reasons    TEXT,         -- JSON list of reason codes, most important first
+    gate_metrics    TEXT,         -- JSON: what the gate measured, plus Spark's verdict if it rejected the photo
+    gate_checked_at TEXT,
+    retakes         INTEGER NOT NULL DEFAULT 0,
     UNIQUE (batch_id, view)
 );
 CREATE TABLE IF NOT EXISTS detections (
@@ -97,6 +108,11 @@ CREATE TABLE IF NOT EXISTS builds (
 """
 
 EDITABLE = ("family", "shape", "size", "color", "plain", "count")
+# Columns added after the first release, for databases created before them.
+MIGRATIONS = {
+    "batch_photos": (("gate_status", "TEXT"), ("gate_reasons", "TEXT"), ("gate_metrics", "TEXT"),
+                     ("gate_checked_at", "TEXT"), ("retakes", "INTEGER NOT NULL DEFAULT 0")),
+}
 
 
 class NotFound(LookupError):
@@ -105,6 +121,15 @@ class NotFound(LookupError):
 
 class Conflict(RuntimeError):
     pass
+
+
+class PhotosNotReady(Conflict):
+    """Some photos failed (or haven't had) the photo check."""
+
+    def __init__(self, batch_id, photos):
+        self.photos = photos
+        views = ", ".join(p["view"] for p in photos)
+        super().__init__(f"batch {batch_id} has photos that need a retake first: {views}")
 
 
 def _now() -> str:
@@ -118,6 +143,12 @@ def connect(path=None) -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA)
+    for table, columns in MIGRATIONS.items():
+        have = {r["name"] for r in conn.execute(f"PRAGMA table_info({table})")}
+        for name, kind in columns:
+            if name not in have:
+                conn.execute(f"ALTER TABLE {table} ADD COLUMN {name} {kind}")
+    conn.execute("CREATE INDEX IF NOT EXISTS batch_photos_sha256 ON batch_photos (sha256)")
     return conn
 
 
@@ -148,8 +179,22 @@ def batch_by_fingerprint(conn, fingerprint):
     return dict(row) if row else None
 
 
+def photos_fingerprint(photos) -> str:
+    """Same photos in the same views -> same fingerprint (catches re-uploads)."""
+    return hashlib.sha256("\n".join(f"{p['view']}:{p['sha256']}" for p in photos).encode()).hexdigest()
+
+
+def _gate_values(gate):
+    """(status, reasons JSON, metrics JSON, checked_at) for a gate dict or None."""
+    if gate is None:
+        return None, None, None, None
+    return ("passed" if gate["passed"] else "failed", json.dumps(list(gate["reasons"])),
+            json.dumps(gate.get("metrics") or {}), _now())
+
+
 def register_batch(conn, batch_id, created_at, photos, fingerprint=None):
-    """Record an uploaded batch. photos: dicts with view, file, sha256, bytes.
+    """Record an uploaded batch. photos: dicts with view, file, sha256, bytes
+    and optionally gate ({passed, reasons, metrics}).
     Returns (batch, created); an id already registered is returned unchanged."""
     with _write(conn):
         row = conn.execute("SELECT * FROM batches WHERE id = ?", (batch_id,)).fetchone()
@@ -160,15 +205,102 @@ def register_batch(conn, batch_id, created_at, photos, fingerprint=None):
             (batch_id, created_at, fingerprint),
         )
         conn.executemany(
-            "INSERT INTO batch_photos (batch_id, view, file, sha256, bytes) VALUES (?, ?, ?, ?, ?)",
-            [(batch_id, p["view"], p["file"], p["sha256"], p["bytes"]) for p in photos],
+            "INSERT INTO batch_photos (batch_id, view, file, sha256, bytes, gate_status, gate_reasons,"
+            " gate_metrics, gate_checked_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [(batch_id, p["view"], p["file"], p["sha256"], p["bytes"], *_gate_values(p.get("gate")))
+             for p in photos],
         )
     return get_batch(conn, batch_id), True
 
 
 def batch_photos(conn, batch_id) -> list:
     rows = conn.execute("SELECT * FROM batch_photos WHERE batch_id = ? ORDER BY id", (batch_id,))
-    return [dict(r) for r in rows]
+    photos = []
+    for r in rows:
+        p = dict(r)
+        p["gate_reasons"] = json.loads(p["gate_reasons"]) if p["gate_reasons"] else []
+        p["gate_metrics"] = json.loads(p["gate_metrics"]) if p["gate_metrics"] else {}
+        photos.append(p)
+    return photos
+
+
+def photo_with_hash(conn, sha256, exclude_batch=None, exclude_view=None):
+    """Another stored photo with exactly these bytes, if any."""
+    for r in conn.execute("SELECT batch_id, view FROM batch_photos WHERE sha256 = ? ORDER BY id", (sha256,)):
+        if (r["batch_id"], r["view"]) != (exclude_batch, exclude_view):
+            return dict(r)
+    return None
+
+
+def set_photo_gate(conn, batch_id, view, gate):
+    status, reasons, metrics, checked = _gate_values(gate)
+    cur = conn.execute(
+        "UPDATE batch_photos SET gate_status = ?, gate_reasons = ?, gate_metrics = ?, gate_checked_at = ?"
+        " WHERE batch_id = ? AND view = ?",
+        (status, reasons, metrics, checked, batch_id, view),
+    )
+    if cur.rowcount == 0:
+        raise NotFound(f"no {view} photo in batch {batch_id}")
+
+
+def photos_needing_retake(conn, batch_id) -> list:
+    """Photos that failed the check or haven't been checked."""
+    return [p for p in batch_photos(conn, batch_id) if p["gate_status"] != "passed"]
+
+
+def require_photos_passed(conn, batch_id):
+    waiting = photos_needing_retake(conn, batch_id)
+    if waiting:
+        raise PhotosNotReady(batch_id, waiting)
+
+
+def replace_photo(conn, batch_id, view, file, sha256, size, gate):
+    """A retake of one view: swap the photo and its check result, leave the
+    other photos alone, and drop proposals made from the old photos."""
+    with _write(conn):
+        if _batch_row(conn, batch_id)["status"] == "confirmed":
+            raise Conflict(f"batch {batch_id} is confirmed; undo it before retaking a photo")
+        status, reasons, metrics, checked = _gate_values(gate)
+        cur = conn.execute(
+            "UPDATE batch_photos SET file = ?, sha256 = ?, bytes = ?, gate_status = ?, gate_reasons = ?,"
+            " gate_metrics = ?, gate_checked_at = ?, retakes = retakes + 1 WHERE batch_id = ? AND view = ?",
+            (file, sha256, size, status, reasons, metrics, checked, batch_id, view),
+        )
+        if cur.rowcount == 0:
+            raise NotFound(f"no {view} photo in batch {batch_id}")
+        conn.execute("DELETE FROM detections WHERE batch_id = ?", (batch_id,))
+        fingerprint = photos_fingerprint(batch_photos(conn, batch_id))
+        taken = conn.execute("SELECT 1 FROM batches WHERE fingerprint = ? AND id != ?", (fingerprint, batch_id)).fetchone()
+        conn.execute(
+            "UPDATE batches SET status = 'uploaded', fingerprint = ?, classifier = NULL, classified_at = NULL"
+            " WHERE id = ?",
+            (None if taken else fingerprint, batch_id),
+        )
+
+
+def reject_photos(conn, batch_id, verdicts, note):
+    """Spark said these views are not real LEGO pieces on a table (or wasn't
+    sure): fail them, keep no proposals, and leave the batch unclassified.
+    verdicts: {view: {"answer": ..., "reason": ...}}."""
+    with _write(conn):
+        if _batch_row(conn, batch_id)["status"] == "confirmed":
+            raise Conflict(f"batch {batch_id} is confirmed; undo it first")
+        for view, verdict in verdicts.items():
+            row = conn.execute(
+                "SELECT gate_metrics FROM batch_photos WHERE batch_id = ? AND view = ?", (batch_id, view)
+            ).fetchone()
+            if row is None:
+                raise NotFound(f"no {view} photo in batch {batch_id}")
+            metrics = json.loads(row["gate_metrics"]) if row["gate_metrics"] else {}
+            metrics["spark_check"] = verdict
+            conn.execute(
+                "UPDATE batch_photos SET gate_status = 'failed', gate_reasons = ?, gate_metrics = ?,"
+                " gate_checked_at = ? WHERE batch_id = ? AND view = ?",
+                (json.dumps(["not_real_lego"]), json.dumps(metrics), _now(), batch_id, view),
+            )
+        conn.execute("DELETE FROM detections WHERE batch_id = ?", (batch_id,))
+        conn.execute("UPDATE batches SET status = 'uploaded', classify_error = ? WHERE id = ?",
+                     (str(note)[:2000], batch_id))
 
 
 def _detection_values(d) -> dict:
@@ -211,6 +343,7 @@ def replace_detections(conn, batch_id, detections, classifier):
     with _write(conn):
         if _batch_row(conn, batch_id)["status"] == "confirmed":
             raise Conflict(f"batch {batch_id} is confirmed; undo it before classifying again")
+        require_photos_passed(conn, batch_id)
         conn.execute("DELETE FROM detections WHERE batch_id = ?", (batch_id,))
         for d in detections:
             _insert_detection(conn, batch_id, d, "spark", "proposed")
@@ -282,9 +415,11 @@ def batch_review(conn, batch_id) -> dict:
         for r in conn.execute("SELECT * FROM detections WHERE batch_id = ? ORDER BY id", (batch_id,))
     ]
     kept = [d for d in detections if d["status"] != "rejected"]
+    photos = batch_photos(conn, batch_id)
     return {
         "batch": batch,
-        "photos": batch_photos(conn, batch_id),
+        "photos": photos,
+        "photos_ready": all(p["gate_status"] == "passed" for p in photos),
         "detections": detections,
         "pieces": sum(d["count"] for d in kept),
         "corrections": sum(1 for d in detections if d["status"] in ("corrected", "rejected") or d["source"] == "manual"),
@@ -300,6 +435,7 @@ def confirm_batch(conn, batch_id) -> dict:
                 "SELECT COALESCE(SUM(quantity), 0) FROM inventory_items WHERE batch_id = ?", (batch_id,)
             ).fetchone()
             return {"batch_id": batch_id, "already_confirmed": True, "pieces_added": 0, "pieces_in_batch": pieces}
+        require_photos_passed(conn, batch_id)
         rows = conn.execute(
             "SELECT * FROM detections WHERE batch_id = ? AND status != 'rejected' ORDER BY id", (batch_id,)
         ).fetchall()

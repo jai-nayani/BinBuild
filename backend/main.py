@@ -5,6 +5,11 @@ classify a batch (segmenter + Muse Spark), review and correct the proposals,
 confirm them into the SQLite inventory, undo the last confirmed batch, and
 read the inventory summary. Generation (BrickGPT) still answers 501.
 
+Every photo goes through the photo gate (backend/photo_gate.py) when it is
+uploaded. A batch with a failed photo answers with a "retake" list (which
+view, why, what to do); the phone retakes just that photo, and classify and
+confirm refuse until every photo has passed.
+
 Run locally from the repo root (--host 0.0.0.0 so a phone on the same Wi-Fi
 can reach it):
     uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
@@ -27,7 +32,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from . import inventory_db
+from . import inventory_db, photo_gate
 from .segmenter import WholePhotoSegmenter
 from .spark_client import SparkClient, SparkError
 
@@ -70,11 +75,6 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _fingerprint(photos) -> str:
-    """Same photos in the same views -> same fingerprint (catches re-uploads)."""
-    return hashlib.sha256("\n".join(f"{p['view']}:{p['sha256']}" for p in photos).encode()).hexdigest()
-
-
 def _batch_dir(batch_id: str) -> Path:
     if not BATCH_ID.fullmatch(batch_id):
         raise HTTPException(404, f"no batch {batch_id!r}")
@@ -99,11 +99,57 @@ def _ensure_registered(conn, batch_id: str) -> dict:
             raise HTTPException(422, f"bad photo name in {batch_id}/batch.json")
         photos.append({"view": p["view"], "file": p["file"], "bytes": p["bytes"],
                        "sha256": p.get("sha256") or _sha256_file(folder / p["file"])})
-    fingerprint = _fingerprint(photos)
+    fingerprint = inventory_db.photos_fingerprint(photos)
     if inventory_db.batch_by_fingerprint(conn, fingerprint):
         fingerprint = None  # the same photos are already registered under another id
     batch, _ = inventory_db.register_batch(conn, batch_id, data["created_at"], photos, fingerprint)
     return batch
+
+
+def _check(conn, path, sha256, batch_id, view, earlier=None) -> dict:
+    """The photo gate on one saved photo, plus the duplicate check: the same
+    bytes may not appear twice in a batch or in any other batch (re-sending an
+    old photo would count its pieces twice). earlier: {sha256: view} of photos
+    already checked in this upload."""
+    result = photo_gate.check_photo(path)
+    reasons, metrics = list(result.reasons), dict(result.metrics)
+    if earlier and sha256 in earlier:
+        same = {"batch_id": batch_id, "view": earlier[sha256]}
+    else:
+        same = inventory_db.photo_with_hash(conn, sha256, exclude_batch=batch_id, exclude_view=view)
+    if same:
+        reasons.append("duplicate")
+        metrics["duplicate_of"] = same
+    return {"passed": not reasons, "reasons": sorted(reasons, key=photo_gate.ORDER.index), "metrics": metrics}
+
+
+def _ensure_checked(conn, batch_id):
+    """Run the gate on photos that predate it (uploaded before it existed)."""
+    folder = _batch_dir(batch_id)
+    for p in inventory_db.batch_photos(conn, batch_id):
+        if p["gate_status"] is None:
+            inventory_db.set_photo_gate(conn, batch_id, p["view"],
+                                        _check(conn, folder / p["file"], p["sha256"], batch_id, p["view"]))
+
+
+def _photo_state(conn, batch_id) -> dict:
+    """Per-photo check results, whether the batch is ready, and what to retake."""
+    photos = inventory_db.batch_photos(conn, batch_id)
+    return {
+        "photos": [{k: p[k] for k in ("view", "file", "bytes", "sha256", "gate_status", "gate_reasons", "retakes")}
+                   for p in photos],
+        "ready": all(p["gate_status"] == "passed" for p in photos),
+        "retake": [photo_gate.retake_notice(p["view"], p["gate_reasons"])
+                   for p in photos if p["gate_status"] != "passed"],
+    }
+
+
+def _write_manifest(conn, batch_id):
+    folder = _batch_dir(batch_id)
+    manifest = json.loads((folder / "batch.json").read_text())
+    manifest["photos"] = [{k: p[k] for k in ("view", "file", "bytes", "sha256", "gate_status", "gate_reasons", "retakes")}
+                          for p in inventory_db.batch_photos(conn, batch_id)]
+    (folder / "batch.json").write_text(json.dumps(manifest, indent=2))
 
 
 class Correction(BaseModel):
@@ -150,6 +196,13 @@ def create_app() -> FastAPI:
     async def not_found(request, err):
         return JSONResponse(status_code=404, content={"detail": str(err)})
 
+    @app.exception_handler(inventory_db.PhotosNotReady)
+    async def photos_not_ready(request, err):
+        retake = [photo_gate.retake_notice(p["view"], p["gate_reasons"]) for p in err.photos]
+        detail = retake[0]["message"] if len(retake) == 1 else (
+            f"{len(retake)} photos are unclear ({', '.join(r['view'] for r in retake)}). Please retake just those photos.")
+        return JSONResponse(status_code=422, content={"detail": detail, "ready": False, "retake": retake})
+
     @app.exception_handler(inventory_db.Conflict)
     async def conflict(request, err):
         return JSONResponse(status_code=409, content={"detail": str(err)})
@@ -172,8 +225,10 @@ def create_app() -> FastAPI:
         """Accept one batch: exactly 5 photos, in order top, front, right, back, left.
 
         Saves them under data/batches/<batch_id>/ with a batch.json manifest,
-        registers the batch in the inventory database and returns the new
-        batch_id. A batch is written to a hidden temp folder and renamed into
+        checks every photo with the photo gate, registers the batch in the
+        inventory database and returns the new batch_id with "ready" (all 5
+        passed) and "retake" (one entry per failed photo: view, reason, tip,
+        message). A batch is written to a hidden temp folder and renamed into
         place only when every photo is saved, so a failed upload leaves nothing
         behind. Re-sending the exact same 5 photos (a retried upload) returns
         the existing batch with "duplicate": true instead of a second copy.
@@ -202,11 +257,18 @@ def create_app() -> FastAPI:
                     "view": view, "file": name, "bytes": size, "sha256": sha256,
                     "content_type": photo.content_type, "original_filename": photo.filename,
                 })
-            fingerprint = _fingerprint(saved)
+            fingerprint = inventory_db.photos_fingerprint(saved)
             with closing(inventory_db.connect()) as conn:
                 existing = inventory_db.batch_by_fingerprint(conn, fingerprint)
                 if existing is None:
-                    manifest = {"batch_id": batch_id, "created_at": created.isoformat(), "photos": saved}
+                    earlier = {}
+                    for p in saved:
+                        p["gate"] = _check(conn, partial / p["file"], p["sha256"], batch_id, p["view"], earlier)
+                        earlier.setdefault(p["sha256"], p["view"])
+                        p["gate_status"] = "passed" if p["gate"]["passed"] else "failed"
+                        p["gate_reasons"] = p["gate"]["reasons"]
+                    manifest = {"batch_id": batch_id, "created_at": created.isoformat(),
+                                "photos": [{k: v for k, v in p.items() if k != "gate"} for p in saved]}
                     (partial / "batch.json").write_text(json.dumps(manifest, indent=2))
                     partial.rename(batches / batch_id)
                     try:
@@ -219,15 +281,60 @@ def create_app() -> FastAPI:
                             raise
                 if existing is not None:
                     shutil.rmtree(partial, ignore_errors=True)
-                    kept = inventory_db.batch_photos(conn, existing["id"])
+                    _ensure_checked(conn, existing["id"])
+                    state = _photo_state(conn, existing["id"])
                     return JSONResponse(status_code=200, content={
-                        "batch_id": existing["id"], "photos_saved": len(kept), "duplicate": True,
-                        "photos": [{k: p[k] for k in ("view", "file", "bytes", "sha256")} for p in kept],
+                        "batch_id": existing["id"], "photos_saved": len(state["photos"]), "duplicate": True, **state,
                     })
+                state = _photo_state(conn, batch_id)
         except BaseException:
             shutil.rmtree(partial, ignore_errors=True)
             raise
-        return {"batch_id": batch_id, "photos_saved": len(saved), "photos": saved}
+        return {"batch_id": batch_id, "photos_saved": len(saved), **state}
+
+    @app.post("/api/inventory/batch/{batch_id}/photos/{view}")
+    def retake_batch_photo(batch_id: str, view: str, photo: UploadFile = File(...)):
+        """Retake one photo of a batch. Checks the new photo with the photo gate
+        and replaces only that view: the other photos keep their results. Any
+        proposals made from the old photos are dropped, so the batch must be
+        classified again. The old photo is kept under replaced/. Answers with
+        "passed" for this photo, plus "ready" and "retake" for the batch."""
+        if view not in BATCH_VIEWS:
+            raise HTTPException(404, f"no view {view!r}; views are {', '.join(BATCH_VIEWS)}")
+        if not (photo.content_type or "").startswith("image/"):
+            raise HTTPException(422, f"{photo.filename!r} is not an image ({photo.content_type})")
+        folder = _batch_dir(batch_id)
+        with closing(inventory_db.connect()) as conn:
+            batch = _ensure_registered(conn, batch_id)
+            if batch["status"] == "confirmed":
+                raise HTTPException(409, f"batch {batch_id} is confirmed; undo it before retaking a photo")
+            current = next(p for p in inventory_db.batch_photos(conn, batch_id) if p["view"] == view)
+            suffix = PHOTO_SUFFIXES.get(photo.content_type, ".img")
+            incoming = folder / f".retake-{view}{suffix}.partial"
+            try:
+                size, sha256 = _save_photo(photo, incoming)
+                gate = _check(conn, incoming, sha256, batch_id, view)
+                name = f"{BATCH_VIEWS.index(view) + 1}-{view}{suffix}"
+                replaced = folder / "replaced"
+                replaced.mkdir(exist_ok=True)
+                old = folder / current["file"]
+                kept_as = replaced / f"{datetime.now(timezone.utc):%Y%m%dT%H%M%S%f}-{current['file']}"
+                if old.exists():
+                    old.rename(kept_as)
+                incoming.rename(folder / name)
+            finally:
+                incoming.unlink(missing_ok=True)
+            try:
+                inventory_db.replace_photo(conn, batch_id, view, name, sha256, size, gate)
+            except BaseException:
+                (folder / name).unlink(missing_ok=True)
+                if kept_as.exists():
+                    kept_as.rename(old)
+                raise
+            _write_manifest(conn, batch_id)
+            notice = {} if gate["passed"] else photo_gate.retake_notice(view, gate["reasons"])
+            return {"batch_id": batch_id, "view": view, "passed": gate["passed"], **notice,
+                    **_photo_state(conn, batch_id)}
 
     @app.post("/api/inventory/batch/{batch_id}/classify")
     def classify_inventory_batch(batch_id: str, force: bool = False, context: bool = True):
@@ -240,9 +347,12 @@ def create_app() -> FastAPI:
             batch = _ensure_registered(conn, batch_id)
             if batch["status"] == "confirmed":
                 raise HTTPException(409, f"batch {batch_id} is confirmed; undo it before classifying again")
+            _ensure_checked(conn, batch_id)
             if batch["status"] == "classified" and not force:
                 return {"classified": False, "reason": "already classified; pass force=true to run again",
-                        **inventory_db.batch_review(conn, batch_id)}
+                        **inventory_db.batch_review(conn, batch_id), **_photo_state(conn, batch_id)}
+            # A failed photo stops here, before any Baseten call (422 with the retake list).
+            inventory_db.require_photos_passed(conn, batch_id)
             from . import inventory_pipeline  # needs Pillow; keep the rest of the app importable without it
             try:
                 spark = SparkClient.from_env()
@@ -250,14 +360,17 @@ def create_app() -> FastAPI:
                     conn, batch_id, _batch_dir(batch_id), WholePhotoSegmenter(), spark, context=context)
             except SparkError as err:
                 raise HTTPException(502, f"Spark failed: {err}")
-            return {"classified": True, "run": run, **inventory_db.batch_review(conn, batch_id)}
+            return {"classified": True, "run": run, **inventory_db.batch_review(conn, batch_id),
+                    **_photo_state(conn, batch_id)}
 
     @app.get("/api/inventory/batch/{batch_id}/review")
     def get_batch_review(batch_id: str):
-        """A batch's photos and proposed pieces, with any corrections so far."""
+        """A batch's photos (with their check results) and proposed pieces,
+        with any corrections so far."""
         with closing(inventory_db.connect()) as conn:
             _ensure_registered(conn, batch_id)
-            return inventory_db.batch_review(conn, batch_id)
+            _ensure_checked(conn, batch_id)
+            return {**inventory_db.batch_review(conn, batch_id), **_photo_state(conn, batch_id)}
 
     @app.post("/api/inventory/batch/{batch_id}/review")
     def post_batch_review(batch_id: str, review: Review):
@@ -279,9 +392,11 @@ def create_app() -> FastAPI:
     @app.post("/api/inventory/batch/{batch_id}/confirm")
     def confirm_inventory_batch(batch_id: str):
         """Add the batch's kept pieces (everything not rejected) to the
-        inventory. Confirming again changes nothing ("already_confirmed")."""
+        inventory. Confirming again changes nothing ("already_confirmed").
+        Refused (422, with the retake list) while any photo needs a retake."""
         with closing(inventory_db.connect()) as conn:
             _ensure_registered(conn, batch_id)
+            _ensure_checked(conn, batch_id)
             result = inventory_db.confirm_batch(conn, batch_id)
             return {**result, "summary": inventory_db.inventory_summary(conn)}
 
