@@ -9,8 +9,11 @@ from dataclasses import fields
 
 from backend.brickgpt_constraint import (
     BRICK_TYPES,
+    DEFAULT_SAMPLES,
     KIT_DIR,
     MAX_PATCH_ATTEMPTS,
+    MAX_SAMPLES,
+    MIN_SAMPLES,
     Build,
     Failure,
     canonical,
@@ -21,6 +24,7 @@ from backend.brickgpt_constraint import (
     load_inventory,
     parse_design,
     plan_build,
+    short_studs,
     shortfall,
     tilings,
 )
@@ -161,6 +165,76 @@ class PipelineTest(unittest.TestCase):
     def test_generate_seam_accepts_another_generator(self):
         result = plan_build("chair", PLENTY, generate=lambda c: parse_design("2x2 (0,0,0)\n"))
         self.assertIsInstance(result, Build)
+
+
+class Draws:
+    """A stand-in generate(): hands out kit designs in order, counting calls.
+
+    Once the list runs out it keeps returning the last design.
+    """
+
+    def __init__(self, *categories):
+        self.designs = [generate(c) for c in categories]
+        self.calls = 0
+
+    def __call__(self, category):
+        design = self.designs[min(self.calls, len(self.designs) - 1)]
+        self.calls += 1
+        return design
+
+
+class SamplingTest(unittest.TestCase):
+    def test_first_sample_that_fits_returns_immediately(self):
+        draws = Draws("chair", "bed", "bus")
+        result = plan_build("chair", FITS, generate=draws)
+        self.assertIsInstance(result, Build)
+        self.assertEqual(result.status, "fit")
+        self.assertEqual(result.design, generate("chair"))
+        self.assertEqual(draws.calls, 1)
+
+    def test_later_sample_that_patches_is_returned(self):
+        draws = Draws("bed", "bus", "chair", "train")
+        result = plan_build("chair", NEAR_MISS, generate=draws)
+        self.assertIsInstance(result, Build, getattr(result, "reason", ""))
+        self.assertEqual(result.status, "patched")
+        self.assertEqual(draws.calls, 3)  # bed and bus fail, the chair patches
+        self.assertEqual(shortfall(result.design, NEAR_MISS), {})
+        self.assertTrue(is_connected(result.design))
+        self.assertEqual(footprint(result.design), footprint(generate("chair")))
+
+    def test_all_samples_fail_returns_smallest_shortfall(self):
+        order = ("bed", "bench", "car", "bus")
+        singles = {c: fit_design(generate(c), NEAR_MISS, "chair") for c in order}
+        for single in singles.values():
+            self.assertIsInstance(single, Failure)
+        # bench is short 108 studs; bed, car and bus are short 300+.
+        best = min(singles, key=lambda c: short_studs(singles[c].shortfall))
+        self.assertEqual(best, "bench")
+
+        result = plan_build("chair", NEAR_MISS, generate=Draws(*order), samples=4)
+        self.assertIsInstance(result, Failure)
+        self.assertEqual(result.shortfall, singles["bench"].shortfall)
+        self.assertEqual(result.still_short, singles["bench"].still_short)
+        self.assertEqual(result.attempts, singles["bench"].attempts)
+        self.assertEqual(result.tried, singles["bench"].tried)  # its own attempt log
+        self.assertEqual(result.attempts, MAX_PATCH_ATTEMPTS)
+        self.assertFalse(hasattr(result, "design"))
+
+    def test_sample_count_is_respected(self):
+        for n in range(MIN_SAMPLES, MAX_SAMPLES + 1):
+            draws = Draws("bed")  # fails under SHORT every time
+            self.assertIsInstance(plan_build("bed", SHORT, generate=draws, samples=n), Failure)
+            self.assertEqual(draws.calls, n)
+        draws = Draws("bed")
+        plan_build("bed", SHORT, generate=draws)
+        self.assertEqual(draws.calls, DEFAULT_SAMPLES)
+
+    def test_sample_count_outside_the_range_is_rejected(self):
+        for n in (MIN_SAMPLES - 1, MAX_SAMPLES + 1):
+            draws = Draws("chair")
+            with self.assertRaises(ValueError):
+                plan_build("chair", FITS, generate=draws, samples=n)
+            self.assertEqual(draws.calls, 0)
 
 
 class NeverReturnRejectedDesignTest(unittest.TestCase):

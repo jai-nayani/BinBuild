@@ -10,10 +10,13 @@ Path A is generate -> filter -> patch:
    short brick with spare owned bricks at the same height. Counts and
    connectivity are re-checked after every swap; at most MAX_PATCH_ATTEMPTS
    swaps are tried per design.
+4. Sample: plan_build draws up to N designs (DEFAULT_SAMPLES, range
+   MIN_SAMPLES-MAX_SAMPLES) and returns the first that fits or patches.
 
 Anything that still does not fit, or is not connected, comes back as a
 Failure. A Failure names the shortfall and carries no design, so a rejected
-design can never reach the caller.
+design can never reach the caller. If all N samples fail, plan_build returns
+the Failure whose design came closest to the bin (fewest short studs).
 
 "Connected" means every brick is joined to every other brick through stud
 contacts (overlapping footprints on adjacent layers). It is NOT a claim of
@@ -26,16 +29,19 @@ Run the full inventory x design matrix from the repo root:
 from __future__ import annotations
 
 import json
+import random
 import re
 import time
 from collections import Counter
 from dataclasses import dataclass, field
-from math import ceil
+from math import ceil, comb
 from pathlib import Path
 
 GRID = 20  # BrickGPT works on a 20 x 20 x 20 grid
 MAX_PATCH_ATTEMPTS = 20
 TILINGS_PER_BRICK = 8  # fewest-piece tilings considered for each short brick
+DEFAULT_SAMPLES, MIN_SAMPLES, MAX_SAMPLES = 6, 4, 8  # designs drawn per plan_build
+SAMPLING_TRIALS = 100  # seeded shuffles per cell in the sampling report
 
 BRICK_TYPES = ("1x1", "1x2", "1x4", "1x6", "1x8", "2x2", "2x4", "2x6")
 CATEGORIES = (
@@ -374,10 +380,37 @@ def fit_design(design: Design, inventory: dict, category: str = "",
                  [line for line in log if line.endswith(": ok")])
 
 
+def short_studs(counts: dict) -> int:
+    """Size of a shortfall in studs, so a missing 2x6 outweighs a missing 1x1."""
+    return sum(_studs(t) * n for t, n in counts.items())
+
+
 def plan_build(category: str, inventory: dict, generate=generate,
-               max_attempts: int = MAX_PATCH_ATTEMPTS):
-    """generate -> filter -> patch for one category."""
-    return fit_design(generate(category), inventory, category, max_attempts)
+               max_attempts: int = MAX_PATCH_ATTEMPTS, samples: int = DEFAULT_SAMPLES):
+    """generate -> filter -> patch, drawing up to `samples` designs for one category.
+
+    Returns the first sample that fits or patches; later samples are never
+    generated. If every sample fails, returns the Failure with the fewest short
+    studs in its generated design (ties: fewest still short after patching,
+    then the earlier sample), with that sample's own attempt log. A design
+    that fits on counts but is not connected has 0 short studs, so it ranks
+    first among failures.
+
+    A repeated design (the stub returns the same one every call) still counts
+    as a draw, but its result is reused rather than patched again.
+    """
+    if not MIN_SAMPLES <= samples <= MAX_SAMPLES:
+        raise ValueError(f"samples must be {MIN_SAMPLES}-{MAX_SAMPLES}, got {samples}")
+    failures, seen = [], {}
+    for _ in range(samples):
+        design = tuple(generate(category))
+        if design not in seen:
+            seen[design] = fit_design(design, inventory, category, max_attempts)
+        result = seen[design]
+        if isinstance(result, Build):
+            return result
+        failures.append(result)
+    return min(failures, key=lambda f: (short_studs(f.shortfall), short_studs(f.still_short)))
 
 
 # --- matrix runner ------------------------------------------------------------
@@ -407,6 +440,40 @@ def main() -> None:
                     after += f"; still short {_fmt(result.still_short)} after patching"
             print(f"| {category} | {len(design)} | {outcome} | {result.attempts} | {ms:.1f} "
                   f"| {_fmt(count_bricks(design))} | {after} |")
+    sampling_report()
+
+
+def sampling_report(trials: int = SAMPLING_TRIALS) -> None:
+    """plan_build with N samples drawn from the kit designs in a random order.
+
+    The stub has one design per category, so N samples of one category are all
+    the same design. As a stand-in for N different live samples, each trial
+    shuffles the 10 kit designs and hands them out in that order, ignoring the
+    category: this measures "build anything from this bin", not one category.
+    """
+    designs = [generate(p.stem) for p in sorted(DESIGNS_DIR.glob("*.txt"))]
+    print(f"\n### Sampling: {len(designs)} kit designs in random order, "
+          f"{trials} seeded shuffles per row\n")
+    print("| inventory | N | builds found | exact rate | mean draws | mean ms |")
+    print("|---|---|---|---|---|---|")
+    for inv_path in sorted(KIT_DIR.glob("test-inventory-*.json")):
+        inventory = load_inventory(inv_path)
+        buildable = sum(isinstance(fit_design(d, inventory), Build) for d in designs)
+        for n in range(MIN_SAMPLES, MAX_SAMPLES + 1):
+            rng = random.Random(n)  # same shuffles for every inventory at a given N
+            found = draws = 0
+            start = time.perf_counter()
+            for _ in range(trials):
+                order = rng.sample(designs, len(designs))
+                remaining = iter(order)
+                result = plan_build("any", inventory, lambda _c: next(remaining), samples=n)
+                found += isinstance(result, Build)
+                draws += len(order) - sum(1 for _ in remaining)  # draws = designs consumed
+            ms = (time.perf_counter() - start) * 1000 / trials
+            # A trial succeeds iff one of its first n designs is buildable.
+            exact = 1 - comb(len(designs) - buildable, n) / comb(len(designs), n)
+            print(f"| {inv_path.name} | {n} | {found}/{trials} | {exact:.1%} "
+                  f"| {draws / trials:.2f} | {ms:.1f} |")
 
 
 if __name__ == "__main__":

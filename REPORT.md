@@ -5,8 +5,8 @@ Branch `spike/constraint-path-a`. Module `backend/brickgpt_constraint.py`, tests
 unchanged from the kit).
 
 ```bash
-python3 -m unittest backend.test_brickgpt_constraint -v   # 26 tests, ~0.1 s, stdlib only
-python3 -m backend.brickgpt_constraint                     # prints the matrix below
+python3 -m unittest backend.test_brickgpt_constraint -v   # 31 tests, ~0.25 s, stdlib only
+python3 -m backend.brickgpt_constraint                     # prints the matrix and sampling tables below (~10 s)
 ```
 
 ## Verdict
@@ -131,6 +131,69 @@ Single run on an Apple M2 with Python 3.14.6. The "ms" column covers generate
 | tower | 68 | FAILED: not connected: 2 separate parts (63+5 bricks) | 0 | 0.3 | 1x1:14 1x2:38 2x2:15 2x6:1 | short 1x1:4 1x2:28 2x2:13 |
 | train | 37 | FAILED: not patchable: short bricks cover 87 studs but spare pieces only 4 | 0 | 0.3 | 1x1:11 1x2:10 1x6:5 1x8:1 2x2:1 2x4:3 2x6:6 | short 1x1:1 1x6:5 2x4:1 2x6:4 |
 
+## Sampling: N designs per `plan_build`
+
+**How it works:**
+- `plan_build(category, inventory, samples=6)` draws up to N designs from
+  `generate()`. N defaults to 6 and must be 4–8, or it raises `ValueError`.
+- It returns the first design that fits or patches. Later samples are never
+  generated.
+- If all N fail, it returns the `Failure` with the fewest short studs in its
+  generated design, with that sample's own attempt log. Ties go to fewest
+  still short after patching, then to the earlier sample.
+- The `Failure` shape is unchanged.
+- A repeated design still counts as a draw, but its result is reused rather
+  than patched again.
+
+**With the stub, sampling one category changes nothing.**
+- The stub has one design per category, so all N draws of a category are the
+  same design.
+- I re-ran the 30 inventory × category cells through `plan_build` with N=6:
+  all 30 give the same outcome as the single-shot matrix above.
+
+**A proxy for N different live samples.** `sampling_report()` shuffles the 10
+kit designs and hands them out in that order, ignoring the category. That
+measures "build anything from this bin", not N samples of one category. Each
+row below is 100 seeded shuffles of real `plan_build` calls. The "exact" rate
+is 1 − C(10−k, N) / C(10, N), where k is the number of kit designs that fit or
+patch for that bin: k = 2 (chair, train) for fits and near-miss, 0 for short.
+
+| inventory | N=4 | N=5 | N=6 | N=7 | N=8 | mean draws at N=6 | mean ms at N=6 |
+|---|---|---|---|---|---|---|---|
+| fits | 69% (exact 66.7%) | 76% (77.8%) | 88% (86.7%) | 95% (93.3%) | 96% (97.8%) | 3.13 | 2.7 |
+| near-miss | 69% (66.7%) | 76% (77.8%) | 88% (86.7%) | 95% (93.3%) | 96% (97.8%) | 3.13 | 13.7 |
+| short | 0% | 0% | 0% | 0% | 0% | 6.00 (always N) | 2.7 |
+
+- The measured rates track the exact ones within sampling noise.
+- "mean ms" is the constraint layer only, with designs pre-parsed. Generation
+  is stubbed, so it isn't timed.
+- Live samples are independent draws rather than a shuffle without
+  replacement. At the same 2-in-10 hit rate, 1 − 0.8^N gives 59.0%, 67.2%,
+  73.8%, 79.0% and 83.2% for N = 4 to 8.
+
+**Which failure gets returned.** Under the fits and near-miss bins, the
+"closest" failure is usually the **tower** whenever it is drawn: only 52 and
+28 short studs. But the tower fails because it is *not connected*, which
+buying bricks can't fix. Under the short bin, the closest is the train (87
+studs), else the tower (112). This follows the rule as specified. If the UI
+will show the shortfall as "you're short X", consider ranking disconnected
+failures after count failures.
+
+**Recommended N: keep 6 as the default.**
+- The constraint layer averages under 17 ms per `plan_build` here, and the
+  slowest single sample is bench's 31 ms patch. So the real cost is N × live
+  generation time. A bin that can't build anything always pays
+  for all N.
+- Going from 4 to 6 adds about 15–20 points of hit rate under both estimates.
+  Going from 6 to 8 adds about 10, for a third more worst-case latency.
+- Revisit once live generation time per design is measured. If it is a few
+  seconds or less, use 8. If it is slow, add an up-front "this bin can't build
+  anything" check rather than lowering N.
+- These rates come from chair-centred test bins and a cross-category pool.
+  They show the shape of the curve, not the live per-category hit rate.
+- The bigger lever is the per-sample hit rate, not N. Prompting BrickGPT
+  towards designs that suit the bin, or Path B, would raise it.
+
 ## Why designs fail, and the patcher's limits
 
 1. **Not enough spare studs (most failures).** The generated designs use far
@@ -185,15 +248,16 @@ Single run on an Apple M2 with Python 3.14.6. The "ms" column covers generate
   - A decision on BrickGPT's physics-based rollback, which needs a Gurobi
     stability solver: it must be disabled or replaced without a Gurobi
     licence. Our connectivity check remains the final gate either way.
-- **The real change is a sampling loop:**
-  - Since Path A filters after generating, `plan_build` should draw N
-    designs (say 4–8) and return the first that fits or patches.
-  - Only after all N fail should it return a `Failure`, the one with the
-    smallest shortfall.
+- **The sampling loop is in place** (see "Sampling" above):
+  - `plan_build` draws up to N designs and returns the first that fits or
+    patches, else the smallest-shortfall `Failure`.
+  - Live, each `generate()` call must return a *new* sample, e.g. a fresh seed
+    per call.
   - That puts generation time × N on the request path. The filter is under
     1 ms and patching at most ~31 ms, so generation dominates.
-  - Hopeless designs should be rejected by the up-front checks before any
-    patching.
+  - Hopeless designs are rejected by the up-front checks before any patching.
+  - A sample that `parse_design` rejects currently raises out of
+    `plan_build`. Live, it should count as one failed draw.
 - **The Path B signal:** if, on real scanned bins, N free samples rarely land
   close enough for the patcher, that is the evidence for the in-loop
   constraint (Path B).
