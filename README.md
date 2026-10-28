@@ -26,11 +26,11 @@ nearest brick category.
 
 ```
 backend/        FastAPI backend (inventory + generation API)
-  main.py       App factory, health check, API route stubs
+  main.py       App factory, health check, batch upload, API route stubs
   requirements.txt
 app/            Phone client (PWA, no build step)
   index.html    Capture loop: snap → review → confirm → Finished
-  app.js        Batch state + placeholder wiring
+  app.js        5-photo batches, upload to the backend (BACKEND_URL at the top)
   manifest.json PWA manifest
   sw.js         Service worker (offline app shell)
   icon.svg      App icon
@@ -44,7 +44,7 @@ Backend (from the repo root):
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r backend/requirements.txt
-uvicorn backend.main:app --reload --port 8000
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Check it: `curl http://localhost:8000/health` → `{"status": "ok", ...}`.
@@ -53,11 +53,15 @@ API docs: http://localhost:8000/docs
 PWA (from the repo root, in another terminal):
 
 ```bash
-python3 -m http.server 8080 --directory app
+python3 -m http.server 8080 --bind 0.0.0.0 --directory app
 ```
 
-Open http://localhost:8080 on your phone (same Wi-Fi) or desktop. Camera
-capture needs a secure context — `localhost` counts, or serve over HTTPS.
+Open http://localhost:8080 on the desktop, or `http://<this Mac's Wi-Fi
+address>:8080` on a phone on the same Wi-Fi. The camera uses the native file
+input (`capture="environment"`), which works over plain HTTP; the service
+worker is optional and only runs on HTTPS or localhost. Uploaded batches are
+saved under `data/batches/` (git-ignored). Step-by-step phone test:
+[TESTING.md](TESTING.md).
 
 ## Build-week plan (Oct 26 – Nov 4)
 
