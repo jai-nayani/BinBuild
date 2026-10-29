@@ -8,14 +8,18 @@ Every stage goes through the HTTP endpoints the phone uses, on a throwaway
 database and data folder: the real binbuild.db is never touched, and nothing
 is edited by hand between stages.
 
-No Baseten call. Spark is replaced by a recorded reply
+No Baseten or Model API call. Spark is replaced by a recorded reply
 (tests/fixtures/kit-batch-recorded.json) that is only played back for the
-exact photos it was recorded on (sha256 per view). The review corrections
-recorded with it go through the review endpoint, as a person would send them
-from a review screen.
+exact photos it was recorded on (sha256 per view). With --sam, classify also
+runs the SAM 3.1 pass, with SAM's replies and Spark's close-up replies played
+back from tests/fixtures/kit-batch-sam-recorded.json (each only for the exact
+request it was recorded for). The review then brings every piece to its
+verified label through the review endpoint, as a person would from the review
+screen, and the report counts the corrections that took.
 
 From the repo root (needs the backend requirements):
     python -m backend.full_loop                  # the kit batch; report under data/full-loop/
+    python -m backend.full_loop --sam            # the same, with the SAM 3.1 pass
     python -m backend.full_loop --batch DIR --recorded FILE --out DIR --design train
 """
 
@@ -39,6 +43,8 @@ from unittest import mock
 REPO = Path(__file__).resolve().parent.parent
 KIT_BATCH = REPO / "data" / "batches" / "20261028-192429-119901"
 RECORDED = REPO / "tests" / "fixtures" / "kit-batch-recorded.json"
+SAM_RECORDED = REPO / "tests" / "fixtures" / "kit-batch-sam-recorded.json"
+FIELDS = ("family", "shape", "size", "color", "plain")
 VIEWS = ("top", "front", "right", "back", "left")
 
 
@@ -47,18 +53,52 @@ class StageFailed(RuntimeError):
 
 
 class ReplaySpark:
-    """Stands in for SparkClient: plays back one recorded reply."""
+    """Stands in for SparkClient: plays back one recorded whole-photo reply
+    and, for the SAM pass, recorded close-up replies (tiles: [{"count",
+    "hints", "reply"}]), each only for a sheet with the same count and hints."""
 
-    def __init__(self, recorded):
+    def __init__(self, recorded, tiles=()):
         self.recorded = recorded
+        self.tiles = list(tiles)
         self.model = "replay:" + recorded.get("model", "meta-models/muse-spark-open-1026")
         self.calls = 0
+        self.tile_calls = 0
+
+    def name_tiles(self, sheet_jpeg, count, context=(), hints=None, max_tokens=0):
+        from .spark_client import SparkError, SparkReply
+        for rec in self.tiles:
+            if rec["count"] == count and rec["hints"] == (list(hints) if hints else None):
+                self.tile_calls += 1
+                return copy.deepcopy(rec["reply"]), SparkReply("", "stop", {"replayed": True}, 0.0)
+        raise SparkError(f"no recorded close-up reply for this sheet of {count}")
 
     def identify_pieces(self, image_jpeg, context=(), max_tokens=0):
         from .spark_client import SparkReply
         self.calls += 1
         reply = SparkReply("", self.recorded["recorded"]["finish_reason"], {"replayed": True}, 0.0)
         return copy.deepcopy(self.recorded["reply"]), reply
+
+
+class ReplaySam:
+    """Stands in for SamClient: plays back recorded SAM replies. A request is
+    answered only if its image size and point prompts match a recorded one
+    exactly; anything else is refused."""
+
+    model = "replay:sam-3.1"
+
+    def __init__(self, recorded):
+        self.recorded = recorded  # [{"size": [w, h], "points": [[id, x, y], ...], "output": text}]
+        self.requests = 0
+
+    def segment_points(self, image_jpeg, size, points):
+        from .sam_client import SamError, SamReply, parse_output
+        want = [list(p) for p in points]
+        for rec in self.recorded:
+            if list(rec["size"]) == list(size) and [list(p) for p in rec["points"]] == want:
+                self.requests += 1
+                masks, diagnostics = parse_output(rec["output"])
+                return SamReply(masks, 0.0, {"replayed": True}, rec["output"], diagnostics)
+        raise SamError(f"no recorded SAM reply for these {len(want)} points")
 
 
 class Api:
@@ -96,14 +136,19 @@ def _free_port():
 
 
 @contextmanager
-def server(workdir, spark):
-    """The real app on a free local port, with its database, data folder and
-    Spark swapped for throwaway ones."""
+def server(workdir, spark, sam=None):
+    """The real app on a free local port, with its database, data folder,
+    Spark and SAM swapped for throwaway ones. Without sam, asking for the SAM
+    pass fails as it would with no key: no real Model API call is possible."""
     import uvicorn
     from . import inventory_db, main
+    from .sam_client import SamError
     patches = [mock.patch.object(inventory_db, "DB_PATH", Path(workdir) / "binbuild.db"),
                mock.patch.object(main, "DATA_DIR", Path(workdir) / "data"),
-               mock.patch.object(main.SparkClient, "from_env", return_value=spark)]
+               mock.patch.object(main.SparkClient, "from_env", return_value=spark),
+               mock.patch.object(main.SamClient, "from_env", **(
+                   {"return_value": sam} if sam is not None else
+                   {"side_effect": SamError("no Meta Model API key (test server)")}))]
     for p in patches:
         p.start()
     port = _free_port()
@@ -147,23 +192,38 @@ def verified_summary(db_path):
         return inventory_db.inventory_summary(conn)
 
 
-def run(batch_dir, recorded, out_dir, known_set="house-and-tree", design="train") -> dict:
+def verified_labels(recorded) -> list:
+    """Each piece's verified label, in reply order: Spark's piece, normalised
+    as classify stores it, with the review's correction where there was one."""
+    from .inventory_pipeline import to_detection
+    from .segmenter import Region
+    fixes = {r["piece"]: r for r in recorded["review"]}
+    labels = []
+    for n, piece in enumerate(recorded["reply"]["pieces"]):
+        d = fixes[n] if n in fixes else to_detection(piece, Region((0, 0, 1, 1)))
+        labels.append({k: d[k] for k in FIELDS})
+    return labels
+
+
+def run(batch_dir, recorded, out_dir, known_set="house-and-tree", design="train", sam_recorded=None) -> dict:
     """The whole loop. Raises StageFailed at the first stage that doesn't
-    answer as expected; returns the report."""
+    answer as expected; returns the report. sam_recorded: also run the SAM
+    3.1 pass, played back from this recording."""
     photos = load_photos(batch_dir)
     for view, (_, data) in zip(VIEWS, photos):
         if hashlib.sha256(data).hexdigest() != recorded["photos_sha256"][view]:
             raise StageFailed(f"the recorded reply was not recorded on this batch's {view} photo; refusing to replay it")
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    spark = ReplaySpark(recorded)
+    spark = ReplaySpark(recorded, tiles=(sam_recorded or {}).get("tiles", ()))
+    sam = ReplaySam(sam_recorded["sam"]) if sam_recorded else None
     stages = []
     report = {"batch": str(batch_dir), "recorded": recorded.get("about", ""), "stages": stages}
 
     def stage(name, started, **facts):
         stages.append({"stage": name, "seconds": round(time.perf_counter() - started, 2), **facts})
 
-    with tempfile.TemporaryDirectory() as workdir, server(workdir, spark) as api:
+    with tempfile.TemporaryDirectory() as workdir, server(workdir, spark, sam) as api:
         t = time.perf_counter()
         status, up = api.call("POST", "/api/inventory/batch", files=photos)
         _expect("upload", status, 201, up)
@@ -174,29 +234,38 @@ def run(batch_dir, recorded, out_dir, known_set="house-and-tree", design="train"
               gate={p["view"]: p["gate_status"] for p in up["photos"]})
 
         t = time.perf_counter()
-        status, cls = api.call("POST", f"/api/inventory/batch/{batch}/classify")
+        status, cls = api.call("POST", f"/api/inventory/batch/{batch}/classify" + ("?segmenter=sam" if sam else ""))
         _expect("classify", status, 200, cls)
         checks = {v: c["answer"] for v, c in cls["run"]["calls"][0]["checks"].items()}
         stage("2. classify (recorded Spark reply)", t, spark_calls=spark.calls, pieces=cls["pieces"],
               real_lego_check=checks, classifier=cls["run"]["classifier"],
               recorded_live_seconds=recorded["recorded"]["seconds"])
+        if sam:
+            sp = cls["run"]["sam_pass"]
+            stages[-1]["stage"] = "2. classify: whole photo, then SAM 3.1 close-ups (recorded replies)"
+            stages[-1].update(classifier=sp["classifier"], sam_requests=sam.requests, masks=sp["masks"],
+                              points=sp["points"], no_mask=sp["no_mask"], same_piece=sp["same_piece"],
+                              spark_tile_calls=spark.tile_calls, recorded_live=sam_recorded["recorded"])
 
         t = time.perf_counter()
         detections = sorted(cls["detections"], key=lambda d: d["id"])
-        fixes = {r["piece"]: r for r in recorded["review"]}
-        corrections = []
-        for n, d in enumerate(detections):
-            if n in fixes:
-                fix = {k: fixes[n][k] for k in ("family", "shape", "size", "color", "plain")}
-                corrections.append({"detection_id": d["id"], **fix, "status": "accepted"})
-            else:
+        verified = verified_labels(recorded)
+        if len(detections) != len(verified):
+            raise StageFailed(f"review: {len(detections)} proposals for {len(verified)} verified pieces")
+        corrections, fixed, wording = [], [], []
+        for n, (d, want) in enumerate(zip(detections, verified), 1):
+            if all(d[k] == want[k] for k in FIELDS):
                 corrections.append({"detection_id": d["id"], "status": "accepted"})
+                continue
+            (wording if all(d[k] == want[k] for k in FIELDS if k != "shape") else fixed).append(n)
+            corrections.append({"detection_id": d["id"], **want, "status": "accepted"})
         status, rev = api.call("POST", f"/api/inventory/batch/{batch}/review", json_body={"corrections": corrections})
         _expect("review", status, 200, rev)
         status, conf = api.call("POST", f"/api/inventory/batch/{batch}/confirm")
         _expect("confirm", status, 200, conf)
         summary = conf["summary"]
-        stage("3. review + confirm", t, corrected=len(fixes), accepted=len(detections) - len(fixes),
+        stage("3. review + confirm", t, corrected=len(fixed), corrected_pieces=fixed, shape_wording_only=len(wording),
+              accepted=len(detections) - len(fixed) - len(wording),
               confirmed=conf.get("pieces_added", summary["total_pieces"]))
 
         t = time.perf_counter()
@@ -258,8 +327,11 @@ def main():
                         default=REPO / "data" / "full-loop" / f"{datetime.now(timezone.utc):%Y%m%d-%H%M%S}")
     parser.add_argument("--set", default="house-and-tree")
     parser.add_argument("--design", default="train")
+    parser.add_argument("--sam", action="store_true", help="also run the SAM 3.1 pass (recorded replies)")
+    parser.add_argument("--sam-recorded", type=Path, default=SAM_RECORDED)
     args = parser.parse_args()
-    report = run(args.batch, json.loads(args.recorded.read_text()), args.out, args.set, args.design)
+    report = run(args.batch, json.loads(args.recorded.read_text()), args.out, args.set, args.design,
+                 json.loads(args.sam_recorded.read_text()) if args.sam else None)
     for s in report["stages"]:
         facts = {k: v for k, v in s.items() if k not in ("stage", "seconds")}
         print(f"{s['stage']} ({s['seconds']} s): {json.dumps(facts)}")

@@ -36,6 +36,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel, Field
 
 from . import booklet, build_plan, inventory_db, inventory_vocab, photo_gate
+from .sam_client import SamClient, SamError
 from .segmenter import COUNT_VIEW, WholePhotoSegmenter
 from .spark_client import SparkClient, SparkError
 
@@ -49,6 +50,9 @@ PHOTO_SUFFIXES = {
     "image/heic": ".heic", "image/heif": ".heif",
 }
 BATCH_ID = re.compile(r"\d{8}-\d{6}-[0-9a-f]{6}")
+# Segmenter for classify when the request doesn't name one: "stub" (whole photo)
+# or "sam" (SAM 3.1 close-ups after the whole-photo pass; needs META_MODEL_API_KEY).
+DEFAULT_SEGMENTER = os.environ.get("BINBUILD_SEGMENTER", "stub")
 # Shapes offered when fixing a piece in review (any text is accepted).
 SHAPES = ("brick", "plate", "tile", "slope", "curved slope", "1x1 slope (cheese)", "inverted slope", "round brick",
           "round plate", "round tile", "brick with studs on side", "headlight brick", "plate with clip",
@@ -376,29 +380,55 @@ def create_app() -> FastAPI:
                     **_photo_state(conn, batch_id)}
 
     @app.post("/api/inventory/batch/{batch_id}/classify")
-    def classify_inventory_batch(batch_id: str, force: bool = False, context: bool = True):
+    def classify_inventory_batch(batch_id: str, force: bool = False, context: bool = True,
+                                 segmenter: Optional[Literal["stub", "sam"]] = None):
         """Find and name the pieces in a batch's top photo and store them as
-        proposals for review. Segmenter: the whole-photo stub until SAM 3.1 is
-        wired in. Classifier: Muse Spark on Baseten, with the 4 side photos as
-        context unless context=false. A batch that already has proposals is
-        returned as is unless force=true. Takes about a minute."""
+        proposals for review. Classifier: Muse Spark on Baseten, with the 4
+        side photos as context unless context=false. Segmenter:
+        - stub: the whole photo in one call (about a minute);
+        - sam: after the whole-photo pass, Spark's centre points prompt SAM 3.1
+          (Meta Model API) for one mask per piece, and Spark checks each
+          piece's close-up (about a minute more).
+        Default: BINBUILD_SEGMENTER, else stub. A batch that already has
+        proposals is returned as is unless force=true; with segmenter=sam, a
+        whole-photo result nobody has reviewed yet gets just the SAM pass. If
+        SAM fails, the whole-photo proposals stay and the error says so."""
+        use = segmenter or DEFAULT_SEGMENTER
         with closing(inventory_db.connect()) as conn:
             batch = _ensure_registered(conn, batch_id)
             if batch["status"] == "confirmed":
                 raise HTTPException(409, f"batch {batch_id} is confirmed; undo it before classifying again")
             _ensure_checked(conn, batch_id)
-            if batch["status"] == "classified" and not force:
+            done_with_sam = "sam-3.1" in (batch["classifier"] or "")
+            if batch["status"] == "classified" and not force and (use == "stub" or done_with_sam):
                 return {"classified": False, "reason": "already classified; pass force=true to run again",
                         **inventory_db.batch_review(conn, batch_id), **_photo_state(conn, batch_id)}
-            # A failed photo stops here, before any Baseten call (422 with the retake list).
+            # A failed photo stops here, before any Baseten or Model API call (422 with the retake list).
             inventory_db.require_photos_passed(conn, batch_id)
             from . import inventory_pipeline  # needs Pillow; keep the rest of the app importable without it
+            sam = None
+            if use == "sam":
+                try:
+                    sam = SamClient.from_env()
+                except SamError as err:
+                    raise HTTPException(503, f"SAM 3.1 is not set up: {err}")
             try:
                 spark = SparkClient.from_env()
-                run = inventory_pipeline.classify_batch(
-                    conn, batch_id, _batch_dir(batch_id), WholePhotoSegmenter(), spark, context=context)
+                run = {}
+                if batch["status"] != "classified" or force:
+                    run = inventory_pipeline.classify_batch(
+                        conn, batch_id, _batch_dir(batch_id), WholePhotoSegmenter(), spark, context=context)
             except SparkError as err:
                 raise HTTPException(502, f"Spark failed: {err}")
+            if sam is not None:
+                try:
+                    sam_run = inventory_pipeline.refine_with_sam(
+                        conn, batch_id, _batch_dir(batch_id), sam, spark, context=context)
+                except (SamError, SparkError) as err:
+                    raise HTTPException(502, f"The SAM pass failed, so the whole-photo proposals are kept "
+                                             f"for review: {err}")
+                sam_run["sam"].pop("recorded", None)
+                run = {**run, "sam_pass": sam_run}
             return {"classified": True, "run": run, **inventory_db.batch_review(conn, batch_id),
                     **_photo_state(conn, batch_id)}
 

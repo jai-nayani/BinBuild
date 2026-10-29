@@ -110,6 +110,8 @@ the rest pass.
 
 - **Dots, not outlines.** Pieces show as Spark's centre points. Outlines and
   close-up crops per piece need SAM 3.1. Pieces added by hand have no dot.
+  (With the SAM pass on, `spike/sam-3-1` draws each piece's outline:
+  [SAM-3-1.md](SAM-3-1.md).)
 - **Crowding.** 50 dots on a 375 px phone are tight; selecting a row is the
   readable way in.
 - **One reviewer at a time.** Two phones reviewing the same batch: the last

@@ -501,10 +501,32 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
 
   function renderDots(kept) {
     var box = $('check-dots');
+    var svg = $('check-outlines');
     var photo = review.photo;
-    var caption = 'Each dot is one piece Spark found. Tap a dot or a row to see which is which.';
+    var outlined = kept.some(function (d) { return d.region && d.region.mask && d.region.mask.path; });
+    var caption = outlined
+      ? 'Each outline is one piece, cut out by SAM. Tap a dot or a row to see which is which.'
+      : 'Each dot is one piece Spark found. Tap a dot or a row to see which is which.';
     box.innerHTML = '';
+    svg.innerHTML = '';
     if (!photo) { $('check-caption').textContent = ''; return; }
+    svg.setAttribute('viewBox', '0 0 ' + photo.width + ' ' + photo.height);
+    kept.forEach(function (d) {
+      var m = d.region && d.region.mask;
+      if (!m || !m.path) { return; }
+      // the path is in the mask's own pixels; its box is in the photo's
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', m.path);
+      path.setAttribute('transform', 'translate(' + m.box[0] + ' ' + m.box[1] + ') scale(' +
+        ((m.box[2] - m.box[0]) / m.size[0]) + ' ' + ((m.box[3] - m.box[1]) / m.size[1]) + ')');
+      var key = groupKey(d);
+      if (review.focus === d.id || (review.focus === null && review.selected === key)) {
+        path.setAttribute('class', 'on');
+      } else if (review.selected) {
+        path.setAttribute('class', 'dim');
+      }
+      svg.appendChild(path);
+    });
     kept.forEach(function (d) {
       var point = d.region && d.region.point;
       if (!point) { return; }
@@ -516,6 +538,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
       dot.style.background = colorHex(d.color);
       dot.setAttribute('aria-label', pieceLabel(d));
       if (review.focus === d.id) { dot.classList.add('focus'); } else if (review.selected === key) { dot.classList.add('on'); } else if (review.selected) { dot.classList.add('dim'); }
+      if (d.region.mask && d.region.mask.path) { dot.classList.add('hollow'); } // let the outline show through
       dot.addEventListener('click', function () { select(key, d.id); });
       box.appendChild(dot);
     });

@@ -29,7 +29,8 @@ backend/        FastAPI backend (inventory + generation API)
   main.py       App factory, health check, batch upload, inventory loop endpoints
   inventory_db.py        SQLite inventory (binbuild.db, git-ignored)
   inventory_vocab.py     Generator types, families, colour names
-  segmenter.py           Segmenter interface + whole-photo stub (SAM 3.1 later)
+  segmenter.py           Segmenter interface: whole-photo stub, SAM 3.1 (one region per piece)
+  sam_client.py          SAM 3.1 via the Meta Model API (key from .env, never logged)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
   inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
   photo_gate.py          Per-photo checks before any Spark call (blur, light, pieces, fakes)
@@ -102,9 +103,12 @@ confirmed inventory goes to a known set or, through Path A, to a pre-generated
 BrickGPT design, and a build that fits gets a step-by-step booklet; one that
 doesn't gets a named shortfall. One batch runs through every stage with
 `python -m backend.full_loop`: [FULL-LOOP.md](FULL-LOOP.md). Live BrickGPT
-generation is off and the segmenter is still the whole-photo stub (SAM 3.1 next).
+generation is off. SAM 3.1 (Meta Model API) is wired in behind the same
+segmenter interface: one mask per piece, close-ups checked by Spark, outlines
+in review. It is opt-in (`?segmenter=sam` or `BINBUILD_SEGMENTER=sam`); results
+on the kit batch: [SAM-3-1.md](SAM-3-1.md).
 On the phone, **Check the pieces** reviews an identified batch (dots on the
 photo, fix / remove / add, then add to the inventory, with undo):
 [REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
-No API keys or secrets live in this repo: the Baseten key is read from the
-git-ignored `.env` (`BASETEN_API_KEY`).
+No API keys or secrets live in this repo: the Baseten and Meta Model API keys
+are read from the git-ignored `.env` (`BASETEN_API_KEY`, `META_MODEL_API_KEY`).

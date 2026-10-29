@@ -186,8 +186,9 @@ curl -F photos=@top.jpg -F photos=@front.jpg -F photos=@right.jpg \
 - **No HTTPS, so no service worker and no "Add to Home Screen" install over
   the LAN.** That is expected. The app logs "no service worker (not a secure
   context)" and works normally.
-- **The review screen points at pieces, it doesn't outline them.** Each dot is
-  Spark's centre point for a piece; per-piece outlines and close-up crops
-  need SAM 3.1. Pieces added by hand have no dot.
+- **Outlines need the SAM pass.** By default each piece is a dot (Spark's
+  centre point). Start the backend with `BINBUILD_SEGMENTER=sam` (and
+  `META_MODEL_API_KEY` in `.env`) to get SAM 3.1 outlines; Identify then takes
+  about a minute longer. Pieces added by hand have no dot.
 - **Booklets open from the backend** (a link to `http://MAC_IP:8000/...`), in
   a new browser tab.
