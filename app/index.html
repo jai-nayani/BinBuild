@@ -64,6 +64,38 @@
     .option .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 10px; background: #efebe0; }
     .option.yes .chip { background: #dff1e6; color: var(--green); }
     details summary { cursor: pointer; font-weight: 600; font-size: 15px; margin: 12px 0 4px; }
+    .photo-box { position: sticky; top: 0; z-index: 3; background: var(--bg); padding: 6px 0 4px; text-align: center; }
+    .photo-wrap { position: relative; display: inline-block; max-width: 100%; vertical-align: top; }
+    .photo-wrap img { display: block; max-width: 100%; max-height: 36vh; width: auto; height: auto; border-radius: 10px; background: #111; }
+    .pin { position: absolute; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.7); cursor: pointer; }
+    .pin.dim { opacity: 0.25; }
+    .pin.on { width: 18px; height: 18px; margin: -9px 0 0 -9px; border: 3px solid var(--yellow); box-shadow: 0 0 0 2px #000; z-index: 2; }
+    .pin.focus { width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 4px solid var(--yellow); box-shadow: 0 0 0 2px #000, 0 0 0 6px rgba(255,213,0,0.5); z-index: 3; }
+    .caption { font-size: 13px; color: var(--muted); margin: 4px 0 0; min-height: 18px; }
+    .review-summary { font-size: 14px; font-weight: 600; margin: 4px 0 0; }
+    .piece-group { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 8px 0; }
+    .piece-group.sel { border: 2px solid var(--ink); }
+    .piece-group.removed { opacity: 0.65; }
+    .pg-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; cursor: pointer; font-size: 15px; }
+    .swatch { width: 20px; height: 20px; border-radius: 5px; border: 1px solid rgba(0,0,0,0.3); flex: none; display: inline-block; vertical-align: middle; }
+    .badge { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 8px; background: #efebe0; }
+    .badge.gen { background: #fff1a8; }
+    .badge.fixed { background: #dff1e6; color: var(--green); }
+    .pg-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .small { padding: 8px 12px; font-size: 14px; border-radius: 10px; border: 1px solid var(--line); background: #faf8f2; color: var(--ink); cursor: pointer; }
+    .small:disabled { opacity: 0.45; }
+    .pg-items { list-style: none; padding: 0; margin: 8px 0 0; }
+    .pg-items li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .pg-items li .who { flex: 1; cursor: pointer; }
+    .pg-items li.focus .who { font-weight: 700; }
+    .section-label { font-size: 14px; font-weight: 700; color: var(--muted); margin: 18px 0 4px; }
+    .sticky-bar { position: sticky; bottom: 0; z-index: 3; background: linear-gradient(rgba(251,248,241,0), var(--bg) 35%); padding: 14px 0 6px; }
+    .modal-card.sheet { border-top-color: var(--yellow); }
+    .sheet label { display: block; font-size: 14px; font-weight: 600; margin: 10px 0 4px; }
+    .sheet input, .sheet select { width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+    .sheet label.check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; }
+    .sheet label.check input { width: auto; margin-top: 3px; }
+    .sheet .color-row { display: flex; gap: 8px; align-items: center; }
     .hidden { display: none; }
     footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 16px 24px; }
   </style>
@@ -105,7 +137,7 @@
 
       <div class="card">
         <h2>Finished?</h2>
-        <p id="finished-note">Upload at least one batch, then tap Finished to see what was sent.</p>
+        <p id="finished-note">See your batches, check each one's pieces and add them to your inventory.</p>
         <button class="btn btn-done" id="finished-btn" disabled>Finished — show my batches</button>
       </div>
     </section>
@@ -130,12 +162,37 @@
         <h2>🎉 Scanning finished</h2>
         <p id="finished-summary"></p>
         <ul class="batches" id="batch-list"></ul>
-        <button class="btn btn-primary" id="ask-build-btn">Ask for a build</button>
+        <button class="btn btn-primary" id="ask-build-btn">🧱 What can I build?</button>
         <button class="btn btn-secondary" id="back-btn">← Back to scanning</button>
       </div>
     </section>
 
-    <!-- 4. Build: what the confirmed inventory can build, and booklets -->
+    <!-- 4. Check the pieces: review one identified batch, then add it to the inventory (or undo) -->
+    <section id="check-view" class="hidden">
+      <div class="card hidden" id="confirmed-card">
+        <h2 id="confirmed-title">✓ Added to your inventory</h2>
+        <p id="confirmed-text"></p>
+        <button class="btn btn-primary" id="confirmed-build-btn">🧱 What can I build?</button>
+        <button class="btn btn-secondary" id="confirmed-next-btn">📷 Scan the next handful</button>
+        <button class="btn btn-secondary" id="undo-btn">↺ Undo: take these pieces out again</button>
+      </div>
+      <div class="card">
+        <h2 id="check-title">Check the pieces</h2>
+        <p id="check-intro"></p>
+        <p class="review-summary" id="check-summary"></p>
+      </div>
+      <div class="photo-box">
+        <div class="photo-wrap"><img id="check-img" alt="Top photo of the pieces"><div id="check-dots"></div></div>
+        <p class="caption" id="check-caption"></p>
+      </div>
+      <div id="check-list"></div>
+      <button class="btn btn-secondary" id="add-piece-btn">＋ Add a piece Spark missed</button>
+      <p class="status" id="check-status" role="status" aria-live="polite"></p>
+      <div class="sticky-bar"><button class="btn btn-done" id="confirm-btn">✓ Add the pieces to my inventory</button></div>
+      <button class="btn btn-secondary" id="check-back-btn">← Back to scanning</button>
+    </section>
+
+    <!-- 5. Build: what the confirmed inventory can build, and booklets -->
     <section id="build-view" class="hidden">
       <div class="card">
         <h2>🧱 What can I build?</h2>
@@ -158,6 +215,35 @@
       <p class="hint" id="retake-hint"></p>
       <label class="btn btn-primary" for="retake-input" id="retake-btn">📷 Retake top photo</label>
       <p class="status" id="retake-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Fix one piece, a whole row of pieces, or add a piece Spark missed. -->
+  <div class="modal hidden" id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal-card sheet">
+      <h2 id="edit-title">Fix this piece</h2>
+      <p class="hint" id="edit-now"></p>
+      <label for="edit-family">What kind of piece</label>
+      <select id="edit-family"></select>
+      <label for="edit-shape">Shape</label>
+      <input id="edit-shape" list="shape-list" autocomplete="off" placeholder="e.g. brick, round plate, curved slope">
+      <datalist id="shape-list"></datalist>
+      <label for="edit-size">Size in studs</label>
+      <input id="edit-size" list="size-list" autocomplete="off" inputmode="text" placeholder="e.g. 1x2">
+      <datalist id="size-list"></datalist>
+      <label for="edit-color">Colour</label>
+      <div class="color-row"><span class="swatch" id="edit-swatch"></span><select id="edit-color"></select></div>
+      <label class="check"><input type="checkbox" id="edit-plain"> Plain: nothing extra on it (no studs on the side, no holes, not round, no clip)</label>
+      <div id="edit-count-row" class="hidden">
+        <label for="edit-count">How many</label>
+        <input id="edit-count" type="number" min="1" max="99" value="1">
+      </div>
+      <p class="hint" id="edit-generator"></p>
+      <div class="row">
+        <button class="btn btn-secondary" id="edit-cancel-btn">Cancel</button>
+        <button class="btn btn-primary" id="edit-save-btn">Save</button>
+      </div>
+      <p class="status" id="edit-status" role="status" aria-live="polite"></p>
     </div>
   </div>
 

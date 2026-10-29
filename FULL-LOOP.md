@@ -211,4 +211,5 @@ test inventories:
 
 The phone has no review-and-confirm screen: a kid's batch stops at "waiting
 for review", and its pieces only reach the inventory (and so "What can I
-build?") through the API.
+build?") through the API. (Built next, on `spike/review-screen`:
+[REVIEW-SCREEN.md](REVIEW-SCREEN.md).)

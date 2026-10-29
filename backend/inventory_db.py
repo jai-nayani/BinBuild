@@ -411,6 +411,23 @@ def review_batch(conn, batch_id, corrections=(), additions=()):
     return batch_review(conn, batch_id)
 
 
+def list_batches(conn) -> list:
+    """Every registered batch, newest first: its state, the pieces it holds
+    (not rejected), how many photos passed the gate, and whether it is the
+    confirmed batch an undo would take out."""
+    last = conn.execute(
+        "SELECT id FROM batches WHERE status = 'confirmed' ORDER BY confirm_seq DESC LIMIT 1").fetchone()
+    rows = conn.execute(
+        "SELECT b.id, b.created_at, b.status, b.classifier, b.confirmed_at,"
+        " (SELECT COALESCE(SUM(count), 0) FROM detections d WHERE d.batch_id = b.id AND d.status != 'rejected')"
+        "   AS pieces,"
+        " (SELECT COUNT(*) FROM batch_photos p WHERE p.batch_id = b.id AND p.gate_status = 'passed') AS photos_passed,"
+        " (SELECT COUNT(*) FROM batch_photos p WHERE p.batch_id = b.id) AS photos"
+        " FROM batches b ORDER BY b.created_at DESC, b.id DESC"
+    ).fetchall()
+    return [dict(r, undoable=bool(last) and r["id"] == last["id"]) for r in rows]
+
+
 def batch_review(conn, batch_id) -> dict:
     batch = get_batch(conn, batch_id)
     detections = [

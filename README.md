@@ -44,7 +44,8 @@ tests/          Standard-library unit tests (python3 -m unittest discover -s tes
 spike-constraint-kit/  Pre-generated BrickGPT designs and Path A test inventories
 app/            Phone client (PWA, no build step)
   index.html    Capture loop: snap → review → confirm → Finished
-  app.js        5-photo batches, upload, retake pop-up, Identify, What can I build? (BACKEND_URL at the top)
+  app.js        5-photo batches, upload, retake pop-up, Identify, Check the pieces,
+                What can I build? (BACKEND_URL at the top)
   manifest.json PWA manifest
   sw.js         Service worker (offline app shell)
   icon.svg      App icon
@@ -102,5 +103,8 @@ BrickGPT design, and a build that fits gets a step-by-step booklet; one that
 doesn't gets a named shortfall. One batch runs through every stage with
 `python -m backend.full_loop`: [FULL-LOOP.md](FULL-LOOP.md). Live BrickGPT
 generation is off and the segmenter is still the whole-photo stub (SAM 3.1 next).
+On the phone, **Check the pieces** reviews an identified batch (dots on the
+photo, fix / remove / add, then add to the inventory, with undo):
+[REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
 No API keys or secrets live in this repo: the Baseten key is read from the
 git-ignored `.env` (`BASETEN_API_KEY`).

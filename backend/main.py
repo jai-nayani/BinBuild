@@ -32,11 +32,11 @@ from typing import Literal, Optional
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from pydantic import BaseModel, Field
 
-from . import booklet, build_plan, inventory_db, photo_gate
-from .segmenter import WholePhotoSegmenter
+from . import booklet, build_plan, inventory_db, inventory_vocab, photo_gate
+from .segmenter import COUNT_VIEW, WholePhotoSegmenter
 from .spark_client import SparkClient, SparkError
 
 # One batch = one handful of pieces: top view + 4 sides, uploaded in this order.
@@ -49,6 +49,10 @@ PHOTO_SUFFIXES = {
     "image/heic": ".heic", "image/heif": ".heif",
 }
 BATCH_ID = re.compile(r"\d{8}-\d{6}-[0-9a-f]{6}")
+# Shapes offered when fixing a piece in review (any text is accepted).
+SHAPES = ("brick", "plate", "tile", "slope", "curved slope", "1x1 slope (cheese)", "inverted slope", "round brick",
+          "round plate", "round tile", "brick with studs on side", "headlight brick", "plate with clip",
+          "jumper plate", "hinge plate", "wedge plate", "tile with studs on edge", "arch", "wheel", "tyre")
 
 
 def _save_photo(photo: UploadFile, dest: Path) -> tuple:
@@ -143,6 +147,24 @@ def _photo_state(conn, batch_id) -> dict:
         "retake": [photo_gate.retake_notice(p["view"], p["gate_reasons"])
                    for p in photos if p["gate_status"] != "passed"],
     }
+
+
+def _count_photo(conn, batch_id):
+    """The counted (top) photo for the review screen: where to load it, and
+    its upright size in pixels, the frame Spark's piece points are in."""
+    photo = next((p for p in inventory_db.batch_photos(conn, batch_id) if p["view"] == COUNT_VIEW), None)
+    if photo is None:
+        return None
+    from PIL import Image
+    try:
+        with Image.open(_batch_dir(batch_id) / photo["file"]) as image:
+            width, height = image.size
+            if image.getexif().get(0x0112) in (5, 6, 7, 8):  # EXIF rotation by 90 degrees
+                width, height = height, width
+    except OSError:
+        return None
+    return {"view": COUNT_VIEW, "width": width, "height": height,
+            "url": f"/api/inventory/batch/{batch_id}/photos/{COUNT_VIEW}?size=1600&v={photo['sha256'][:12]}"}
 
 
 def _write_manifest(conn, batch_id):
@@ -380,14 +402,63 @@ def create_app() -> FastAPI:
             return {"classified": True, "run": run, **inventory_db.batch_review(conn, batch_id),
                     **_photo_state(conn, batch_id)}
 
+    @app.get("/api/inventory/batches")
+    def list_inventory_batches():
+        """Every batch, newest first: uploaded, classified (waiting for
+        review) or confirmed, with its pieces and whether undo would take it
+        out. Lets the phone find batches still waiting for review after a
+        reload."""
+        with closing(inventory_db.connect()) as conn:
+            return {"batches": inventory_db.list_batches(conn)}
+
+    @app.get("/api/inventory/batch/{batch_id}/photos/{view}")
+    def get_batch_photo(batch_id: str, view: str, size: int = 1600):
+        """One photo of a batch, turned upright (EXIF) and scaled down to at
+        most `size` pixels on its long side, for the review screen."""
+        if view not in BATCH_VIEWS:
+            raise HTTPException(404, f"no view {view!r}; views are {', '.join(BATCH_VIEWS)}")
+        folder = _batch_dir(batch_id)
+        with closing(inventory_db.connect()) as conn:
+            _ensure_registered(conn, batch_id)
+            photo = next(p for p in inventory_db.batch_photos(conn, batch_id) if p["view"] == view)
+        from io import BytesIO
+        from PIL import Image, ImageOps
+        side = min(max(size, 64), 4096)
+        try:
+            with Image.open(folder / photo["file"]) as image:
+                image.draft("RGB", (side, side))  # decode JPEGs at a reduced size: much faster
+                upright = ImageOps.exif_transpose(image).convert("RGB")
+        except OSError:
+            raise HTTPException(404, f"the {view} photo of batch {batch_id} can't be read")
+        upright.thumbnail((side, side))
+        out = BytesIO()
+        upright.save(out, "JPEG", quality=82)
+        return Response(out.getvalue(), media_type="image/jpeg",
+                        headers={"Cache-Control": "private, max-age=86400"})
+
+    @app.get("/api/inventory/vocab")
+    def get_inventory_vocab():
+        """The words a review may use: families, colours (with a swatch
+        colour), the 8 BrickGPT sizes, and suggested shapes."""
+        with closing(inventory_db.connect()) as conn:
+            seen = [r[0] for r in conn.execute("SELECT DISTINCT shape FROM detections WHERE shape != ''")]
+        return {
+            "families": list(inventory_vocab.FAMILIES),
+            "colors": [{"name": c, "hex": booklet.HEX.get(c, booklet.HEX["unknown"])} for c in inventory_vocab.COLORS],
+            "generator_types": list(inventory_vocab.GENERATOR_TYPES),
+            "shapes": sorted(set(SHAPES) | set(seen)),
+        }
+
     @app.get("/api/inventory/batch/{batch_id}/review")
     def get_batch_review(batch_id: str):
         """A batch's photos (with their check results) and proposed pieces,
-        with any corrections so far."""
+        with any corrections so far, plus the counted photo to point at them
+        on (count_photo: url and upright size; piece points are in that frame)."""
         with closing(inventory_db.connect()) as conn:
             _ensure_registered(conn, batch_id)
             _ensure_checked(conn, batch_id)
-            return {**inventory_db.batch_review(conn, batch_id), **_photo_state(conn, batch_id)}
+            return {**inventory_db.batch_review(conn, batch_id), **_photo_state(conn, batch_id),
+                    "count_photo": _count_photo(conn, batch_id)}
 
     @app.post("/api/inventory/batch/{batch_id}/review")
     def post_batch_review(batch_id: str, review: Review):
