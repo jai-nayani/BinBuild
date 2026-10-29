@@ -1,0 +1,91 @@
+{
+ "id": "hot-air-balloon",
+ "name": "Hot-air Balloon",
+ "pages": [
+  54,
+  55
+ ],
+ "status": "draft",
+ "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "read_from": "the “Elements you’ll need” box on page 54, photo IMG_3610, read on Oct 29",
+ "elements_total": 14,
+ "unsure_elements": 2,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black 1x2 curved slope"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "sure": true,
+   "doubt": null,
+   "as_read": "trans clear 1x2 plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "drawn yellow-green",
+   "as_read": "lime 1x1 round plate"
+  },
+  {
+   "qty": 3,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": true,
+   "doubt": null,
+   "as_read": "dark purple 1x2 plate"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange 1x2 brick (basket)"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "lime tall 1x1 brick with 2 studs on side"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium azure 1x2 curved slope"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

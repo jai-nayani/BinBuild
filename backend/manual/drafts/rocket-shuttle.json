@@ -1,0 +1,122 @@
+{
+ "id": "rocket-shuttle",
+ "name": "Rocket shuttle",
+ "pages": [
+  88,
+  89,
+  96
+ ],
+ "status": "draft",
+ "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "read_from": "the drawing of pile C on page 96 (the answer to the puzzle on page 88), photo IMG_3631, read on Oct 29",
+ "elements_total": 20,
+ "unsure_elements": 0,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "blue 1x4 brick with 4 studs on side"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium azure 1x2 curved slope"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "light bluish gray 1x1 headlight brick"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": true,
+   "doubt": null,
+   "as_read": "dark purple 1x2 plate"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange 1x2 brick"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "lime 1x1 round plate"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "light bluish gray 1x3 curved slope"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium azure 2x4 plate"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium blue 1x1 slope (cheese), seen from above"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 1x2 jumper plate"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

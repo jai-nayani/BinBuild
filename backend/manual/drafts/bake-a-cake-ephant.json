@@ -1,0 +1,111 @@
+{
+ "id": "bake-a-cake-ephant",
+ "name": "Bake-a-cake-ephant",
+ "pages": [
+  50,
+  51
+ ],
+ "status": "draft",
+ "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "read_from": "the “Elements you’ll need” box on page 50, photo IMG_3608, read on Oct 29",
+ "elements_total": 15,
+ "unsure_elements": 0,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": true,
+   "doubt": null,
+   "as_read": "dark purple 1x2 plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 1x2 jumper plate"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange 1x2 brick"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 1x1 round printed tile (open eyes)"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium azure 1x2 curved slope (ears)"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium azure 2x4 plate"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 2x2 tile with 2 studs on edge"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black 1x2 curved slope (drawn end-on)"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "lime tall 1x1 brick with 2 studs on side"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

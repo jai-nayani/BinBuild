@@ -57,7 +57,9 @@ def label(part) -> str:
     """'orange 1x2 brick', 'lime 1x1 round plate'."""
     color = part["color"].replace("_", " ")
     shape = part.get("shape") or part["family"]
-    return f"{color} {part['size']} {shape}" if part.get("size") else f"{color} {shape}"
+    if not part.get("size") or shape.startswith(part["size"]):  # "1x1 slope (cheese)" names its size
+        return f"{color} {shape}"
+    return f"{color} {part['size']} {shape}"
 
 
 def place(part, at, along="x", down=None) -> dict:
@@ -310,6 +312,46 @@ def _parts_html(placements, parts) -> str:
         solo = dict(example, at=[0, 0, 0])
         items.append(f'<li>{picture([solo])}<span><b>{part["qty"]}×</b> {html.escape(part["label"])}</span></li>')
     return '<ul class="parts">' + "".join(items) + "</ul>"
+
+
+def render_checklist(drafts) -> str:
+    """The draft piece lists as one printable page for a hand-check at the
+    table: unsure lines first and highlighted, a swatch per colour."""
+    css = PAGE_CSS + """
+.draft h2 { display: flex; justify-content: space-between; gap: 8px; }
+.draft .state { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 9px; background: #fff1c2; }
+.draft .state.done { background: #dff1e6; color: #1f8a4c; }
+.draft table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.draft td { padding: 5px 4px; border-top: 1px solid var(--line); vertical-align: top; }
+.draft td.box { width: 22px; } .draft td.qty { width: 34px; font-weight: 700; text-align: right; }
+.draft tr.unsure { background: #fff6d8; } .draft .why { color: #8a5a00; font-size: 12px; display: block; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.3); margin-right: 6px; vertical-align: -1px; }
+"""
+    waiting = sum(not d["hand_check"]["done"] for d in drafts)
+    out = ["<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">",
+           "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+           f"<title>Manual hand-check · BinBuild</title><style>{css}</style></head><body>",
+           "<header><h1>✅ Manual hand-check</h1>"
+           f"<p>{len(drafts)} draft piece lists read from the book · {waiting} waiting for a check</p></header><main>",
+           '<section class="card"><p class="note">For each build: lay these pieces out from the kit next to its page '
+           "and build the model once. Tick each line; fix a count or a colour that's wrong. Highlighted lines were "
+           "hard to read in the photo. Then record it: <code>python -m backend.manual_check &lt;id&gt; --done --by "
+           "NAME</code> (use <code>--set</code> and <code>--sure</code> for fixes).</p></section>"]
+    for d in drafts:
+        done = d["hand_check"]["done"]
+        out.append(f'<section class="card draft"><h2><span>{html.escape(d["name"])} '
+                   f'<small>· pages {", ".join(map(str, d["pages"]))}</small></span>'
+                   f'<span class="state{" done" if done else ""}">{"hand-checked" if done else "draft"}</span></h2>'
+                   f'<p class="note">{html.escape(d["id"])} · {d["elements_total"]} elements · '
+                   f'{d["unsure_elements"]} unsure · from {html.escape(d["read_from"])}</p><table>')
+        for e in sorted(d["elements"], key=lambda e: e["sure"]):
+            why = f'<span class="why">unsure: {html.escape(e["doubt"] or "")}</span>' if not e["sure"] else ""
+            out.append(f'<tr class="{"" if e["sure"] else "unsure"}"><td class="box">☐</td>'
+                       f'<td class="qty">{e["qty"]}×</td><td><span class="sw" style="background:'
+                       f'{HEX.get(e["color"], HEX["unknown"])}"></span>{html.escape(label(e))}{why}</td></tr>')
+        out.append("</table></section>")
+    out.append("</main><footer>BinBuild · Not affiliated with the LEGO Group.</footer></body></html>")
+    return "".join(out)
 
 
 def render_html(book) -> str:

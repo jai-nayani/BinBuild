@@ -3,9 +3,12 @@
 The build list starts with the manual that came with the kit
 (backend/manual/catalog.json): every build in it is a candidate for this kit
 and is listed, with its page. Only a build whose piece list has been
-verified (a known set) is checked against the inventory and gets a booklet;
-the others are shown as manual builds whose parts are not yet verified, with
-no fit claim and no booklet. Then come BrickGPT designs.
+verified is checked against the inventory: a known set (with steps, so it
+also gets a booklet), or a draft list transcribed from the book
+(backend/manual/drafts/) once someone has hand-checked it against the kit
+(no booklet: it is built from the book). The others are shown as manual
+builds whose parts are not yet verified, with no fit claim and no booklet.
+Then come BrickGPT designs.
 
 Two kinds of build can be planned:
 
@@ -35,6 +38,7 @@ from .inventory_vocab import GENERATOR_TYPES
 
 SETS_DIR = Path(__file__).resolve().parent / "sets"
 MANUAL = Path(__file__).resolve().parent / "manual" / "catalog.json"
+DRAFTS_DIR = MANUAL.parent / "drafts"
 
 
 def _key(part) -> tuple:
@@ -69,20 +73,23 @@ def known_sets() -> dict:
     return {s["id"]: s for s in sets}
 
 
-def check_set(spec, items) -> dict:
-    """Each piece the set needs against the inventory (exact family, shape,
-    size and colour; a different colour is a different piece)."""
-    need = Counter(p["part"] for step in spec["steps"] for p in step["place"])
+def check_pieces(needed, items) -> dict:
+    """needed: [(part, count)]. Each piece against the inventory (exact
+    family, shape, size and colour; a different colour is a different piece)."""
     have = Counter()
     for item in items:
         have[_key(item)] += item["quantity"]
     parts = []
-    for name, n in need.items():
-        part = spec["parts"][name]
+    for part, n in needed:
         got = have[_key(part)]
         parts.append({"label": bk.label(part), "need": n, "have": got, "short": max(n - got, 0)})
     return {"fits": all(not p["short"] for p in parts), "parts": parts,
             "missing": [p for p in parts if p["short"]]}
+
+
+def check_set(spec, items) -> dict:
+    need = Counter(p["part"] for step in spec["steps"] for p in step["place"])
+    return check_pieces([(spec["parts"][name], n) for name, n in need.items()], items)
 
 
 def plan_set(set_id, items, with_booklet=True) -> dict:
@@ -207,6 +214,22 @@ def manual_catalog() -> dict:
     return json.loads(MANUAL.read_text())
 
 
+def manual_drafts() -> dict:
+    """Draft piece lists transcribed from the book, by build id."""
+    drafts = (json.loads(p.read_text()) for p in sorted(DRAFTS_DIR.glob("*.json")))
+    return {d["id"]: d for d in drafts}
+
+
+def hand_checked(draft) -> bool:
+    return bool(draft and (draft.get("hand_check") or {}).get("done"))
+
+
+def _fit_message(check, pieces) -> str:
+    if check["fits"]:
+        return f"You have all {pieces} pieces."
+    return "Missing " + ", ".join(f"{p['short']}× {p['label']}" for p in check["missing"]) + "."
+
+
 def _pages(pages) -> str:
     pages = sorted(set(pages))
     return f"page {pages[0]}" if len(pages) == 1 else "pages " + ", ".join(str(p) for p in pages)
@@ -218,25 +241,37 @@ def manual_options(items) -> list:
     like any known set; every other build is listed as it is, with its piece
     list marked not yet verified: no fit claim, no booklet."""
     catalog = manual_catalog()
+    drafts = manual_drafts()
     chapters = {c["n"]: c["title"] for c in catalog["chapters"]}
     out = []
     for b in catalog["builds"]:
         entry = {"kind": "manual", "id": b["id"], "title": b["name"], "chapter": b["chapter"],
                  "chapter_title": chapters[b["chapter"]], "pages": b["pages"], "where": _pages(b["pages"]),
-                 "piece_status": b["status"], "manual_kind": b["kind"]}
+                 "piece_status": b["status"], "manual_kind": b["kind"], "has_booklet": False}
         for key in ("stated_elements", "activity", "note"):
             if key in b:
                 entry[key] = b[key]
+        draft = drafts.get(b["id"])
         if b["status"] == "verified" and b.get("set"):
             plan = plan_set(b["set"], items, with_booklet=False)
             entry.update(set=b["set"], status=plan["status"], message=plan["message"], missing=plan["missing"],
-                         pieces=plan["pieces"])
+                         pieces=plan["pieces"], has_booklet=True, verified_by="known set with steps")
+        elif hand_checked(draft):
+            needed = [({k: e[k] for k in ("family", "shape", "size", "color")}, e["qty"]) for e in draft["elements"]]
+            check = check_pieces(needed, items)
+            pieces = sum(n for _, n in needed)
+            entry.update(piece_status="verified", status="fit" if check["fits"] else "short",
+                         missing=check["missing"], pieces=pieces, verified_by="hand-checked against the kit",
+                         message=_fit_message(check, pieces) + f" Build it from the book: {_pages(b['pages'])}.")
         else:
             entry["status"] = "unverified"
             told = (f" The page says it uses {b['stated_elements']} elements; which ones isn't listed."
                     if "stated_elements" in b else "")
-            how = (" The page shows the elements it needs; checking them against your kit would verify it."
-                   if b["status"] == "diagram-readable" else "")
+            how = (" A draft list read from the book is waiting for a hand-check against the kit."
+                   if draft else " The page shows the elements it needs; checking them against your kit would "
+                                 "verify it." if b["status"] == "diagram-readable" else "")
+            if draft:
+                entry["draft"] = "waiting for a hand-check"
             entry["message"] = ("A build from the manual that came with your kit. Its parts aren't verified yet, so "
                                 "BinBuild can't check your bin for it or make a booklet: build it from the book."
                                 + told + how)

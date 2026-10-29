@@ -7,23 +7,32 @@
   the BrickGPT designs; a build without a verified piece list gets no fit
   claim and no booklet;
 - the house-and-tree booklet follows the picture on page 28;
-- the API: the manual summary, the catalog, and the verified build's booklet.
+- draft piece lists (one per diagram-readable build): unverified, within
+  the kit, no fit claim until hand-checked; a hand-checked draft gets a fit
+  check but no booklet; the hand-check tool;
+- the API: the manual summary, the catalog, the checklist, and the verified
+  build's booklet.
 
 Standard-library unittest. Run from the repo root:
     python3 -m unittest discover -s tests -v
 """
 
+import io
 import json
+import shutil
+import tempfile
 import unittest
 from collections import Counter
-from contextlib import closing
+from contextlib import closing, redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 from backend import build_plan as bp
 from backend import inventory_db as db
+from backend import inventory_vocab as vocab
+from backend import manual_check
 
 try:
-    import tempfile
     import uvicorn  # noqa: F401
     from backend import full_loop
     from test_full_loop import KIT_ITEMS, seed
@@ -122,6 +131,118 @@ class TestHouseAndTreeBooklet(unittest.TestCase):
         self.assertIn("manual, page 28", book["source"])
 
 
+DRAFTS = bp.manual_drafts()
+
+
+def kit_key(e):
+    return e["family"], e["shape"], e["size"], e["color"]
+
+
+class TestDrafts(unittest.TestCase):
+    def test_one_draft_per_diagram_readable_build(self):
+        readable = {b["id"] for b in BUILDS if b["status"] == "diagram-readable"}
+        self.assertEqual(set(DRAFTS), readable)
+        self.assertEqual(len(DRAFTS), 18)
+
+    def test_drafts_are_unverified_and_say_so(self):
+        for d in DRAFTS.values():
+            self.assertEqual(d["status"], "draft", d["id"])
+            self.assertFalse(d["hand_check"]["done"], d["id"])
+            self.assertIn("not checked against the kit", d["warning"])
+            self.assertIn("photo IMG_", d["read_from"])
+
+    def test_totals_and_vocabulary(self):
+        for d in DRAFTS.values():
+            self.assertEqual(d["elements_total"], sum(e["qty"] for e in d["elements"]), d["id"])
+            self.assertEqual(d["unsure_elements"], sum(e["qty"] for e in d["elements"] if not e["sure"]), d["id"])
+            for e in d["elements"]:
+                self.assertIn(e["family"], vocab.FAMILIES)
+                self.assertIn(e["color"], vocab.COLORS)
+                self.assertTrue(e["sure"] or e["doubt"], (d["id"], e))
+
+    def test_no_draft_needs_more_than_the_kit_has(self):
+        kit = {kit_key(i): i["quantity"] for i in KIT_ITEMS}
+        for d in DRAFTS.values():
+            need = Counter()
+            for e in d["elements"]:
+                need[kit_key(e)] += e["qty"]
+            for key, n in need.items():
+                self.assertLessEqual(n, kit.get(key, 0), (d["id"], key))
+
+    def test_waiting_drafts_get_no_fit_claim(self):
+        manual = {o["id"]: o for o in bp.manual_options(KIT_ITEMS)}
+        for bid in DRAFTS:
+            o = manual[bid]
+            self.assertEqual((o["status"], o["piece_status"], o["draft"]), ("unverified", "diagram-readable",
+                                                                         "waiting for a hand-check"))
+            self.assertFalse(PARTS_KEYS & set(o))
+            self.assertNotIn("missing", o)
+            self.assertIn("waiting for a hand-check", o["message"])
+        self.assertFalse(any("draft" in o for o in manual.values() if o["piece_status"] == "not-yet-piece-verified"))
+
+
+class TestHandCheck(unittest.TestCase):
+    """The hand-check tool on copies of the drafts (the repo's files are untouched)."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self.tmp.name)
+        for p in bp.DRAFTS_DIR.glob("*.json"):
+            shutil.copy(p, self.dir)
+        self.patches = [mock.patch.object(bp, "DRAFTS_DIR", self.dir), mock.patch.object(manual_check, "DRAFTS_DIR", self.dir)]
+        for p in self.patches:
+            p.start()
+
+    def tearDown(self):
+        for p in self.patches:
+            p.stop()
+        self.tmp.cleanup()
+
+    def run_tool(self, *args):
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), redirect_stderr(err):
+            code = manual_check.main(list(args))
+        return code, out.getvalue(), err.getvalue()
+
+    def test_done_is_refused_while_lines_are_unsure(self):
+        code, _, err = self.run_tool("dozy-dolphin", "--done", "--by", "tester")
+        self.assertEqual(code, 1)
+        self.assertIn("still unsure", err)
+        self.assertFalse(bp.manual_drafts()["dozy-dolphin"]["hand_check"]["done"])
+
+    def test_hand_checked_draft_gets_a_fit_check_but_no_booklet(self):
+        code, out, _ = self.run_tool("dozy-dolphin", "--sure", "medium_azure 1x2 curved slope",
+                                     "--sure", "medium_blue 1x1 1x1 slope (cheese)", "--done", "--by", "tester",
+                                     "--notes", "built it")
+        self.assertEqual(code, 0, out)
+        self.assertIn("HAND-CHECKED", out)
+        o = next(o for o in bp.manual_options(KIT_ITEMS) if o["id"] == "dozy-dolphin")
+        self.assertEqual((o["piece_status"], o["status"], o["has_booklet"]), ("verified", "fit", False))
+        self.assertEqual(o["verified_by"], "hand-checked against the kit")
+        self.assertIn("Build it from the book: pages 10, 11.", o["message"])
+        no_magenta = [i for i in KIT_ITEMS if i["color"] != "magenta"]
+        short = next(o for o in bp.manual_options(no_magenta) if o["id"] == "dozy-dolphin")
+        self.assertEqual(short["status"], "short")
+        self.assertIn("Missing 2× magenta 2x2 plate.", short["message"])
+        # the verified list still gets no booklet, and "What can I build?" shows no booklet button for it
+        self.assertNotIn("set", o)
+
+    def test_set_fixes_a_count_and_undo_resets(self):
+        code, out, _ = self.run_tool("happy-ghost", "--set", "white 1x2 jumper plate=2")
+        self.assertEqual(code, 0)
+        d = bp.manual_drafts()["happy-ghost"]
+        self.assertEqual(d["elements_total"], 13)
+        code, _, _ = self.run_tool("happy-ghost", "--done", "--by", "tester")
+        self.assertTrue(bp.manual_drafts()["happy-ghost"]["hand_check"]["done"])
+        self.run_tool("happy-ghost", "--undo")
+        self.assertEqual(bp.manual_drafts()["happy-ghost"]["status"], "draft")
+
+    def test_unknown_build_and_bad_set(self):
+        self.assertEqual(self.run_tool("castle")[0], 2)
+        self.assertEqual(self.run_tool("happy-ghost", "--set", "nonsense")[0], 2)
+        self.assertEqual(self.run_tool("happy-ghost", "--set", "gold 1x2 brick=1")[0], 2)
+
+
 @unittest.skipUnless(HAVE_SERVER, "FastAPI, uvicorn or Pillow not installed")
 class TestManualApi(unittest.TestCase):
     def test_options_manual_and_booklet(self):
@@ -141,6 +262,11 @@ class TestManualApi(unittest.TestCase):
             self.assertIn("House and tree", page)
             status, catalog = api.call("GET", "/api/manual")
             self.assertEqual((status, len(catalog["builds"])), (200, 106))
+            self.assertEqual((body["manual"]["drafts_waiting"], body["manual"]["hand_checked"]), (18, 0))
+            status, page = api.call("GET", "/api/manual/checklist", raw=True)
+            self.assertEqual(status, 200)
+            self.assertEqual(page.count('class="card draft"'), 18)
+            self.assertIn("Dozy Dolphin", page)
 
 
 if __name__ == "__main__":

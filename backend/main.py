@@ -563,6 +563,8 @@ def create_app() -> FastAPI:
                 "manual": {"builds": len(manual), "verified": count("verified"),
                            "diagram_readable": count("diagram-readable"),
                            "not_yet_piece_verified": count("not-yet-piece-verified"),
+                           "drafts_waiting": sum("draft" in o for o in manual),
+                           "hand_checked": sum(o.get("verified_by") == "hand-checked against the kit" for o in manual),
                            "read_from": build_plan.manual_catalog()["read_from"]},
                 "options": found}
 
@@ -571,6 +573,12 @@ def create_app() -> FastAPI:
         """The manual catalog: every build in the book, its chapter and pages,
         and the status of its piece list. No parts lists."""
         return build_plan.manual_catalog()
+
+    @app.get("/api/manual/checklist", response_class=HTMLResponse)
+    def get_manual_checklist():
+        """The draft piece lists transcribed from the book, as a printable
+        page for hand-checking them against the kit. Drafts, not verified."""
+        return HTMLResponse(booklet.render_checklist(list(build_plan.manual_drafts().values())))
 
     @app.post("/api/builds", status_code=201)
     def create_build(request: BuildRequest):

@@ -39,6 +39,8 @@ backend/        FastAPI backend (inventory + generation API)
   booklet.py             Step-by-step booklet: JSON + printable HTML page with drawings
   sets/                  Known sets with verified piece lists (house-and-tree)
   manual/catalog.json    Every build in the kit's manual: name, chapter, pages, piece-list status
+  manual/drafts/         Draft piece lists read from the book (unverified until hand-checked)
+  manual_check.py        Hand-check a draft against the kit (python -m backend.manual_check)
   full_loop.py           One batch through every stage via the API (recorded Spark reply)
   requirements.txt
 tests/          Standard-library unit tests (python3 -m unittest discover -s tests;

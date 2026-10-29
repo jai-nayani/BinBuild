@@ -878,7 +878,8 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
       (o.activity ? ' · ' + o.activity.replace(/ \(p.*\)$/, '') : '')));
     row.appendChild(left);
     row.appendChild(el('span', 'chip ' + (o.piece_status === 'diagram-readable' ? 'readable' : 'unverified'),
-      (o.stated_elements ? o.stated_elements + ' elements · ' : '') + PIECES[o.piece_status]));
+      (o.stated_elements ? o.stated_elements + ' elements · ' : '') +
+      (o.draft ? 'Parts not verified yet · draft list waiting for a hand-check' : PIECES[o.piece_status])));
     return row;
   }
 
@@ -902,13 +903,15 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
         : 'No confirmed pieces yet: scan a batch, review it and confirm it first.';
       var manual = body.options.filter(function (o) { return o.kind === 'manual'; });
       var checked = manual.filter(function (o) { return o.piece_status === 'verified'; });
+      var drafts = manual.filter(function (o) { return o.draft; }).length;
       var unchecked = manual.filter(function (o) { return o.piece_status !== 'verified'; });
       var others = body.options.filter(function (o) { return o.kind !== 'manual'; });
 
       section(list, '📕 From your manual (' + manual.length + ' builds)');
-      list.appendChild(el('p', 'note', checked.length + ' with a verified piece list: BinBuild checks your bin for it and ' +
-        'makes a booklet. The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
-        'parts BinBuild hasn\u2019t verified yet: build them from the book.'));
+      list.appendChild(el('p', 'note', checked.length + ' with a verified piece list: BinBuild checks your bin for ' +
+        (checked.length === 1 ? 'it' : 'them') + ' (and makes a booklet where it has the steps). The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
+        'parts BinBuild hasn\u2019t verified yet: build them from the book.' +
+        (drafts ? ' ' + drafts + ' of them have a draft list read from the book, waiting for a hand-check.' : '')));
       checked.forEach(function (o) { list.appendChild(optionCard(o)); });
       var chapter = null;
       unchecked.forEach(function (o) {
@@ -945,7 +948,8 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     card.appendChild(title);
     if (o.kind === 'manual') {
       card.appendChild(el('p', 'where', 'Manual · chapter ' + o.chapter + ' · ' + o.chapter_title + ' · ' + o.where));
-      card.appendChild(el('span', 'chip verified', PIECES[o.piece_status]));
+      card.appendChild(el('span', 'chip verified', PIECES[o.piece_status] +
+        (o.verified_by === 'hand-checked against the kit' ? ' (hand-checked)' : '')));
       card.appendChild(document.createTextNode(' '));
     }
     var chip = document.createElement('span');
@@ -955,7 +959,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     text.textContent = o.message;
     card.appendChild(chip);
     card.appendChild(text);
-    if (buildable(o)) {
+    if (buildable(o) && (o.kind !== 'manual' || o.has_booklet)) {
       var btn = document.createElement('button');
       btn.className = 'btn btn-primary';
       btn.textContent = '📖 Make the booklet';

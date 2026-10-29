@@ -93,16 +93,76 @@ The booklet now follows the picture:
 
 Same 7 pieces, same 5 steps; the steps and drawings are BinBuild's own.
 
+## Draft piece lists for the 18 (added Oct 29)
+
+Each diagram-readable build now has a **draft**: its elements box (or drawn
+pieces) transcribed from the full-size photo, in
+`backend/manual/drafts/<id>.json`.
+- **Status:** every draft says `"status": "draft"` and carries a warning that
+  it isn't a verified piece list.
+- **Doubts:** each element line records what was read; lines that were hard to
+  read are marked unsure, with the reason.
+- **Catalog unchanged:** the 18 stay "diagram-readable". The app shows them as
+  "Parts not verified yet · draft list waiting for a hand-check", with no fit
+  claim.
+
+**Consistency check.** Every element in every draft maps to a piece kind the
+50-piece kit has, and no draft needs more of a kind than the kit holds.
+That's evidence the reading is right, not proof.
+
+| Build | Pages | Elements | Kinds | Unsure lines (why) |
+|---|---|---|---|---|
+| Dozy Dolphin | 10, 11 | 18 | 11 | 2× medium azure curved slope (side view); 1× medium blue cheese slope (small square from above) |
+| Yoga Goose | 14, 15 | 16 | 10 | 2× medium azure curved slope (drawn side-on) |
+| Viking longboat | 18, 19 | 14 | 9 | 1× medium blue cheese slope (side-on); 1× dark purple plate (looks blue-purple) |
+| Tiny Tentacles | 22, 23 | 18 | 9 | none |
+| Inspector Duck | 26, 27 | 17 | 10 | 2× dark purple plate (drawn blue-violet) |
+| Mini City car | 30, 31 | 20 | 8 | none |
+| Happy Ghost | 38, 39 | 12 | 9 | none |
+| Town square puzzle | 40, 96 | 19 | 8 | 4× lime round plate, 1× lime 1x6 plate (drawn yellow) |
+| Town square puzzle (Build Boost) | 41, 96 | 9 | 5 | 2× dark purple plate (each half hidden) |
+| Hungry Elephant | 42, 43 | 20 | 10 | 2× lime round plate (drawn yellow); 2× grey 1x3 curved slope (drawn almost white) |
+| La-La Llama | 46, 47 | 31 | 14 | 3× dark purple plate, 2× magenta plate, 1× medium azure 2x4 plate (drawn small or edge-on) |
+| Bake-a-cake-ephant | 50, 51 | 15 | 9 | none |
+| Hot-air Balloon | 54, 55 | 14 | 7 | 2× lime round plate (drawn yellow-green) |
+| Playful Plane | 58, 59 | 14 | 9 | none |
+| Space Rocket | 76, 77 | 18 | 11 | 2× medium blue cheese slope (seen from above) |
+| Supergalactic Hero | 80, 81 | 21 | 13 | 2× lime clip plate, 2× lime tall side-stud brick (drawn yellow); 2× grey 1x3 curved slope (drawn almost white) |
+| Puppy Power | 84, 85 | 15 | 10 | none |
+| Rocket shuttle | 88, 89, 96 | 20 | 10 | none (pile C, from the answer on p96) |
+
+**7 drafts have no unsure lines.** Most doubts are colour: the book draws
+lime as yellow and light grey as near-white. The kit has only one colour of
+each of those pieces, so the doubt is the drawing, not the piece.
+
+**Hand-checking a draft:**
+1. Open the printable checklist: `GET /api/manual/checklist` (on the Mac:
+   http://localhost:8000/api/manual/checklist). It shows all 18, with unsure
+   lines first and highlighted.
+2. For a build, lay its pieces out from the kit next to its page, tick each
+   line, and build the model once.
+3. Record it:
+   ```
+   python -m backend.manual_check dozy-dolphin                       # the checklist in the terminal
+   python -m backend.manual_check dozy-dolphin --sure "medium_azure 1x2 curved slope" --set "white 1x2 jumper plate=2"
+   python -m backend.manual_check dozy-dolphin --done --by NAME --notes "built it"
+   ```
+   `--done` is refused while any line is still unsure. `--undo` puts it back
+   to a draft. Commit the changed draft file to keep the check.
+4. From then on, "What can I build?" counts the build as verified
+   ("(hand-checked)") and checks the bin against it: "You have all 18 pieces.
+   Build it from the book: pages 10, 11.", or what's missing.
+   - **Still no booklet:** BinBuild has no steps for it, so it is built from
+     the book.
+   - **Turning one into a booklet** means writing its steps as a set file,
+     like house-and-tree.
+
 ## What would verify the rest
 
-- **The 18 diagram-readable builds (cheapest):**
-  1. Read the elements box from the full-size photo.
-  2. Hand-check it: lay those pieces from the kit next to the page, and build
-     the model once.
-  3. Write the list as a set file like `backend/sets/house-and-tree.json`.
-
-  The build then turns verified, gets checked against the bin, and gets a
-  booklet. About 5–10 minutes per build.
+- **The 18 diagram-readable builds:** transcribed (above). What's left is the
+  hand-check, about 5–10 minutes per build with the kit.
+  - Done: the build turns verified and gets a bin check.
+  - Its steps as a set file would add a booklet.
 - **The 87 with no list on the page:** build the model from the picture with
   the kit, take it apart, and scan that handful as a batch. Review and confirm
   give its exact piece list, which becomes its set file. The 4 printed totals
@@ -140,12 +200,21 @@ catalog holds names and page numbers only.
 - **API:** the manual summary, the booklet for the verified build, and the
   catalog.
 
-Totals: 114 tests in `tests/` plus Path A's 31, all passing in the venv. With
+Drafts and hand-check, 9 more tests in the same file:
+- **Drafts:** one per diagram-readable build, all unverified and saying so;
+  totals, vocabulary, and within the kit; no fit claim while waiting.
+- **Hand-check tool:** refuses `--done` while unsure lines remain; a
+  hand-checked draft gets a fit check and a "short" with what's missing, but
+  no booklet; `--set` and `--undo`; bad input. Runs on copies, so the repo's
+  drafts are untouched.
+- **API:** the checklist page and the summary counts (18 waiting, 0
+  hand-checked).
+
+Totals: 123 tests in `tests/` plus Path A's 31, all passing in the venv. With
 the system `python3`, 57 are skipped and the rest pass.
 
 ## Next blocker for the Oct 30 – Nov 1 kid trials
 
-Only 1 of the 106 manual builds has a verified piece list, so the app can check
-a kid's bin and make a booklet for the house and tree alone. Verifying the 18
-diagram-readable builds against the kit is the quickest way to give the trials
-more than one booklet.
+The 18 draft piece lists need a person with the kit to hand-check them (about
+5–10 minutes each; start with the 7 that have no unsure lines). Until then,
+house and tree is still the only build the app can check a kid's bin for.
