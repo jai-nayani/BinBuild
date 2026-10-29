@@ -1,0 +1,26 @@
+# Simple House: a Muse Wonder design for the kit's 50 pieces
+# Target "a simple house"; muse-wonder-1.0, reasoning effort high, Oct 29.
+# Passed the BinBuild validator on the first attempt: owned pieces only, on the stud grid,
+# no overlaps, every piece held by studs, standing on the table. NOT yet hand-built.
+# 20 pieces; one Wonder call, 88.0 s, $0.2024 (1263 input + 9869 output tokens).
+# Format: SIZE (x,y,z) code colour [direction]; x, y in studs, z in plates (backend/wonder_design.py).
+2x4 (0,0,0) plate medium_azure
+2x4 (2,0,0) plate medium_azure
+4x1 (0,3,1) side_stud_brick blue
+1x2 (0,1,1) brick orange
+1x2 (3,1,1) brick orange
+1x1 (0,0,1) headlight_brick light_bluish_gray
+1x1 (3,0,1) headlight_brick light_bluish_gray
+2x1 (1,0,1) jumper_plate white
+2x2 (0,2,4) plate magenta
+2x2 (2,2,4) plate magenta
+2x1 (0,0,4) plate dark_purple
+2x1 (2,0,4) plate dark_purple
+2x1 (0,1,4) plate dark_purple
+2x1 (2,1,4) plate dark_purple
+2x1 (0,1,5) curved_slope black down=-x
+2x1 (0,2,5) curved_slope black down=-x
+2x1 (2,1,5) curved_slope black down=+x
+2x1 (2,2,5) curved_slope black down=+x
+1x1 (3,3,5) round_brick light_bluish_gray
+1x1 (3,3,8) round_tile white

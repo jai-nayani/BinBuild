@@ -31,6 +31,10 @@ backend/        FastAPI backend (inventory + generation API)
   inventory_vocab.py     Generator types, families, colour names
   segmenter.py           Segmenter interface: whole-photo stub, SAM 3.1 (one region per piece)
   sam_client.py          SAM 3.1 via the Meta Model API (key from .env, never logged)
+  wonder_design.py       Designs with every kind of owned piece: format, LDraw geometry, validator
+  wonder_client.py       Muse Wonder via the Meta Model API (key from .env, never logged)
+  wonder_designer.py     Wonder designs from the bin, validated, retried, booklet (parallel track)
+  designs/               Validated Wonder designs (not yet hand-built)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
   inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
   photo_gate.py          Per-photo checks before any Spark call (blur, light, pieces, fakes)
@@ -107,6 +111,9 @@ generation is off. SAM 3.1 (Meta Model API) is wired in behind the same
 segmenter interface: one mask per piece, close-ups checked by Spark, outlines
 in review. It is opt-in (`?segmenter=sam` or `BINBUILD_SEGMENTER=sam`); results
 on the kit batch: [SAM-3-1.md](SAM-3-1.md).
+Parallel track: Muse Wonder designs new models from every kind of piece in
+the bin (not just BrickGPT's 8 bricks), checked by a validator against the
+owned pieces and LDraw geometry: [WONDER-DESIGNER.md](WONDER-DESIGNER.md).
 On the phone, **Check the pieces** reviews an identified batch (dots on the
 photo, fix / remove / add, then add to the inventory, with undo):
 [REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
