@@ -118,6 +118,8 @@ on the kit batch: [SAM-3-1.md](SAM-3-1.md).
 first (106; one, house-and-tree, has a verified piece list and a booklet; the
 others are shown with their pages and parts marked not yet verified), then
 BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
+Everything above is integrated into one app on `spike/integration`, with the
+trial-day run sheet: [INTEGRATION.md](INTEGRATION.md).
 Parallel track: Muse Wonder designs new models from every kind of piece in
 the bin (not just BrickGPT's 8 bricks), checked by a validator against the
 owned pieces and LDraw geometry: [WONDER-DESIGNER.md](WONDER-DESIGNER.md).
