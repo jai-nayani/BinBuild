@@ -19,10 +19,13 @@
  * Uses the native camera input (capture="environment"), which works over plain
  * HTTP on the home network. Nothing here needs the service worker.
  *
- * "What can I build?" lists what the confirmed inventory can build (known sets
- * and pre-generated BrickGPT designs, from GET /api/builds/options), names
- * what is missing for the rest, and makes a step-by-step booklet for one that
- * fits (POST /api/builds), opened from the backend as a printable page.
+ * "What can I build?" (GET /api/builds/options) lists every build in the
+ * manual that came with the kit first, then the pre-generated BrickGPT
+ * designs. A manual build with a verified piece list is checked against the
+ * confirmed inventory and can get a step-by-step booklet (POST /api/builds),
+ * opened from the backend as a printable page. Every other manual build is
+ * listed with its chapter, pages and the status of its piece list, and gets
+ * no fit claim and no booklet: it is built from the book.
  */
 
 // Where the FastAPI backend lives. Default: the machine that served this page,
@@ -856,7 +859,28 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     short: 'Not enough pieces yet', not_connected: "Can't be built: the design has a loose part",
   };
 
+  var PIECES = {
+    'verified': '✓ Verified piece list',
+    'diagram-readable': 'Parts not verified yet · elements shown in the book',
+    'not-yet-piece-verified': 'Parts not verified yet',
+  };
+
   function buildable(o) { return o.status === 'fit' || o.status === 'patched'; }
+
+  function section(list, text) { list.appendChild(el('h3', 'build-section', text)); }
+
+  // A manual build without a verified piece list: name, where it is, and what is known. No button.
+  function manualRow(o) {
+    var row = el('div', 'mrow');
+    var left = el('div', 'mname');
+    left.appendChild(el('span', null, o.title));
+    left.appendChild(el('span', 'where', o.where.replace('pages', 'pp.').replace('page', 'p.') +
+      (o.activity ? ' · ' + o.activity.replace(/ \(p.*\)$/, '') : '')));
+    row.appendChild(left);
+    row.appendChild(el('span', 'chip ' + (o.piece_status === 'diagram-readable' ? 'readable' : 'unverified'),
+      (o.stated_elements ? o.stated_elements + ' elements · ' : '') + PIECES[o.piece_status]));
+    return row;
+  }
 
   function openBuilds() {
     var list = $('build-list');
@@ -876,11 +900,28 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
         ? inv.total_pieces + ' confirmed pieces in your inventory: ' + inv.generator_ready +
           ' plain bricks BrickGPT can use, ' + inv.other + ' other pieces.'
         : 'No confirmed pieces yet: scan a batch, review it and confirm it first.';
-      var yes = body.options.filter(buildable);
-      var no = body.options.filter(function (o) { return !buildable(o); });
-      if (!yes.length) {
-        setStatus('Nothing fits your pieces yet. Each option below says what is missing.', null, buildStatus);
-      }
+      var manual = body.options.filter(function (o) { return o.kind === 'manual'; });
+      var checked = manual.filter(function (o) { return o.piece_status === 'verified'; });
+      var unchecked = manual.filter(function (o) { return o.piece_status !== 'verified'; });
+      var others = body.options.filter(function (o) { return o.kind !== 'manual'; });
+
+      section(list, '📕 From your manual (' + manual.length + ' builds)');
+      list.appendChild(el('p', 'note', checked.length + ' with a verified piece list: BinBuild checks your bin for it and ' +
+        'makes a booklet. The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
+        'parts BinBuild hasn\u2019t verified yet: build them from the book.'));
+      checked.forEach(function (o) { list.appendChild(optionCard(o)); });
+      var chapter = null;
+      unchecked.forEach(function (o) {
+        if (o.chapter !== chapter) {
+          chapter = o.chapter;
+          list.appendChild(el('h4', 'chapter', 'Chapter ' + o.chapter + ' · ' + o.chapter_title));
+        }
+        list.appendChild(manualRow(o));
+      });
+
+      section(list, '🤖 BrickGPT designs (' + others.length + ')');
+      var yes = others.filter(buildable);
+      var no = others.filter(function (o) { return !buildable(o); });
       yes.forEach(function (o) { list.appendChild(optionCard(o)); });
       if (no.length) {
         var more = document.createElement('details');
@@ -890,20 +931,28 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
         no.forEach(function (o) { more.appendChild(optionCard(o)); });
         list.appendChild(more);
       }
+      if (!checked.some(buildable) && !yes.length) {
+        setStatus('Nothing with a checked piece list fits your pieces yet; each one says what is missing.', null, buildStatus);
+      }
     });
   }
 
   function optionCard(o) {
     var card = document.createElement('div');
-    card.className = 'option ' + (buildable(o) ? 'yes' : 'no');
+    card.className = 'option ' + (buildable(o) ? 'yes' : 'no') + (o.piece_status === 'verified' ? ' verified' : '');
     var title = document.createElement('h3');
-    title.textContent = o.title + (o.kind === 'brickgpt' ? ' · BrickGPT design' : ' · set');
+    title.textContent = o.title + (o.kind === 'brickgpt' ? ' · BrickGPT design' : o.kind === 'manual' ? '' : ' · set');
+    card.appendChild(title);
+    if (o.kind === 'manual') {
+      card.appendChild(el('p', 'where', 'Manual · chapter ' + o.chapter + ' · ' + o.chapter_title + ' · ' + o.where));
+      card.appendChild(el('span', 'chip verified', PIECES[o.piece_status]));
+      card.appendChild(document.createTextNode(' '));
+    }
     var chip = document.createElement('span');
     chip.className = 'chip';
     chip.textContent = CHIP[o.status] || o.status;
     var text = document.createElement('p');
     text.textContent = o.message;
-    card.appendChild(title);
     card.appendChild(chip);
     card.appendChild(text);
     if (buildable(o)) {
@@ -919,7 +968,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
   function makeBooklet(o, btn) {
     btn.disabled = true;
     btn.textContent = 'Making the booklet…';
-    var ask = o.kind === 'set' ? { set: o.id } : { design: o.id };
+    var ask = o.set ? { set: o.set } : o.kind === 'set' ? { set: o.id } : { design: o.id };
     request('POST', '/api/builds', ask, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
       if (!failure && xhr.status === 201 && body && body.booklet_url) {
         // A link, not window.open: phones block pop-ups opened after a network call.

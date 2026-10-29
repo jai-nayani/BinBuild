@@ -1,6 +1,13 @@
 """The build step: from the confirmed inventory to a plan, and a booklet.
 
-Two kinds of build:
+The build list starts with the manual that came with the kit
+(backend/manual/catalog.json): every build in it is a candidate for this kit
+and is listed, with its page. Only a build whose piece list has been
+verified (a known set) is checked against the inventory and gets a booklet;
+the others are shown as manual builds whose parts are not yet verified, with
+no fit claim and no booklet. Then come BrickGPT designs.
+
+Two kinds of build can be planned:
 
 - A known set (backend/sets/*.json): exact pieces (family, shape, size,
   colour) with written steps. It fits when the inventory holds every piece;
@@ -27,6 +34,7 @@ from . import brickgpt_constraint as path_a
 from .inventory_vocab import GENERATOR_TYPES
 
 SETS_DIR = Path(__file__).resolve().parent / "sets"
+MANUAL = Path(__file__).resolve().parent / "manual" / "catalog.json"
 
 
 def _key(part) -> tuple:
@@ -99,9 +107,10 @@ def plan_set(set_id, items, with_booklet=True) -> dict:
                 add.append(len(placements))
                 placements.append(bk.place(spec["parts"][p["part"]], p["at"], p.get("along", "x"), p.get("down")))
             steps.append((step["text"], add))
+        where = f"the manual, page {spec['manual']['page']}" if spec.get("manual") else f"known set: {set_id}"
         result["booklet"] = bk.booklet(
             spec["title"], spec["subtitle"], placements, steps,
-            source=f"the pieces in your bin (known set: {set_id})",
+            source=f"the pieces in your bin ({where})",
             notes=[f"Every piece checked against your confirmed inventory: {result['message']}"])
     return result
 
@@ -192,6 +201,49 @@ def plan_design(category, items, samples=path_a.DEFAULT_SAMPLES, with_booklet=Tr
     return out
 
 
+# --- the manual ------------------------------------------------------------------------
+
+def manual_catalog() -> dict:
+    return json.loads(MANUAL.read_text())
+
+
+def _pages(pages) -> str:
+    pages = sorted(set(pages))
+    return f"page {pages[0]}" if len(pages) == 1 else "pages " + ", ".join(str(p) for p in pages)
+
+
+def manual_options(items) -> list:
+    """Every build in the manual, in book order with verified builds first.
+    A verified build (one with a known set) is planned against the inventory
+    like any known set; every other build is listed as it is, with its piece
+    list marked not yet verified: no fit claim, no booklet."""
+    catalog = manual_catalog()
+    chapters = {c["n"]: c["title"] for c in catalog["chapters"]}
+    out = []
+    for b in catalog["builds"]:
+        entry = {"kind": "manual", "id": b["id"], "title": b["name"], "chapter": b["chapter"],
+                 "chapter_title": chapters[b["chapter"]], "pages": b["pages"], "where": _pages(b["pages"]),
+                 "piece_status": b["status"], "manual_kind": b["kind"]}
+        for key in ("stated_elements", "activity", "note"):
+            if key in b:
+                entry[key] = b[key]
+        if b["status"] == "verified" and b.get("set"):
+            plan = plan_set(b["set"], items, with_booklet=False)
+            entry.update(set=b["set"], status=plan["status"], message=plan["message"], missing=plan["missing"],
+                         pieces=plan["pieces"])
+        else:
+            entry["status"] = "unverified"
+            told = (f" The page says it uses {b['stated_elements']} elements; which ones isn't listed."
+                    if "stated_elements" in b else "")
+            how = (" The page shows the elements it needs; checking them against your kit would verify it."
+                   if b["status"] == "diagram-readable" else "")
+            entry["message"] = ("A build from the manual that came with your kit. Its parts aren't verified yet, so "
+                                "BinBuild can't check your bin for it or make a booklet: build it from the book."
+                                + told + how)
+        out.append(entry)
+    return sorted(out, key=lambda e: e["piece_status"] != "verified")  # stable: book order otherwise
+
+
 # --- everything you could build ---------------------------------------------------------
 
 RANK = {"fit": 0, "patched": 0, "short": 1, "not_connected": 2}
@@ -207,8 +259,12 @@ def plan(request, items) -> dict:
 
 
 def options(items) -> list:
-    """Every known set and pre-generated design, buildable first, then the
-    closest shortfalls; designs with a loose part last."""
-    found = [plan_set(s, items, with_booklet=False) for s in known_sets()]
-    found += [plan_design(d, items, with_booklet=False) for d in designs()]
-    return sorted(found, key=lambda f: (RANK[f["status"]], f.get("short_studs", 0), f["kind"] != "set"))
+    """Manual builds first (verified first, then the rest in book order),
+    then known sets the manual doesn't list, then the pre-generated BrickGPT
+    designs: buildable first, then the closest shortfalls, designs with a
+    loose part last."""
+    manual = manual_options(items)
+    in_manual = {e.get("set") for e in manual}
+    extra = [plan_set(s, items, with_booklet=False) for s in known_sets() if s not in in_manual]
+    designs_ = [plan_design(d, items, with_booklet=False) for d in designs()]
+    return manual + extra + sorted(designs_, key=lambda f: (RANK[f["status"]], f.get("short_studs", 0)))

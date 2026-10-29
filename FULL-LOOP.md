@@ -108,6 +108,8 @@ with 5 steps. Build 2 (train) is stored as a shortfall.
 **The arrangement is BinBuild's own.** Only the piece list came from the kit.
 If the kit's picture puts them differently, the placements in
 `backend/sets/house-and-tree.json` are the one thing to change.
+(It did: `spike/manual-catalog` moves them to match the picture on page 28 of
+the manual.)
 
 ## Stretch target: BrickGPT on the kit, **named shortfall (pass)**
 
