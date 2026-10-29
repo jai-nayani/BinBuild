@@ -17,6 +17,9 @@ Idempotency:
 Undo removes the most recently confirmed batch's inventory rows and reopens
 the batch for review, so it can be corrected and confirmed again.
 
+Builds: each request for a build is stored with the inventory it was
+planned against and its result (a plan and booklet, or a named shortfall).
+
 Photo gate: every photo carries the result of the local checks (and of
 Spark's "is this real LEGO?" check). A batch can't be classified or confirmed
 while any photo is failed or unchecked; a retake replaces one view's photo,
@@ -102,8 +105,8 @@ CREATE TABLE IF NOT EXISTS builds (
     created_at         TEXT NOT NULL,
     status             TEXT NOT NULL DEFAULT 'requested',
     request            TEXT NOT NULL,  -- JSON: what was asked for
-    inventory_snapshot TEXT,           -- JSON: generator-ready counts the build may use
-    result             TEXT            -- JSON: the generated build
+    inventory_snapshot TEXT,           -- JSON: the confirmed inventory the build was planned against
+    result             TEXT            -- JSON: the plan (fit, patched, short) and its booklet
 );
 """
 
@@ -514,3 +517,22 @@ def inventory_summary(conn) -> dict:
         "unknown": unknown,
         "items": [dict(r) for r in rows],
     }
+
+
+def create_build(conn, request, snapshot, result) -> dict:
+    """Store one build request with the inventory it was planned against."""
+    cur = conn.execute(
+        "INSERT INTO builds (created_at, status, request, inventory_snapshot, result) VALUES (?, ?, ?, ?, ?)",
+        (_now(), result["status"], json.dumps(request), json.dumps(snapshot), json.dumps(result)),
+    )
+    return get_build(conn, cur.lastrowid)
+
+
+def get_build(conn, build_id) -> dict:
+    row = conn.execute("SELECT * FROM builds WHERE id = ?", (build_id,)).fetchone()
+    if row is None:
+        raise NotFound(f"no build {build_id!r}")
+    build = dict(row)
+    for key in ("request", "inventory_snapshot", "result"):
+        build[key] = json.loads(build[key]) if build[key] else None
+    return build

@@ -3,7 +3,10 @@
 Health check, batch photo upload, and the inventory loop on top of it:
 classify a batch (segmenter + Muse Spark), review and correct the proposals,
 confirm them into the SQLite inventory, undo the last confirmed batch, and
-read the inventory summary. Generation (BrickGPT) still answers 501.
+read the inventory summary. Then the build step: what can be built from the
+confirmed inventory (a known set, or a pre-generated BrickGPT design fitted
+with Path A), and a step-by-step booklet for a build that fits. Live BrickGPT
+generation is off.
 
 Every photo goes through the photo gate (backend/photo_gate.py) when it is
 uploaded. A batch with a failed photo answers with a "retake" list (which
@@ -29,14 +32,12 @@ from typing import Literal, Optional
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, Field
 
-from . import inventory_db, photo_gate
+from . import booklet, build_plan, inventory_db, photo_gate
 from .segmenter import WholePhotoSegmenter
 from .spark_client import SparkClient, SparkError
-
-NOT_IMPLEMENTED = "Not implemented yet — lands in the Oct 26-27 spike."
 
 # One batch = one handful of pieces: top view + 4 sides, uploaded in this order.
 BATCH_VIEWS = ("top", "front", "right", "back", "left")
@@ -175,6 +176,22 @@ class Addition(BaseModel):
 class Review(BaseModel):
     corrections: list[Correction] = []
     additions: list[Addition] = []
+
+
+class BuildRequest(BaseModel):
+    set: Optional[str] = None     # a known set, e.g. "house-and-tree"
+    design: Optional[str] = None  # a BrickGPT category with a pre-generated design, e.g. "train"
+    samples: int = Field(default=6, ge=4, le=8)
+
+
+def _build_reply(build) -> dict:
+    """A stored build without the booklet's drawing data, plus where to read the booklet."""
+    result = {k: v for k, v in build["result"].items() if k != "booklet"}
+    reply = {"build_id": build["id"], "created_at": build["created_at"], "request": build["request"], **result}
+    if "booklet" in build["result"]:
+        reply["booklet_url"] = f"/api/builds/{build['id']}/booklet"
+        reply["steps"] = len(build["result"]["booklet"]["steps"])
+    return reply
 
 
 def create_app() -> FastAPI:
@@ -424,25 +441,56 @@ def create_app() -> FastAPI:
         """Same as /api/inventory/summary."""
         return get_inventory_summary()
 
-    @app.post("/api/generate", status_code=501)
-    async def generate_build(payload: dict):
-        """Request a new build from the confirmed inventory.
+    @app.get("/api/builds/options")
+    def get_build_options():
+        """Everything that could be built from the confirmed inventory: each
+        known set and each pre-generated BrickGPT design, with "fit",
+        "patched", "short" (and what is missing) or "not_connected".
+        Buildable first, then the closest shortfalls."""
+        with closing(inventory_db.connect()) as conn:
+            summary = inventory_db.inventory_summary(conn)
+        return {"inventory": {"total_pieces": summary["total_pieces"],
+                              "generator_ready": summary["generator_ready"]["total"],
+                              "other": summary["other"]["total"] + summary["unknown"]["total"]},
+                "options": build_plan.options(summary["items"])}
 
-        Placeholder: the real handler will run inventory-constrained BrickGPT
-        and return a build id to poll.
-        """
-        return JSONResponse(
-            status_code=501,
-            content={"detail": NOT_IMPLEMENTED, "request": payload},
-        )
+    @app.post("/api/builds", status_code=201)
+    def create_build(request: BuildRequest):
+        """Plan a build from the confirmed inventory and store it: a known set
+        ({"set": "house-and-tree"}) or a BrickGPT design fitted with Path A
+        ({"design": "train"}). A plan that fits comes with a booklet
+        (booklet_url); one that doesn't comes back as a named shortfall, with
+        no booklet."""
+        if bool(request.set) == bool(request.design):
+            raise HTTPException(422, "ask for exactly one of: a known set ('set') or a BrickGPT design ('design')")
+        asked = {"set": request.set} if request.set else {"design": request.design, "samples": request.samples}
+        with closing(inventory_db.connect()) as conn:
+            summary = inventory_db.inventory_summary(conn)
+            try:
+                result = build_plan.plan(asked, summary["items"])
+            except KeyError as err:
+                raise HTTPException(404, err.args[0])
+            build = inventory_db.create_build(conn, asked, build_plan.snapshot(summary), result)
+            return _build_reply(build)
 
-    @app.get("/api/builds/{build_id}", status_code=501)
-    async def get_build(build_id: str):
-        """Return a generated build (status + step-by-step booklet)."""
-        return JSONResponse(
-            status_code=501,
-            content={"detail": NOT_IMPLEMENTED, "build_id": build_id},
-        )
+    @app.get("/api/builds/{build_id}")
+    def get_build(build_id: int):
+        """A stored build: the plan, the inventory it was planned against and,
+        if it fits, the booklet's steps."""
+        with closing(inventory_db.connect()) as conn:
+            build = inventory_db.get_build(conn, build_id)
+        return {**_build_reply(build), "booklet": build["result"].get("booklet"),
+                "inventory_snapshot": build["inventory_snapshot"]}
+
+    @app.get("/api/builds/{build_id}/booklet", response_class=HTMLResponse)
+    def get_build_booklet(build_id: int):
+        """The booklet as one printable page: a picture for every step."""
+        with closing(inventory_db.connect()) as conn:
+            build = inventory_db.get_build(conn, build_id)
+        if "booklet" not in build["result"]:
+            raise HTTPException(404, f"build {build_id} doesn't fit the inventory, so it has no booklet: "
+                                     f"{build['result']['message']}")
+        return HTMLResponse(booklet.render_html(build["result"]["booklet"]))
 
     return app
 

@@ -11,6 +11,11 @@
  *
  * Uses the native camera input (capture="environment"), which works over plain
  * HTTP on the home network. Nothing here needs the service worker.
+ *
+ * "What can I build?" lists what the confirmed inventory can build (known sets
+ * and pre-generated BrickGPT designs, from GET /api/builds/options), names
+ * what is missing for the rest, and makes a step-by-step booklet for one that
+ * fits (POST /api/builds), opened from the backend as a printable page.
  */
 
 // Where the FastAPI backend lives. Default: the machine that served this page,
@@ -31,6 +36,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
   var UPLOAD_TIMEOUT_MS = 120000;
   var IDENTIFY_TIMEOUT_MS = 240000;
   var HEALTH_TIMEOUT_MS = 4000;
+  var BUILD_TIMEOUT_MS = 30000;
 
   var slots = VIEWS.map(function () { return null; }); // confirmed { file, url } per view
   var pending = null;   // { file, url } under review, not yet in the batch
@@ -57,7 +63,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
   }
 
   function show(viewId) {
-    ['capture-view', 'review-view', 'finished-view'].forEach(function (id) {
+    ['capture-view', 'review-view', 'finished-view', 'build-view'].forEach(function (id) {
       $(id).classList.toggle('hidden', id !== viewId);
     });
     window.scrollTo(0, 0);
@@ -75,9 +81,10 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     return xhr.statusText || ('HTTP ' + xhr.status);
   }
 
-  function post(path, form, timeout, onDone, onProgress) {
+  // body: FormData, a plain object (sent as JSON) or null.
+  function request(method, path, body, timeout, onDone, onProgress) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', BACKEND_URL + path);
+    xhr.open(method, BACKEND_URL + path);
     xhr.timeout = timeout;
     if (onProgress) { xhr.upload.onprogress = onProgress; } // must be set before send()
     xhr.onload = function () {
@@ -87,8 +94,14 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     };
     xhr.onerror = function () { onDone(xhr, null, "couldn't reach the backend at " + BACKEND_URL + '.'); checkBackend(); };
     xhr.ontimeout = function () { onDone(xhr, null, 'no answer from the backend after ' + (timeout / 1000) + ' s.'); };
-    xhr.send(form);
+    if (body && !(body instanceof FormData)) {
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      body = JSON.stringify(body);
+    }
+    xhr.send(body);
   }
+
+  function post(path, form, timeout, onDone, onProgress) { request('POST', path, form, timeout, onDone, onProgress); }
 
   // --- render -----------------------------------------------------------------
 
@@ -365,9 +378,98 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
 
   $('back-btn').addEventListener('click', function () { show('capture-view'); render(); });
 
-  $('ask-build-btn').addEventListener('click', function () {
-    window.alert('Build generation is not wired up yet — it comes after inventory review.');
-  });
+  // --- build -------------------------------------------------------------------
+
+  var CHIP = {
+    fit: '✓ You can build this', patched: '✓ You can build this (a few bricks swapped for smaller ones)',
+    short: 'Not enough pieces yet', not_connected: "Can't be built: the design has a loose part",
+  };
+
+  function buildable(o) { return o.status === 'fit' || o.status === 'patched'; }
+
+  function openBuilds() {
+    var list = $('build-list');
+    var buildStatus = $('build-status');
+    show('build-view');
+    list.innerHTML = '';
+    $('build-inventory').textContent = 'Checking your inventory…';
+    setStatus('', null, buildStatus);
+    request('GET', '/api/builds/options', null, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
+      if (failure || xhr.status !== 200 || !body) {
+        $('build-inventory').textContent = '';
+        setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', buildStatus);
+        return;
+      }
+      var inv = body.inventory;
+      $('build-inventory').textContent = inv.total_pieces
+        ? inv.total_pieces + ' confirmed pieces in your inventory: ' + inv.generator_ready +
+          ' plain bricks BrickGPT can use, ' + inv.other + ' other pieces.'
+        : 'No confirmed pieces yet: scan a batch, review it and confirm it first.';
+      var yes = body.options.filter(buildable);
+      var no = body.options.filter(function (o) { return !buildable(o); });
+      if (!yes.length) {
+        setStatus('Nothing fits your pieces yet. Each option below says what is missing.', null, buildStatus);
+      }
+      yes.forEach(function (o) { list.appendChild(optionCard(o)); });
+      if (no.length) {
+        var more = document.createElement('details');
+        var label = document.createElement('summary');
+        label.textContent = 'Not enough pieces yet (' + no.length + ')';
+        more.appendChild(label);
+        no.forEach(function (o) { more.appendChild(optionCard(o)); });
+        list.appendChild(more);
+      }
+    });
+  }
+
+  function optionCard(o) {
+    var card = document.createElement('div');
+    card.className = 'option ' + (buildable(o) ? 'yes' : 'no');
+    var title = document.createElement('h3');
+    title.textContent = o.title + (o.kind === 'brickgpt' ? ' · BrickGPT design' : ' · set');
+    var chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.textContent = CHIP[o.status] || o.status;
+    var text = document.createElement('p');
+    text.textContent = o.message;
+    card.appendChild(title);
+    card.appendChild(chip);
+    card.appendChild(text);
+    if (buildable(o)) {
+      var btn = document.createElement('button');
+      btn.className = 'btn btn-primary';
+      btn.textContent = '📖 Make the booklet';
+      btn.addEventListener('click', function () { makeBooklet(o, btn); });
+      card.appendChild(btn);
+    }
+    return card;
+  }
+
+  function makeBooklet(o, btn) {
+    btn.disabled = true;
+    btn.textContent = 'Making the booklet…';
+    var ask = o.kind === 'set' ? { set: o.id } : { design: o.id };
+    request('POST', '/api/builds', ask, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
+      if (!failure && xhr.status === 201 && body && body.booklet_url) {
+        // A link, not window.open: phones block pop-ups opened after a network call.
+        var link = document.createElement('a');
+        link.className = 'btn btn-done';
+        link.href = BACKEND_URL + body.booklet_url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = '📖 Open the booklet (' + body.steps + ' steps)';
+        btn.replaceWith(link);
+      } else {
+        btn.disabled = false;
+        btn.textContent = '📖 Make the booklet';
+        setStatus('✗ ' + (failure || (body && body.message) || detailOf(xhr, body)), 'error', $('build-status'));
+      }
+    });
+  }
+
+  $('ask-build-btn').addEventListener('click', openBuilds);
+  $('build-open-btn').addEventListener('click', openBuilds);
+  $('build-back-btn').addEventListener('click', function () { show('capture-view'); render(); });
 
   // --- backend reachability ---------------------------------------------------
 

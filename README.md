@@ -33,11 +33,18 @@ backend/        FastAPI backend (inventory + generation API)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
   inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
   photo_gate.py          Per-photo checks before any Spark call (blur, light, pieces, fakes)
+  build_plan.py          The build step: known sets, BrickGPT designs through Path A
+  brickgpt_constraint.py Path A: generate (pre-generated designs) -> filter -> patch
+  booklet.py             Step-by-step booklet: JSON + printable HTML page with drawings
+  sets/                  Known sets (house-and-tree)
+  full_loop.py           One batch through every stage via the API (recorded Spark reply)
   requirements.txt
-tests/          Standard-library unit tests (python3 -m unittest discover -s tests)
+tests/          Standard-library unit tests (python3 -m unittest discover -s tests;
+                Path A: python3 -m unittest backend.test_brickgpt_constraint)
+spike-constraint-kit/  Pre-generated BrickGPT designs and Path A test inventories
 app/            Phone client (PWA, no build step)
   index.html    Capture loop: snap → review → confirm → Finished
-  app.js        5-photo batches, upload, retake pop-up, Identify (BACKEND_URL at the top)
+  app.js        5-photo batches, upload, retake pop-up, Identify, What can I build? (BACKEND_URL at the top)
   manifest.json PWA manifest
   sw.js         Service worker (offline app shell)
   icon.svg      App icon
@@ -89,6 +96,11 @@ upload, classify with Muse Spark (whole-photo stub segmenter until SAM 3.1),
 review, confirm into SQLite, undo, summary. Results and API:
 [INVENTORY-LOOP.md](INVENTORY-LOOP.md). Every photo is checked before any
 Spark call, and a failed photo is retaken on its own:
-[IMAGE-GUARDRAILS.md](IMAGE-GUARDRAILS.md). BrickGPT generation is still a stub.
+[IMAGE-GUARDRAILS.md](IMAGE-GUARDRAILS.md). The build step is wired on: the
+confirmed inventory goes to a known set or, through Path A, to a pre-generated
+BrickGPT design, and a build that fits gets a step-by-step booklet; one that
+doesn't gets a named shortfall. One batch runs through every stage with
+`python -m backend.full_loop`: [FULL-LOOP.md](FULL-LOOP.md). Live BrickGPT
+generation is off and the segmenter is still the whole-photo stub (SAM 3.1 next).
 No API keys or secrets live in this repo: the Baseten key is read from the
 git-ignored `.env` (`BASETEN_API_KEY`).

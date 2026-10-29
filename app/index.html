@@ -20,7 +20,7 @@
     .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
     .card h2 { margin: 0 0 6px; font-size: 18px; }
     .card p { margin: 0 0 12px; color: var(--muted); font-size: 14px; line-height: 1.45; }
-    .btn { display: block; width: 100%; padding: 14px; margin: 8px 0; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; text-align: center; }
+    .btn { display: block; width: 100%; padding: 14px; margin: 8px 0; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; text-align: center; text-decoration: none; }
     .btn-primary { background: var(--yellow); color: var(--ink); }
     .btn-secondary { background: #efebe0; color: var(--ink); }
     .btn-done { background: var(--green); color: #fff; }
@@ -57,6 +57,13 @@
     .modal-card .reason { font-weight: 600; }
     .modal-card .hint { color: var(--muted); font-size: 14px; }
     #retake-img { width: 100%; max-height: 34vh; object-fit: contain; border-radius: 10px; background: #111; display: block; margin: 4px 0 10px; }
+    .option { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 10px 0; }
+    .option.yes { border: 2px solid var(--green); }
+    .option h3 { margin: 0 0 6px; font-size: 16px; }
+    .option p { margin: 8px 0 0; font-size: 14px; }
+    .option .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 10px; background: #efebe0; }
+    .option.yes .chip { background: #dff1e6; color: var(--green); }
+    details summary { cursor: pointer; font-weight: 600; font-size: 15px; margin: 12px 0 4px; }
     .hidden { display: none; }
     footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 16px 24px; }
   </style>
@@ -91,6 +98,12 @@
       </div>
 
       <div class="card">
+        <h2>Build</h2>
+        <p>See what you can build from the pieces you've confirmed, and get a step-by-step booklet.</p>
+        <button class="btn btn-secondary" id="build-open-btn">🧱 What can I build?</button>
+      </div>
+
+      <div class="card">
         <h2>Finished?</h2>
         <p id="finished-note">Upload at least one batch, then tap Finished to see what was sent.</p>
         <button class="btn btn-done" id="finished-btn" disabled>Finished — show my batches</button>
@@ -119,6 +132,17 @@
         <ul class="batches" id="batch-list"></ul>
         <button class="btn btn-primary" id="ask-build-btn">Ask for a build</button>
         <button class="btn btn-secondary" id="back-btn">← Back to scanning</button>
+      </div>
+    </section>
+
+    <!-- 4. Build: what the confirmed inventory can build, and booklets -->
+    <section id="build-view" class="hidden">
+      <div class="card">
+        <h2>🧱 What can I build?</h2>
+        <p id="build-inventory"></p>
+        <div id="build-list"></div>
+        <p class="status" id="build-status" role="status" aria-live="polite"></p>
+        <button class="btn btn-secondary" id="build-back-btn">← Back to scanning</button>
       </div>
     </section>
   </main>
