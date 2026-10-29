@@ -31,6 +31,10 @@ backend/        FastAPI backend (inventory + generation API)
   inventory_vocab.py     Generator types, families, colour names
   segmenter.py           Segmenter interface: whole-photo stub, SAM 3.1 (one region per piece)
   sam_client.py          SAM 3.1 via the Meta Model API (key from .env, never logged)
+  wonder_design.py       Designs with every kind of owned piece: format, LDraw geometry, validator
+  wonder_client.py       Muse Wonder via the Meta Model API (key from .env, never logged)
+  wonder_designer.py     Wonder designs from the bin, validated, retried, booklet (parallel track)
+  designs/               Validated Wonder designs (not yet hand-built)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
   inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
   photo_gate.py          Per-photo checks before any Spark call (blur, light, pieces, fakes)
@@ -114,6 +118,9 @@ on the kit batch: [SAM-3-1.md](SAM-3-1.md).
 first (106; one, house-and-tree, has a verified piece list and a booklet; the
 others are shown with their pages and parts marked not yet verified), then
 BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
+Parallel track: Muse Wonder designs new models from every kind of piece in
+the bin (not just BrickGPT's 8 bricks), checked by a validator against the
+owned pieces and LDraw geometry: [WONDER-DESIGNER.md](WONDER-DESIGNER.md).
 On the phone, **Check the pieces** reviews an identified batch (dots on the
 photo, fix / remove / add, then add to the inventory, with undo):
 [REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
