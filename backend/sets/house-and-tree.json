@@ -1,8 +1,9 @@
 {
   "id": "house-and-tree",
   "title": "House and tree",
-  "subtitle": "A tiny house with a round roof, and a tree beside it. 7 pieces, 5 steps.",
-  "note": "BinBuild's own arrangement of the 7-piece house-and-tree set (piece list from the kit). Placements: x and y in studs, z in plates.",
+  "subtitle": "A little house with a round roof, and a tree. 7 pieces, 5 steps.",
+  "manual": {"page": 28, "chapter": 2},
+  "note": "Arranged as pictured in the manual on page 28 (steps and drawings are BinBuild's own). Piece list checked against the kit's confirmed inventory. Placements: x and y in studs, z in plates.",
   "parts": {
     "grass":    {"family": "plate", "shape": "plate",        "size": "1x6", "color": "lime"},
     "wall":     {"family": "brick", "shape": "brick",        "size": "1x2", "color": "orange"},
@@ -13,13 +14,13 @@
   "steps": [
     {"text": "Lay the long green plate flat on the table. That's the grass.",
      "place": [{"part": "grass", "at": [0, 0, 0]}]},
-    {"text": "Put the 2 orange bricks side by side at one end of the plate. They cover 4 studs: these are the walls.",
-     "place": [{"part": "wall", "at": [0, 0, 1]}, {"part": "wall", "at": [2, 0, 1]}]},
-    {"text": "Put the 2 black curved pieces on top of the walls, tall ends touching in the middle. That's the roof.",
-     "place": [{"part": "roof", "at": [0, 0, 4], "down": "-x"}, {"part": "roof", "at": [2, 0, 4], "down": "+x"}]},
-    {"text": "Skip one stud, then put the grey round brick on the last stud. That's the tree trunk.",
-     "place": [{"part": "trunk", "at": [5, 0, 1]}]},
+    {"text": "Leave one stud free at one end. Next to it, put an orange brick, then stack the other orange brick on top. That's the house.",
+     "place": [{"part": "wall", "at": [3, 0, 1]}, {"part": "wall", "at": [3, 0, 4]}]},
+    {"text": "Put the 2 black curved pieces on top of the house, tall ends together in the middle, so the roof hangs over both sides.",
+     "place": [{"part": "roof", "at": [2, 0, 7], "down": "-x"}, {"part": "roof", "at": [4, 0, 7], "down": "+x"}]},
+    {"text": "Put the grey round brick on the second stud from the other end. That's the tree trunk.",
+     "place": [{"part": "trunk", "at": [1, 0, 1]}]},
     {"text": "Put the green round plate on top of the trunk. That's the treetop.",
-     "place": [{"part": "treetop", "at": [5, 0, 4]}]}
+     "place": [{"part": "treetop", "at": [1, 0, 4]}]}
   ]
 }

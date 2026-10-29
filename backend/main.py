@@ -544,16 +544,41 @@ def create_app() -> FastAPI:
 
     @app.get("/api/builds/options")
     def get_build_options():
-        """Everything that could be built from the confirmed inventory: each
-        known set and each pre-generated BrickGPT design, with "fit",
-        "patched", "short" (and what is missing) or "not_connected".
-        Buildable first, then the closest shortfalls."""
+        """Everything there is to build, manual first:
+        - every build in the manual that came with the kit (kind "manual"):
+          a verified build is checked against the confirmed inventory ("fit"
+          or "short", with what is missing) and can get a booklet; every other
+          one is "unverified": listed with its chapter and pages, its piece
+          list not yet verified, no fit claim and no booklet;
+        - then the pre-generated BrickGPT designs, with "fit", "patched",
+          "short" or "not_connected"."""
         with closing(inventory_db.connect()) as conn:
             summary = inventory_db.inventory_summary(conn)
+        found = build_plan.options(summary["items"])
+        manual = [o for o in found if o["kind"] == "manual"]
+        count = lambda status: sum(o["piece_status"] == status for o in manual)  # noqa: E731
         return {"inventory": {"total_pieces": summary["total_pieces"],
                               "generator_ready": summary["generator_ready"]["total"],
                               "other": summary["other"]["total"] + summary["unknown"]["total"]},
-                "options": build_plan.options(summary["items"])}
+                "manual": {"builds": len(manual), "verified": count("verified"),
+                           "diagram_readable": count("diagram-readable"),
+                           "not_yet_piece_verified": count("not-yet-piece-verified"),
+                           "drafts_waiting": sum("draft" in o for o in manual),
+                           "hand_checked": sum(o.get("verified_by") == "hand-checked against the kit" for o in manual),
+                           "read_from": build_plan.manual_catalog()["read_from"]},
+                "options": found}
+
+    @app.get("/api/manual")
+    def get_manual():
+        """The manual catalog: every build in the book, its chapter and pages,
+        and the status of its piece list. No parts lists."""
+        return build_plan.manual_catalog()
+
+    @app.get("/api/manual/checklist", response_class=HTMLResponse)
+    def get_manual_checklist():
+        """The draft piece lists transcribed from the book, as a printable
+        page for hand-checking them against the kit. Drafts, not verified."""
+        return HTMLResponse(booklet.render_checklist(list(build_plan.manual_drafts().values())))
 
     @app.post("/api/builds", status_code=201)
     def create_build(request: BuildRequest):

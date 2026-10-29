@@ -37,7 +37,10 @@ backend/        FastAPI backend (inventory + generation API)
   build_plan.py          The build step: known sets, BrickGPT designs through Path A
   brickgpt_constraint.py Path A: generate (pre-generated designs) -> filter -> patch
   booklet.py             Step-by-step booklet: JSON + printable HTML page with drawings
-  sets/                  Known sets (house-and-tree)
+  sets/                  Known sets with verified piece lists (house-and-tree)
+  manual/catalog.json    Every build in the kit's manual: name, chapter, pages, piece-list status
+  manual/drafts/         Draft piece lists read from the book (unverified until hand-checked)
+  manual_check.py        Hand-check a draft against the kit (python -m backend.manual_check)
   full_loop.py           One batch through every stage via the API (recorded Spark reply)
   requirements.txt
 tests/          Standard-library unit tests (python3 -m unittest discover -s tests;
@@ -107,6 +110,10 @@ generation is off. SAM 3.1 (Meta Model API) is wired in behind the same
 segmenter interface: one mask per piece, close-ups checked by Spark, outlines
 in review. It is opt-in (`?segmenter=sam` or `BINBUILD_SEGMENTER=sam`); results
 on the kit batch: [SAM-3-1.md](SAM-3-1.md).
+"What can I build?" lists every build in the manual that came with the kit
+first (106; one, house-and-tree, has a verified piece list and a booklet; the
+others are shown with their pages and parts marked not yet verified), then
+BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
 On the phone, **Check the pieces** reviews an identified batch (dots on the
 photo, fix / remove / add, then add to the inventory, with undo):
 [REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).

@@ -201,9 +201,11 @@ class TestBuildPlan(unittest.TestCase):
 
     def test_options_order(self):
         found = bp.options(KIT_ITEMS)
-        self.assertEqual([(o["id"], o["status"]) for o in found[:2]], [("house-and-tree", "fit"), ("train", "short")])
+        designs = [o for o in found if o["kind"] == "brickgpt"]
+        self.assertEqual((found[0]["id"], found[0]["status"]), ("house-and-tree", "fit"))  # the manual comes first
+        self.assertEqual((designs[0]["id"], designs[0]["status"]), ("train", "short"))
         self.assertEqual({o["status"] for o in found[-2:]}, {"not_connected"})
-        self.assertEqual(len(found), 1 + len(bp.designs()))
+        self.assertEqual(len(found), len(bp.manual_catalog()["builds"]) + len(bp.designs()))
 
 
 def seed(conn, items, batch_id="20261029-000000-aaaaaa"):
