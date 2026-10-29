@@ -26,6 +26,13 @@
  * opened from the backend as a printable page. Every other manual build is
  * listed with its chapter, pages and the status of its piece list, and gets
  * no fit claim and no booklet: it is built from the book.
+ *
+ * When the backend runs with BINBUILD_WONDER=1 (off by default), a third
+ * section follows the BrickGPT designs: "Generate a new design". One tap is
+ * one generation (POST /api/builds/wonder): Muse Wonder designs from the
+ * confirmed pieces, BinBuild's validator checks every proposal, and only a
+ * design that passes is shown, with its parts and booklet; otherwise the
+ * shortfall. Nothing is generated without a tap.
  */
 
 // Where the FastAPI backend lives. Default: the machine that served this page,
@@ -47,6 +54,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
   var IDENTIFY_TIMEOUT_MS = 240000;
   var HEALTH_TIMEOUT_MS = 4000;
   var BUILD_TIMEOUT_MS = 30000;
+  var WONDER_TIMEOUT_MS = 15 * 60000;  // up to 5 tries of about 2 minutes each
 
   var slots = VIEWS.map(function () { return null; }); // confirmed { file, url } per view
   var pending = null;   // { file, url } under review, not yet in the batch
@@ -936,6 +944,86 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
       }
       if (!checked.some(buildable) && !yes.length) {
         setStatus('Nothing with a checked piece list fits your pieces yet; each one says what is missing.', null, buildStatus);
+      }
+      if (body.wonder && body.wonder.enabled) { list.appendChild(wonderSection(body.wonder, inv)); }
+    });
+  }
+
+  // --- generate a new design (Muse Wonder, only when the backend turns it on) ---
+
+  function wonderResult(r) {
+    var box = el('div', 'option ' + (r.booklet_url ? 'yes' : 'no'));
+    box.appendChild(el('h3', null, (r.title || 'New design') + ' · Muse Wonder'));
+    box.appendChild(el('span', 'chip', r.booklet_url ? '✓ Checked: only your pieces, all held by studs'
+      : r.status === 'short' ? 'Not enough pieces' : 'No design passed the check'));
+    box.appendChild(el('p', null, r.message));
+    if (r.parts) {
+      var parts = el('ul', 'wparts');
+      r.parts.forEach(function (p) { parts.appendChild(el('li', null, p.qty + '× ' + p.label)); });
+      box.appendChild(parts);
+    }
+    if (r.problems && r.problems.length) {
+      box.appendChild(el('p', 'note', 'What the checker found in the last try: ' + r.problems.slice(0, 3).join(' · ')));
+    }
+    if (r.booklet_url) {
+      var link = el('a', 'btn btn-done', '📖 Open the booklet' + (r.steps ? ' (' + r.steps + ' steps)' : ''));
+      link.href = BACKEND_URL + r.booklet_url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      box.appendChild(link);
+    }
+    if (r.tries) {
+      box.appendChild(el('p', 'note', r.tries.length + (r.tries.length === 1 ? ' try' : ' tries') + ', ' +
+        Math.round(r.seconds) + ' s, $' + Number(r.usd).toFixed(2) + '.'));
+    }
+    return box;
+  }
+
+  function wonderSection(w, inv) {
+    var wrap = el('div', 'wonder');
+    section(wrap, '✨ New design from your pieces');
+    wrap.appendChild(el('p', 'note', 'Muse Wonder invents something new from all ' + inv.total_pieces +
+      ' of your confirmed pieces. BinBuild checks every design (only pieces you own, every piece held by studs) ' +
+      'before you see it. Each try takes about ' + Math.round(w.per_try.seconds / 60) + ' min and costs about $' +
+      w.per_try.usd.toFixed(2) + '; if a design fails the check, Wonder tries again, up to ' + w.max_tries + ' tries.'));
+    var pick = el('select', 'wtarget');
+    pick.setAttribute('aria-label', 'What to design');
+    w.targets.forEach(function (t) { var o = el('option', null, t); o.value = t; pick.appendChild(o); });
+    wrap.appendChild(pick);
+    var btn = el('button', 'btn btn-primary', '✨ Generate a new design');
+    var out = el('div', 'wresult');
+    var status = el('p', 'status');
+    btn.disabled = !inv.total_pieces || w.busy;
+    if (w.busy) { setStatus('A new design is already being made. Check back in a minute.', null, status); }
+    btn.addEventListener('click', function () { generateDesign(pick.value, btn, pick, out, status); });
+    wrap.appendChild(btn);
+    wrap.appendChild(status);
+    wrap.appendChild(out);
+    if (w.recent && w.recent.length) {
+      wrap.appendChild(el('p', 'section-label', 'Designs made before'));
+      w.recent.forEach(function (r) { wrap.appendChild(wonderResult(r)); });
+    }
+    return wrap;
+  }
+
+  function generateDesign(target, btn, pick, out, status) {
+    var started = Date.now();
+    btn.disabled = true;
+    pick.disabled = true;
+    var tick = setInterval(function () {
+      btn.textContent = 'Designing ' + target + '… ' + Math.round((Date.now() - started) / 1000) + ' s';
+    }, 1000);
+    setStatus('Muse Wonder is designing. Keep this screen open: it takes a minute or two, longer if it needs another try.', null, status);
+    request('POST', '/api/builds/wonder', { target: target }, WONDER_TIMEOUT_MS, function (xhr, body, failure) {
+      clearInterval(tick);
+      btn.disabled = false;
+      pick.disabled = false;
+      btn.textContent = '✨ Generate a new design';
+      if (!failure && xhr.status === 201 && body) {
+        setStatus('', null, status);
+        out.insertBefore(wonderResult(body), out.firstChild);
+      } else {
+        setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', status);
       }
     });
   }

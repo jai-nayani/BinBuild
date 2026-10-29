@@ -4,7 +4,7 @@
  * Network first, so a freshly served app.js always wins over the cached one;
  * the cache is only the offline fallback. API calls are never cached.
  */
-var CACHE_NAME = 'binbuild-v8';
+var CACHE_NAME = 'binbuild-v9';
 var SHELL = [
   './',
   './index.html',

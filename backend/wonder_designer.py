@@ -8,8 +8,10 @@ MAX_ATTEMPTS times. The result is a design that passed, with its parts list,
 placements and a booklet, or an explicit failure naming the shortfall and
 the errors of the last attempt, like Path A.
 
-This is a parallel track: nothing in the app calls it, and live generation
-stays off elsewhere. From the repo root:
+The app can call it too, from "What can I build?", but only when the backend
+runs with BINBUILD_WONDER=1 (off by default) and only when the user taps
+Generate: one tap, one generation (app_result below is what it stores and
+shows). From the repo root:
     python -m backend.wonder_designer --target "a simple house"
     python -m backend.wonder_designer --replay tests/fixtures/wonder-house-recorded.json
 Output goes to data/wonder/<time>/ (git-ignored): design.txt, report.json,
@@ -32,6 +34,9 @@ from . import wonder_design as wd
 
 MAX_ATTEMPTS = 5
 REPO = Path(__file__).resolve().parent.parent
+# What the app offers to design, and what one try costs (two live runs, Oct 29: $0.20-0.29, 88-145 s).
+TARGETS = ("a simple house", "a little car", "an animal", "a robot", "a boat")
+PER_TRY = {"usd": 0.25, "seconds": 120}
 
 TOP = {
     "all": "a stud on every cell",
@@ -200,6 +205,36 @@ def make_booklet(title, pieces, target, turn=False):
              "Nobody has built it yet: if something doesn't hold, tell us."]
     return bk.booklet(title, f"{len(pieces)} pieces, {len(steps)} steps.", places, steps,
                       source="the pieces in your bin (Muse Wonder design)", notes=notes)
+
+
+def app_result(result, owned) -> dict:
+    """A generation for the app to store as a build. Only a design that
+    passes the validator on the owned pieces gets parts, placements and a
+    booklet; anything else is a failure naming the shortfall, like Path A."""
+    tries = [{"n": a.n, "pieces": len(wd.parse(a.design)[0]), "errors": len(a.errors),
+              "seconds": a.seconds, "usd": a.usd} for a in result.attempts]
+    base = {"kind": "wonder", "id": "wonder", "target": result.target, "tries": tries,
+            "usd": result.usd, "seconds": result.seconds, "model": "muse-wonder-1.0"}
+    check = wd.validate(result.design, owned) if result.ok else None
+    if check is not None and check.ok:   # checked again here: nothing unvalidated is stored or shown
+        pieces = check.pieces
+        n = len(result.attempts)
+        return {**base, "status": "fit", "title": result.title, "pieces": len(pieces),
+                "parts": parts_list(pieces), "placements": [p.text() for p in pieces], "design": result.design,
+                "message": (f"A new design from your pieces: {len(pieces)} pieces, checked by BinBuild (only pieces "
+                            f"you own, every piece held by studs). Found on try {n} of {MAX_ATTEMPTS}. "
+                            "Nobody has built it yet."),
+                "booklet": make_booklet(result.title, pieces, result.target)}
+    last = result.attempts[-1] if result.attempts else None
+    short = result.shortfall or (last.shortfall if last else {})
+    if short:
+        message = ("No design fits your pieces after "
+                   f"{len(result.attempts)} tries. Short of " + ", ".join(f"{n}× {k}" for k, n in short.items()) + ".")
+    else:
+        message = (f"No design passed BinBuild's check in {len(result.attempts)} tries"
+                   + (f"; the last one still had {len(last.errors)} problems." if last else "."))
+    return {**base, "status": "short" if short else "failed", "title": f"New design: {result.target}",
+            "shortfall": short, "problems": (last.errors[:8] if last else []), "message": message}
 
 
 def owned_inventory(source="db") -> dict:

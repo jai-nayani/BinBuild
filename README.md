@@ -123,6 +123,9 @@ trial-day run sheet: [INTEGRATION.md](INTEGRATION.md).
 Parallel track: Muse Wonder designs new models from every kind of piece in
 the bin (not just BrickGPT's 8 bricks), checked by a validator against the
 owned pieces and LDraw geometry: [WONDER-DESIGNER.md](WONDER-DESIGNER.md).
+With `BINBUILD_WONDER=1` (off by default, and off for the kid trials) "What
+can I build?" gains a third section, "Generate a new design", wired to that
+designer: [WONDER-IN-APP.md](WONDER-IN-APP.md).
 On the phone, **Check the pieces** reviews an identified batch (dots on the
 photo, fix / remove / add, then add to the inventory, with undo):
 [REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
