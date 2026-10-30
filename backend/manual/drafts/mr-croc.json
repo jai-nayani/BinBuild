@@ -1,0 +1,73 @@
+{
+ "id": "mr-croc",
+ "name": "Mr Croc",
+ "pages": [
+  20
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 20, photo IMG_3593, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Mr Croc is the small horizontal blue crocodile at the top centre of page 20, before the dotted line leading to the standing T. rex version.",
+ "count_note": "No element total is printed for this model; count is from visible pieces only, with the magenta plate and the backs of the head/tail pieces partly hidden.",
+ "elements_total": 8,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "light-blue studded plate forming the long body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Dark piece at the tail end appears to show four studs in a 2x2 area, but no 2x2 dark-purple plate is in the kit; best fit is two 1x2 plates side by side, partly hidden under/behind the body plate, and",
+   "as_read": "dark purple studded piece on top at tail end"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "Only a pink edge protrudes from under the medium-azure body plate, so most of the piece and its exact extent are hidden.",
+   "as_read": "pink plate edge sticking out under body"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Grey head block is partly hidden under the body plate and seen from one side; width suggests two 1x1 bricks but the join is not clearly visible, and light grey prints near-white.",
+   "as_read": "light-grey head block at front end"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": false,
+   "doubt": "Two eye tiles appear staggered by perspective on the grey head, but one is partly obscured behind the other/body.",
+   "as_read": "white round eye tiles with lashes on head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

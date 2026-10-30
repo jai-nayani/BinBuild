@@ -1,0 +1,53 @@
+{
+ "id": "mini-city-airplane",
+ "name": "Airplane over Mini City",
+ "pages": [
+  31
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 31, photo IMG_3599, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small white-winged airplane in the upper-right of page 31, flying over the painted Mini City beside the BUILD BOOST text.",
+ "count_note": "No element count is printed for this BUILD BOOST airplane; this is the count visible in the small illustration and hidden pieces may not be visible.",
+ "elements_total": 4,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "Second wing is partly hidden behind the fuselage, with only its tapered tip clearly visible",
+   "as_read": "white tapered wing plates on both sides"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Grey fuselage is partly hidden by the wings; a second matching slope may be hidden beneath it, and light grey prints near-white",
+   "as_read": "smooth grey fuselage through the wings"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "Orange piece is partly separated visually by the intervening wing, so its attachment and exact count are uncertain",
+   "as_read": "orange two-stud brick at rear of plane"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

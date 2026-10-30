@@ -326,24 +326,38 @@ def render_checklist(drafts) -> str:
 .draft td.box { width: 22px; } .draft td.qty { width: 34px; font-weight: 700; text-align: right; }
 .draft tr.unsure { background: #fff6d8; } .draft .why { color: #8a5a00; font-size: 12px; display: block; }
 .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.3); margin-right: 6px; vertical-align: -1px; }
+.draft .by { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 8px; background: #e7eefb; color: #2d4a7c; margin-left: 4px; }
+.draft .count { color: #8a5a00; }
 """
+    drafts = sorted(drafts, key=lambda d: (d["pages"][0], d["id"]))
     waiting = sum(not d["hand_check"]["done"] for d in drafts)
+    by_wonder = sum(d.get("read_by") == "muse-wonder-1.0" for d in drafts)
     out = ["<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">",
            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
            f"<title>Manual hand-check · BinBuild</title><style>{css}</style></head><body>",
            "<header><h1>✅ Manual hand-check</h1>"
-           f"<p>{len(drafts)} draft piece lists read from the book · {waiting} waiting for a check</p></header><main>",
+           f"<p>{len(drafts)} draft piece lists read from the book · {waiting} waiting for a check"
+           + (f" · {by_wonder} read by Muse Wonder" if by_wonder else "") + "</p></header><main>",
            '<section class="card"><p class="note">For each build: lay these pieces out from the kit next to its page '
            "and build the model once. Tick each line; fix a count or a colour that's wrong. Highlighted lines were "
            "hard to read in the photo. Then record it: <code>python -m backend.manual_check &lt;id&gt; --done --by "
-           "NAME</code> (use <code>--set</code> and <code>--sure</code> for fixes).</p></section>"]
+           "NAME</code> (use <code>--set</code> and <code>--sure</code> for fixes).</p>"
+           + ('<p class="note">Lists marked <b>read by Muse Wonder</b> come from the picture of the finished model, '
+              "not from a printed list: pieces hidden inside the model may be missing or guessed, so build it "
+              "before you tick.</p>" if by_wonder else "") + "</section>"]
     for d in drafts:
         done = d["hand_check"]["done"]
+        wonder = d.get("read_by") == "muse-wonder-1.0"
+        cc = d.get("count_check")
+        count = (f' · <span class="count">the page says {cc["page_says"]}'
+                 + ("" if cc["matches"] else f', this list has {cc["list_total"]}') + "</span>") if cc else ""
+        note = f'<p class="note">Wonder: {html.escape(d["count_note"])}</p>' if d.get("count_note") else ""
         out.append(f'<section class="card draft"><h2><span>{html.escape(d["name"])} '
-                   f'<small>· pages {", ".join(map(str, d["pages"]))}</small></span>'
+                   f'<small>· page{"s" * (len(d["pages"]) > 1)} {", ".join(map(str, d["pages"]))}</small>'
+                   + ('<span class="by">read by Muse Wonder</span>' if wonder else "") + '</span>'
                    f'<span class="state{" done" if done else ""}">{"hand-checked" if done else "draft"}</span></h2>'
-                   f'<p class="note">{html.escape(d["id"])} · {d["elements_total"]} elements · '
-                   f'{d["unsure_elements"]} unsure · from {html.escape(d["read_from"])}</p><table>')
+                   f'<p class="note">{html.escape(d["id"])} · {d["elements_total"]} elements{count} · '
+                   f'{d["unsure_elements"]} unsure · from {html.escape(d["read_from"])}</p>{note}<table>')
         for e in sorted(d["elements"], key=lambda e: e["sure"]):
             why = f'<span class="why">unsure: {html.escape(e["doubt"] or "")}</span>' if not e["sure"] else ""
             out.append(f'<tr class="{"" if e["sure"] else "unsure"}"><td class="box">☐</td>'

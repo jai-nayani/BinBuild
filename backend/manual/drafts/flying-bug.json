@@ -1,0 +1,83 @@
+{
+ "id": "flying-bug",
+ "name": "Flying bug",
+ "pages": [
+  64
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 64, photo IMG_3615, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The flying bug is the illustrated bug on page 64, shown at upper left and again near step 2, with an orange head, two eyes and a long white wing.",
+ "count_note": "The same bug is drawn twice on page 64 for the game steps and was counted once; no printed element total for this bug was visible.",
+ "elements_total": 7,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange block forming the head"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two printed eye tiles on the head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark piece prints navy-blue; closest listed piece is dark purple and exact length is partly obscured in the illustration",
+   "as_read": "dark protruding plate at one end"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal body plate is partly hidden behind the white wing and orange head, so its full size cannot be counted",
+   "as_read": "teal flat piece under the head and wing"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "stylised illustration shows a long white wing with studs along one edge; taper is not clearly visible, wedge plate is the closest listed piece",
+   "as_read": "long white wing with studs along one edge"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "piece prints yellow-green, consistent with lime printing differently; clip end partly visible",
+   "as_read": "green-yellow clipped piece under the wing"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

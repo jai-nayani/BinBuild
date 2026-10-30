@@ -1,0 +1,63 @@
+{
+ "id": "traffic-light",
+ "name": "Traffic light",
+ "pages": [
+  31
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 31, photo IMG_3599, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A tall traffic light with a grey pole and lime head at the top-left of the city scene on page 31.",
+ "count_note": "No separate element count is printed for the traffic light; this is the visible count only, with the base and cap partly obscured.",
+ "elements_total": 6,
+ "unsure_elements": 6,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "Base is at the picture edge and printed pink-purple, so magenta versus dark purple and its exact size are partly obscured.",
+   "as_read": "pink-purple flat base at end of pole"
+  },
+  {
+   "qty": 3,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Pole segment joins are partly hidden behind the base and head; three grey cylindrical segments are visible.",
+   "as_read": "three grey cylindrical pole segments"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green in the photo; shape and two side studs match this piece.",
+   "as_read": "yellow-green head with two side studs"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Small dark-blue cap is partly obscured and its sloped profile is not clear; this is the closest listed piece.",
+   "as_read": "small dark blue square cap on top of head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

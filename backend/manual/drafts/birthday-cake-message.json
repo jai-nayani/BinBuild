@@ -1,0 +1,83 @@
+{
+ "id": "birthday-cake-message",
+ "name": "Birthday cake (message to aliens)",
+ "pages": [
+  95
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 95, photo IMG_3630, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small layered birthday-cake symbol on the right-hand side of page 95, with a flat base, stacked coloured layers and lime studs on top.",
+ "count_note": "No element count for this model is printed on the page.",
+ "elements_total": 10,
+ "unsure_elements": 9,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Base plate is in shadow and partly overlapped by the cake layers, so its size is estimated from the visible top surface.",
+   "as_read": "teal flat base plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Colour looks dark blue-purple in print and the layer is partly hidden behind the black slopes.",
+   "as_read": "dark purple lower cake layer"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange middle cake layer"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "Partly covered by the lime round plates on top, so the 2x2 size is inferred.",
+   "as_read": "pink-magenta upper cake layer"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime looks yellow-green in print and the small round studs overlap each other, so the count is an estimate.",
+   "as_read": "cluster of yellow-green round studs on top"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Pieces are partly hidden behind the cake layers, so their shape and size are inferred from the visible curves.",
+   "as_read": "black curved pieces flanking the cake"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,123 @@
+{
+ "id": "moo-airlines",
+ "name": "Moo Airlines",
+ "pages": [
+  71
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 71, photo IMG_3618, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Moo Airlines is the flying cow airplane at the bottom of page 71 under the green 'Moo Airlines' label, beside the 'NOW I CAN JUMP OVER THE MOON!' speech bubble.",
+ "count_note": "No printed element count for this model is visible on pages 70-71; total is my visible count only.",
+ "elements_total": 14,
+ "unsure_elements": 11,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange front face of head"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two closed-eye tiles on orange face"
+  },
+  {
+   "qty": 4,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "two grey telescopic eye stalks appear two bricks long each, but the joints/bases are partly hidden behind the lime head piece",
+   "as_read": "two long grey round eye stalks"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime upright behind the face is partly hidden by the eyes and eye stalks; lime may print yellow-green",
+   "as_read": "lime upright piece behind eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "long lime wing crosses the body and its ends partly overlap other pieces, so length is estimated",
+   "as_read": "long lime-green wing plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "blue wing plate is angled and partly under the body, so its full size is partly hidden",
+   "as_read": "blue flat wing on opposite side"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "white rear wing is partly covered by the black slope and seen at an angle",
+   "as_read": "white pointed tail wing at rear"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "black piece sits on the white tail wing; its length is partly hidden",
+   "as_read": "black curved cap on tail"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "azure curved body piece behind the head is partly hidden by the lime wing and eye stalks",
+   "as_read": "azure curved piece with one stud behind head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "small dark piece at the front underside looks blue in print; dark purple can look blue, and it is partly hidden",
+   "as_read": "small dark blue-purple plate tip under face"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

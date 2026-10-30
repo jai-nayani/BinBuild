@@ -1,0 +1,73 @@
+{
+ "id": "rabbit-half-listening",
+ "name": "Rabbit face (half-listening)",
+ "pages": [
+  48
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 48, photo IMG_3607, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A flat rabbit face with white wedge ears at the top-left of the upper page, beside the 'I'M ONLY HALF-LISTENING!' speech bubble.",
+ "count_note": "No printed element count for this model is visible on the page; total is the count of pieces visible/inferred in the pictured model.",
+ "elements_total": 8,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Face studs and edges are partly covered by the nose plates, eye tiles and ear wedges; two-plate 4-wide face inferred from the visible grid.",
+   "as_read": "light-blue flat face made of two plates"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Printed colour looks dark blue/navy, matching the warning that dark purple can look blue.",
+   "as_read": "dark rectangle on face beside white plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white rectangle with one central stud on face"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two round open-eye tiles"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white triangular wedge ears on opposite sides"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

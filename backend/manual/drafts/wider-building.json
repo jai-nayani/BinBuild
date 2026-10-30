@@ -1,0 +1,93 @@
+{
+ "id": "wider-building",
+ "name": "Wider building",
+ "pages": [
+  36
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 36, photo IMG_3601, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The wider building is the large two-pillared building on the left side of page 37, also shown small at step 3 on page 36.",
+ "count_note": "No printed element count for this model was seen on pages 36-37; total is the sum of the pieces listed from the pictured example.",
+ "elements_total": 9,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "light blue 2x4 base plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and the discs partly overlap the cylinder on the base, so stacking is partly hidden",
+   "as_read": "two small lime round discs on the base"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Light grey prints near-white and the cylinder is partly hidden behind the round plates",
+   "as_read": "pale grey-white cylinder on the base"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and the side studs are turned inwards and hidden, pillars identified by their tall shape",
+   "as_read": "two tall yellow-green pillars"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "The blue cross-piece is partly hidden behind the pillars and its side studs are not visible",
+   "as_read": "dark blue cross-piece near the top"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Only the front face of the small purple piece is visible between the pillars, so its depth is hidden",
+   "as_read": "small dark purple rectangle under the roof"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Grey roof is seen mainly in profile and could resemble a wedge, but its thick curved outline best matches the 1x3 curved slope",
+   "as_read": "large grey curved roof cap"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

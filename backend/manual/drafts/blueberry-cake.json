@@ -1,0 +1,53 @@
+{
+ "id": "blueberry-cake",
+ "name": "Blueberry cake",
+ "pages": [
+  51
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 51, photo IMG_3608, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small blue-purple cake with a lime round topping pictured at the lower left of page 51.",
+ "count_note": "No element count is printed for the cake; the elements list on page 50 is for the elephant, so no total comparison is possible.",
+ "elements_total": 4,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "Only a white pointed tip is visible at the left side under the cake; the rest is hidden and its size cannot be counted.",
+   "as_read": "white pointed piece under cake"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Purple-blue cake body looks blue in print and partly overlaps; it could instead be a single 2x2 purple plate, so the 1x2 count is uncertain.",
+   "as_read": "dark blue-purple square cake layer"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Small yellow-green round centre is visible, but it is tiny and lime prints yellowish in the book.",
+   "as_read": "lime round stud on top centre"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

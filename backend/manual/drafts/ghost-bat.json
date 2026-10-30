@@ -1,0 +1,63 @@
+{
+ "id": "ghost-bat",
+ "name": "Ghost Bat",
+ "pages": [
+  39
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 39, photo IMG_3602, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Ghost Bat is the small white-winged bat model in the middle-left of page 39, beside its yellow Ghost Bat label.",
+ "count_note": "No element count is printed for this Build Boost example; the total is from the pieces visible in the pictured model only.",
+ "elements_total": 7,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white four-stud wing plates"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two closed-eye round tiles"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "black body is partly hidden between the wings and eyes, so its division into two slopes is not fully clear",
+   "as_read": "two black blocks forming the body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "small central connector is partly hidden behind the wings and eye tiles and its printed colour could be distorted",
+   "as_read": "small purple plate at the centre"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,83 @@
+{
+ "id": "unknown-airplane",
+ "name": "Airplane (built blindfolded)",
+ "pages": [
+  61
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 61, photo IMG_3613, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The model labelled Airplane is the small stacked flying model at the lower centre of page 61.",
+ "count_note": "No element count is printed for this model on pages 60-61; total is the six pieces I can distinguish.",
+ "elements_total": 6,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "dark blue 1x4 brick with four side studs on the left"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal flat base is partly hidden under the orange brick and blue brick, size inferred",
+   "as_read": "teal flat plate under the orange centre"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange brick in the centre"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "long white wing plate is seen at an angle, tapered end and full width partly hidden; closest listed piece is the white 2x4 wedge plate",
+   "as_read": "long white plate with a row of studs rising from the centre"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "dark teal upright piece behind the orange brick is partly hidden, shape and size inferred",
+   "as_read": "small dark teal curved block behind orange"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "small grey cylinder at the front is partly hidden and its length/orientation is unclear, count is best estimate",
+   "as_read": "small light grey round piece protruding at the front right"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,93 @@
+{
+ "id": "four-legged-space-station",
+ "name": "Space station on four legs",
+ "pages": [
+  79
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 79, photo IMG_3622, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The small space station beside the BUILD BOOST box on page 79, standing at the edge of the illustrated planet.",
+ "count_note": "No printed element total for this open-ended example; model is small in the photo and some pieces are partly hidden, so the count is a best reading.",
+ "elements_total": 12,
+ "unsure_elements": 10,
+ "elements": [
+  {
+   "qty": 4,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Legs look white in print and two are partly hidden behind the body; four inferred from the visible legs and the four-legged stance",
+   "as_read": "four short white cylindrical legs"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Main plate is partly covered by pieces on top, so its exact extent is uncertain",
+   "as_read": "cyan flat main body plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "White wing-like piece is partly hidden at the far side of the body",
+   "as_read": "white studded wing plate"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Black curved hull appears as one arc; the join between two pieces is partly hidden",
+   "as_read": "black curved arc under body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Small blue curved top is partly obscured and its size is hard to count at this scale",
+   "as_read": "blue curved piece on top"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime looks yellow-green in print and the plate end is partly covered by an eye tile",
+   "as_read": "lime plate under eye tiles"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white round eye tiles"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

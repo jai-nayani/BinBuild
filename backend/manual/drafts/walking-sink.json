@@ -1,0 +1,93 @@
+{
+ "id": "walking-sink",
+ "name": "Walking sink with mirror",
+ "pages": [
+  82
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 82, photo IMG_3624, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The walking sink is the small blue, orange and white creature-like model at the lower right of the yellow page 82, labelled 'Walking sink with mirror'.",
+ "count_note": "No element count is printed for this example; model is very small and partly obscured, so hidden pieces may be missed.",
+ "elements_total": 9,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Model is very small; blue body partly hidden and side studs only partly visible",
+   "as_read": "blue main body holding the eyes"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "Small image; orange block partly obscured, size estimated",
+   "as_read": "orange block on top of blue body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Small teal curved piece partly hidden behind orange and blue pieces; shape and size uncertain",
+   "as_read": "medium azure curved hump on upper body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "White upright studded piece is partly cropped by angle; wedge shape and stud count not fully clear",
+   "as_read": "white studded upright plate at back"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green in the book; two small round studs on white piece, partly hidden",
+   "as_read": "two lime round studs on white piece"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white printed eyes on front"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Small light-grey protrusion at side is partly hidden and shape unclear; closest listed piece, light grey prints near-white",
+   "as_read": "small light-grey side protrusion"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

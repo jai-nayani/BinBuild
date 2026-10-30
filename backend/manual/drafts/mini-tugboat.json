@@ -1,0 +1,98 @@
+{
+ "id": "mini-tugboat",
+ "name": "Mini-tugboat",
+ "pages": [
+  9
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 9, photo IMG_3584, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small boat with a grey chimney, orange cabin and black bow at the upper right of page 9.",
+ "count_note": "Total matches the printed 10 elements.",
+ "elements_total": 10,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "grey round chimney at rear"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange cabin block"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "lower plate is partly behind the orange cabin and the colour prints dark blue-purple",
+   "as_read": "dark plate on cabin and under white plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "only its edge is visible and its central stud is hidden under the round brick",
+   "as_read": "white plate under chimney"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "partly covered by the cabin and bow, so not all studs can be counted",
+   "as_read": "teal deck plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "seen from the side as one pink-red strip; the seam between the two plates is not visible and the colour prints redder than magenta",
+   "as_read": "pink-red hull plate strip"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "two side-by-side slopes inferred from the deck width; the far slope is largely hidden behind the near one",
+   "as_read": "black curved bow"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "count_check": {
+  "page_says": 10,
+  "list_total": 10,
+  "matches": true
+ }
+}

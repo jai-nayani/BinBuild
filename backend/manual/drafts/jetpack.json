@@ -1,0 +1,63 @@
+{
+ "id": "jetpack",
+ "name": "Jetpack",
+ "pages": [
+  83
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 83, photo IMG_3624, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Jetpack is the small diagonal white-and-teal model at the left of page 83, next to its label.",
+ "count_note": null,
+ "elements_total": 7,
+ "unsure_elements": 5,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "Long white base is partly hidden under the azure pieces and seen at an angle, so its taper and exact width are hard to confirm; it appears as a long white studded bar.",
+   "as_read": "long white studded base"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two teal curved humps on the base"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Small grey cylinders at both ends are partly hidden behind the base and lime tips.",
+   "as_read": "grey cylinder at each end"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Tiny lime end caps are small in the photo; colour appears lime-green.",
+   "as_read": "lime round tip at each end"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

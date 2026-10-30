@@ -1,0 +1,53 @@
+{
+ "id": "guitar",
+ "name": "Guitar",
+ "pages": [
+  23
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 23, photo IMG_3594, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Guitar is the white-bodied, long green-necked model at the upper left of page 23, labelled 'Guitar'.",
+ "count_note": "No separate element count is printed for the Guitar.",
+ "elements_total": 3,
+ "unsure_elements": 0,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "long green neck with studs"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white tapered wedge guitar body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "small green round stud on body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

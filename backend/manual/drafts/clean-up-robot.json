@@ -1,0 +1,83 @@
+{
+ "id": "clean-up-robot",
+ "name": "Clean-up Robot",
+ "pages": [
+  75
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 75, photo IMG_3620, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Clean-up Robot is the labelled robot in the centre of page 75, with a black central body, lime limbs and head, and a single eye on a grey neck.",
+ "count_note": "No printed element total is visible on pages 74-75; total is my visible count only and hidden neck/arm joints may affect the round-brick count.",
+ "elements_total": 9,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "Central black bar is partly covered by the magenta plate and neck; identified as the hinge body from its length and end bars.",
+   "as_read": "black vertical bar at centre"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and both pieces are partly behind the body/arms; count inferred as one at each end of the black hinge bar.",
+   "as_read": "lime limb pieces at both ends of black body"
+  },
+  {
+   "qty": 3,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Light grey looks near-white; grey cylinders overlap, so the neck may contain one or two round bricks plus one in the side arm.",
+   "as_read": "grey cylinders forming neck and side arm"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and head is seen at an angle, partly obscuring its height and side studs.",
+   "as_read": "lime head block bearing the eye"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white round eye tile on lime head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "Partly hidden behind the black body, so its full 2x2 extent cannot be seen.",
+   "as_read": "pink-magenta square plate on side of body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

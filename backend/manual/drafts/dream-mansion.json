@@ -1,0 +1,133 @@
+{
+ "id": "dream-mansion",
+ "name": "Dream mansion",
+ "pages": [
+  29
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 29, photo IMG_3598, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The blue-and-white flat mansion with entrance gates, path and tree is in the centre and left of page 29.",
+ "count_note": "No element total is printed for the dream mansion on page 29 (the 7-element count on page 28 is for the simple house and tree); the small visitor figure at the bottom-left corner was excluded as a separate model.",
+ "elements_total": 20,
+ "unsure_elements": 14,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two teal-blue 2x4 plates forming top and bottom of the mansion"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white pointed wedge plates at the right end of the mansion"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "white middle section between the wedges is partly obscured and its stud pattern is hard to read",
+   "as_read": "white 2x2 section with two studs between the wedges"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "sure": true,
+   "doubt": null,
+   "as_read": "clear 1x2 plate centred on each medium-azure plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark purple prints blue-purple; pieces form the left half of the middle strip and exact division is partly hidden under the colour change",
+   "as_read": "two dark purple 1x2 plates in the middle strip"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "right half of the middle strip prints dark blue rather than magenta; this is the closest listed 2x2 plate and the shape/size match",
+   "as_read": "dark blue-purple 2x2 square in the right half of the middle strip"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green; the long path plate is clear but its role between mansion and gates could be separate scenery",
+   "as_read": "long yellow-green 1x6 path plate in front of the mansion"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "the two black entrance gates are seen from above/side and a gate could be made of more than one curved slope partly hidden behind the lime stud",
+   "as_read": "two black curved entrance gates on the left"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green; two are on the gates and two small green apples/leaves on the tree are partly hidden in the foliage",
+   "as_read": "small lime round plates on the gates and tree"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey prints near-white/grey and the tree trunk cylinders overlap each other",
+   "as_read": "two grey round cylinders forming the tree trunk"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green and the clip end is partly turned away in the tree foliage",
+   "as_read": "yellow-green clip plate forming the tree foliage"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

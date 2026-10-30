@@ -1,0 +1,43 @@
+{
+ "id": "binoculars",
+ "name": "Binoculars",
+ "pages": [
+  23
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 23, photo IMG_3594, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Binoculars are the small pair of upright grey tubes on a dark base at the bottom-right of page 23, labelled 'Binoculars'.",
+ "count_note": "No element count is printed for the Binoculars alone; the elements list on page 22 is for the main Tiny Tentacles model.",
+ "elements_total": 3,
+ "unsure_elements": 1,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two upright grey cylinders"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "base partly hidden under the two cylinders; dark purple prints blue-purple in the photo",
+   "as_read": "dark base plate under cylinders"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

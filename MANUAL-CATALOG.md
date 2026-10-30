@@ -163,10 +163,12 @@ each of those pieces, so the doubt is the drawing, not the piece.
   hand-check, about 5–10 minutes per build with the kit.
   - Done: the build turns verified and gets a bin check.
   - Its steps as a set file would add a booklet.
-- **The 87 with no list on the page:** build the model from the picture with
-  the kit, take it apart, and scan that handful as a batch. Review and confirm
-  give its exact piece list, which becomes its set file. The 4 printed totals
-  are a check on the count.
+- **The 87 with no list on the page:** 82 now have draft lists read from the
+  pictures by Muse Wonder ([WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md)); the
+  other 5 are activities. They hand-check the same way as the 18. Building the
+  model and scanning that handful as a batch is the other route: review and
+  confirm give its exact piece list, which becomes its set file. The 4 printed
+  totals are a check on the count.
 - **Activities** (Chance Creatures, Mirror People and the like) have no fixed
   list by design. They stay unverified, which is right for them.
 - **Pages 1–7 and 34–35** need photographing; any builds on them aren't in the
@@ -216,5 +218,7 @@ the system `python3`, 57 are skipped and the rest pass.
 ## Next blocker for the Oct 30 – Nov 1 kid trials
 
 The 18 draft piece lists need a person with the kit to hand-check them (about
-5–10 minutes each; start with the 7 that have no unsure lines). Until then,
+5–10 minutes each; start with the 7 that have no unsure lines). Since then
+Muse Wonder has drafted 82 more ([WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md)),
+so 100 builds are one hand-check away from verified. Until then,
 house and tree is still the only build the app can check a kid's bin for.

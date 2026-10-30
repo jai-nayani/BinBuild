@@ -1,0 +1,148 @@
+{
+ "id": "submarine",
+ "name": "Submarine",
+ "pages": [
+  8
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 8, photo IMG_3583, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A horizontal blue submarine with an orange conning tower and periscope eye in the upper half of page 8.",
+ "count_note": "Total matches the page's stated 15 elements.",
+ "elements_total": 15,
+ "unsure_elements": 11,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Side studs not visible; identified as the two 1x4 blue bricks forming the upper and lower hull.",
+   "as_read": "two stacked blue hull bricks"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Thin stripe partly covered by hull and deck pieces, so full 1x6 length is inferred; lime prints yellow-green.",
+   "as_read": "thin lime stripe along hull"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow in the picture.",
+   "as_read": "yellow nose block at front"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow; discs could at first look like the tall brick's own studs, but they appear full-width round plates on its studs.",
+   "as_read": "two yellow round discs on nose"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange conning-tower brick"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Partly hidden under the periscope brick on top of the orange brick.",
+   "as_read": "white plate atop orange tower"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "One forms the periscope top; the second is the grey block under the tail fin, partly hidden and identified by its 1x1 brick shape, light grey prints near-white/grey.",
+   "as_read": "grey periscope cube and tail block"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "horizontal grey periscope cylinder"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white eye at periscope end"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black curved slope at front deck"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Prints dark blue like the hull, not medium azure; identified by its 1x2 curved-slope profile with a top stud left of the orange tower.",
+   "as_read": "dark blue sloped deck piece"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Prints dark navy blue; identified by its small 1x1 cheese-slope shape on the tail.",
+   "as_read": "dark blue tail-fin slope"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "count_check": {
+  "page_says": 15,
+  "list_total": 15,
+  "matches": true
+ }
+}

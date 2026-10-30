@@ -1,0 +1,93 @@
+{
+ "id": "friendly-face-message",
+ "name": "Friendly face (message to aliens)",
+ "pages": [
+  95
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 95, photo IMG_3630, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small friendly face with two closed eyes on a teal and dark-blue head, with black and lime protrusions, in the centre of page 95.",
+ "count_note": "No printed element count for this model was seen on pages 94-95; total is my best visible count and partly hidden pieces may affect it.",
+ "elements_total": 9,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white closed-eye round tiles"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal central piece is partly covered by other pieces, so its exact extent and whether it is the plate or a curved piece cannot be counted with certainty",
+   "as_read": "large teal rectangular piece across the middle of the face"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "dark-blue piece is partly hidden behind the teal piece and an eye tile, so its length and side studs are not fully visible",
+   "as_read": "dark blue rectangular block bearing an eye"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "the two black curved pieces meet at an angle and partly merge in shadow, so the joint and count are uncertain",
+   "as_read": "black V-shaped curved pieces at one side of the face"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "long black bar is partly hidden behind the face and lime pieces, and its ends are not clear",
+   "as_read": "long black bar across one side of the face"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green and the long strip is partly hidden behind the black bar, so stud count is not clear",
+   "as_read": "long lime strip protruding from the top of the face"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small lime piece at the end of the black bar has its clip end hidden",
+   "as_read": "small lime two-stud piece at the end of the black bar"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

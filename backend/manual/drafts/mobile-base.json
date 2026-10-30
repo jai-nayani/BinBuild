@@ -1,0 +1,123 @@
+{
+ "id": "mobile-base",
+ "name": "Mobile base",
+ "pages": [
+  78
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 78, photo IMG_3622, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Mobile base is the small wheeled-looking vehicle example in the lower-left dotted box on page 78.",
+ "count_note": "No element count is printed on the page; underside and fully hidden pieces cannot be seen, so this is a visible-pieces best count.",
+ "elements_total": 12,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white wing plate at front lower end"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black curved pieces at front and rear"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "teal flat main body plate"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "partly hidden behind the rear black curved slope, size is best estimate",
+   "as_read": "orange block on top of body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey looks near-white in print and partly hidden, length is best estimate",
+   "as_read": "pale grey sloping body piece"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey looks near-white; cannon assembly partly overlaps so exact count is uncertain",
+   "as_read": "grey cylindrical telescope/cannon pieces"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "partly hidden at base of the grey cannon, closest listed piece",
+   "as_read": "small grey square piece at cannon base"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime looks yellow-green in print and clip end is hidden underneath",
+   "as_read": "lime lower chassis piece with studs"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small lime stud partly hidden under the cannon",
+   "as_read": "small lime round stud"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "sure": false,
+   "doubt": "pale piece on the azure plate is partly hidden and colour is hard to distinguish",
+   "as_read": "pale flat piece on body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

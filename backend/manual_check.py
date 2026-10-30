@@ -1,7 +1,9 @@
 """Hand-check a draft piece list from the manual against the kit.
 
-A draft (backend/manual/drafts/<id>.json) is the "Elements you'll need" box
-of a manual build, transcribed from a photo of the book. It is not a
+A draft (backend/manual/drafts/<id>.json) is either the "Elements you'll
+need" box of a manual build, transcribed from a photo of the book, or (for
+builds that print no list) the parts Muse Wonder read from the picture of
+the model (backend/manual_transcribe.py; "read_by" says which). It is not a
 verified piece list until a person has laid those pieces out from the kit
 next to the page and built the model once. This tool shows the checklist,
 records corrections, and marks the draft hand-checked; from then on "What

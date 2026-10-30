@@ -1,0 +1,73 @@
+{
+ "id": "colorful-chameleon",
+ "name": "Colorful chameleon",
+ "pages": [
+  21
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 21, photo IMG_3593, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A blue chameleon with a large eye, green back and green feet on the right-hand side of page 21, beside the speech bubble.",
+ "count_note": "No printed element count for this model was seen on the page.",
+ "elements_total": 6,
+ "unsure_elements": 5,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "One end and some side studs are partly hidden by the eye and snout pieces",
+   "as_read": "blue long body with side studs"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "large white eye tile"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Partly hidden behind the blue body so the stud count is not fully visible; lime prints green-yellow",
+   "as_read": "long bright green plate behind body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Feet are partly hidden behind the blue body and only their clip and stud ends are clearly visible",
+   "as_read": "two lime feet at base"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Small snout piece partly overlaps the blue body and its exact profile is partly hidden",
+   "as_read": "small blue wedge snout"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

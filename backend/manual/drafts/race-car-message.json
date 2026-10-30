@@ -1,0 +1,83 @@
+{
+ "id": "race-car-message",
+ "name": "Race car (message to aliens)",
+ "pages": [
+  94
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 94, photo IMG_3630, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The small flat race-car symbol in the lower centre of the purple page 94, shown in profile with two lime wheels.",
+ "count_note": "No element count is printed on the page; flat symbol illustration leaves some pieces partly overlapping, so total is a best visible count.",
+ "elements_total": 8,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green in the flat illustration",
+   "as_read": "two lime round wheels"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "white rectangular piece with one central circle; could be a headlight brick in this flat view",
+   "as_read": "white piece between the wheels"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal body length partly covered by other pieces in the flat illustration",
+   "as_read": "teal long body/base piece"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark purple prints dark blue; partly hidden behind body pieces",
+   "as_read": "dark blue-purple stripe on body"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "two black curved shapes overlap, exact count partly hidden",
+   "as_read": "two black curved top pieces"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "sure": false,
+   "doubt": "small clear checked piece partly hidden under a black curve",
+   "as_read": "small clear windshield piece"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

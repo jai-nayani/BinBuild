@@ -1,0 +1,88 @@
+{
+ "id": "snappy-crab",
+ "name": "Snappy crab",
+ "pages": [
+  9
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 9, photo IMG_3584, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The snappy crab is the small crab model at the bottom of page 9, below the mini-tugboat.",
+ "count_note": "Total matches the page statement of 9 elements.",
+ "elements_total": 9,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "Middle hidden behind the body; only the black bar ends at either side of the body are visible",
+   "as_read": "black bar ends flanking body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Clip joints partly hidden where the arms meet the body; lime printed yellow-green",
+   "as_read": "lime arms left and right"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Printed dark teal-blue and partly turned away, size estimated",
+   "as_read": "blue claw tips at arm ends"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Printed very dark navy; front studs mostly covered by the eyes and top plate, so length is estimated",
+   "as_read": "dark blue central body behind eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Seen mainly as the dark purple top cap; partly hidden and colour printed near-black purple",
+   "as_read": "dark purple cap on top of body"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two large printed eyes at front"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "count_check": {
+  "page_says": 9,
+  "list_total": 9,
+  "matches": true
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "id": "stingray",
+ "name": "Stingray",
+ "pages": [
+  20
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 20, photo IMG_3593, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The small flat stingray example at the top left of page 20, labelled 'From stingray ... to the super sprinter!'.",
+ "count_note": null,
+ "elements_total": 6,
+ "unsure_elements": 2,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white wing-shaped plates forming the wings"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and part of the plate and its stud count are hidden under the wings.",
+   "as_read": "long yellow-green plate forming the tail"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Mostly hidden under the wedge plates; only the front end beneath the eyes is visible, so its size cannot be counted.",
+   "as_read": "blue plate at the centre/front under the eyes"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two round white eye tiles"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

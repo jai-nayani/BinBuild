@@ -1,0 +1,63 @@
+{
+ "id": "eerie-eyeballs",
+ "name": "Eerie Eyeballs",
+ "pages": [
+  39
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 39, photo IMG_3602, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Eerie Eyeballs is the small pair of eyes between two light grey curved pieces on the left side of page 39 beside its yellow label.",
+ "count_note": "No element count is printed for this Build Boost example; any connector behind the eyeballs is hidden and has not been added.",
+ "elements_total": 7,
+ "unsure_elements": 5,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Pieces are partly overlapping the eyes and have no visible studs, so length is judged from the curved outline; light grey looks near-white.",
+   "as_read": "two long light grey curved pieces above and below the eyes"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Cylinders are partly hidden between the curved pieces and under the eye tiles, so exact count is judged from the two visible grey cylinders.",
+   "as_read": "two light grey round cylinders carrying the eyes"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white round eye tiles with black pupils"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Only a small bright-blue piece is visible at the top and its slope profile is partly hidden; this is the closest listed piece in that colour.",
+   "as_read": "small bright-blue piece at the top of the model"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

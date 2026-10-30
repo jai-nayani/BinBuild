@@ -1,0 +1,63 @@
+{
+ "id": "giraffe-face",
+ "name": "Giraffe face",
+ "pages": [
+  49
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 49, photo IMG_3607, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A blue flat giraffe face in profile with lime spots and one eye at the bottom left of page 49, beside the 'Can't quite reach those leaves' speech bubble.",
+ "count_note": "No element count is printed for this model; the separate lime T-shaped piece below the face was not counted as part of the giraffe face.",
+ "elements_total": 8,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Second plate is largely hidden under the first, only a short 1-wide tip carrying the eye protrudes; left edge of the model is also cropped by the photo.",
+   "as_read": "blue flat plates forming neck and head"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and the leftmost spots are at the cropped edge of the photo.",
+   "as_read": "yellow-green round spots on the blue plate"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "one open eye on the head tip"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Dark purple prints dark blue and only a small tip is visible behind the azure head/neck joint.",
+   "as_read": "small dark rectangle behind the head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

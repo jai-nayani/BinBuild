@@ -19,6 +19,7 @@ printed, logged, put in an error message or written anywhere. Standard
 library only.
 """
 
+import base64
 import json
 import time
 import urllib.error
@@ -112,10 +113,17 @@ class WonderClient:
                 reason = getattr(err, "reason", err)
                 raise WonderError(f"could not reach the Meta Model API: {self._scrub(str(reason))}") from None
 
-    def respond(self, text, instructions=None, previous_id=None) -> WonderReply:
+    def respond(self, text, instructions=None, previous_id=None, images=()) -> WonderReply:
         """One turn: the user text (plus instructions on the first turn).
-        Continues previous_id's conversation when given."""
-        body = {"model": self.model, "input": text, "reasoning": {"effort": self.effort},
+        Continues previous_id's conversation when given. images: JPEG bytes
+        sent with the text (as input_image parts); text alone otherwise."""
+        content = text
+        if images:
+            content = [{"type": "message", "role": "user", "content": [{"type": "input_text", "text": text}] + [
+                {"type": "input_image",
+                 "image_url": "data:image/jpeg;base64," + base64.b64encode(jpeg).decode("ascii")}
+                for jpeg in images]}]
+        body = {"model": self.model, "input": content, "reasoning": {"effort": self.effort},
                 "max_output_tokens": self.max_output_tokens, "background": True, "store": True}
         if instructions:
             body["instructions"] = instructions

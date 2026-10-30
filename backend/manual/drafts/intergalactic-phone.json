@@ -1,0 +1,63 @@
+{
+ "id": "intergalactic-phone",
+ "name": "Intergalactic phone",
+ "pages": [
+  82
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 82, photo IMG_3624, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Intergalactic phone is the small diagonal handset-like model labelled at the lower left of page 82.",
+ "count_note": "No printed element count for this model is visible on the page; total is the visible pieces counted.",
+ "elements_total": 7,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Partly covered by the lime round plates and black slope, so the full length is inferred from the visible teal rectangular end.",
+   "as_read": "teal flat plate at one end"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Small in the photo and lime prints yellow-green, but four separate round studded discs are visible in a 2x2 group.",
+   "as_read": "four yellow-green round studs"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Seen at an angle between the other plates, so its length is inferred from the single smooth black curved piece visible.",
+   "as_read": "black smooth curved piece in middle"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "Mainly seen from the tapering underside beyond the black piece, so the 2x4 size is inferred and the studded edge is hidden.",
+   "as_read": "white tapered piece at far end"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

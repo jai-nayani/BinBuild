@@ -1,0 +1,103 @@
+{
+ "id": "flying-snail",
+ "name": "A flying snail",
+ "pages": [
+  71
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 71, photo IMG_3618, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small flying snail with eye tiles and a white wing, pictured on page 71 next to the green 'A flying snail' label near the spine.",
+ "count_note": "No element count for this model is printed on the page; the model is very small, so pieces hidden under the body or on the far side cannot be confirmed and are not added.",
+ "elements_total": 9,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white eye tiles on top"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "model is very small in the photo; wing shape is clear but stud count and exact size cannot be counted",
+   "as_read": "large white tapered wing to one side"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "model is very small; pink square on body, studs cannot be counted reliably",
+   "as_read": "pink square plate on body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "model is very small and partly under other pieces; blue body plate size cannot be counted reliably",
+   "as_read": "blue flat body piece"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark blue-purple piece in the small body; dark purple can print blue and exact size is hidden",
+   "as_read": "dark purple-blue piece in body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "small black piece partly hidden beside the wing/body; exact slope size cannot be counted",
+   "as_read": "small black piece near wing"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime piece protruding under body is partly hidden; clip end and exact size cannot be seen clearly, lime may print yellow-green",
+   "as_read": "lime protruding piece under body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "pale piece under the eyes is tiny and partly hidden; light grey prints near-white and exact size cannot be counted",
+   "as_read": "light grey curved piece under eyes"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

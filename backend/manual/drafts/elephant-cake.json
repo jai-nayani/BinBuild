@@ -1,0 +1,53 @@
+{
+ "id": "elephant-cake",
+ "name": "Cake for Hungry Elephant",
+ "pages": [
+  43
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 43, photo IMG_3604, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small stylised cake build pictured at the top of page 43 above the elephant, separate from the green leafy snack at the bottom.",
+ "count_note": "No element count is printed for this cake; total is the 4 pieces I can read from the small illustration, with no pieces added to reach another model's count.",
+ "elements_total": 4,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "Small stylised illustration; brick is partly in shadow and studs are not clearly readable, colour/shading varies",
+   "as_read": "orange rectangular brick forming the cake body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Thin layer is partly hidden between the orange brick and blue top; dark purple prints dark blue-purple in the illustration",
+   "as_read": "thin dark purple strip under the blue top"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Small stylised illustration; the two blue slopes merge into one ridged shape and the dividing line is partly hidden",
+   "as_read": "blue ridged triangular top on the cake"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

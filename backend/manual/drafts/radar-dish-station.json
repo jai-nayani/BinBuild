@@ -1,0 +1,73 @@
+{
+ "id": "radar-dish-station",
+ "name": "Radar dish station",
+ "pages": [
+  78
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 78, photo IMG_3622, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Radar dish station is the small white-dish-on-a-green-mast model in the yellow dotted oval on the right side of page 78.",
+ "count_note": null,
+ "elements_total": 6,
+ "unsure_elements": 5,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "Tapered dish is angled and only part of its stud row is clearly visible",
+   "as_read": "white tapered dish at the end of the mast"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "long lime-green studded mast"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "Purple base plate is partly hidden under the mast and base pieces, and its purple shade is ambiguous in print",
+   "as_read": "small purple square base under the mast"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Black base piece is partly hidden behind the grey round pieces, so its curved profile is not clear",
+   "as_read": "black piece across the foot of the mast"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Only the two round grey ends are visible; the bodies are largely hidden at the foot of the mast",
+   "as_read": "two grey round ends side by side at the base"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

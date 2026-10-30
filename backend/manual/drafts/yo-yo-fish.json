@@ -1,0 +1,93 @@
+{
+ "id": "yo-yo-fish",
+ "name": "Yo-yo fish",
+ "pages": [
+  13
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 13, photo IMG_3587, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The yo-yo fish is the small vertical zigzag fish at the top left of page 13, above its red caption box.",
+ "count_note": "No printed element count for this model is shown on the page, so the total is only the pieces counted from the photograph.",
+ "elements_total": 11,
+ "unsure_elements": 9,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two eye tiles on top of head"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "grey blocks under eyes are partly hidden and print near-white; bases for the two eyes are inferred",
+   "as_read": "small light grey blocks holding eyes"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "head plates overlap at an angle, so second plate and exact 2x4 stud count are partly hidden",
+   "as_read": "two stacked blue flat plates forming head/jaws"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow and the piece is partly behind the head and caption area",
+   "as_read": "vertical yellow-green body segment below head"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "curved blue segment is turned sideways and partly obscures its stud and exact profile",
+   "as_read": "blue curved mid-body segment"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "orange brick is rotated diagonally, so its length is partly foreshortened",
+   "as_read": "orange diamond-shaped lower body brick"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "one grey cylinder is partly hidden between the blue curved piece and orange brick; colours print grey-beige",
+   "as_read": "grey round cylinders above and below orange brick"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,103 @@
+{
+ "id": "sleepy-mermaid",
+ "name": "Sleepy mermaid",
+ "pages": [
+  25
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 25, photo IMG_3596, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The sleepy mermaid is the swapped-head mermaid body on the right side of page 25, labelled 'A sleepy mermaid!'.",
+ "count_note": "No element count is printed for this example on pages 24-25; the total is the pieces I can identify in the photograph.",
+ "elements_total": 10,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two closed-eye tiles on the swapped head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "head base is mostly hidden under the eye tiles; purple is visible at one side",
+   "as_read": "purple plate under the closed eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "black bar is partly behind the head and torso, so its full length is not visible",
+   "as_read": "black horizontal bar below the head"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellowish and the torso is partly obscured; side studs are not clearly visible",
+   "as_read": "vertical lime-yellow torso brick"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellowish; one clip is raised beside the head and the other is at the tail, with joints partly hidden",
+   "as_read": "lime clip pieces forming arm and tail fin"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "white connector under the head is partly hidden by the black bar and head",
+   "as_read": "white plate between head and torso"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey prints near-white and the curved tail piece is partly behind the torso",
+   "as_read": "light grey curved tail section"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "grey cylinder at the tail base is seen side-on and partly hidden",
+   "as_read": "grey round brick at the lower tail"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

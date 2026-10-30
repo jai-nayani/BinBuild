@@ -1,0 +1,63 @@
+{
+ "id": "laser-umbrella",
+ "name": "Laser umbrella",
+ "pages": [
+  83
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 83, photo IMG_3624, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Laser umbrella is the small T-shaped model at the bottom-right of page 83, at the end of the illustrated diagonal laser beam.",
+ "count_note": "No element count is printed for this model; the long diagonal laser beam is an illustration, not LEGO pieces.",
+ "elements_total": 5,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "blue flat studded canopy"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "small diagonal shaft is partly obscured by the illustrated beam and light grey looks near-white",
+   "as_read": "two grey cylindrical shaft segments"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "tiny end piece is partly hidden behind the canopy and lime looks yellow in print",
+   "as_read": "small lime round tip beyond canopy"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark strip under the canopy is partly hidden and dark purple can look blue",
+   "as_read": "dark plate under blue canopy"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

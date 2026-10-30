@@ -1,0 +1,93 @@
+{
+ "id": "eyebot",
+ "name": "Eyebot",
+ "pages": [
+  87
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 87, photo IMG_3626, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Eyebot is the small single-eyed robot at the top centre of page 87, next to the yellow label 'What might Eyebot spot on the ship?'",
+ "count_note": "No element count is printed for this model; hidden joins behind the head and central plates make the grey cylinder and dark plate counts uncertain.",
+ "elements_total": 9,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange 1x2 brick at lower side of body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "magenta/purple plate is tilted and partly behind the head, size inferred",
+   "as_read": "magenta diamond plate in centre of body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark pieces print blue in the photo and are partly hidden behind the magenta plate; dark purple can look blue",
+   "as_read": "two dark blue-purple flat plates either side/below centre"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "grey cylinder for the eye is partly hidden and its length/join cannot be counted clearly, best count two",
+   "as_read": "light grey horizontal cylinder holding the eye"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "square grey piece behind the round eye cylinder is partly hidden",
+   "as_read": "light grey square brick behind eye cylinder"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "single large printed eye on front of cylinder"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "white pointed piece behind the head is partly obscured and could be confused with page artwork; closest listed piece is the white wedge plate",
+   "as_read": "white pointed fin/wing behind head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

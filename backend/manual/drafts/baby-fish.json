@@ -1,0 +1,53 @@
+{
+ "id": "baby-fish",
+ "name": "Baby fish",
+ "pages": [
+  21
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 21, photo IMG_3593, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small blue fish swimming in the waves in the centre-left of page 21, by the caption 'From baby fish to ...'.",
+ "count_note": "No element count is printed for this model on the page.",
+ "elements_total": 3,
+ "unsure_elements": 1,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "long blue body with three side studs visible"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "large round eye tile at the head end"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Small fin at the tail end is partly hidden against the painted waves and prints darker blue than expected; triangular shape best matches this piece",
+   "as_read": "small blue triangular fin at tail end"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,103 @@
+{
+ "id": "smoothie-robot",
+ "name": "Green smoothie robot",
+ "pages": [
+  86
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 86, photo IMG_3626, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The small green robot in the centre of page 86 beside the caption saying it will serve a green milk smoothie.",
+ "count_note": "No printed element count seen for this model; total is my visible count and some pieces are small or partly hidden.",
+ "elements_total": 10,
+ "unsure_elements": 10,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "long lime bar partly covered, stud count not fully countable and lime prints yellow-green",
+   "as_read": "long lime plate body"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small picture; second tall lime piece partly hidden behind the body",
+   "as_read": "tall lime bricks at body ends"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "protruding lime arm partly hidden by body",
+   "as_read": "lime arm sticking out sideways"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small round lime studs on body may be body studs showing through",
+   "as_read": "two round lime studs on body"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "grey cylinder partly hidden; light grey prints near-white",
+   "as_read": "grey round cylinder at head/cup end"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "grey cube head partly hidden and colour prints near-white",
+   "as_read": "small grey cube head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "flat white/grey piece at end partly hidden, size not fully countable",
+   "as_read": "flat white tray/foot on grey piece"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": false,
+   "doubt": "eye is very small in the picture",
+   "as_read": "white round eye tile on head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

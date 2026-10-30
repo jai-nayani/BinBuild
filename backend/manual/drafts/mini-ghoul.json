@@ -1,0 +1,43 @@
+{
+ "id": "mini-ghoul",
+ "name": "Mini Ghoul",
+ "pages": [
+  39
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 39, photo IMG_3602, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Mini Ghoul is the small white-and-black figure at the bottom-left corner of page 39, beside its yellow label.",
+ "count_note": "No element count is printed for this example model; the elements list on page 38 is for Happy Ghost, not Mini Ghoul.",
+ "elements_total": 3,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Model is small and angled; size inferred from the white square with two studs along one edge",
+   "as_read": "white square body with two studs along one edge"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Black pieces are partly hidden behind the white body and shown small, so shape and 1x2 size are best estimates",
+   "as_read": "two black curved pieces below the white body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

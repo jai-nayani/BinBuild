@@ -1,0 +1,133 @@
+{
+ "id": "high-wire-home",
+ "name": "High-wire home",
+ "pages": [
+  66
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 66, photo IMG_3616, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A rectangular high-wire perch with Baby Bird perched on its black wire, shown large on the left of page 66.",
+ "count_note": "No printed element count is visible on pages 66-67; the total includes Baby Bird perched on the wire and may miss pieces hidden behind the bird and wire joints.",
+ "elements_total": 21,
+ "unsure_elements": 13,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal base is partly hidden under the lime base plate; two plates inferred from its length and central seam",
+   "as_read": "teal plates forming the bottom base"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green and the plate is partly covered by the teal base",
+   "as_read": "long yellow-green plate along the base"
+  },
+  {
+   "qty": 4,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two grey round bricks in each end post"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "upper ends partly hidden by the wire, clips and round plates",
+   "as_read": "lime block at the top of each post"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "clips are mostly hidden where they grip the black hinge plate ends",
+   "as_read": "small lime clips at the wire ends"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "the four small lime discs may partly be the tall bricks' own side studs",
+   "as_read": "two small lime discs on each post"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black bar used as the high wire"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "bird's head prints near-white and its faces are partly covered by the eye",
+   "as_read": "pale cube forming Baby Bird's head"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "printed eye on Baby Bird"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two blue triangular slopes on Baby Bird"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "partly hidden under the bird's head; purple prints dark blue-purple",
+   "as_read": "dark purple piece under Baby Bird's head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}
