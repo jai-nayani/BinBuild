@@ -8,8 +8,11 @@
   claim and no booklet;
 - the house-and-tree booklet follows the picture on page 28;
 - draft piece lists (one per diagram-readable build): unverified, within
-  the kit, no fit claim until hand-checked; a hand-checked draft gets a fit
-  check but no booklet; the hand-check tool;
+  the kit, no fit claim until hand-checked; the hand-check tool records the
+  steps while building, and a draft hand-checked with steps that place every
+  piece is verified with a fit check and a booklet (house and tree's
+  treatment); without them it stays unverified;
+- the checklist order: the 11 closest to verified first;
 - the API: the manual summary, the catalog, the checklist, and the verified
   build's booklet.
 
@@ -27,6 +30,7 @@ from contextlib import closing, redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
+from backend import booklet
 from backend import build_plan as bp
 from backend import inventory_db as db
 from backend import inventory_vocab as vocab
@@ -45,6 +49,9 @@ CATALOG = json.loads((Path(__file__).resolve().parent.parent / "backend" / "manu
 BUILDS = CATALOG["builds"]
 STATUSES = {"verified", "diagram-readable", "not-yet-piece-verified"}
 PARTS_KEYS = {"parts", "elements", "pieces", "piece_list", "parts_list", "bricks"}
+CLOSEST = ["submarine", "sailing-ship", "mini-tugboat", "snappy-crab",           # the page's total matches
+           "tiny-tentacles", "mini-city-car", "happy-ghost", "bake-a-cake-ephant",  # no unsure lines
+           "playful-plane", "puppy-power", "rocket-shuttle"]
 
 
 class TestCatalog(unittest.TestCase):
@@ -220,43 +227,177 @@ class TestHandCheck(unittest.TestCase):
             code = manual_check.main(list(args))
         return code, out.getvalue(), err.getvalue()
 
+    def place_all(self, bid, skip=0):
+        """Steps that place every piece of a draft, one step per line, each
+        piece on its own spot (made-up positions: only the tool is under test).
+        skip: leave that many pieces of the last line unplaced."""
+        draft = bp.manual_drafts()[bid]
+        steps = []
+        for n, e in enumerate(draft["elements"], 1):
+            qty = e["qty"] - (skip if n == len(draft["elements"]) else 0)
+            if qty:
+                spots = " ".join(f"@{4 * k},{4 * n},0" for k in range(qty))
+                steps += ["--step", f"Add the {bp.line_of(e)}. :: #{n} {spots}"]
+        return self.run_tool(bid, *steps)
+
+    def sure_dolphin(self):
+        return self.run_tool("dozy-dolphin", "--sure", "medium_azure 1x2 curved slope", "--sure", "#7")
+
     def test_done_is_refused_while_lines_are_unsure(self):
         code, _, err = self.run_tool("dozy-dolphin", "--done", "--by", "tester")
         self.assertEqual(code, 1)
         self.assertIn("still unsure", err)
         self.assertFalse(bp.manual_drafts()["dozy-dolphin"]["hand_check"]["done"])
 
-    def test_hand_checked_draft_gets_a_fit_check_but_no_booklet(self):
-        code, out, _ = self.run_tool("dozy-dolphin", "--sure", "medium_azure 1x2 curved slope",
-                                     "--sure", "medium_blue 1x1 1x1 slope (cheese)", "--done", "--by", "tester",
-                                     "--notes", "built it")
+    def test_done_needs_steps_that_place_every_piece(self):
+        self.sure_dolphin()
+        code, _, err = self.run_tool("dozy-dolphin", "--done", "--by", "tester")
+        self.assertEqual((code, "no steps recorded yet" in err), (1, True))
+        self.assertEqual(self.place_all("dozy-dolphin", skip=1)[0], 0)
+        code, _, err = self.run_tool("dozy-dolphin", "--done", "--by", "tester")
+        self.assertEqual(code, 1)
+        self.assertIn("1× white 2x2 tile with 2 studs on edge not placed yet", err)
+        self.assertEqual(self.run_tool("dozy-dolphin", "--step", "Last. :: #11 @0,60,0")[0], 0)
+        code, out, _ = self.run_tool("dozy-dolphin", "--done", "--by", "tester", "--notes", "built it")
         self.assertEqual(code, 0, out)
-        self.assertIn("HAND-CHECKED", out)
+        self.assertIn("Verified: What can I build? checks a bin for it and makes its booklet.", out)
+
+    def test_a_hand_checked_draft_with_steps_gets_the_full_treatment(self):
+        self.sure_dolphin()
+        self.place_all("dozy-dolphin")
+        self.assertEqual(self.run_tool("dozy-dolphin", "--done", "--by", "tester")[0], 0)
+        steps = len(bp.manual_drafts()["dozy-dolphin"]["steps"])
         o = next(o for o in bp.manual_options(KIT_ITEMS) if o["id"] == "dozy-dolphin")
-        self.assertEqual((o["piece_status"], o["status"], o["has_booklet"]), ("verified", "fit", False))
-        self.assertEqual(o["verified_by"], "hand-checked against the kit")
-        self.assertIn("Build it from the book: pages 10, 11.", o["message"])
+        self.assertEqual((o["piece_status"], o["status"], o["has_booklet"], o["set"]),
+                         ("verified", "fit", True, "dozy-dolphin"))
+        self.assertEqual((o["verified_by"], o["message"]), ("hand-checked against the kit", "You have all 18 pieces."))
+        self.assertNotIn("draft", o)
+        plan = bp.plan({"set": "dozy-dolphin"}, KIT_ITEMS)                # what POST /api/builds runs
+        book = plan["booklet"]
+        self.assertEqual((plan["status"], len(book["steps"]), len(book["placements"])), ("fit", steps, 18))
+        self.assertEqual(book["source"], "the pieces in your bin (the manual, pages 10, 11)")
+        self.assertIn("hand-checked against the kit by tester", book["notes"][1])
+        self.assertEqual(sum(p["qty"] for p in book["parts"]), 18)
         no_magenta = [i for i in KIT_ITEMS if i["color"] != "magenta"]
         short = next(o for o in bp.manual_options(no_magenta) if o["id"] == "dozy-dolphin")
-        self.assertEqual(short["status"], "short")
-        self.assertIn("Missing 2× magenta 2x2 plate.", short["message"])
-        # the verified list still gets no booklet, and "What can I build?" shows no booklet button for it
-        self.assertNotIn("set", o)
+        self.assertEqual((short["status"], short["message"]), ("short", "Missing 2× magenta 2x2 plate."))
+        self.assertNotIn("booklet", bp.plan({"set": "dozy-dolphin"}, no_magenta))   # no booklet when short
+        verified = [o for o in bp.manual_options(KIT_ITEMS) if o["piece_status"] == "verified"]
+        self.assertEqual([o["id"] for o in verified], ["dozy-dolphin", "house-and-tree"])  # first, in book order
+        self.assertEqual([o["id"] for o in bp.manual_options(KIT_ITEMS)[:2]], ["dozy-dolphin", "house-and-tree"])
+        self.assertTrue(all(o["has_booklet"] and o.get("set") for o in verified))
+
+    def test_hand_checked_without_steps_stays_unverified(self):
+        path = self.dir / "happy-ghost.json"
+        d = json.loads(path.read_text())
+        d.update(status="hand-checked", hand_check={"done": True, "on": "2026-11-01", "by": "x", "notes": ""})
+        path.write_text(json.dumps(d))
+        o = next(o for o in bp.manual_options(KIT_ITEMS) if o["id"] == "happy-ghost")
+        self.assertEqual((o["status"], o["piece_status"], o["has_booklet"], o["draft"]),
+                         ("unverified", "diagram-readable", False, "hand-checked, waiting for its steps"))
+        self.assertNotIn("happy-ghost", bp.known_sets())
+        with self.assertRaises(KeyError):
+            bp.plan({"set": "happy-ghost"}, KIT_ITEMS)
+
+    def test_steps_refuse_over_placing_and_bad_positions(self):
+        bad = ["Plates. :: #3 @0,0,0 @2,0,0 @4,0,0",       # 3 magenta plates, the list has 2
+               "Plates. :: #3 @0,0",                        # not x,y,z
+               "Plates. :: #3 @0,0,-1",                     # below the table
+               "Plates. :: #3 0,0,0",                       # no @
+               "Plates. :: #99 @0,0,0",                     # no such line
+               "Plates. :: #3 @0,0,0 along z",
+               "Roof. :: #5 @0,0,0 down up",
+               "no separator #3 @0,0,0"]
+        for spec in bad:
+            code, _, err = self.run_tool("dozy-dolphin", "--step", spec)
+            self.assertEqual(code, 2, (spec, err))
+        self.assertNotIn("steps", bp.manual_drafts()["dozy-dolphin"])
+        code, _, _ = self.run_tool("dozy-dolphin", "--step",
+                                   "Roof. :: black 1x2 curved slope @2,0,7 down -x @4,0,7 down +x; #2 @0,0,0 along y")
+        self.assertEqual(code, 0)
+        place = bp.manual_drafts()["dozy-dolphin"]["steps"][0]["place"]
+        self.assertEqual(place, [{"line": "black 1x2 curved slope", "at": [2, 0, 7], "down": "+x"},
+                                 {"line": "black 1x2 curved slope", "at": [4, 0, 7], "down": "+x"},
+                                 {"line": "black 1x4 hinge plate", "at": [0, 0, 0], "along": "y"}])
+
+    def test_record_types_the_steps(self):
+        answers = iter(["Lay the hinge plate flat.", "#2 @0,0,0", "nonsense @1", "", "Plates on it.",
+                        "#3 @0,0,1 @2,0,1", "", ""])
+        out = io.StringIO()
+        with redirect_stdout(out), redirect_stderr(io.StringIO()):
+            code = manual_check.main(["dozy-dolphin", "--record"], ask=lambda _: next(answers))
+        self.assertEqual(code, 0)
+        self.assertIn("no line 'nonsense'", out.getvalue())
+        self.assertIn("2 steps added.", out.getvalue())
+        steps = bp.manual_drafts()["dozy-dolphin"]["steps"]
+        self.assertEqual([(s["text"], len(s["place"])) for s in steps], [("Lay the hinge plate flat.", 1),
+                                                                         ("Plates on it.", 2)])
+        _, out, _ = self.run_tool("dozy-dolphin", "--undo-step")
+        self.assertEqual(len(bp.manual_drafts()["dozy-dolphin"]["steps"]), 1)
+        self.run_tool("dozy-dolphin", "--clear-steps")
+        self.assertEqual(bp.manual_drafts()["dozy-dolphin"]["steps"], [])
+
+    def test_preview_writes_the_booklet_so_far(self):
+        self.run_tool("dozy-dolphin", "--step", "Lay the hinge plate flat. :: #2 @0,0,0")
+        page = self.dir / "preview.html"
+        code, out, _ = self.run_tool("dozy-dolphin", "--preview", str(page))
+        self.assertEqual(code, 0)
+        html = page.read_text()
+        self.assertIn("Dozy Dolphin (preview)", html)
+        self.assertIn("Still to place:", html)
+        self.assertIn("<svg", html)
+        self.assertFalse(bp.manual_drafts()["dozy-dolphin"]["hand_check"]["done"])
 
     def test_set_fixes_a_count_and_undo_resets(self):
         code, out, _ = self.run_tool("happy-ghost", "--set", "white 1x2 jumper plate=2")
         self.assertEqual(code, 0)
         d = bp.manual_drafts()["happy-ghost"]
         self.assertEqual(d["elements_total"], 13)
+        self.place_all("happy-ghost")
         code, _, _ = self.run_tool("happy-ghost", "--done", "--by", "tester")
+        self.assertEqual(code, 0)
         self.assertTrue(bp.manual_drafts()["happy-ghost"]["hand_check"]["done"])
         self.run_tool("happy-ghost", "--undo")
-        self.assertEqual(bp.manual_drafts()["happy-ghost"]["status"], "draft")
+        d = bp.manual_drafts()["happy-ghost"]
+        self.assertEqual((d["status"], bool(d["steps"])), ("draft", True))   # back to draft, steps kept
+        self.assertNotIn("happy-ghost", bp.known_sets())
+
+    def test_listing_starts_with_the_closest(self):
+        code, out, _ = self.run_tool()
+        self.assertEqual(code, 0)
+        first = [line.split()[1] for line in out.splitlines()[:12]]
+        self.assertEqual(first[:11], CLOSEST)
+        self.assertTrue(all(line.startswith("*") for line in out.splitlines()[:11]))
+        self.assertFalse(out.splitlines()[11].startswith("*"))
 
     def test_unknown_build_and_bad_set(self):
         self.assertEqual(self.run_tool("castle")[0], 2)
         self.assertEqual(self.run_tool("happy-ghost", "--set", "nonsense")[0], 2)
         self.assertEqual(self.run_tool("happy-ghost", "--set", "gold 1x2 brick=1")[0], 2)
+        self.assertEqual(self.run_tool("happy-ghost", "--sure", "#99")[0], 2)
+
+
+class TestChecklistOrder(unittest.TestCase):
+    def test_the_11_closest_come_first(self):
+        ordered = bp.checklist_order(bp.manual_drafts())
+        self.assertEqual(len(ordered), len(DRAFTS))
+        self.assertEqual([d["id"] for d, _ in ordered[:11]], CLOSEST)
+        self.assertEqual({why for _, why in ordered[:4]}, {bp.CLOSEST["total"]})
+        self.assertEqual({why for _, why in ordered[4:11]}, {bp.CLOSEST["sure"]})
+        self.assertFalse(any(why for _, why in ordered[11:]))
+        for d, _ in ordered[:4]:
+            self.assertEqual(d["count_check"]["page_says"], d["elements_total"])
+        self.assertTrue(all(d["unsure_elements"] == 0 and "read_by" not in d for d, _ in ordered[4:11]))
+
+    def test_the_printable_page_follows_it(self):
+        ordered = bp.checklist_order(bp.manual_drafts())
+        page = booklet.render_checklist([d for d, _ in ordered], first={d["id"]: w for d, w in ordered if w})
+        self.assertEqual(page.count('class="start"'), 11)
+        at = [page.index(f"<p class=\"note\">{bid} ·") for bid in CLOSEST]
+        self.assertEqual(at, sorted(at))
+        self.assertLess(at[-1], page.index('<p class="note">dozy-dolphin ·'))
+        self.assertIn('<td class="n">#1</td>', page)
+        self.assertIn("--record", page)
 
 
 @unittest.skipUnless(HAVE_SERVER, "FastAPI, uvicorn or Pillow not installed")
@@ -282,7 +423,35 @@ class TestManualApi(unittest.TestCase):
             status, page = api.call("GET", "/api/manual/checklist", raw=True)
             self.assertEqual(status, 200)
             self.assertEqual(page.count('class="card draft"'), len(DRAFTS))
-            self.assertIn("Dozy Dolphin", page)
+            self.assertEqual(page.count('class="start"'), 11)
+            self.assertLess(page.index("Submarine"), page.index("Dozy Dolphin"))
+
+    def test_a_hand_checked_draft_gets_its_booklet_through_the_api(self):
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as drafts:
+            for p in bp.DRAFTS_DIR.glob("*.json"):
+                shutil.copy(p, drafts)
+            path = Path(drafts) / "snappy-crab.json"
+            d = json.loads(path.read_text())
+            for e in d["elements"]:
+                e.update(sure=True, doubt=None)
+            d["steps"] = [{"text": f"Add the {bp.line_of(e)}.",
+                           "place": [{"line": bp.line_of(e), "at": [2 * k, 2 * n, 0]} for k in range(e["qty"])]}
+                          for n, e in enumerate(d["elements"])]
+            d.update(status="hand-checked", hand_check={"done": True, "on": "2026-11-01", "by": "tester", "notes": ""})
+            path.write_text(json.dumps(d))
+            with mock.patch.object(bp, "DRAFTS_DIR", Path(drafts)), full_loop.server(tmp, None) as api:
+                with closing(db.connect()) as conn:
+                    seed(conn, KIT_ITEMS)
+                status, body = api.call("GET", "/api/builds/options")
+                self.assertEqual(body["manual"]["verified"], 2)
+                crab = next(o for o in body["options"] if o["id"] == "snappy-crab")
+                self.assertEqual((crab["status"], crab["has_booklet"], crab["set"]), ("fit", True, "snappy-crab"))
+                status, build = api.call("POST", "/api/builds", json_body={"set": crab["set"]})
+                self.assertEqual((status, build["status"], build["steps"]), (201, "fit", len(d["elements"])))
+                status, page = api.call("GET", build["booklet_url"], raw=True)
+                self.assertEqual(status, 200)
+                self.assertIn("Snappy crab", page)
+                self.assertIn("the manual, page 9", page)
 
 
 if __name__ == "__main__":

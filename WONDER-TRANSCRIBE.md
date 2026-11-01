@@ -13,8 +13,9 @@ use the kit's owned pieces, within their exact counts.
   not-yet-piece-verified.
 - Every draft says `"status": "draft"` and warns that it is not a verified
   piece list. The catalog still lists all 87 builds as not-yet-piece-verified.
-- Drafts make no fit claim and get no booklet. A hand-check makes a draft
-  verified and gives it a bin check, as with the 18 hand drafts.
+- Drafts make no fit claim and get no booklet. A hand-check with the steps
+  recorded makes a draft verified, with a bin check and a booklet, as with
+  the 18 hand drafts (since Nov 1: [TRIAL-FIXES.md](TRIAL-FIXES.md)).
 - **100 builds are now one hand-check away from verified:** the 18 transcribed
   by hand plus these 82.
 
@@ -148,8 +149,9 @@ The same tools cover the new drafts:
     before ticking;
   - each Wonder card has a "read by Muse Wonder" badge, the page's printed total
     where there is one, and Wonder's count note.
-- A hand-checked Wonder draft becomes **verified** with a bin check
-  ("Build it from the book: …"), still without a booklet. A test covers this.
+- A Wonder draft hand-checked with its steps recorded becomes **verified**
+  with a bin check and a booklet drawn from those steps (Nov 1; before that,
+  no booklet). A test covers this.
 
 ## Cost and time
 
@@ -185,7 +187,8 @@ build. The reruns cost $3.88 of the total.
   - the retry loop and "no fixed model";
   - the draft format;
   - that hand and hand-checked drafts are never overwritten;
-  - that a hand-checked Wonder draft gets a bin check and no booklet;
+  - that a Wonder draft hand-checked with its steps gets a bin check and a
+    booklet;
   - three recorded live replies that replay into the committed drafts.
 - **`tests/test_manual_catalog.py`** splits drafts into 18 hand and 82 Wonder.
   Every Wonder draft is checked to be for a not-yet build that isn't an

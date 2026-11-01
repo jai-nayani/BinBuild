@@ -887,7 +887,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     row.appendChild(left);
     row.appendChild(el('span', 'chip ' + (o.piece_status === 'diagram-readable' ? 'readable' : 'unverified'),
       (o.stated_elements ? o.stated_elements + ' elements · ' : '') +
-      (o.draft ? 'Parts not verified yet · draft list waiting for a hand-check' : PIECES[o.piece_status])));
+      (o.draft ? 'Parts not verified yet · draft list ' + o.draft : PIECES[o.piece_status])));
     return row;
   }
 
@@ -917,7 +917,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
 
       section(list, '📕 From your manual (' + manual.length + ' builds)');
       list.appendChild(el('p', 'note', checked.length + ' with a verified piece list: BinBuild checks your bin for ' +
-        (checked.length === 1 ? 'it' : 'them') + ' (and makes a booklet where it has the steps). The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
+        (checked.length === 1 ? 'it' : 'them') + ' and makes ' + (checked.length === 1 ? 'its' : 'their') + ' step-by-step booklet. The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
         'parts BinBuild hasn\u2019t verified yet: build them from the book.' +
         (drafts ? ' ' + drafts + ' of them have a draft list read from the book, waiting for a hand-check.' : '')));
       checked.forEach(function (o) { list.appendChild(optionCard(o)); });

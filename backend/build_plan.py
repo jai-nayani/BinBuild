@@ -3,18 +3,20 @@
 The build list starts with the manual that came with the kit
 (backend/manual/catalog.json): every build in it is a candidate for this kit
 and is listed, with its page. Only a build whose piece list has been
-verified is checked against the inventory: a known set (with steps, so it
-also gets a booklet), or a draft list transcribed from the book
+verified is checked against the inventory and gets a booklet: a known set
+(backend/sets/), or a draft list transcribed from the book
 (backend/manual/drafts/) once someone has hand-checked it against the kit
-(no booklet: it is built from the book). The others are shown as manual
-builds whose parts are not yet verified, with no fit claim and no booklet.
-Then come BrickGPT designs.
+and recorded its steps while building it (python -m backend.manual_check);
+those steps make its booklet. The others are shown as manual builds whose
+parts are not yet verified, with no fit claim and no booklet. Then come
+BrickGPT designs.
 
 Two kinds of build can be planned:
 
-- A known set (backend/sets/*.json): exact pieces (family, shape, size,
-  colour) with written steps. It fits when the inventory holds every piece;
-  otherwise the missing pieces are named.
+- A known set (backend/sets/*.json, or a hand-checked manual draft with its
+  recorded steps): exact pieces (family, shape, size, colour) with written
+  steps. It fits when the inventory holds every piece; otherwise the missing
+  pieces are named.
 - A BrickGPT design through Path A (backend/brickgpt_constraint.py, used
   unchanged). Live generation is off, so plan_build draws the pre-generated
   design for a category. Only the generator-ready layer (plain bricks in the 8
@@ -69,8 +71,14 @@ def snapshot(summary) -> dict:
 # --- known sets -----------------------------------------------------------------
 
 def known_sets() -> dict:
+    """The set files, plus every manual draft that is hand-checked with its
+    steps recorded (as draft_set builds it)."""
     sets = (json.loads(p.read_text()) for p in sorted(SETS_DIR.glob("*.json")))
-    return {s["id"]: s for s in sets}
+    found = {s["id"]: s for s in sets}
+    for d in manual_drafts().values():
+        if booklet_ready(d) and d["id"] not in found:
+            found[d["id"]] = draft_set(d)
+    return found
 
 
 def check_pieces(needed, items) -> dict:
@@ -96,7 +104,11 @@ def plan_set(set_id, items, with_booklet=True) -> dict:
     sets = known_sets()
     if set_id not in sets:
         raise KeyError(f"no known set {set_id!r}; sets are {', '.join(sets)}")
-    spec = sets[set_id]
+    return plan_spec(sets[set_id], items, with_booklet)
+
+
+def plan_spec(spec, items, with_booklet=True) -> dict:
+    set_id = spec["id"]
     check = check_set(spec, items)
     pieces = sum(p["need"] for p in check["parts"])
     result = {"kind": "set", "id": set_id, "title": spec["title"],
@@ -114,11 +126,13 @@ def plan_set(set_id, items, with_booklet=True) -> dict:
                 add.append(len(placements))
                 placements.append(bk.place(spec["parts"][p["part"]], p["at"], p.get("along", "x"), p.get("down")))
             steps.append((step["text"], add))
-        where = f"the manual, page {spec['manual']['page']}" if spec.get("manual") else f"known set: {set_id}"
+        manual = spec.get("manual")
+        where = f"the manual, {_pages(manual.get('pages') or [manual['page']])}" if manual else f"known set: {set_id}"
         result["booklet"] = bk.booklet(
             spec["title"], spec["subtitle"], placements, steps,
             source=f"the pieces in your bin ({where})",
-            notes=[f"Every piece checked against your confirmed inventory: {result['message']}"])
+            notes=[f"Every piece checked against your confirmed inventory: {result['message']}"]
+            + spec.get("notes", []))
     return result
 
 
@@ -224,10 +238,70 @@ def hand_checked(draft) -> bool:
     return bool(draft and (draft.get("hand_check") or {}).get("done"))
 
 
-def _fit_message(check, pieces) -> str:
-    if check["fits"]:
-        return f"You have all {pieces} pieces."
-    return "Missing " + ", ".join(f"{p['short']}× {p['label']}" for p in check["missing"]) + "."
+def line_of(e) -> str:
+    """A draft line as the hand-check tool and the recorded steps name it:
+    'orange 1x2 brick'."""
+    return f"{e['color']} {e['size']} {e['shape']}"
+
+
+def step_problems(draft) -> list:
+    """Why a draft's recorded steps can't make its booklet yet: no steps, a
+    step naming a line the list doesn't have, or a piece placed fewer or more
+    times than the list holds. Empty once every piece is placed exactly once."""
+    if not draft.get("steps"):
+        return ["no steps recorded yet"]
+    want = {line_of(e): e["qty"] for e in draft["elements"]}
+    placed = Counter(p["line"] for step in draft["steps"] for p in step["place"])
+    problems = [f"{line} is placed but isn't on the list" for line in placed if line not in want]
+    for line, n in want.items():
+        if placed[line] < n:
+            problems.append(f"{n - placed[line]}× {line} not placed yet")
+        elif placed[line] > n:
+            problems.append(f"{line} placed {placed[line]} times, the list has {n}")
+    return problems
+
+
+def booklet_ready(draft) -> bool:
+    """Hand-checked, with steps that place every piece of its list once."""
+    return hand_checked(draft) and not step_problems(draft)
+
+
+def draft_set(draft) -> dict:
+    """A draft as a known set (the shape of backend/sets/house-and-tree.json):
+    its checked list is the parts, its recorded steps the steps."""
+    hc = draft["hand_check"]
+    parts = {line_of(e): {k: e[k] for k in ("family", "shape", "size", "color")} for e in draft["elements"]}
+    steps = [{"text": step["text"],
+              "place": [{"part": p["line"], "at": p["at"], **{k: p[k] for k in ("along", "down") if p.get(k)}}
+                        for p in step["place"]]}
+             for step in draft["steps"]]
+    pieces = sum(e["qty"] for e in draft["elements"])
+    return {"id": draft["id"], "title": draft["name"],
+            "subtitle": f"From the manual, {_pages(draft['pages'])}. {pieces} pieces, {len(steps)} steps.",
+            "manual": {"page": draft["pages"][0], "pages": draft["pages"]},
+            "notes": [f"Piece list and steps hand-checked against the kit by {hc['by']} on {hc['on']}, "
+                      "building the model from the book; the drawings are BinBuild's own."],
+            "parts": parts, "steps": steps}
+
+
+CLOSEST = {"total": "its list matches the total the page prints", "sure": "no unsure lines"}
+
+
+def checklist_order(drafts) -> list:
+    """The drafts in the order to hand-check them, as [(draft, why first or
+    None)]: the closest to verified first (Wonder's lists that match the
+    element total the page prints, then the lists transcribed from the book
+    with no unsure line), then the rest in book order; hand-checked ones last."""
+    def why(d):
+        if (d.get("count_check") or {}).get("matches"):
+            return "total"
+        if not d.get("read_by") and not d["unsure_elements"]:
+            return "sure"
+        return None
+    rank = {"total": 0, "sure": 1, None: 2}
+    book = {b["id"]: n for n, b in enumerate(manual_catalog()["builds"])}
+    ordered = sorted(drafts.values(), key=lambda d: (hand_checked(d), rank[why(d)], book.get(d["id"], len(book))))
+    return [(d, None if hand_checked(d) else CLOSEST.get(why(d))) for d in ordered]
 
 
 def _pages(pages) -> str:
@@ -237,8 +311,9 @@ def _pages(pages) -> str:
 
 def manual_options(items) -> list:
     """Every build in the manual, in book order with verified builds first.
-    A verified build (one with a known set) is planned against the inventory
-    like any known set; every other build is listed as it is, with its piece
+    A verified build (one with a set file, or a draft hand-checked with its
+    steps recorded) is planned against the inventory like any known set, so it
+    can get a booklet; every other build is listed as it is, with its piece
     list marked not yet verified: no fit claim, no booklet."""
     catalog = manual_catalog()
     drafts = manual_drafts()
@@ -256,22 +331,21 @@ def manual_options(items) -> list:
             plan = plan_set(b["set"], items, with_booklet=False)
             entry.update(set=b["set"], status=plan["status"], message=plan["message"], missing=plan["missing"],
                          pieces=plan["pieces"], has_booklet=True, verified_by="known set with steps")
-        elif hand_checked(draft):
-            needed = [({k: e[k] for k in ("family", "shape", "size", "color")}, e["qty"]) for e in draft["elements"]]
-            check = check_pieces(needed, items)
-            pieces = sum(n for _, n in needed)
-            entry.update(piece_status="verified", status="fit" if check["fits"] else "short",
-                         missing=check["missing"], pieces=pieces, verified_by="hand-checked against the kit",
-                         message=_fit_message(check, pieces) + f" Build it from the book: {_pages(b['pages'])}.")
+        elif booklet_ready(draft):
+            plan = plan_spec(draft_set(draft), items, with_booklet=False)
+            entry.update(set=b["id"], piece_status="verified", status=plan["status"], message=plan["message"],
+                         missing=plan["missing"], pieces=plan["pieces"], has_booklet=True,
+                         verified_by="hand-checked against the kit")
         else:
             entry["status"] = "unverified"
             told = (f" The page says it uses {b['stated_elements']} elements; which ones isn't listed."
                     if "stated_elements" in b else "")
-            how = (" A draft list read from the book is waiting for a hand-check against the kit."
+            how = (" Its draft list is hand-checked; its steps aren't recorded yet." if hand_checked(draft)
+                   else " A draft list read from the book is waiting for a hand-check against the kit."
                    if draft else " The page shows the elements it needs; checking them against your kit would "
                                  "verify it." if b["status"] == "diagram-readable" else "")
             if draft:
-                entry["draft"] = "waiting for a hand-check"
+                entry["draft"] = "hand-checked, waiting for its steps" if hand_checked(draft) else "waiting for a hand-check"
             entry["message"] = ("A build from the manual that came with your kit. Its parts aren't verified yet, so "
                                 "BinBuild can't check your bin for it or make a booklet: build it from the book."
                                 + told + how)

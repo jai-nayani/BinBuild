@@ -644,8 +644,11 @@ def create_app() -> FastAPI:
     @app.get("/api/manual/checklist", response_class=HTMLResponse)
     def get_manual_checklist():
         """The draft piece lists transcribed from the book, as a printable
-        page for hand-checking them against the kit. Drafts, not verified."""
-        return HTMLResponse(booklet.render_checklist(list(build_plan.manual_drafts().values())))
+        page for hand-checking them against the kit, closest to verified first.
+        Drafts, not verified."""
+        ordered = build_plan.checklist_order(build_plan.manual_drafts())
+        return HTMLResponse(booklet.render_checklist([d for d, _ in ordered],
+                                                     first={d["id"]: why for d, why in ordered if why}))
 
     @app.post("/api/builds", status_code=201)
     def create_build(request: BuildRequest):

@@ -314,9 +314,12 @@ def _parts_html(placements, parts) -> str:
     return '<ul class="parts">' + "".join(items) + "</ul>"
 
 
-def render_checklist(drafts) -> str:
+def render_checklist(drafts, first=None) -> str:
     """The draft piece lists as one printable page for a hand-check at the
-    table: unsure lines first and highlighted, a swatch per colour."""
+    table, in the order given: unsure lines first and highlighted, a swatch per
+    colour, lines numbered as the hand-check tool numbers them. first: {id:
+    why} for the drafts to start with (marked "start here")."""
+    first = first or {}
     css = PAGE_CSS + """
 .draft h2 { display: flex; justify-content: space-between; gap: 8px; }
 .draft .state { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 9px; background: #fff1c2; }
@@ -328,8 +331,9 @@ def render_checklist(drafts) -> str:
 .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,.3); margin-right: 6px; vertical-align: -1px; }
 .draft .by { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 8px; background: #e7eefb; color: #2d4a7c; margin-left: 4px; }
 .draft .count { color: #8a5a00; }
+.draft .start { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 8px; background: #ffd84d; margin-left: 4px; }
+.draft td.n { width: 26px; color: #888; font-size: 12px; }
 """
-    drafts = sorted(drafts, key=lambda d: (d["pages"][0], d["id"]))
     waiting = sum(not d["hand_check"]["done"] for d in drafts)
     by_wonder = sum(d.get("read_by") == "muse-wonder-1.0" for d in drafts)
     out = ["<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">",
@@ -340,8 +344,13 @@ def render_checklist(drafts) -> str:
            + (f" · {by_wonder} read by Muse Wonder" if by_wonder else "") + "</p></header><main>",
            '<section class="card"><p class="note">For each build: lay these pieces out from the kit next to its page '
            "and build the model once. Tick each line; fix a count or a colour that's wrong. Highlighted lines were "
-           "hard to read in the photo. Then record it: <code>python -m backend.manual_check &lt;id&gt; --done --by "
-           "NAME</code> (use <code>--set</code> and <code>--sure</code> for fixes).</p>"
+           "hard to read in the photo; fix them with <code>--set</code> or confirm them with <code>--sure</code>. "
+           "As you build, record the steps, one per layer: <code>python -m backend.manual_check &lt;id&gt; "
+           "--record</code> asks what to do and where each piece goes (<code>#n @x,y,z</code>: studs along the "
+           "table, plates up; a brick is 3). <code>--preview FILE.html</code> shows the booklet they make. "
+           "Then <code>--done --by NAME</code>: the build is verified and gets its booklet. "
+           + (f"Start with the {len(first)} marked <b>start here</b>: closest to verified." if first else "")
+           + "</p>"
            + ('<p class="note">Lists marked <b>read by Muse Wonder</b> come from the picture of the finished model, '
               "not from a printed list: pieces hidden inside the model may be missing or guessed, so build it "
               "before you tick.</p>" if by_wonder else "") + "</section>"]
@@ -352,15 +361,21 @@ def render_checklist(drafts) -> str:
         count = (f' · <span class="count">the page says {cc["page_says"]}'
                  + ("" if cc["matches"] else f', this list has {cc["list_total"]}') + "</span>") if cc else ""
         note = f'<p class="note">Wonder: {html.escape(d["count_note"])}</p>' if d.get("count_note") else ""
+        steps = len(d.get("steps") or [])
+        start = (f'<span class="start" title="{html.escape(first[d["id"]])}">start here</span>'
+                 if d["id"] in first else "")
         out.append(f'<section class="card draft"><h2><span>{html.escape(d["name"])} '
                    f'<small>· page{"s" * (len(d["pages"]) > 1)} {", ".join(map(str, d["pages"]))}</small>'
-                   + ('<span class="by">read by Muse Wonder</span>' if wonder else "") + '</span>'
+                   + start + ('<span class="by">read by Muse Wonder</span>' if wonder else "") + '</span>'
                    f'<span class="state{" done" if done else ""}">{"hand-checked" if done else "draft"}</span></h2>'
                    f'<p class="note">{html.escape(d["id"])} · {d["elements_total"]} elements{count} · '
-                   f'{d["unsure_elements"]} unsure · from {html.escape(d["read_from"])}</p>{note}<table>')
-        for e in sorted(d["elements"], key=lambda e: e["sure"]):
+                   f'{d["unsure_elements"]} unsure · {steps} step{"s" * (steps != 1)} recorded · '
+                   f'from {html.escape(d["read_from"])}</p>'
+                   + (f'<p class="note"><b>Start here:</b> {html.escape(first[d["id"]])}.</p>' if start else "")
+                   + f'{note}<table>')
+        for n, e in sorted(enumerate(d["elements"], 1), key=lambda ne: ne[1]["sure"]):
             why = f'<span class="why">unsure: {html.escape(e["doubt"] or "")}</span>' if not e["sure"] else ""
-            out.append(f'<tr class="{"" if e["sure"] else "unsure"}"><td class="box">☐</td>'
+            out.append(f'<tr class="{"" if e["sure"] else "unsure"}"><td class="box">☐</td><td class="n">#{n}</td>'
                        f'<td class="qty">{e["qty"]}×</td><td><span class="sw" style="background:'
                        f'{HEX.get(e["color"], HEX["unknown"])}"></span>{html.escape(label(e))}{why}</td></tr>')
         out.append("</table></section>")

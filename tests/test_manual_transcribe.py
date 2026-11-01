@@ -12,7 +12,8 @@
   Wonder; existing drafts are never overwritten unless they are earlier
   Wonder drafts (and never once hand-checked);
 - the recorded live replies replay into the committed drafts;
-- a hand-checked Wonder draft gets a bin check and no booklet, like the 18.
+- a Wonder draft hand-checked with its steps gets a bin check and a booklet,
+  like the 18.
 
 No Model API call. Standard-library unittest; run from the repo root:
     python3 -m unittest discover -s tests -v
@@ -188,19 +189,22 @@ class TestWriting(unittest.TestCase):
         (self.dir / "made-up.json").write_text(json.dumps(dict(wonder, hand_check={"done": True})))
         self.assertFalse(mt.write_draft(dict(wonder, seen="third"), force=True))  # hand-checked: kept
 
-    def test_a_hand_checked_wonder_draft_gets_a_bin_check_and_no_booklet(self):
+    def test_a_hand_checked_wonder_draft_gets_a_bin_check_and_a_booklet(self):
         wonder = [i for i, d in bp.manual_drafts().items() if d.get("read_by") == "muse-wonder-1.0"]
         self.assertTrue(wonder)
         bid = "submarine" if "submarine" in wonder else wonder[0]
         draft = bp.manual_drafts()[bid]
         sure = [f"{e['color']} {e['size']} {e['shape']}" for e in draft["elements"] if not e["sure"]]
-        args = [bid] + [a for line in sure for a in ("--sure", line)] + ["--done", "--by", "tester"]
+        steps = [a for n, e in enumerate(draft["elements"], 1)
+                 for a in ("--step", f"Add it. :: #{n} " + " ".join(f"@{2 * k},{2 * n},0" for k in range(e["qty"])))]
+        args = [bid] + [a for line in sure for a in ("--sure", line)] + steps + ["--done", "--by", "tester"]
         with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
             self.assertEqual(manual_check.main(args), 0)
         o = next(o for o in bp.manual_options(KIT_ITEMS) if o["id"] == bid)
-        self.assertEqual((o["piece_status"], o["has_booklet"]), ("verified", False))
+        self.assertEqual((o["piece_status"], o["has_booklet"], o["set"]), ("verified", True, bid))
         self.assertIn(o["status"], ("fit", "short"))
-        self.assertIn("Build it from the book", o["message"])
+        if o["status"] == "fit":
+            self.assertEqual(len(bp.plan({"set": bid}, KIT_ITEMS)["booklet"]["steps"]), len(draft["elements"]))
 
 
 @needs_pillow

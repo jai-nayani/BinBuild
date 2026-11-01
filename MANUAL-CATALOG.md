@@ -135,34 +135,45 @@ That's evidence the reading is right, not proof.
 lime as yellow and light grey as near-white. The kit has only one colour of
 each of those pieces, so the doubt is the drawing, not the piece.
 
-**Hand-checking a draft:**
+**Hand-checking a draft (and recording its steps):**
 1. Open the printable checklist: `GET /api/manual/checklist` (on the Mac:
-   http://localhost:8000/api/manual/checklist). It shows all 18, with unsure
-   lines first and highlighted.
+   http://localhost:8000/api/manual/checklist). The 11 closest to verified
+   come first, marked "start here". Unsure lines are listed first and
+   highlighted, and every line is numbered (`#n`).
 2. For a build, lay its pieces out from the kit next to its page, tick each
-   line, and build the model once.
-3. Record it:
+   line, and build the model once, recording each step (one per layer) as
+   you go:
    ```
+   python -m backend.manual_check                                    # every draft, closest first
    python -m backend.manual_check dozy-dolphin                       # the checklist in the terminal
-   python -m backend.manual_check dozy-dolphin --sure "medium_azure 1x2 curved slope" --set "white 1x2 jumper plate=2"
+   python -m backend.manual_check dozy-dolphin --sure "#6" --set "white 1x2 jumper plate=2"
+   python -m backend.manual_check dozy-dolphin --record              # what to do, then "#n @x,y,z" per piece
+   python -m backend.manual_check dozy-dolphin --preview dolphin.html
    python -m backend.manual_check dozy-dolphin --done --by NAME --notes "built it"
    ```
-   `--done` is refused while any line is still unsure. `--undo` puts it back
-   to a draft. Commit the changed draft file to keep the check.
-4. From then on, "What can I build?" counts the build as verified
-   ("(hand-checked)") and checks the bin against it: "You have all 18 pieces.
-   Build it from the book: pages 10, 11.", or what's missing.
-   - **Still no booklet:** BinBuild has no steps for it, so it is built from
-     the book.
-   - **Turning one into a booklet** means writing its steps as a set file,
-     like house-and-tree.
+   - Positions: x and y in studs along the table, z in plates up (a brick
+     is 3). Add `along y` for a piece turned that way and `down -x` for the
+     way a slope falls. `--step "TEXT :: #n @x,y,z; ..."` adds a step
+     without prompts, and `--undo-step` / `--clear-steps` take them back.
+   - `--done` is refused while a line is still unsure, or until the steps
+     place every piece on the list exactly once.
+   - `--undo` puts it back to a draft and keeps the steps.
+   - Commit the changed draft file to keep the check.
+3. From then on the build is **verified, with house and tree's full
+   treatment**:
+   - its checked list is the parts list;
+   - "What can I build?" checks the bin against it ("You have all 18
+     pieces.", or what's missing);
+   - "Make the booklet" draws a booklet from the recorded steps, one drawing
+     per step.
+   - A draft marked done without complete steps stays unverified ("draft list
+     hand-checked, waiting for its steps").
 
 ## What would verify the rest
 
 - **The 18 diagram-readable builds:** transcribed (above). What's left is the
-  hand-check, about 5–10 minutes per build with the kit.
-  - Done: the build turns verified and gets a bin check.
-  - Its steps as a set file would add a booklet.
+  hand-check with its steps, about 10–15 minutes per build with the kit.
+  Once done, the build is verified with a bin check and a booklet.
 - **The 87 with no list on the page:** 82 now have draft lists read from the
   pictures by Muse Wonder ([WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md)); the
   other 5 are activities. They hand-check the same way as the 18. Building the
@@ -205,10 +216,12 @@ catalog holds names and page numbers only.
 Drafts and hand-check, 9 more tests in the same file:
 - **Drafts:** one per diagram-readable build, all unverified and saying so;
   totals, vocabulary, and within the kit; no fit claim while waiting.
-- **Hand-check tool:** refuses `--done` while unsure lines remain; a
-  hand-checked draft gets a fit check and a "short" with what's missing, but
-  no booklet; `--set` and `--undo`; bad input. Runs on copies, so the repo's
-  drafts are untouched.
+- **Hand-check tool:** refuses `--done` while unsure lines remain or until
+  the steps place every piece; a draft hand-checked with its steps gets a fit
+  check, a "short" with what's missing, and a booklet; one without steps
+  stays unverified; `--step`, `--record`, `--preview`, `--set` and `--undo`;
+  bad input. Runs on copies, so the repo's drafts are untouched (changed Nov
+  1: hand-checked drafts used to get no booklet).
 - **API:** the checklist page and the summary counts (18 waiting, 0
   hand-checked).
 
