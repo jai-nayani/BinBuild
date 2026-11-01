@@ -1,0 +1,74 @@
+{
+ "id": "green-party-alien",
+ "name": "Green party alien",
+ "pages": [
+  90,
+  91
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on pages 90, 91, photo IMG_3628, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The green party alien is the lime-green model on the right side of page 91 captioned as the green alien on the dance floor.",
+ "count_note": "No element count is printed on pages 90-91; 11 is the number I can read from the standalone green model, with some lime stacks partly hidden.",
+ "elements_total": 11,
+ "unsure_elements": 9,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and some studs are partly obscured by attached limbs, so the length is read as six studs.",
+   "as_read": "long central lime body plate"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Two tall lime uprights appear partly hidden behind the body and eye stalks; their side studs are not all visible.",
+   "as_read": "tall lime uprights at the body ends"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Small lime end pieces are partly turned away, so their clip ends and full count are uncertain.",
+   "as_read": "small lime plates at the limb ends"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "The eye stalks appear to use two stacked lime discs each, but the lower stack is partly hidden.",
+   "as_read": "stacked lime discs under the eyes"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "round white closed-eye tiles"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

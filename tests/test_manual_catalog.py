@@ -138,18 +138,34 @@ def kit_key(e):
     return e["family"], e["shape"], e["size"], e["color"]
 
 
+BY_ID = {b["id"]: b for b in BUILDS}
+HAND = {i: d for i, d in DRAFTS.items() if d.get("read_by") != "muse-wonder-1.0"}
+WONDER = {i: d for i, d in DRAFTS.items() if d.get("read_by") == "muse-wonder-1.0"}
+
+
 class TestDrafts(unittest.TestCase):
-    def test_one_draft_per_diagram_readable_build(self):
+    def test_the_18_hand_drafts_are_the_diagram_readable_builds(self):
         readable = {b["id"] for b in BUILDS if b["status"] == "diagram-readable"}
-        self.assertEqual(set(DRAFTS), readable)
-        self.assertEqual(len(DRAFTS), 18)
+        self.assertEqual(set(HAND), readable)
+        self.assertEqual(len(HAND), 18)
+
+    def test_wonder_drafts_are_for_unlisted_fixed_models_only(self):
+        for bid, d in WONDER.items():
+            b = BY_ID[bid]
+            self.assertEqual(b["status"], "not-yet-piece-verified", bid)   # the catalog still says so
+            self.assertNotEqual(b["kind"], "activity", bid)               # pure activities have no draft
+            self.assertIn("Read by Muse Wonder", d["warning"])
+            if "stated_elements" in b:
+                self.assertEqual(d["count_check"]["page_says"], b["stated_elements"])
+                self.assertEqual(d["count_check"]["list_total"], d["elements_total"])
+        self.assertFalse(any(b["kind"] == "activity" for b in BUILDS if b["id"] in DRAFTS))
 
     def test_drafts_are_unverified_and_say_so(self):
         for d in DRAFTS.values():
             self.assertEqual(d["status"], "draft", d["id"])
             self.assertFalse(d["hand_check"]["done"], d["id"])
             self.assertIn("not checked against the kit", d["warning"])
-            self.assertIn("photo IMG_", d["read_from"])
+            self.assertRegex(d["read_from"], r"photos? IMG_")
 
     def test_totals_and_vocabulary(self):
         for d in DRAFTS.values():
@@ -173,12 +189,12 @@ class TestDrafts(unittest.TestCase):
         manual = {o["id"]: o for o in bp.manual_options(KIT_ITEMS)}
         for bid in DRAFTS:
             o = manual[bid]
-            self.assertEqual((o["status"], o["piece_status"], o["draft"]), ("unverified", "diagram-readable",
-                                                                         "waiting for a hand-check"))
+            self.assertEqual((o["status"], o["piece_status"], o["draft"]),
+                             ("unverified", BY_ID[bid]["status"], "waiting for a hand-check"))
             self.assertFalse(PARTS_KEYS & set(o))
             self.assertNotIn("missing", o)
             self.assertIn("waiting for a hand-check", o["message"])
-        self.assertFalse(any("draft" in o for o in manual.values() if o["piece_status"] == "not-yet-piece-verified"))
+        self.assertFalse(any("draft" in o for bid, o in manual.items() if bid not in DRAFTS))
 
 
 class TestHandCheck(unittest.TestCase):
@@ -262,10 +278,10 @@ class TestManualApi(unittest.TestCase):
             self.assertIn("House and tree", page)
             status, catalog = api.call("GET", "/api/manual")
             self.assertEqual((status, len(catalog["builds"])), (200, 106))
-            self.assertEqual((body["manual"]["drafts_waiting"], body["manual"]["hand_checked"]), (18, 0))
+            self.assertEqual((body["manual"]["drafts_waiting"], body["manual"]["hand_checked"]), (len(DRAFTS), 0))
             status, page = api.call("GET", "/api/manual/checklist", raw=True)
             self.assertEqual(status, 200)
-            self.assertEqual(page.count('class="card draft"'), 18)
+            self.assertEqual(page.count('class="card draft"'), len(DRAFTS))
             self.assertIn("Dozy Dolphin", page)
 
 

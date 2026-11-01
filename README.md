@@ -43,7 +43,10 @@ backend/        FastAPI backend (inventory + generation API)
   booklet.py             Step-by-step booklet: JSON + printable HTML page with drawings
   sets/                  Known sets with verified piece lists (house-and-tree)
   manual/catalog.json    Every build in the kit's manual: name, chapter, pages, piece-list status
-  manual/drafts/         Draft piece lists read from the book (unverified until hand-checked)
+  manual/drafts/         Draft piece lists read from the book (unverified until hand-checked):
+                         18 from the printed element boxes, the rest read by Muse Wonder from the pictures
+  manual/photos.json     Which manual photo shows each page (file names only)
+  manual_transcribe.py   Muse Wonder drafts parts lists for builds that print none (python -m backend.manual_transcribe)
   manual_check.py        Hand-check a draft against the kit (python -m backend.manual_check)
   full_loop.py           One batch through every stage via the API (recorded Spark reply)
   requirements.txt
@@ -117,7 +120,9 @@ on the kit batch: [SAM-3-1.md](SAM-3-1.md).
 "What can I build?" lists every build in the manual that came with the kit
 first (106; one, house-and-tree, has a verified piece list and a booklet; the
 others are shown with their pages and parts marked not yet verified), then
-BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
+BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md). Draft parts lists for
+the builds that print none were read from the pictures by Muse Wonder, all
+waiting for a hand-check: [WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md).
 Everything above is integrated into one app on `spike/integration`, with the
 trial-day run sheet: [INTEGRATION.md](INTEGRATION.md).
 Parallel track: Muse Wonder designs new models from every kind of piece in

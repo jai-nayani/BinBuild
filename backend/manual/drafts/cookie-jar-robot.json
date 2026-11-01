@@ -1,0 +1,53 @@
+{
+ "id": "cookie-jar-robot",
+ "name": "Orange cookie-jar robot",
+ "pages": [
+  86
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 86, photo IMG_3626, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A tiny orange robot with a grey eye head at the bottom corner of page 86 beside the orange-robot text box.",
+ "count_note": "No element count is printed for this example; the thumbnail is very small, so a small connector or base piece hidden between the orange body and grey head may not be readable and has not been added.",
+ "elements_total": 4,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "Model is a very small thumbnail; two stacked orange blocks are visible but their joins and orientation are partly obscured.",
+   "as_read": "orange stacked body blocks"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Small and partly hidden behind the text box edge; grey prints near-white and the cylinder end is partly obscured.",
+   "as_read": "grey cylinder head"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": false,
+   "doubt": "Very small thumbnail; only one eye disc can be read clearly.",
+   "as_read": "white eye on head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

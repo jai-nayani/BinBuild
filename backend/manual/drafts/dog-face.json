@@ -1,0 +1,63 @@
+{
+ "id": "dog-face",
+ "name": "Dog face",
+ "pages": [
+  49
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 49, photo IMG_3607, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Dog face is the black-and-white flat face in the centre of page 49, between the sleepy-eyed face and the frog, with black ears at both ends and two open eyes.",
+ "count_note": "No element total is printed for this face; the total is the number of pieces I could see.",
+ "elements_total": 6,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Face plate prints light greyish-white and its edge studs are largely covered by the eye tiles; identified by its rectangular 2x2 shape.",
+   "as_read": "white 2x2 face between the black ears"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Snout prints light grey rather than white and partly overlaps the face; identified by its single central stud.",
+   "as_read": "snout with one central stud sticking out from the face"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Seen top-down as plain black 1x2 rectangles, so the curved slope profile is not visible.",
+   "as_read": "black rectangular ear at each end of the face"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two round open-eye tiles on the face"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

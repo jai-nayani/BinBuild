@@ -1,0 +1,63 @@
+{
+ "id": "frog-face",
+ "name": "Frog face",
+ "pages": [
+  49
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 49, photo IMG_3607, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The frog face is the flat green face on page 49 at the lower right, beside the 'CROAK!' speech bubble.",
+ "count_note": "No printed element count for this model is visible on the page.",
+ "elements_total": 6,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime piece prints as darker green for the frog; length partly overlapped by the black bar",
+   "as_read": "long green bar across the face"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "Partly hidden between the green plates, ends not clearly visible",
+   "as_read": "black bar across middle of face"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Short green eye stalks partly hidden under the eye tiles and main plates; clips not clearly visible and lime prints green",
+   "as_read": "short green stalks holding the eyes"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white eye tiles at stalk tips"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

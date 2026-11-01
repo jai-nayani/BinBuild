@@ -1,0 +1,103 @@
+{
+ "id": "planet-base-radio-tower",
+ "name": "Planet base with radio tower",
+ "pages": [
+  78
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 78, photo IMG_3622, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The model is the small planet base with a long diagonal radio tower in the blue-dotted oval on the upper-left area of page 78.",
+ "count_note": "No printed element count for this model is visible on the page; total is the 8 pieces I could identify, and hidden stacking in the base may differ.",
+ "elements_total": 8,
+ "unsure_elements": 6,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white wing plate with studs under base"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Thin teal layer is partly hidden between white wedge and upper bricks; footprint cannot be counted fully.",
+   "as_read": "thin cyan-blue plate layer in base"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Blue prints dark and side studs/size are partly hidden behind the black slope.",
+   "as_read": "blue block at far end of base"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Partly hidden by the blue block and seen at an angle; exact footprint cannot be counted.",
+   "as_read": "black smooth curved piece on base"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Small grey connector is partly hidden between base and tower; light grey can print near-white.",
+   "as_read": "small grey round cylinder at tower joint"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "long black bar forming tower arm"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and the stud count/length is partly obscured by the black hinge plate.",
+   "as_read": "long lime plate under tower arm to pointed tip"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Small lime piece at the tower joint is partly hidden behind the hinge plate and round brick.",
+   "as_read": "small lime clip piece at base of tower arm"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

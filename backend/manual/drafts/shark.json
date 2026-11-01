@@ -1,0 +1,103 @@
+{
+ "id": "shark",
+ "name": "Shark",
+ "pages": [
+  19
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 19, photo IMG_3592, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A blue shark with one large eye and an open mouth at the bottom right of page 19, beside the Build Boost box.",
+ "count_note": "No element count is printed for the Shark; total is the pieces I could identify in the small photo, and partly hidden connections may hide additional pieces.",
+ "elements_total": 8,
+ "unsure_elements": 6,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "dark blue upright body, eye on a side stud"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "large white eye tile with black pupil"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "pale blue-green curved piece at the snout is partly obscured and colour prints lighter than medium azure",
+   "as_read": "curved upper snout at top of head"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "white mouth piece is partly hidden; two studs are visible but its full size cannot be counted, closest listed piece is this",
+   "as_read": "white two-stud piece in the open mouth, like teeth"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime piece at the top of the head looks yellow-green in print and is partly hidden behind the snout",
+   "as_read": "lime plate at top of head above the mouth"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "small dark blue triangular piece on top of the head is tiny and partly hidden; colour may print darker than medium blue",
+   "as_read": "small triangular fin on top of head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "long black fin/jaw piece is seen edge-on, so its length and end fittings are partly hidden",
+   "as_read": "long thin black piece sticking out from the side of the body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "flat light-blue tail plate is viewed at an angle, so its exact stud count is partly hidden",
+   "as_read": "light blue flat tail/fin plate at the bottom of the body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

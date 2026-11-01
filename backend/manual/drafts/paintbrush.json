@@ -1,0 +1,43 @@
+{
+ "id": "paintbrush",
+ "name": "Paintbrush",
+ "pages": [
+  23
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 23, photo IMG_3594, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small horizontal grey-and-lime paintbrush floating to the right of Tiny Tentacles on page 23, labelled Paintbrush.",
+ "count_note": null,
+ "elements_total": 3,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "two grey cylinders joined end-to-end; the middle joint is shaded and partly side-on, count inferred from length and ring",
+   "as_read": "two stacked grey round cylinders"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small end cap seen side-on and lime prints yellow-green",
+   "as_read": "lime round cap on one end"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

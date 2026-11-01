@@ -1,0 +1,113 @@
+{
+ "id": "robot-space-pincers",
+ "name": "Robot with space pincers",
+ "pages": [
+  74
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 74, photo IMG_3620, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small robot with a magenta body, one closed eye and lime pincers on a black bar, on white wedge pieces at the upper centre of page 74 next to its red label.",
+ "count_note": "No printed element count is visible on the page; model is small and rotated, so hidden central connectors may be missed.",
+ "elements_total": 14,
+ "unsure_elements": 11,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "two long white wedges overlap at the centre; tips partly hidden under the azure plates",
+   "as_read": "two long white tapered plates crossing at body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal plates at both wedge tips; far one partly hidden and foreshortened so size not countable",
+   "as_read": "teal plate at each wedge tip"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "magenta square torso"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white closed eye on magenta torso"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black bar across torso"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow; pieces at both ends of black bar partly overlap it, clips not clearly seen",
+   "as_read": "yellow-lime 1x2 pieces at both ends of black bar"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "grey 2-wide brick cluster at centre partly hidden behind magenta and wedges; holes/studs hard to separate",
+   "as_read": "light grey brick cluster left of torso"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow; only a small lime 1x1 section shows behind/below magenta, rest hidden",
+   "as_read": "small lime square under magenta torso"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow; round discs at pincer ends partly overlap the clip plates and could be their studs",
+   "as_read": "lime round disc at each pincer end"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

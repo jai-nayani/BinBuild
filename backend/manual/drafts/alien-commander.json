@@ -1,0 +1,145 @@
+{
+ "id": "alien-commander",
+ "name": "Alien Commander",
+ "pages": [
+  92,
+  93,
+  96
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on pages 92, 93, 96, photos IMG_3629, IMG_3631, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Alien Commander is the large alien on the left of page 93, matching the identical B and F pictures on page 92 and the front view at bottom right of page 96.",
+ "count_note": "No element total is printed for this model; total is from the visible B/F, page 93 and page 96 views, with partly hidden pieces noted.",
+ "elements_total": 22,
+ "unsure_elements": 15,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green in the pictures",
+   "as_read": "long foot bar at the base"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green; side studs partly obscured by the view angle",
+   "as_read": "two tall legs between foot bar and body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Dark purple prints blue-purple and the layer is partly hidden under the blue torso; two plates inferred end-to-end",
+   "as_read": "purple band under the blue torso"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "blue torso brick with front studs"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "teal curved shoulders on both sides of torso"
+  },
+  {
+   "qty": 4,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Light grey prints near-white; partly hidden grey cylinders at arms and eye tips could in part be square headlight bricks, round shape is closest seen",
+   "as_read": "grey arm pieces and grey eye supports"
+  },
+  {
+   "qty": 3,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green; one is the chest medal, the two hand discs are partly hidden at the arm ends",
+   "as_read": "lime round medal on chest and lime hand discs"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "pink block above torso in centre"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Prints dark blue-purple on the magenta block; back/hidden side could hide a second, one triangular wedge is clearly seen",
+   "as_read": "small triangular wedge on magenta head block"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black horizontal bar above head"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green; clips gripping the black bar are partly hidden",
+   "as_read": "two angled lime eye stalks gripping black bar"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two open printed eyes at stalk tips"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

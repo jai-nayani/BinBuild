@@ -1,0 +1,93 @@
+{
+ "id": "unknown-helicopter",
+ "name": "Helicopter (built blindfolded)",
+ "pages": [
+  61
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 61, photo IMG_3613, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Helicopter is the labelled model in the upper part of page 61, above the Airplane.",
+ "count_note": "No element count is printed for this model on the page; total is the pieces I could read in the illustration.",
+ "elements_total": 8,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "stylised illustration; dark blue lower body block, side studs not clearly visible and partly hidden",
+   "as_read": "dark blue lower body block"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal base is partly hidden under blue block; exact size cannot be counted in illustration",
+   "as_read": "teal flat base protruding at bottom"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "thin maroon-magenta band could be dark purple in print; width partly wraps behind body",
+   "as_read": "thin magenta band across middle"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "pale grey-white cube partly hidden by orange brick and grey curves; headlight hole not visible",
+   "as_read": "pale block above magenta band"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "orange block seen end-on in stylised illustration, length partly hidden",
+   "as_read": "orange block on top of body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "black protrusion partly hidden and shape stylised; closest listed black piece",
+   "as_read": "black piece sticking out from front"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "two large grey curves overlap; one partly hidden behind the other and shading makes them look near-white/grey",
+   "as_read": "two large grey curved pieces on top"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

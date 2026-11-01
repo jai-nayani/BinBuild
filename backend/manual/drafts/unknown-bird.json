@@ -1,0 +1,103 @@
+{
+ "id": "unknown-bird",
+ "name": "Bird (built blindfolded)",
+ "pages": [
+  60
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 60, photo IMG_3613, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Bird is the small blue blindfold-built model at the lower left of page 60, labelled Bird.",
+ "count_note": "No element count is printed for this model on the page.",
+ "elements_total": 10,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "Piece appears pale yellow in the illustration, not orange; shape is a 1x2 brick with two studs.",
+   "as_read": "yellow 1x2 brick forming the front/head"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Second blue brick is partly hidden behind the first in the jumbled body; side-stud rows are partly obscured.",
+   "as_read": "two blue long bricks forming the body"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "light grey 1x1 cube with circular recess at the front"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Only one round brick is clearly visible protruding at the rear; the second is largely hidden in/behind the blue body.",
+   "as_read": "light grey cylinder protruding at rear, plus a hidden second"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Small white piece is partly hidden under the large grey curved slope and its stud is not clearly visible.",
+   "as_read": "small white plate in the middle of the body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "sure": false,
+   "doubt": "Transparent plate is mostly hidden between the blue body and the front brick; only a pale edge is visible.",
+   "as_read": "pale transparent edge near the front"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "small black curved wedge under the large fin"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "large light grey long curved slope raised as a fin/tail"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

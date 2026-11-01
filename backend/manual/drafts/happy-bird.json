@@ -1,0 +1,93 @@
+{
+ "id": "happy-bird",
+ "name": "Happy Bird",
+ "pages": [
+  52
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 52, photo IMG_3609, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small bird with lime wings, an orange head and a white tail in the top middle of page 52, labelled Happy Bird.",
+ "count_note": "No element count for this model is printed on the visible page; total is the 9 pieces I can see.",
+ "elements_total": 9,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange rectangular head/body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "black curved end piece partly seen in profile, so its length is estimated",
+   "as_read": "black curved piece at front of orange brick"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "only a teal strip is visible, mostly hidden under the orange brick and central bar",
+   "as_read": "teal flat strip under orange brick"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "central black bar is partly covered by round plates and wing joints, so its ends are hidden",
+   "as_read": "black transverse bar across body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green and the lower wing is partly hidden by the pink label; clip ends are hidden at the central bar",
+   "as_read": "two lime wing plates with two studs each"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime colour prints yellow-green",
+   "as_read": "two lime round discs on central bar"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "white tapered piece is seen without visible studs, so its size is estimated",
+   "as_read": "large white tapered tail piece"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

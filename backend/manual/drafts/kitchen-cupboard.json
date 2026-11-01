@@ -1,0 +1,113 @@
+{
+ "id": "kitchen-cupboard",
+ "name": "Galactic kitchen cupboard",
+ "pages": [
+  87
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 87, photo IMG_3626, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The galactic kitchen cupboard is the symmetric two-legged robot at the lower left of page 87, beside its yellow caption.",
+ "count_note": "No printed element count for this model is visible on the page; total is the count of pieces I could identify.",
+ "elements_total": 16,
+ "unsure_elements": 12,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black feet at the ends of both legs"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green in the photo",
+   "as_read": "thin yellow-green rings on both legs"
+  },
+  {
+   "qty": 4,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey looks near-white and the eye supports are partly hidden behind the body; count is two leg cylinders plus two eye supports",
+   "as_read": "light grey cylinders in both legs and under both eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "body plate is partly hidden by the eye supports and central table piece",
+   "as_read": "magenta plate forming the main body across the legs"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark purple prints blue-purple and pieces are partly hidden at the sides of the body",
+   "as_read": "dark blue-purple plates at both sides of the body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "central piece is seen in perspective as a pointed diamond and its blue shade is ambiguous",
+   "as_read": "blue table-top piece projecting from the centre of the body"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white round tiles with closed printed eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "bar between the feet is partly hidden and seen end-on",
+   "as_read": "black-ended bar joining the feet"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "white centre of the foot bar is partly hidden; could be another light plate",
+   "as_read": "white piece in the middle of the bar between the feet"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "id": "baby-bird",
+ "name": "Baby Bird",
+ "pages": [
+  66
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 66, photo IMG_3616, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Baby Bird is the tiny large-eyed bird shown alone beside step 1 and perched on the black wire in the centre of page 66.",
+ "count_note": "No printed element count for Baby Bird is visible on pages 66-67; total is the pieces I can identify from the pictured bird.",
+ "elements_total": 4,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Body/head block looks cream or near-white in print; closest listed piece is the light bluish grey 1x1 headlight brick, and light grey can print near-white.",
+   "as_read": "pale square head/body block"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "large printed eye on head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Purple-blue piece is partly hidden under/behind the head and could be the connecting base; dark purple can print blue-purple.",
+   "as_read": "dark purple rectangle under/beside head"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Blue triangular beak is small and partly turned away; its two shaded faces could be mistaken for two slopes, so count is best seen as one.",
+   "as_read": "blue triangular beak beside eye"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

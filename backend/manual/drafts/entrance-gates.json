@@ -1,0 +1,73 @@
+{
+ "id": "entrance-gates",
+ "name": "Impressive entrance gates",
+ "pages": [
+  29
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 29, photo IMG_3598, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The entrance gates are on the left-centre of page 29, beside the blue-and-white mansion, with a lime base plate, a grey post and two dark gate pieces.",
+ "count_note": "No element count is printed for this model; connections between the black gate pieces, lime base and grey post are partly hidden, so hidden pieces may be missed.",
+ "elements_total": 7,
+ "unsure_elements": 5,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "long lime plate with six studs"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "only one grey cylindrical post is clearly visible; any second post is hidden behind the gate/clip pieces",
+   "as_read": "grey cylindrical post at the end of the lime plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "tilted lime piece ending in an open clip"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "dark curved pieces are seen largely in profile and partly in shadow, so their length cannot be counted certainly; they look longer than a 1x2 in profile",
+   "as_read": "two large black curved gate pieces"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small lime studs are partly hidden at the sides of the black gate pieces and lime prints yellow-green, so shape and attachment are uncertain",
+   "as_read": "small lime single-stud piece on each black gate piece"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

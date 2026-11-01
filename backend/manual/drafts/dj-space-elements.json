@@ -1,0 +1,123 @@
+{
+ "id": "dj-space-elements",
+ "name": "DJ Space-Elements",
+ "pages": [
+  87
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 87, photo IMG_3626, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The DJ Space-Elements robot is the blue-headed robot with two eyes on the right side of page 87, beside the 'SQUARE RECORDS ARE THE BEST!' speech bubble.",
+ "count_note": "No element total is printed for this model on the page; total is my visible count only.",
+ "elements_total": 15,
+ "unsure_elements": 11,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": true,
+   "doubt": null,
+   "as_read": "blue head brick with eyes on side studs"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white eye tiles on head"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Black cap on top of head is partly seen and its exact shape/size is obscured by the head angle",
+   "as_read": "black curved cap on head"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Grey neck piece between head and body is partly hidden; could be another grey brick form",
+   "as_read": "light grey cylinder at neck"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Teal shoulder/arm pieces are partly hidden behind the chest and head",
+   "as_read": "two medium azure curved shoulder pieces"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "magenta square chest plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Teal base plate under chest is partly hidden by chest and legs",
+   "as_read": "medium azure plate under body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Leg plates look magenta-purple in print and dark purple can look blue/purple; partly hidden under body",
+   "as_read": "two purple leg plates"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Two lime pieces flanking the robot appear detached/sideways and are partly small in photo; counted as its side speaker/arm pieces, lime often prints yellow-green",
+   "as_read": "two lime tall pieces flanking robot"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Small white caps on the flanking lime pieces are partly hidden and size is hard to count",
+   "as_read": "white caps on lime side pieces"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

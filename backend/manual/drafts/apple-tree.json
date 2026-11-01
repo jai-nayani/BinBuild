@@ -1,0 +1,63 @@
+{
+ "id": "apple-tree",
+ "name": "Tree with green apples",
+ "pages": [
+  29
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 29, photo IMG_3598, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small tree with a grey trunk and lime-green top on page 29, between the mansion entrance gates and the animal at the corner of the page.",
+ "count_note": "No element count is printed for this tree alone; the 7-element count on page 28 is for the separate simple house and tree.",
+ "elements_total": 5,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "long lime plate forming the leafy top"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "trunk is partly hidden behind the top and the nearby animal; it may be two stacked round bricks",
+   "as_read": "short grey cylindrical trunk"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "angled lime piece is partly hidden and could belong to the adjacent branch structure",
+   "as_read": "diagonal lime plate with a clip at one end"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints close to the lime canopy colour and the discs are partly hidden, so the apple count is a best count",
+   "as_read": "small lime round discs as green apples"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

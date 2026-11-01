@@ -1,0 +1,83 @@
+{
+ "id": "mini-robot-spy-eye",
+ "name": "Mini-robot with a spy-eye",
+ "pages": [
+  74
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 74, photo IMG_3620, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small robot with an orange body and a protruding grey eye-stalk is on the left side of page 74 beside its yellow label.",
+ "count_note": "No printed element count for this model is visible on the page; body stack and head are partly hidden, so hidden connecting pieces may not be counted.",
+ "elements_total": 9,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "rear and underside hidden, so footprint cannot be counted directly",
+   "as_read": "orange block at back of body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "only a pink layer of the body stack is visible; size and underside hidden",
+   "as_read": "pink plate layer in body stack"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark purple can look burgundy/blue in print and layers are partly hidden in the body stack",
+   "as_read": "two dark layers in body stack"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey looks near-white in print and the upper cylinder is partly hidden behind the body",
+   "as_read": "two horizontal grey cylinders, one forming the eye stalk"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white round eye with black pupil on end of stalk"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "one slope is in shadow and prints dark purple-blue; both are partly hidden on top of the head",
+   "as_read": "two small blue sloping pieces on head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

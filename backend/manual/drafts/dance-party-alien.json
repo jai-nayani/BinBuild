@@ -1,0 +1,104 @@
+{
+ "id": "dance-party-alien",
+ "name": "Ultimate dance party alien",
+ "pages": [
+  90,
+  91
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on pages 90, 91, photo IMG_3628, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The ultimate dance party alien is the large blue-green combined alien on the left side of page 91, with four eyes and two lime eye-stalks.",
+ "count_note": "No element total is printed for this model; pieces at the join between the green and blue aliens are partly hidden, so the hidden join pieces cannot be counted with certainty.",
+ "elements_total": 15,
+ "unsure_elements": 11,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Dark blue blocks partly hidden where the two aliens are joined; colour prints darker than listed blue",
+   "as_read": "two dark blue rectangular bricks, centre and eye head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Teal plate partly overlapped by the central blue brick",
+   "as_read": "teal studded plate at upper side"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Curved teal piece partly hidden behind central blue brick",
+   "as_read": "teal curved raised piece at top"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and the long plate is partly covered by the blue body",
+   "as_read": "long yellow-green plate diagonally across model"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Small lime end piece partly hidden and viewed at an angle",
+   "as_read": "small upturned lime piece at far end"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Small teal-blue slope partly hidden at the lime end; colour prints teal",
+   "as_read": "tiny teal slope near far lime end"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime discs are stacked as two eye-stalks, so lower discs are partly hidden",
+   "as_read": "stacked lime discs under closed eyes"
+  },
+  {
+   "qty": 4,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two open eyes and two closed eye tiles"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

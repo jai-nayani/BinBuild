@@ -1,0 +1,103 @@
+{
+ "id": "magical-sea-monster",
+ "name": "Magical sea monster",
+ "pages": [
+  25
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 25, photo IMG_3596, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The magical sea monster is the blue zig-zag creature with a magenta open-eyed head on the left side of page 25.",
+ "count_note": "No element count is printed for this model; total is the visible count, with some body pieces partly hidden behind the head and grey arch.",
+ "elements_total": 11,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "one orange piece is partly hidden under the body/head and colour is printed orange-yellow",
+   "as_read": "orange bricks at tail and neck"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "second dark-blue studded segment is partly hidden and rotated, count inferred from visible studs",
+   "as_read": "dark blue studded body segments"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "partly hidden under orange brick and head end",
+   "as_read": "large light-blue flat body plate"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "partly hidden behind the dark-blue tail piece, shape inferred",
+   "as_read": "light-blue curved body piece"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "pale grey long curved arch over head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "partly hidden behind grey arch and head; dark purple can print blue-purple",
+   "as_read": "small dark purple plate by head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "magenta square head"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two open eye tiles on head"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

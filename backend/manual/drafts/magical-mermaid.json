@@ -1,0 +1,113 @@
+{
+ "id": "magical-mermaid",
+ "name": "Magical mermaid",
+ "pages": [
+  24
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 24, photo IMG_3596, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The magical mermaid is the small open-eyed creature at the left of page 24 beside the yellow 'A magical mermaid ...' label.",
+ "count_note": "No element count is printed for this model; the body and tail joints are partly hidden, so hidden connecting pieces may not be visible.",
+ "elements_total": 11,
+ "unsure_elements": 9,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two open eye tiles on the face"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "pink-magenta face plate is partly covered by the eyes and black bar, so its full size is hidden",
+   "as_read": "magenta square face under the eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "black bar across the head is partly hidden at both ends and its full length cannot be counted",
+   "as_read": "black horizontal bar across the head"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime is printed yellow-green and the clip ends are partly turned away/hidden",
+   "as_read": "two lime clip-like arms/fins beside the body"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey reads near-white and the grey cylinder is partly hidden behind the head",
+   "as_read": "short light-grey cylinder below the head"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime is printed yellow and the torso block is partly hidden, so its stud arrangement cannot be confirmed",
+   "as_read": "yellow-green torso block"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey reads near-white and part of the curved tail is hidden behind the white fin",
+   "as_read": "light-grey curved tail piece"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "the pointed tail fin is partly behind the grey curve, so its full 2x4 size cannot be counted",
+   "as_read": "white pointed tail fin"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "the small blue piece at the far end is partly hidden on the lime block and its curved profile is not clearly visible",
+   "as_read": "small blue piece at the tail end"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

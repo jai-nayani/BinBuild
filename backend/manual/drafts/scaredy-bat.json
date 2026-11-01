@@ -1,0 +1,74 @@
+{
+ "id": "scaredy-bat",
+ "name": "Scaredy Bat",
+ "pages": [
+  62,
+  63
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on pages 62, 63, photo IMG_3614, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small bat with white wedge wings, lime connectors, a black hinge and a blue body in the centre of page 62, with only its shadows on page 63.",
+ "count_note": "No element count is printed on pages 62-63; total is the visible and inferred count only, with the body partly hidden.",
+ "elements_total": 8,
+ "unsure_elements": 5,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white wedge wing at each end"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "upper lime connector partly hidden behind the wedge and body and looks longer in perspective; count inferred from the clearer lower wing",
+   "as_read": "lime studded connector inside each wing"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "black bar with round ends between body and lower wing"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark piece partly hidden under the blue body and printed dark blue-purple, so colour and exact extent are uncertain",
+   "as_read": "small dark plate under the blue body"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "blue body is turned away and partly hidden; two triangular blue slopes are my best reading of its peaked shape",
+   "as_read": "two blue triangular slopes forming the body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

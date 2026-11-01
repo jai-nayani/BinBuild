@@ -1,0 +1,73 @@
+{
+ "id": "wise-owl",
+ "name": "Wise Owl",
+ "pages": [
+  53
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 53, photo IMG_3609, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Wise Owl is the small flying owl model at the centre of page 53, labelled Wise Owl.",
+ "count_note": null,
+ "elements_total": 6,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "magenta 2x2 plate with four studs on top"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Body partly hidden under the magenta plate and behind the eyes, so its exact extent cannot be counted",
+   "as_read": "teal curved body piece"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Mostly hidden behind the teal body; dark purple can also print blue in the book",
+   "as_read": "dark purple-blue strip at the far side of the body"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white round eye tiles with black pupils"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Foreground perspective makes the dark curved piece look larger, possibly 1x3-like; black curved slope 1x2 is the closest colour and shape match",
+   "as_read": "large black curved piece beside the eyes"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

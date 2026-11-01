@@ -1,0 +1,53 @@
+{
+ "id": "apple-visitor",
+ "name": "Hungry visitor (eats the apples)",
+ "pages": [
+  29
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 29, photo IMG_3598, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small orange-and-blue animal with grey round-brick feet at the bottom-left corner of page 29, next to the 'YUM YUM!' speech bubble.",
+ "count_note": "No element count is printed for this visitor; the nearby lime tree/garden pieces are a separate build and are not counted.",
+ "elements_total": 4,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey looks near-white and one cylinder is partly hidden behind the orange body",
+   "as_read": "two short grey-white cylinders under the body"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange rectangular body block"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "colour prints as bright blue; identified as the listed medium_azure curved slope",
+   "as_read": "blue curved head piece on top of the orange body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,103 @@
+{
+ "id": "flying-sofa",
+ "name": "A flying sofa",
+ "pages": [
+  71
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 71, photo IMG_3618, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small flying sofa with a turquoise seat and pink cushion is pictured on the right side of page 71 beside the green 'A flying sofa' label.",
+ "count_note": "No element count is printed for this model; some under/side pieces are partly hidden in the small angled photo.",
+ "elements_total": 8,
+ "unsure_elements": 6,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "turquoise flat seat base with studs"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "bright pink square cushion on seat"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "dark blue long strip along/behind seat is partly hidden and colour prints dark",
+   "as_read": "dark blue long sofa back/side"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "raised turquoise end under black piece is partly hidden, shape hard to confirm",
+   "as_read": "raised turquoise end piece with one stud"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "only one black end cap clearly seen; any matching end is hidden",
+   "as_read": "black curved cap at one end"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "small dark plate under seat prints blue/purple and is partly hidden",
+   "as_read": "small dark plate under seat"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small lime piece at end of seat is partly hidden; clip end not clear, lime may print yellowish",
+   "as_read": "small lime piece at seat end"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "white wing protruding to the side appears separated by perspective/shadow and is partly hidden",
+   "as_read": "white tapered wing beside sofa"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

@@ -1,0 +1,73 @@
+{
+ "id": "rabbit-both-ears",
+ "name": "Rabbit face (both ears)",
+ "pages": [
+  48
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 48, photo IMG_3607, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The both-ears rabbit is the blue flat face in the centre of the upper page with two white wedge ears extending to one side and a speech bubble saying it is listening with both ears.",
+ "count_note": null,
+ "elements_total": 8,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Eye tiles and nose pieces cover part of the blue head; two-plate count inferred from the square 4x4 outline and visible seam",
+   "as_read": "two blue plates forming square head"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white tapered wedge ears"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two printed eye tiles on head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Printed colour looks dark blue/navy, but closest kit piece is dark purple",
+   "as_read": "dark 1x2 plate at side of nose"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 1x2 piece with single central stud beside dark plate"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}

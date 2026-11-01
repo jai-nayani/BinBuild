@@ -1,0 +1,88 @@
+{
+ "id": "sailing-ship",
+ "name": "Sailing ship",
+ "pages": [
+  8
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 8, photo IMG_3583, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small sailing ship on two blue water plates at the lower centre-right of page 8.",
+ "count_note": "Total matches the printed 8 elements.",
+ "elements_total": 8,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two joined blue studded water base plates"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "grey long curved hull rising at the bow"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "partly hidden under the mast and hull, so its length is inferred",
+   "as_read": "dark purple deck strip under the mast"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "grey cylindrical mast"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "the lower front piece is partly obscured and its recess looks wide in perspective",
+   "as_read": "grey boxes with square recesses, one atop the mast and one at the front deck"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "shape matches a tall 1x1 brick with two side studs, but it is printed white/light grey as a sail rather than lime",
+   "as_read": "white tall sail with two studs protruding from one side"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "count_check": {
+  "page_says": 8,
+  "list_total": 8,
+  "matches": true
+ }
+}

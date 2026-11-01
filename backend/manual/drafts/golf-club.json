@@ -1,0 +1,53 @@
+{
+ "id": "golf-club",
+ "name": "Golf club",
+ "pages": [
+  23
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 23, photo IMG_3594, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Golf club is a blue 1x4 brick with a lime round plate on one end and a white round ball above it, at the bottom left of page 23.",
+ "count_note": null,
+ "elements_total": 3,
+ "unsure_elements": 2,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Side studs are not visible in the top view; identified as the kit's only blue 1x4 brick by colour and four top studs.",
+   "as_read": "blue 1x4 brick, studs up"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": true,
+   "doubt": null,
+   "as_read": "lime round disc on one end stud"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": false,
+   "doubt": "White round piece is detached above the club and may be intended as its golf ball; eye-like black print visible.",
+   "as_read": "white round tile with black centre"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ }
+}
