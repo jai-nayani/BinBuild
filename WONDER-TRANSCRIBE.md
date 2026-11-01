@@ -16,7 +16,10 @@ use the kit's owned pieces, within their exact counts.
 - Drafts make no fit claim and get no booklet. A hand-check with the steps
   recorded makes a draft verified, with a bin check and a booklet, as with
   the 18 hand drafts (since Nov 1: [TRIAL-FIXES.md](TRIAL-FIXES.md)).
-- **100 builds are now one hand-check away from verified:** the 18 transcribed
+- **Since Nov 1** a second Wonder read checked every draft: 29 of these 82
+  (and 11 of the 18 hand drafts) are verified by two agreeing reads, and the
+  other 60 drafts wait for a hand-check ([MANUAL-VERIFY.md](MANUAL-VERIFY.md)).
+- **100 builds were then one hand-check away from verified:** the 18 transcribed
   by hand plus these 82.
 
 ## How it works

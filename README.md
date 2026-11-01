@@ -43,7 +43,7 @@ backend/        FastAPI backend (inventory + generation API)
   booklet.py             Step-by-step booklet: JSON + printable HTML page with drawings
   sets/                  Known sets with verified piece lists (house-and-tree)
   manual/catalog.json    Every build in the kit's manual: name, chapter, pages, piece-list status
-  manual/drafts/         Draft piece lists read from the book (unverified until hand-checked):
+  manual/drafts/         Draft piece lists read from the book (verified once two reads agree or a hand-check):
                          18 from the printed element boxes, the rest read by Muse Wonder from the pictures
   manual/photos.json     Which manual photo shows each page (file names only)
   manual_transcribe.py   Muse Wonder drafts parts lists for builds that print none (python -m backend.manual_transcribe)

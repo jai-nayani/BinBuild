@@ -238,7 +238,8 @@ Drafts and hand-check, 9 more tests in the same file:
   bad input. Runs on copies, so the repo's drafts are untouched (changed Nov
   1: hand-checked drafts used to get no booklet).
 - **API:** the checklist page and the summary counts (18 waiting, 0
-  hand-checked).
+  hand-checked, as it was then; since the second reads, 60 waiting and 40
+  verified by two reads, data-driven from the drafts).
 
 Totals: 199 tests in `tests/` plus Path A's 31, all passing in the venv. With
 the system `python3`, 93 are skipped and the rest pass.

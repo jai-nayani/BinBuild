@@ -101,7 +101,8 @@ tool's list put the 11 closest first, each marked "start here":
 
 Checklist lines are numbered to match the tool.
 
-**Now:** 1 verified build (house and tree) out of 106. 100 drafts are each
+**Then:** 1 verified build (house and tree) out of 106 (since the second
+reads, 41: [MANUAL-VERIFY.md](MANUAL-VERIFY.md)). 100 drafts are each
 one hand-check away, steps included, from the same treatment. No draft has
 been hand-checked yet: the hand-checks are done with the kit, and this
 change is the tooling.
