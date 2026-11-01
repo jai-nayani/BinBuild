@@ -25,6 +25,7 @@ import re
 import secrets
 import shutil
 import sqlite3
+import threading
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
@@ -37,6 +38,7 @@ from pydantic import BaseModel, Field
 
 from . import booklet, build_plan, inventory_db, inventory_vocab, photo_gate
 from .sam_client import SamClient, SamError
+from .wonder_client import WonderClient, WonderError
 from .segmenter import COUNT_VIEW, WholePhotoSegmenter
 from .spark_client import SparkClient, SparkError
 
@@ -53,6 +55,14 @@ BATCH_ID = re.compile(r"\d{8}-\d{6}-[0-9a-f]{6}")
 # Segmenter for classify when the request doesn't name one: "stub" (whole photo)
 # or "sam" (SAM 3.1 close-ups after the whole-photo pass; needs META_MODEL_API_KEY).
 DEFAULT_SEGMENTER = os.environ.get("BINBUILD_SEGMENTER", "stub")
+# "Generate a new design" (Muse Wonder) in What can I build?: off unless the
+# backend runs with BINBUILD_WONDER=1. Read on every request.
+WONDER_FLAG = "BINBUILD_WONDER"
+_wonder_busy = threading.Lock()   # one generation at a time
+
+
+def wonder_on() -> bool:
+    return os.environ.get(WONDER_FLAG, "").strip() == "1"
 # Shapes offered when fixing a piece in review (any text is accepted).
 SHAPES = ("brick", "plate", "tile", "slope", "curved slope", "1x1 slope (cheese)", "inverted slope", "round brick",
           "round plate", "round tile", "brick with studs on side", "headlight brick", "plate with clip",
@@ -202,6 +212,10 @@ class Addition(BaseModel):
 class Review(BaseModel):
     corrections: list[Correction] = []
     additions: list[Addition] = []
+
+
+class WonderRequest(BaseModel):
+    target: str = Field(default="a simple house", min_length=3, max_length=60)
 
 
 class BuildRequest(BaseModel):
@@ -566,7 +580,60 @@ def create_app() -> FastAPI:
                            "drafts_waiting": sum("draft" in o for o in manual),
                            "hand_checked": sum(o.get("verified_by") == "hand-checked against the kit" for o in manual),
                            "read_from": build_plan.manual_catalog()["read_from"]},
-                "options": found}
+                "options": found, **({"wonder": _wonder_state()} if wonder_on() else {})}
+
+    def _wonder_state():
+        from . import wonder_designer
+        with closing(inventory_db.connect()) as conn:
+            recent = [b for b in inventory_db.recent_builds(conn, 50) if b["request"].get("wonder")][:5]
+        return {"enabled": True, "targets": list(wonder_designer.TARGETS), "per_try": wonder_designer.PER_TRY,
+                "max_tries": wonder_designer.MAX_ATTEMPTS, "busy": _wonder_busy.locked(),
+                "recent": [{"build_id": b["id"], "created_at": b["created_at"], "target": b["request"].get("target"),
+                            "title": b["result"].get("title"), "status": b["result"].get("status"),
+                            "pieces": b["result"].get("pieces"), "message": b["result"].get("message"),
+                            **({"booklet_url": f"/api/builds/{b['id']}/booklet"} if b["has_booklet"] else {})}
+                           for b in recent]}
+
+    @app.post("/api/builds/wonder", status_code=201)
+    def generate_wonder_design(request: WonderRequest):
+        """Generate a new design from the confirmed inventory with Muse Wonder
+        (only with BINBUILD_WONDER=1). One request, one generation: Wonder
+        proposes, BinBuild's validator checks it against the owned pieces, and
+        the errors go back to Wonder, at most 5 tries (each about 90 s and
+        $0.20). A design that passes comes back with its parts list and a
+        booklet; otherwise a failure naming the shortfall. Stored as a build,
+        with the inventory and the batches it came from. Nothing calls this
+        but a tap on Generate."""
+        if not wonder_on():
+            raise HTTPException(404, f"generating new designs is off (start the backend with {WONDER_FLAG}=1)")
+        target = "".join(ch for ch in request.target if ch.isprintable()).strip()
+        from . import wonder_designer
+        from . import wonder_design as wd
+        with closing(inventory_db.connect()) as conn:
+            summary = inventory_db.inventory_summary(conn)
+            batches = inventory_db.confirmed_batches(conn)
+        owned = wd.owned_from_items(summary["items"])
+        if not wd.usable_pieces(owned):
+            raise HTTPException(422, "no confirmed pieces yet: scan a batch, check it and add it to your inventory first")
+        if not _wonder_busy.acquire(blocking=False):
+            raise HTTPException(409, "a new design is already being made; wait for it to finish")
+        try:
+            try:
+                client = WonderClient.from_env()
+            except WonderError as err:
+                raise HTTPException(503, f"Muse Wonder is not set up: {err}")
+            try:
+                result = wonder_designer.design(client, owned, target, wonder_designer.MAX_ATTEMPTS,
+                                                log=lambda *_: None)
+            except WonderError as err:
+                raise HTTPException(502, f"Muse Wonder failed: {err}")
+        finally:
+            _wonder_busy.release()
+        stored = wonder_designer.app_result(result, owned)
+        with closing(inventory_db.connect()) as conn:
+            build = inventory_db.create_build(conn, {"wonder": True, "target": target},
+                                              {**build_plan.snapshot(summary), "batches": batches}, stored)
+        return _build_reply(build)
 
     @app.get("/api/manual")
     def get_manual():

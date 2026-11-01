@@ -545,6 +545,24 @@ def create_build(conn, request, snapshot, result) -> dict:
     return get_build(conn, cur.lastrowid)
 
 
+def recent_builds(conn, limit=20) -> list:
+    """The newest builds, request and result parsed, booklets left out."""
+    out = []
+    for row in conn.execute("SELECT * FROM builds ORDER BY id DESC LIMIT ?", (limit,)):
+        build = dict(row)
+        build["request"] = json.loads(build["request"]) if build["request"] else {}
+        result = json.loads(build["result"]) if build["result"] else {}
+        build["has_booklet"] = "booklet" in result
+        build["result"] = {k: v for k, v in result.items() if k != "booklet"}
+        build.pop("inventory_snapshot", None)
+        out.append(build)
+    return out
+
+
+def confirmed_batches(conn) -> list:
+    return [r["id"] for r in conn.execute("SELECT id FROM batches WHERE status = 'confirmed' ORDER BY confirm_seq")]
+
+
 def get_build(conn, build_id) -> dict:
     row = conn.execute("SELECT * FROM builds WHERE id = ?", (build_id,)).fetchone()
     if row is None:
