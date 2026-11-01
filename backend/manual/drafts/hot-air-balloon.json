@@ -87,5 +87,95 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3610"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.166,
+  "seen": "A hot-air balloon with an orange basket and a lime, teal, black and purple balloon, shown in steps on page 54 and large on page 55.",
+  "count_note": "No printed element total is visible; total is 14 counted from the Elements you'll need box and checked against the finished model.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange basket brick"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "trans_clear",
+    "sure": false,
+    "doubt": "printed white/light grey rather than clear in the Elements box",
+    "as_read": "two clear-white 1x2 plates"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two black curved pieces"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime printed yellow in the Elements box",
+    "as_read": "two small yellow round plates"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime printed yellow and clip end not clearly visible in the small top-down icons; closest and only lime 1x2 piece in kit",
+    "as_read": "two yellow-green 1x2 plates with two studs"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two teal stepped curved bricks"
+   },
+   {
+    "qty": 3,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple can look dark blue in print; only one is clearly visible on the finished balloon, the others are from the Elements box and are partly hidden in the model",
+    "as_read": "three dark purple 1x2 plates"
+   }
+  ],
+  "elements_total": 14,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 2, second read 0",
+   "lime 1x2 plate with clip: first read 0, second read 2"
+  ]
  }
 }

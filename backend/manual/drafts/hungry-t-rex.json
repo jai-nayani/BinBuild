@@ -109,5 +109,105 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3593"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0786,
+  "seen": "The Hungry T. rex is the blue long-bodied dinosaur with a grey eye head at the lower centre of the orange panel on page 20, labelled 'From Mr croc to ... hungry T. rex?'",
+  "count_note": "No element total is printed for this model; some body and leg connections are hidden in the small photograph, so the hidden head/leg construction is given as the closest listed pieces.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light-blue studded plate forming the top of the body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "dark blue long body is partly hidden under the top plate and its side studs are not clearly visible",
+    "as_read": "dark-blue long brick under the body plate"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "purple/dark piece at the rear is partly hidden under the azure plate and colour prints dark",
+    "as_read": "dark purple-blue small plate at the back under the body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "tail piece at the far left is partly obscured and its curved profile is hard to confirm at this size",
+    "as_read": "blue curved piece at the tail end"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green in the book and the upright middle piece is partly hidden behind the body",
+    "as_read": "yellow-green upright piece in the middle of the body/leg"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green and the small leg/foot pieces are partly hidden under the body, so clip ends are not clear",
+    "as_read": "two small yellow-green leg/foot plates underneath"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey prints near-white/grey and the head blocks are partly behind the eye tiles; exact head construction is hidden",
+    "as_read": "grey head blocks at the front carrying the eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white eye tiles with closed eyelashes on the head"
+   }
+  ],
+  "elements_total": 11,
+  "agrees": false,
+  "differences": [
+   "magenta 2x2 plate: first read 1, second read 0",
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 2, second read 1"
+  ]
  }
 }

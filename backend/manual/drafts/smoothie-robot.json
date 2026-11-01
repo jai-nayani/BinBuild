@@ -4,8 +4,8 @@
  "pages": [
   86
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 86, photo IMG_3626, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "The small green robot in the centre of page 86 beside the caption saying it will serve a green milk smoothie.",
@@ -99,5 +99,111 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3626"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0743,
+  "seen": "The small lime-green robot is in the middle of page 86 beside the caption saying it will serve a green milk smoothie.",
+  "count_note": "No element count is printed for this example; the model is pictured very small, so grey/white and lime pieces partly hidden behind the head and body may not all be readable.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Model is very small; lime prints yellow-green and the long bar is partly obscured by pieces on it",
+    "as_read": "long lime bar forming the body/arms"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Small and partly hidden; two upright lime blocks are visible but their side studs and exact separation are hard to read",
+    "as_read": "two upright lime blocks"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Small lime limb/foot at one end is partly hidden; clip end is not clearly visible",
+    "as_read": "small lime foot/hand piece"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Two round lime studs on the long bar are visible but small and lime prints yellow-green",
+    "as_read": "two round lime studs on bar"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Grey head/neck is small, partly hidden behind the eye, and light grey prints near-white",
+    "as_read": "grey cylindrical head/neck"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Grey head block is partly hidden by the eye tile and prints near-white; recess is not clearly visible",
+    "as_read": "grey 1x1 head block"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "Pale flat piece at the head/base end is partly hidden and could be confused with light grey in print",
+    "as_read": "white flat piece with one central stud"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "single white eye tile on head"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.212,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The white printed round tile eye is mounted vertically on the front stud of the headlight brick, so it is held only by a side stud rather than by a stud underneath it"
  }
 }

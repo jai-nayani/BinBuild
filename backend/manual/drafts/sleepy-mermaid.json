@@ -99,5 +99,128 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3596"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.12,
+  "seen": "The sleepy mermaid is the upright figure labelled 'A sleepy mermaid!' on the right side of page 25, with closed eyes after the head swap.",
+  "count_note": "No element count for this model is printed on pages 24-25; total is my visible count and some body pieces are partly hidden.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two closed-eye tiles on head"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "purple plate partly hidden behind the eye tiles, colour may print differently",
+    "as_read": "purple plate behind eyes"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey head block partly hidden behind eyes and black bar",
+    "as_read": "grey block at head"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": false,
+    "doubt": "long black bar under head, ends partly covered by lime pieces",
+    "as_read": "black horizontal bar under head"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow-green in print; one is the raised arm and the second lime end piece is partly hidden at the lower end",
+    "as_read": "lime arm and lime end piece"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "small white piece between head and torso is partly hidden",
+    "as_read": "small white neck piece"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow in print and torso piece is partly covered, so size is uncertain",
+    "as_read": "yellow-lime torso front"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "only a blue patch at the waist is visible, most of the plate is hidden behind torso and tail",
+    "as_read": "blue patch at waist"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "large grey curved tail is partly behind the torso, length hard to count",
+    "as_read": "large grey curved tail"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey cylinders at the side of the head and at the base of the tail are partly hidden and could include another grey piece",
+    "as_read": "grey cylinders at head side and tail base"
+   }
+  ],
+  "elements_total": 13,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 1, second read 0",
+   "light_bluish_gray 1x1 round brick: first read 1, second read 2",
+   "light_bluish_gray 1x1 headlight brick: first read 0, second read 1",
+   "lime 1x6 plate: first read 0, second read 1",
+   "medium_azure 2x4 plate: first read 0, second read 1"
+  ]
  }
 }

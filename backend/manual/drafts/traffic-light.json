@@ -59,5 +59,64 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3599"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1419,
+  "seen": "The traffic light is the tall pole model on the left side of the city scene on page 31, lying across the page in the photo.",
+  "count_note": "No element count is printed for this spare-parts traffic light; the count printed for the Mini City activity relates to the car, so no comparison was made.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "Base is partly shadowed and seen at an angle; colour looks magenta to dark purple and its far edge is hidden.",
+    "as_read": "purple-pink square base at foot of pole"
+   },
+   {
+    "qty": 4,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Pole segments are partly merged in the photo; count estimated from pole length and segment joints, some joints hidden.",
+    "as_read": "long grey cylindrical pole"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow-green; piece is turned sideways so its two side studs appear in a row.",
+    "as_read": "lime-yellow head with two side studs"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Small dark-blue cap at the end of the head is partly hidden and prints darker than medium blue; this is the closest listed piece.",
+    "as_read": "small dark blue cap on head end"
+   }
+  ],
+  "elements_total": 7,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 3, second read 4"
+  ]
  }
 }

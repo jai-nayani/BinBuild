@@ -202,7 +202,9 @@ class TestBuildPlan(unittest.TestCase):
     def test_options_order(self):
         found = bp.options(KIT_ITEMS)
         designs = [o for o in found if o["kind"] == "brickgpt"]
-        self.assertEqual((found[0]["id"], found[0]["status"]), ("house-and-tree", "fit"))  # the manual comes first
+        house = next(o for o in found if o["id"] == "house-and-tree")
+        self.assertEqual((found[0]["kind"], found[0]["piece_status"]), ("manual", "verified"))  # the manual comes first
+        self.assertEqual(house["status"], "fit")
         self.assertEqual((designs[0]["id"], designs[0]["status"]), ("train", "short"))
         self.assertEqual({o["status"] for o in found[-2:]}, {"not_connected"})
         self.assertEqual(len(found), len(bp.manual_catalog()["builds"]) + len(bp.designs()))
@@ -269,7 +271,9 @@ class TestBuildApi(unittest.TestCase):
         status, body = self.api.call("GET", "/api/builds/options")
         self.assertEqual(status, 200)
         self.assertEqual(body["inventory"], {"total_pieces": 50, "generator_ready": 2, "other": 48})
-        self.assertEqual((body["options"][0]["id"], body["options"][0]["status"]), ("house-and-tree", "fit"))
+        self.assertEqual(body["options"][0]["piece_status"], "verified")   # verified manual builds first
+        house = next(o for o in body["options"] if o["id"] == "house-and-tree")
+        self.assertEqual(house["status"], "fit")
 
     def test_undo_takes_the_pieces_out_of_the_build(self):
         status, _ = self.api.call("POST", f"/api/inventory/undo-last-batch?batch_id={self.batch}")

@@ -59,5 +59,54 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3624"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1393,
+  "seen": "The Jetpack is the white and medium-azure model labelled on the left side of page 83.",
+  "count_note": "No printed element count is visible for this model; the total is the count of pieces I could identify, with any underside attachment hidden.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "Main plate is partly covered by the azure pieces, so its tapered outline and exact stud count are hard to confirm; it appears white to pale grey in print.",
+    "as_read": "long white studded main plate"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two teal curved pieces on the plate"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Small lime discs at both tips are partly seen in perspective, so their exact attachment and count are uncertain.",
+    "as_read": "small lime disc at each end"
+   }
+  ],
+  "elements_total": 5,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 2, second read 0"
+  ]
  }
 }

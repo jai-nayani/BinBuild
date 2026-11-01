@@ -84,5 +84,85 @@
   "page_says": 8,
   "list_total": 8,
   "matches": true
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3583"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0715,
+  "seen": "A small sailing ship on teal sea plates at the lower centre of page 8, below the submarine.",
+  "count_note": "Total 8 matches the page's printed 8 elements.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two teal base plates forming the sea"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "hull partly hidden under deck and mast; only curved grey side clearly visible",
+    "as_read": "grey curved hull"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "partly hidden under the round mast; dark colour looks blue-purple and length is partly obscured",
+    "as_read": "dark strip on deck under mast"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "grey cylindrical mast section"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "one at mast top and one at the bow; square holes visible but orientation and exact footprint partly obscured by angle",
+    "as_read": "grey bricks with square recesses at mast top and bow"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white vertical sail with two studs"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 1, second read 0",
+   "white 2x2 tile with 2 studs on edge: first read 0, second read 1"
+  ]
  }
 }

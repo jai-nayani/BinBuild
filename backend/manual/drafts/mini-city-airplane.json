@@ -4,8 +4,8 @@
  "pages": [
   31
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 31, photo IMG_3599, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A small white-winged airplane in the upper-right of page 31, flying over the painted Mini City beside the BUILD BOOST text.",
@@ -49,5 +49,61 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3599"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0682,
+  "seen": "A small airplane flying over the painted Mini City at the top right of page 31.",
+  "count_note": "No element total is printed for this Build Boost airplane; the total is the number of pieces I could identify in the picture.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange 1x2 brick with two studs on top of the plane"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "second wing is partly hidden behind the body and appears grey in shadow; wings are a left and right pair",
+    "as_read": "two white wing-shaped wedge plates forming the wings"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "central body is partly hidden by the orange brick and wings, so its exact shape and size are uncertain; it appears as a long light-grey body piece",
+    "as_read": "long light-grey piece forming the fuselage between the wings"
+   }
+  ],
+  "elements_total": 4,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 6,
+  "usd": 2.9936,
+  "picture_checks": 3,
+  "reason": "no design passed BinBuild's checker and looked like the book's picture in 6 tries (the last: 2 checker problems left)"
  }
 }

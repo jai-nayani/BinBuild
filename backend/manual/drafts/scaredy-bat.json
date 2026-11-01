@@ -5,8 +5,8 @@
   62,
   63
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on pages 62, 63, photo IMG_3614, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A small bat with white wedge wings, lime connectors, a black hinge and a blue body in the centre of page 62, with only its shadows on page 63.",
@@ -70,5 +70,81 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3614"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1079,
+  "seen": "A bat with outstretched diagonal wings in the centre of page 62, with only black shadow silhouettes on page 63.",
+  "count_note": "No printed element count is visible on the pages; total is from the pieces I could identify in the pictured bat.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white wing tips at both ends"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow-green and the clip ends are partly hidden where they grip the black bar.",
+    "as_read": "lime-green pieces between wings and centre"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black bar through the centre"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark piece looks blue-purple and is partly hidden under the blue body pieces; size is estimated from the visible part.",
+    "as_read": "dark blue-purple plate at centre body"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Small blue pointed body pieces are partly merged/hidden in the photo; counted as two 1x1 cheese slopes forming the body top.",
+    "as_read": "medium-blue pointed slopes on centre body"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
  }
 }

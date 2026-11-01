@@ -4,8 +4,8 @@
  "pages": [
   95
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 95, photo IMG_3630, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A small friendly face with two closed eyes on a teal and dark-blue head, with black and lime protrusions, in the centre of page 95.",
@@ -89,5 +89,101 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3630"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1043,
+  "seen": "The friendly face is the model with two closed eyes on the upper part of page 95, the lower page in the photo.",
+  "count_note": "No element count for this model is printed on the page; total is the pieces I could identify in the pictured face.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white round closed-eye tiles"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "partly hidden behind the teal centre and one eye; length and side studs inferred from visible blue section",
+    "as_read": "dark blue brick holding an eye"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "central teal piece is partly covered by the black bar and blue brick, so its full size and whether it is a plate are not certain",
+    "as_read": "large teal central face piece"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": false,
+    "doubt": "long black bar seen at an angle; its end fittings are partly hidden",
+    "as_read": "long black bar across one side of face"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "two black curved pieces meet at an angle and partly overlap, so the join and exact count are partly hidden",
+    "as_read": "two black curved pieces forming a V"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow-green in print and the long piece is partly hidden behind the face; full length inferred",
+    "as_read": "long lime plate protruding behind top of face"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "small lime piece at the end of the black bar is partly hidden and its clip is not visible; lime looks yellow-green in print",
+    "as_read": "small lime 1x2 piece with two studs"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
  }
 }

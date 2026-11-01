@@ -70,5 +70,57 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3628"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.132,
+  "seen": "The small horizontal lime-green one-eyed alien pictured for step 1 on page 90, below the 'best party ever' speech bubble.",
+  "count_note": "No printed element count for this model was visible; total is the count I could read from the small illustration.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Model is pictured very small and lime prints yellow-green; length is my best stud count.",
+    "as_read": "long lime bar forming the body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Small raised round detail on the body may partly be a stud of the long plate.",
+    "as_read": "small round lime raised stud on top"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "single open eye at one end"
+   }
+  ],
+  "elements_total": 3,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 2, second read 0",
+   "lime 1x2 plate with clip: first read 2, second read 0",
+   "lime 1x1 round plate: first read 4, second read 1",
+   "white 1x1 round printed tile: first read 2, second read 1"
+  ]
  }
 }

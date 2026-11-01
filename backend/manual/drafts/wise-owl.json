@@ -4,8 +4,8 @@
  "pages": [
   53
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 53, photo IMG_3609, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "The Wise Owl is the small flying owl model at the centre of page 53, labelled Wise Owl.",
@@ -69,5 +69,81 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3609"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1394,
+  "seen": "The Wise Owl is the labelled model in the centre of page 53, with two large eyes beside a black block and a magenta plate on its body.",
+  "count_note": "No printed element count is visible on the page; any piece supporting the eye tiles on the side is hidden behind the eyes, body and black block, so the visible-piece total may be under the model's true total.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "purple-pink 4-stud plate on top of body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal curved body partly covered by magenta plate and eyes; exact extent and stud step not clearly visible.",
+    "as_read": "teal curved block forming body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Large black curved block beside eyes; its length is partly obscured by the eyes and perspective, so 1x2 is the closest listed black curved slope.",
+    "as_read": "black curved block beside eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two round eye tiles"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark blue-purple slab peeking from under the teal body is partly hidden and colour prints more blue than purple.",
+    "as_read": "dark slab under body"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 4,
+  "usd": 1.8646,
+  "picture_checks": 1,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: the pictured magenta plate rests only on the smooth top of the medium-azure curved slope and the curved slopes sit beside, not on, the studded plates, so they have no stud connection without moving them from their pictured positions"
  }
 }

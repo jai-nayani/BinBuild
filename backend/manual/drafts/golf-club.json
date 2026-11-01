@@ -4,8 +4,8 @@
  "pages": [
   23
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 23, photo IMG_3594, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "The Golf club is a blue 1x4 brick with a lime round plate on one end and a white round ball above it, at the bottom left of page 23.",
@@ -49,5 +49,61 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3594"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0947,
+  "seen": "The golf club is the blue club with a lime round piece at one end and a white round ball beside it, at the lower left of page 23.",
+  "count_note": "No element count is printed for this hobby example; total includes the loose golf ball beside the club.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long blue brick forming the club"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "small lime round stud on one end of the blue brick"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": false,
+    "doubt": "loose white ball beside the club rather than attached to it, so it may not be counted as part of the club itself; black eye print visible",
+    "as_read": "white round tile used as golf ball"
+   }
+  ],
+  "elements_total": 3,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.1245,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The white round tile golf ball is shown loose beside the blue brick, not held by any stud, so the pictured model is not a single stud-connected model"
  }
 }

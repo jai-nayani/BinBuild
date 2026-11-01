@@ -5,8 +5,8 @@
   10,
   11
  ],
- "status": "draft",
- "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the “Elements you’ll need” box on page 10, photo IMG_3585, read on Oct 29",
  "elements_total": 18,
  "unsure_elements": 3,
@@ -127,5 +127,141 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3585"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0863,
+  "seen": "The Dozy Dolphin is shown in build steps and as a completed dolphin on page 10, with its Elements You'll Need box at upper right.",
+  "count_note": "No printed total element count was visible; the 18 pieces counted from the Elements You'll Need box match the pieces identifiable through steps 1-4.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two dark blue body bricks in elements box"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "Box icons print as dark pink/burgundy squares; shape and kit match magenta 2x2 plates.",
+    "as_read": "two pink-red square plates"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints pale sage-green in the box and model; identified by 1x2 clip flipper shape.",
+    "as_read": "two pale green flipper plates"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Small black icons in box are tiny; shape matches black 1x2 curved slopes seen on top of body, one partly hidden on far side.",
+    "as_read": "two small black curved pieces"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two light blue rounded head pieces"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Box shows a small plain blue square and the piece is small at the tail tip; closest listed piece is the medium blue 1x1 cheese slope.",
+    "as_read": "small blue tail-tip piece"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long black bar element under body"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "one open eye and one closed eye"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark purple prints very dark blue-purple in box; one side piece is partly hidden on far side of model.",
+    "as_read": "two dark purple side rectangles"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "small white plate with one centre stud"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white snout plate with two edge studs"
+   }
+  ],
+  "elements_total": 18,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
  }
 }

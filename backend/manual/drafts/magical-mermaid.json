@@ -109,5 +109,118 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3596"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1793,
+  "seen": "The magical mermaid is the small creature on the left side of the pink panel on page 24, labelled 'A magical mermaid ...', with a magenta face and open eyes.",
+  "count_note": "No element count for this model is printed on the page; total is my visible count and some body pieces are partly hidden, so hidden pieces may be missed.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "magenta square face"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two open eye tiles on face"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": false,
+    "doubt": "black bar across top of head/shoulders is partly hidden behind the head, length not fully countable",
+    "as_read": "long thin black bar"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "pale grey curved piece at the tail end is partly hidden and light grey prints near-white",
+    "as_read": "light grey curved tail piece"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "long yellow-green body/tail piece; lime prints as yellow and its ends are partly hidden",
+    "as_read": "long yellow-green plate along body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "yellow-green torso block is partly hidden behind other pieces; lime prints as yellow",
+    "as_read": "yellow-green torso block"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "small dark piece on top of the body looks blue in print; dark purple can look blue",
+    "as_read": "small dark blue-purple plate on body"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey cylindrical connectors at neck/tail are partly hidden behind the body, count is best guess; light grey prints near-white",
+    "as_read": "grey round connectors"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "two small lime fin/arm pieces are partly hidden and angled away; lime prints as yellow-green",
+    "as_read": "two small lime fins/arms"
+   }
+  ],
+  "elements_total": 12,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 1, second read 2",
+   "white 2x4 wedge plate: first read 1, second read 0",
+   "medium_azure 1x2 curved slope: first read 1, second read 0",
+   "lime 1x6 plate: first read 0, second read 1",
+   "dark_purple 1x2 plate: first read 0, second read 1"
+  ]
  }
 }

@@ -5,8 +5,8 @@
   38,
   39
  ],
- "status": "draft",
- "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the “Elements you’ll need” box on page 38, photo IMG_3602, read on Oct 29",
  "elements_total": 12,
  "unsure_elements": 0,
@@ -107,5 +107,121 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3602"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1429,
+  "seen": "The Happy Ghost is the small ghost built in steps 1-4 on page 38 and shown finished at the bottom of page 39 in front of the haunted house.",
+  "count_note": "No printed total element count was found; 12 pieces counted from the Elements you'll need box and checked against steps 1-4.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow in the book; identified by the tall 1x1 body shape in step 1 and the Elements box.",
+    "as_read": "yellow-green tall body brick"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "grey round tail under body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange brick added to body in step 2"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow in the book; wing pieces are partly behind the black hinge in step 3.",
+    "as_read": "two yellow-green wing clips on the black bar"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long black bar between the wings"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey prints near-white; identified by the two small square bricks with a recess in the Elements box forming the head.",
+    "as_read": "two pale grey head bricks"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two printed eye tiles"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "Small white piece in the Elements box; single central stud suggests a jumper plate but its size is hard to confirm at this scale.",
+    "as_read": "small white plate with one stud on head"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Blue prints darker than medium blue in the book; this is the only listed 1x1 cheese slope.",
+    "as_read": "small blue slope on top of head"
+   }
+  ],
+  "elements_total": 12,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
  }
 }

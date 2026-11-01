@@ -4,8 +4,8 @@
  "pages": [
   49
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 49, photo IMG_3607, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "The Dog face is the black-and-white flat face in the centre of page 49, between the sleepy-eyed face and the frog, with black ears at both ends and two open eyes.",
@@ -59,5 +59,71 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3607"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0703,
+  "seen": "The dog face is the black-eared white face in the centre of page 49, next to the 'WHAT'S UP, DOG!' speech bubble.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "boundary partly hidden beside the 2x2 tile and under an ear; identified by the single central stud",
+    "as_read": "white 1x2 plate with one central stud"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "its two studs are covered by the eye tiles, so the edge-stud pattern is inferred",
+    "as_read": "white 2x2 smooth tile area holding the eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two open eye tiles"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two black smooth ear pieces"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 2,
+  "usd": 0.4978,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: the pictured dog is a flat lay—the black curved-slope ears and white jumper-plate snout only butt against the 2x2 face and have no stud connection to it; holding them would require stacking or overlapping them onto the face’s studs, which are already occupied by the eyes, thereby changing the pictur"
  }
 }

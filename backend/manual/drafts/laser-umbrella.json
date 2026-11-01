@@ -59,5 +59,67 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3624"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1035,
+  "seen": "A small umbrella with a teal-and-white canopy at the bottom-right of page 83, its shaft pointing diagonally up-left along a printed laser beam.",
+  "count_note": "No element count is printed for this model; the shaft is partly obscured by the printed beam graphic, so hidden handle pieces may be missed.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "studs partly hidden under the crossing white piece, so the 2x4 size is a best count",
+    "as_read": "teal flat canopy plate"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "partly hidden over the azure plate and its tapered edge is hard to see; closest listed piece for the white 4-stud canopy piece",
+    "as_read": "white canopy piece crossing the teal plate"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey shaft is partly overlapped by the printed laser beam, so the number of stacked cylinders is uncertain",
+    "as_read": "grey cylindrical shaft pieces"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey looks near-white in print and the piece at the canopy centre is partly hidden",
+    "as_read": "grey block at centre of canopy"
+   }
+  ],
+  "elements_total": 5,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 round plate: first read 1, second read 0",
+   "dark_purple 1x2 plate: first read 1, second read 0",
+   "white 2x4 wedge plate: first read 0, second read 1",
+   "light_bluish_gray 1x1 headlight brick: first read 0, second read 1"
+  ]
  }
 }

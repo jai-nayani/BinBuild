@@ -47,6 +47,7 @@ backend/        FastAPI backend (inventory + generation API)
                          18 from the printed element boxes, the rest read by Muse Wonder from the pictures
   manual/photos.json     Which manual photo shows each page (file names only)
   manual_transcribe.py   Muse Wonder drafts parts lists for builds that print none (python -m backend.manual_transcribe)
+  manual_verify.py       Second Wonder read per draft; auto booklet steps for the ones that agree (python -m backend.manual_verify)
   manual_check.py        Hand-check a draft and record its steps (python -m backend.manual_check)
   full_loop.py           One batch through every stage via the API (recorded Spark reply)
   requirements.txt
@@ -118,11 +119,16 @@ segmenter interface: one mask per piece, close-ups checked by Spark, outlines
 in review. It is opt-in (`?segmenter=sam` or `BINBUILD_SEGMENTER=sam`); results
 on the kit batch: [SAM-3-1.md](SAM-3-1.md).
 "What can I build?" lists every build in the manual that came with the kit
-first (106; one, house-and-tree, has a verified piece list and a booklet; the
-others are shown with their pages and parts marked not yet verified), then
-BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md). Draft parts lists for
-the builds that print none were read from the pictures by Muse Wonder, all
-waiting for a hand-check: [WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md).
+first (106; 41 have a verified piece list and a bin check — house-and-tree
+hand-checked, 40 more verified by two independent Muse Wonder reads of the
+page agreeing on every line, 11 of those with a validated step-by-step
+booklet; the rest are shown with their pages and parts marked not yet
+verified), then BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
+Draft parts lists for the builds that print none were read from the pictures
+by Muse Wonder: [WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md); the second
+reads and auto-generated booklets: [MANUAL-VERIFY.md](MANUAL-VERIFY.md). The
+60 drafts whose reads differ wait in the hand-check queue, differing lines
+first.
 A hand-check records the build's steps too, so a hand-checked build gets a
 booklet like house and tree; the retake pop-up fix from the Oct 31 trial is in
 [TRIAL-FIXES.md](TRIAL-FIXES.md).

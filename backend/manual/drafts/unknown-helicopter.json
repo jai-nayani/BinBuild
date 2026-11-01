@@ -89,5 +89,104 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3613"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0972,
+  "seen": "The Helicopter is the labelled model in the upper-right area of page 61, above the Airplane, on the purple space background.",
+  "count_note": "No element total for this model is printed on pages 60-61, so there is no printed count to compare with the 9 pieces listed.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Stylised illustration and pieces overlap at the top; grey looks near-white and the join between the two curved pieces is partly hidden behind the orange brick.",
+    "as_read": "two large grey curved pieces forming the top/rotor"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Seen in angled/stylised view under the rotor, so its 1x2 length is partly hidden.",
+    "as_read": "orange block in the centre"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Closest listed piece for the pale grey/white rectangular block below the orange piece; no headlight hole is visible in the stylised drawing and it may be partly hidden.",
+    "as_read": "pale grey-white block below orange"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Small grey cylindrical support under the black side piece is partly hidden and shown only in stylised form.",
+    "as_read": "small grey cylinder on the left side"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Closest listed piece for the black elongated piece protruding on the left; its shape/end is stylised and partly overlaps the grey cylinder.",
+    "as_read": "black protruding piece on the left"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "Thin reddish-purple band is seen edge-on, so size is hidden; colour could be dark purple printed as magenta/burgundy, magenta 2x2 is the closest match.",
+    "as_read": "thin magenta-purple band above the base"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal base block is seen in stylised angled view and partly overlapped by the blue block, so its footprint cannot be counted directly.",
+    "as_read": "teal block at lower-left of base"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Dark blue base block is partly overlapped by the teal block and shown stylised, so side studs/length are not fully visible; blue in the book looks darker than the kit colour.",
+    "as_read": "dark blue block at lower-right of base"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 0, second read 1"
+  ]
  }
 }

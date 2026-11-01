@@ -44,6 +44,7 @@ needs_pillow = unittest.skipUnless(HAVE_PILLOW, "Pillow not installed")
 OWNED = mt.kit_owned() if HAVE_PILLOW else {}
 RECORDED = Path(__file__).resolve().parent / "fixtures" / "wonder-transcribe-recorded.json"
 CRAB = next(b for b in mt.todo_builds() if b["id"] == "snappy-crab")
+SECOND_READ = ("second_read", "auto_steps", "steps", "status", "warning")  # what manual_verify adds or changes
 
 
 def element(qty, code, color, size, sure=True, doubt=""):
@@ -156,7 +157,7 @@ class TestLoop(unittest.TestCase):
     def test_same_format_as_the_hand_drafts(self):
         record, _ = self.run_one([self.GOOD])
         hand = json.loads((bp.DRAFTS_DIR / "dozy-dolphin.json").read_text())
-        self.assertTrue(set(hand) <= set(record["draft"]))
+        self.assertTrue(set(hand) - set(SECOND_READ) <= set(record["draft"]))
         self.assertEqual(set(hand["elements"][0]), set(record["draft"]["elements"][0]))
 
 
@@ -220,6 +221,9 @@ class TestRecorded(unittest.TestCase):
             for key in ("read_from",):  # the date is when it ran
                 record["draft"].pop(key)
                 committed.pop(key)
+            for key in SECOND_READ:     # added by the second read (backend/manual_verify.py)
+                committed.pop(key, None)
+                record["draft"].pop(key, None)
             self.assertEqual(record["draft"], committed, bid)
 
 

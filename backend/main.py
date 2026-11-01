@@ -579,6 +579,8 @@ def create_app() -> FastAPI:
                            "not_yet_piece_verified": count("not-yet-piece-verified"),
                            "drafts_waiting": sum("draft" in o for o in manual),
                            "hand_checked": sum(o.get("verified_by") == "hand-checked against the kit" for o in manual),
+                           "two_reads_agree": sum(o.get("verified_by") == "two independent reads agree" for o in manual),
+                           "with_booklet": sum(o["piece_status"] == "verified" and o["has_booklet"] for o in manual),
                            "read_from": build_plan.manual_catalog()["read_from"]},
                 "options": found, **({"wonder": _wonder_state()} if wonder_on() else {})}
 
@@ -643,12 +645,14 @@ def create_app() -> FastAPI:
 
     @app.get("/api/manual/checklist", response_class=HTMLResponse)
     def get_manual_checklist():
-        """The draft piece lists transcribed from the book, as a printable
-        page for hand-checking them against the kit, closest to verified first.
-        Drafts, not verified."""
-        ordered = build_plan.checklist_order(build_plan.manual_drafts())
+        """The draft piece lists still waiting for a person (a second read
+        disagreed, or none yet), as a printable page for hand-checking them
+        against the kit, closest to verified first. Drafts, not verified."""
+        drafts = build_plan.manual_drafts()
+        ordered = build_plan.checklist_order(drafts)
         return HTMLResponse(booklet.render_checklist([d for d, _ in ordered],
-                                                     first={d["id"]: why for d, why in ordered if why}))
+                                                     first={d["id"]: why for d, why in ordered if why},
+                                                     verified=sum(map(build_plan.reads_agree, drafts.values()))))
 
     @app.post("/api/builds", status_code=201)
     def create_build(request: BuildRequest):

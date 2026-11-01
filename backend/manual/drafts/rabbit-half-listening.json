@@ -4,8 +4,8 @@
  "pages": [
   48
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 48, photo IMG_3607, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A flat rabbit face with white wedge ears at the top-left of the upper page, beside the 'I'M ONLY HALF-LISTENING!' speech bubble.",
@@ -69,5 +69,81 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3607"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0668,
+  "seen": "The flat blue rabbit face with mismatched white ears at the top-left of the yellow page 48, beside the 'I'M ONLY HALF-LISTENING!' speech bubble.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "blue flat face, seam between two plates"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple printed as dark blue in the book",
+    "as_read": "dark 1x2 rectangle beside muzzle"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white plate with single central stud"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two open eye tiles"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white wedge ears pointing different ways"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 6,
+  "usd": 1.9132,
+  "picture_checks": 2,
+  "reason": "no design passed BinBuild's checker and looked like the book's picture in 6 tries (the last: 2 checker problems left)"
  }
 }

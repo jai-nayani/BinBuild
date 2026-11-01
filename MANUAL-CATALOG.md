@@ -53,6 +53,13 @@ plus a note quoting the caption where useful.
 | diagram-readable | **18** | The page shows exactly which elements the build needs, legible in the full-size photo. Nothing transcribed or checked yet. |
 | not-yet-piece-verified | **87** | The page pictures the model but lists no elements. 4 of these have a printed total (submarine 15, sailing ship 8, mini-tugboat 10, snappy crab 9), but which elements isn't given. |
 
+**Since Nov 1** the 100 draft lists (the 18 below plus Wonder's 82) have all
+had an independent second read: **40 are verified** (two reads agree on every
+line; 11 of them also have a validated booklet) and 60 wait in the hand-check
+queue with their differing lines listed first. The catalog file's statuses
+above are unchanged; the app's verified count is 41 including house and tree.
+See [MANUAL-VERIFY.md](MANUAL-VERIFY.md).
+
 **The 18 diagram-readable builds:**
 - 15 have an "Elements you'll need" box: Dozy Dolphin, Yoga Goose, Viking
   longboat, Tiny Tentacles, Inspector Duck, Mini City car, Happy Ghost, Hungry
@@ -65,10 +72,11 @@ plus a note quoting the caption where useful.
 
 ## What "What can I build?" shows now
 
-1. **📕 From your manual (106 builds).** One line explains that 1 build has a
-   verified piece list (BinBuild checks your bin and makes a booklet), and the
-   other 105 are builds from the same book, meant for this kit, whose parts
-   aren't verified yet: build them from the book.
+1. **📕 From your manual (106 builds).** One line explains how many builds
+   have a verified piece list (BinBuild checks your bin; 12 of the 41 verified
+   builds have a step-by-step booklet, and the line says so), and the rest are
+   builds from the same book, meant for this kit, whose parts aren't verified
+   yet: build them from the book.
 2. **House and tree, highlighted:** "Manual · chapter 2 · Go Wild in the City ·
    page 28", "✓ Verified piece list", "✓ You can build this" (or what's
    missing), and **Make the booklet**.
@@ -171,15 +179,22 @@ each of those pieces, so the doubt is the drawing, not the piece.
 
 ## What would verify the rest
 
-- **The 18 diagram-readable builds:** transcribed (above). What's left is the
-  hand-check with its steps, about 10–15 minutes per build with the kit.
-  Once done, the build is verified with a bin check and a booklet.
+- **The 60 whose two reads differ** (including 7 of the 18 diagram-readable
+  builds): the hand-check with its steps, about 10–15 minutes per build with
+  the kit. Each checklist card now starts with the exact lines the reads
+  disagree on, so most checks are short. Once done, the build is verified
+  with a bin check and a booklet, and the hand-check overrides the reads.
+- **The 29 verified without a booklet:** a hand-check recording its steps is
+  the only route for the 15 side-stud/clip models and the 5 that failed the
+  checker; the 9 hinge-plate builds also need the validator to learn that
+  piece (no LDraw model) before any auto-steps can be checked.
 - **The 87 with no list on the page:** 82 now have draft lists read from the
   pictures by Muse Wonder ([WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md)); the
-  other 5 are activities. They hand-check the same way as the 18. Building the
-  model and scanning that handful as a batch is the other route: review and
-  confirm give its exact piece list, which becomes its set file. The 4 printed
-  totals are a check on the count.
+  other 5 are activities. Building the model and scanning that handful as a
+  batch is the other route: review and confirm give its exact piece list,
+  which becomes its set file. The 4 printed totals are a check on the count
+  (two agree across reads and are verified; sailing ship and snappy crab
+  differ by one line and head the hand-check queue).
 - **Activities** (Chance Creatures, Mirror People and the like) have no fixed
   list by design. They stay unverified, which is right for them.
 - **Pages 1–7 and 34–35** need photographing; any builds on them aren't in the
@@ -225,13 +240,14 @@ Drafts and hand-check, 9 more tests in the same file:
 - **API:** the checklist page and the summary counts (18 waiting, 0
   hand-checked).
 
-Totals: 123 tests in `tests/` plus Path A's 31, all passing in the venv. With
-the system `python3`, 57 are skipped and the rest pass.
+Totals: 199 tests in `tests/` plus Path A's 31, all passing in the venv. With
+the system `python3`, 93 are skipped and the rest pass.
 
 ## Next blocker for the Oct 30 – Nov 1 kid trials
 
-The 18 draft piece lists need a person with the kit to hand-check them (about
-5–10 minutes each; start with the 7 that have no unsure lines). Since then
-Muse Wonder has drafted 82 more ([WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md)),
-so 100 builds are one hand-check away from verified. Until then,
-house and tree is still the only build the app can check a kid's bin for.
+The second reads (Nov 1, [MANUAL-VERIFY.md](MANUAL-VERIFY.md)) verified 40 of
+the 100 drafts without a person, so the app can now check a kid's bin for 41
+manual builds. What still needs a person with the kit is the 60-build
+hand-check queue — start with sailing ship and snappy crab (one differing
+line each, printed totals to check against) — and hand-building any of the
+11 auto-booklet builds, none of which has been built from its steps yet.

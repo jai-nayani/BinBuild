@@ -97,5 +97,105 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3599"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1538,
+  "seen": "The Mini City car is shown in the building steps on page 30 and as the finished car at lower left on page 31.",
+  "count_note": "No numeric element total is printed; the total is the sum of the pieces pictured in the Elements you'll need box and checked against the steps.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two long blue body bricks"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "pink square plate on top of body"
+   },
+   {
+    "qty": 4,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Far-side door panels are hidden; count taken from the four purple plates pictured in the elements box and the near-side panel in the model.",
+    "as_read": "purple door panels on each side"
+   },
+   {
+    "qty": 4,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "tiny lime-green wheels, two per side"
+   },
+   {
+    "qty": 4,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black slopes at front and rear"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "trans_clear",
+    "sure": false,
+    "doubt": "Clear plates look pale tan against the orange page in the elements box; only the windscreen area is clearly visible in the model.",
+    "as_read": "clear windscreen plates"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two blue curved cabin pieces"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "White roof is seen mainly from the side, so its full 2x2 size is not directly countable in the model picture; count taken from the single white piece in the elements box.",
+    "as_read": "white roof tile"
+   }
+  ],
+  "elements_total": 20,
+  "agrees": false,
+  "differences": [
+   "white 1x2 jumper plate: first read 1, second read 0",
+   "white 2x2 tile with 2 studs on edge: first read 0, second read 1"
+  ]
  }
 }

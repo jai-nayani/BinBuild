@@ -4,8 +4,8 @@
  "pages": [
   66
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 66, photo IMG_3616, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A rectangular high-wire perch with Baby Bird perched on its black wire, shown large on the left of page 66.",
@@ -129,5 +129,141 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3616"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.2285,
+  "seen": "The high-wire home is the rectangular frame with a black wire across the top and Baby Bird perched on it, on the left of page 66.",
+  "count_note": "No element count is printed on the page; the bird perched on the wire is counted as part of the pictured model.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "base partly covered by the lime plate and supports; count inferred from the visible seam and length",
+    "as_read": "teal base plates"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow and its ends are covered by the supports",
+    "as_read": "yellow studded strip on base"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow and ends are partly hidden by grey and lime connectors",
+    "as_read": "long yellow support bars"
+   },
+   {
+    "qty": 4,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "grey cylinders, two on each support"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "clip ends are hidden gripping the ends of the black hinge plate",
+    "as_read": "small lime pieces at wire ends"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black high wire"
+   },
+   {
+    "qty": 4,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime discs on the support side studs could partly be the studs themselves",
+    "as_read": "lime discs on supports"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey prints near-white and is partly covered by the eye tile",
+    "as_read": "bird body block"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "bird eye"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "blue triangular bird pieces"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple prints blue-purple and is partly hidden behind the bird body",
+    "as_read": "purple piece under bird"
+   }
+  ],
+  "elements_total": 21,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
  }
 }

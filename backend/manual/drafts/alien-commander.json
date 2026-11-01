@@ -141,5 +141,148 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3629",
+   "IMG_3631"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1689,
+  "seen": "The Alien Commander is the large upright alien on the left of page 93, matching the identical B and F pictures on page 92 and shown again at bottom right of the page 96 answers.",
+  "count_note": "No printed element count for this model was seen on pages 92, 93 or 96, so there is no printed total to compare with.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime 1x6 foot base plate"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "legs are partly hidden behind the torso and base and lime prints yellow-green; inferred as the tall lime 1x1 bricks",
+    "as_read": "two tall lime legs"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "torso core is partly covered by front plates and the medal, so its full length and studs cannot be counted clearly",
+    "as_read": "blue torso brick with front studs"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple can look blue and one plate is partly hidden under the black bar; count is best estimate for the lower torso band and small piece above the magenta plate",
+    "as_read": "dark purple lower torso and top detail"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "magenta square at the neck/chest"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "medium azure curved shoulder caps, one each side"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey arm pieces under the shoulders are partly hidden by the curved slopes; shape is hard to distinguish from other grey 1x1 bricks",
+    "as_read": "light grey pieces hanging under shoulders"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime round medal on the front of the torso"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black horizontal bar above the head"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime angled eye-stalk arms clipped to the black bar"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey eye supports are partly hidden behind the eyes and at the ends of the lime arms, so their exact form cannot be seen clearly",
+    "as_read": "light grey 1x1 blocks behind the eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white open eye tiles"
+   }
+  ],
+  "elements_total": 19,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 4, second read 2",
+   "lime 1x1 round plate: first read 3, second read 1",
+   "medium_blue 1x1 1x1 slope (cheese): first read 1, second read 0",
+   "light_bluish_gray 1x1 headlight brick: first read 0, second read 2"
+  ]
  }
 }

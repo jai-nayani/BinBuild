@@ -157,5 +157,156 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3606"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.2301,
+  "seen": "The La-La Llama is the large singing llama on page 47, with build steps and the Elements you'll need box on page 46.",
+  "count_note": "No printed element total was seen on pages 46-47; total is the sum of the Elements box pieces checked against the model picture.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "neck length is partly obscured; two stacked/end-to-end bricks inferred from the box and neck seam",
+    "as_read": "orange neck bricks"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "body core is partly hidden by side pieces; count from Elements box",
+    "as_read": "blue body core bricks"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "small grey face pieces are partly hidden behind the eye tiles; light grey prints near-white",
+    "as_read": "grey face/mouth bricks"
+   },
+   {
+    "qty": 4,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "four grey cylinder legs"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple prints blue/purple and thin plates at the neck are partly hidden",
+    "as_read": "purple neck stripes"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "far-side body panel is hidden; magenta/dark purple colours print similarly",
+    "as_read": "pink-purple body panels"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light blue body base plate"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "one wedge is on the far side of the body and partly hidden",
+    "as_read": "white wedge side pieces"
+   },
+   {
+    "qty": 4,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "only two black curves are clearly visible on the near side; far-side pair inferred from Elements box and step 3",
+    "as_read": "black curved back pieces"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey back piece is partly hidden behind black curves and prints near-white",
+    "as_read": "sleek grey back curve"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "head pieces are small and partly hidden behind eyes and ear plates",
+    "as_read": "teal head/ear supports"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two closed-eye tiles"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow in the book; far ear is partly hidden",
+    "as_read": "yellow-green ear tops"
+   }
+  ],
+  "elements_total": 28,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x3 curved slope: first read 2, second read 1",
+   "dark_purple 1x2 plate: first read 3, second read 2",
+   "white 1x2 jumper plate: first read 1, second read 0"
+  ]
  }
 }

@@ -99,5 +99,104 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3596"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1191,
+  "seen": "The magical sea monster is the left-hand swapped-head creature on page 25, labelled 'A magical sea monster!', with a magenta open-eyed head on the former sleepy sea monster body.",
+  "count_note": "No element total is printed for this model on the page; hidden body joints may mean some connecting pieces cannot be seen.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Partly hidden in the curved body; a second such brick may be hidden behind the blue plate.",
+    "as_read": "dark blue brick with side studs in upper body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Top of body partly hidden and colour prints blue; a second curved piece may be obscured.",
+    "as_read": "blue curved hump at top of body"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Two separate orange areas are visible, one near the top and one below the head, but both are partly hidden.",
+    "as_read": "orange bricks near top and below face"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Partly hidden under the body and head; size estimated from visible edge.",
+    "as_read": "flat blue plate at lower side of body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey prints near-white and the ends are partly hidden behind the head.",
+    "as_read": "pale grey long curve arching over head"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Small purple piece is partly hidden behind the grey curve and magenta face; dark purple can print blue/purple.",
+    "as_read": "small dark purple piece behind face"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "magenta square face"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two open eye tiles on magenta face"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": false,
+  "differences": [
+   "blue 1x4 brick with 4 studs on side: first read 2, second read 1"
+  ]
  }
 }

@@ -79,5 +79,97 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3620"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0746,
+  "seen": "A small illustrated robot with an orange rear block and a grey spy-eye stalk, at the lower left of page 74 beside its yellow label.",
+  "count_note": "No element count is printed for this model on the page; total is the count of pieces I could identify in the illustration.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Illustrated rather than photographed and partly seen end-on, so depth/size is inferred",
+    "as_read": "orange block at rear of body"
+   },
+   {
+    "qty": 3,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark purple prints blue/purple in the illustration; two dark stacked layers and a dark upright fin partly hidden by the blue slope, count inferred",
+    "as_read": "dark layers in body stack and dark upright fin"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "Pink/magenta layer partly hidden in the body stack, exact size cannot be counted from the illustration",
+    "as_read": "magenta layer between dark plates"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Small grey block partly hidden under the body plates where the eye stalk joins, identification inferred",
+    "as_read": "small light-grey block under body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Grey cylinder is partly hidden by the body, length/count inferred from the visible stalk",
+    "as_read": "horizontal grey cylinder eye stalk"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white round eye with black pupil at end of stalk"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Blue triangular piece in the illustration is larger-looking and partly overlaps the dark fin, mapped to the only listed medium-blue slope",
+    "as_read": "blue triangular slope on top side"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "dark_purple 1x2 plate: first read 2, second read 3",
+   "light_bluish_gray 1x1 round brick: first read 2, second read 1",
+   "medium_blue 1x1 1x1 slope (cheese): first read 2, second read 1",
+   "light_bluish_gray 1x1 headlight brick: first read 0, second read 1"
+  ]
  }
 }

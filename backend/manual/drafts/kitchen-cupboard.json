@@ -109,5 +109,107 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3626"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1734,
+  "seen": "The galactic kitchen cupboard is the two-legged robot-like cupboard at the lower left of page 87, labelled as laying the table.",
+  "count_note": "No element count is printed for this model on the page.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "feet are partly in shadow and seen side-on",
+    "as_read": "black feet"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime rings above feet"
+   },
+   {
+    "qty": 4,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey leg and eye supports are partly hidden; eye supports could instead be headlight bricks",
+    "as_read": "grey cylindrical legs and eye supports"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "magenta body is partly covered by the central plate, so the split into two plates is inferred",
+    "as_read": "magenta body/top bar"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white closed-eye tiles"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "central plate is dark blue-purple in print, so colour could be dark purple, and its pointed look is perspective",
+    "as_read": "large dark-blue central door plate"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "only a small orange end is visible behind the central plate",
+    "as_read": "small orange piece under door"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "small white piece between the legs is partly hidden and its studs cannot be counted",
+    "as_read": "small white rectangle between legs"
+   }
+  ],
+  "elements_total": 15,
+  "agrees": false,
+  "differences": [
+   "magenta 2x2 plate: first read 1, second read 2",
+   "dark_purple 1x2 plate: first read 2, second read 0",
+   "black 1x4 hinge plate: first read 1, second read 0",
+   "orange 1x2 brick: first read 0, second read 1"
+  ]
  }
 }

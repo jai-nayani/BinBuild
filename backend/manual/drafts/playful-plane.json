@@ -5,8 +5,8 @@
   58,
   59
  ],
- "status": "draft",
- "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the “Elements you’ll need” box on page 58, photo IMG_3612, read on Oct 29",
  "elements_total": 14,
  "unsure_elements": 0,
@@ -107,5 +107,121 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3612"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1097,
+  "seen": "A small plane with a grey curved nose, white wedge wings and lime wing lights, pictured large on page 59 and in steps 1-4 on page 58.",
+  "count_note": "No printed element total seen; total is 14 counted from the Elements you'll need box and checked against the model pictures.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two teal 2x4 plates forming long body"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white wedge wings"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "second piece is side-by-side with the first and hidden in the side/large views; count taken from elements box",
+    "as_read": "large grey curved nose/canopy"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "only one black curve is clearly visible on top of the grey canopy; second is hidden behind it, count taken from elements box",
+    "as_read": "black curved piece on grey canopy"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "model prints the blue tail piece darker navy than medium blue; identification from elements box square blue icon",
+    "as_read": "small blue sloped tail fin"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": true,
+    "doubt": null,
+    "as_read": "dark purple strip under grey nose"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "trans_clear",
+    "sure": false,
+    "doubt": "elements box shows a very pale 2-stud 1x2 plate, colour printing near-white, and the piece is hidden in the finished model",
+    "as_read": "pale 1x2 two-stud plate in elements box"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "elements box shows a pale 1x2 plate with one central stud; piece is largely hidden under other parts in the finished model",
+    "as_read": "white 1x2 single-stud plate in elements box"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime round discs on both wing tips"
+   }
+  ],
+  "elements_total": 14,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 6,
+  "usd": 2.495,
+  "picture_checks": 1,
+  "reason": "no design passed BinBuild's checker and looked like the book's picture in 6 tries (the last: not the book's model: dark purple nose plate on top of body instead of underneath)"
  }
 }

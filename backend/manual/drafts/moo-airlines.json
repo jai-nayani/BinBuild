@@ -119,5 +119,124 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3618"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.117,
+  "seen": "Moo Airlines is the flying cow airplane at the lower right of page 71, labelled in green beside a speech bubble.",
+  "count_note": "No element count is printed for this example on the page.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange nose at front of head"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two closed eye tiles on head"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime head block is partly hidden behind the eye tiles and grey cylinders; two 1x1 blocks inferred from the two-stud width",
+    "as_read": "lime block forming forehead/head"
+   },
+   {
+    "qty": 4,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "each grey cylinder shows a mid joint suggesting two stacked round bricks, but the bases are hidden behind the head",
+    "as_read": "two tall grey cylinders behind head"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "long lime wing/body plate is partly covered by the body and tail pieces, so its full length is inferred",
+    "as_read": "long lime plate through body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "blue plate under the lime plate is partly hidden; printed blue may differ in shade",
+    "as_read": "blue plate under body/wing"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "tail piece is small and angled; its single step stud is visible but the curve is partly obscured",
+    "as_read": "blue curved tail piece at rear"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "small rear fin is partly hidden and dark purple prints close to blue in the photo",
+    "as_read": "small dark fin at rear under tail"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black curved piece on top rear of body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "white piece under the black slope is partly hidden and angled; it is read as the white wedge wing, though only part of its tapered shape is clear",
+    "as_read": "white wing under black slope"
+   }
+  ],
+  "elements_total": 15,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 1, second read 2"
+  ]
  }
 }

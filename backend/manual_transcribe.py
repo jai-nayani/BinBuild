@@ -175,6 +175,9 @@ def request_text(build) -> str:
         parts.append(f"About it: {build['note']}")
     if build.get("stated_elements"):
         parts.append(f"The page says it uses {build['stated_elements']} elements.")
+    if build.get("status") == "diagram-readable" and build.get("kind") == "instructions":
+        parts.append("The page prints an \"Elements you'll need\" box picturing every piece the model uses: read "
+                     "the list from that box, and check it against the model's picture.")
     photos = photos_for(build)
     parts.append(f"The attached photo{'s are' if len(photos) > 1 else ' is'} of "
                  + ", ".join(f"page{'s' if len(PAGE_PHOTO_PAGES[p]) > 1 else ''} "

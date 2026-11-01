@@ -59,5 +59,54 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3598"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1277,
+  "seen": "The small tree is on page 29 between the blue mansion and the animal at the lower-left, with a long lime plate, grey trunk and lime clip piece.",
+  "count_note": "No element count is printed for the tree alone on page 29, so the total is from the visible pieces only.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long lime plate with six studs"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "partly hidden under the lime plate and clip piece, so exact count is uncertain",
+    "as_read": "short grey cylinder trunk"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "partly overlapping the trunk and angled in the scene; lime prints yellow-green",
+    "as_read": "angled lime piece with forked clip end"
+   }
+  ],
+  "elements_total": 3,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 round plate: first read 2, second read 0"
+  ]
  }
 }

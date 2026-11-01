@@ -8,11 +8,14 @@
   claim and no booklet;
 - the house-and-tree booklet follows the picture on page 28;
 - draft piece lists (one per diagram-readable build): unverified, within
-  the kit, no fit claim until hand-checked; the hand-check tool records the
-  steps while building, and a draft hand-checked with steps that place every
-  piece is verified with a fit check and a booklet (house and tree's
-  treatment); without them it stays unverified;
-- the checklist order: the 11 closest to verified first;
+  the kit, no fit claim until verified; every draft has a second read, and
+  one whose two reads agree is verified with a bin check (and a booklet when
+  its steps passed the validator, re-checked here); the hand-check tool
+  records the steps while building, and a draft hand-checked with steps that
+  place every piece is verified with a fit check and a booklet (house and
+  tree's treatment); without them it stays unverified;
+- the checklist order: only the drafts still waiting, the closest of the 11
+  first;
 - the API: the manual summary, the catalog, the checklist, and the verified
   build's booklet.
 
@@ -35,6 +38,8 @@ from backend import build_plan as bp
 from backend import inventory_db as db
 from backend import inventory_vocab as vocab
 from backend import manual_check
+from backend import manual_verify as mv
+from backend import wonder_design as wd
 
 try:
     import uvicorn  # noqa: F401
@@ -52,6 +57,12 @@ PARTS_KEYS = {"parts", "elements", "pieces", "piece_list", "parts_list", "bricks
 CLOSEST = ["submarine", "sailing-ship", "mini-tugboat", "snappy-crab",           # the page's total matches
            "tiny-tentacles", "mini-city-car", "happy-ghost", "bake-a-cake-ephant",  # no unsure lines
            "playful-plane", "puppy-power", "rocket-shuttle"]
+DRAFTS = bp.manual_drafts()
+AGREE = {i for i, d in DRAFTS.items() if bp.reads_agree(d)}   # verified by two reads (backend/manual_verify.py)
+WAITING = set(DRAFTS) - AGREE                                  # the hand-check queue
+BOOK = {b["id"]: n for n, b in enumerate(BUILDS)}
+VERIFIED = sorted(AGREE | {"house-and-tree"}, key=BOOK.get)
+CLOSEST_WAITING = [i for i in CLOSEST if i in WAITING]
 
 
 class TestCatalog(unittest.TestCase):
@@ -102,13 +113,16 @@ class TestWhatCanIBuild(unittest.TestCase):
         self.assertEqual({o["id"] for o in self.manual}, {b["id"] for b in BUILDS})
         kinds = [o["kind"] for o in self.found]
         self.assertEqual(kinds, ["manual"] * len(BUILDS) + ["brickgpt"] * len(bp.designs()))
-        self.assertEqual((self.found[0]["id"], self.found[0]["status"]), ("house-and-tree", "fit"))
-        # after the verified build, the rest in book order
-        pages = [o["pages"][0] for o in self.manual[1:]]
+        self.assertEqual([o["id"] for o in self.manual[:len(VERIFIED)]], VERIFIED)  # verified first, book order
+        self.assertTrue(all(o["piece_status"] == "verified" for o in self.manual[:len(VERIFIED)]))
+        house = next(o for o in self.manual if o["id"] == "house-and-tree")
+        self.assertEqual(house["status"], "fit")
+        # after the verified builds, the rest in book order
+        pages = [o["pages"][0] for o in self.manual[len(VERIFIED):]]
         self.assertEqual(pages, sorted(pages))
 
     def test_unverified_builds_get_no_fit_claim_or_booklet(self):
-        for o in self.manual[1:]:
+        for o in self.manual[len(VERIFIED):]:
             self.assertEqual(o["status"], "unverified", o["id"])
             self.assertNotIn("booklet", o)
             self.assertNotIn("missing", o)
@@ -116,13 +130,32 @@ class TestWhatCanIBuild(unittest.TestCase):
             self.assertFalse(PARTS_KEYS & set(o), o["id"])
             self.assertIn("aren't verified yet", o["message"])
             self.assertTrue(o["where"].startswith("page"))
-        sub = next(o for o in self.manual if o["id"] == "submarine")
-        self.assertIn("uses 15 elements; which ones isn't listed", sub["message"])
+        for o in self.manual[len(VERIFIED):]:
+            if "stated_elements" in o:
+                self.assertIn(f"uses {o['stated_elements']} elements; which ones isn't listed", o["message"])
 
     def test_the_verified_build_is_checked_against_the_bin(self):
-        short = bp.options([i for i in KIT_ITEMS if i["color"] != "orange"])[0]
+        short = next(o for o in bp.options([i for i in KIT_ITEMS if i["color"] != "orange"])
+                     if o["id"] == "house-and-tree")
         self.assertEqual((short["id"], short["status"]), ("house-and-tree", "short"))
         self.assertEqual(short["message"], "Missing 2× orange 1x2 brick.")
+
+    def test_builds_whose_two_reads_agree_get_the_bin_check(self):
+        for o in self.manual:
+            if o["id"] not in AGREE:
+                continue
+            d = DRAFTS[o["id"]]
+            with self.subTest(o["id"]):
+                self.assertEqual((o["piece_status"], o["verified_by"]), ("verified", "two independent reads agree"))
+                self.assertIn(o["status"], ("fit", "short"))
+                self.assertEqual(o["pieces"], d["elements_total"])
+                self.assertEqual(o["has_booklet"], bp.booklet_ready(d))
+                if o["has_booklet"]:
+                    self.assertEqual(o["set"], o["id"])
+                else:
+                    self.assertNotIn("set", o)
+                    reason = (d.get("auto_steps") or {}).get("reason") or "its steps haven't been worked out yet"
+                    self.assertIn("No step-by-step booklet: " + reason, o["message"])
 
 
 class TestHouseAndTreeBooklet(unittest.TestCase):
@@ -136,9 +169,6 @@ class TestHouseAndTreeBooklet(unittest.TestCase):
         self.assertEqual(at["light_bluish_gray round brick"], [(1, 0, 1)])         # second stud
         self.assertEqual(at["lime round plate"], [(1, 0, 4)])
         self.assertIn("manual, page 28", book["source"])
-
-
-DRAFTS = bp.manual_drafts()
 
 
 def kit_key(e):
@@ -161,18 +191,54 @@ class TestDrafts(unittest.TestCase):
             b = BY_ID[bid]
             self.assertEqual(b["status"], "not-yet-piece-verified", bid)   # the catalog still says so
             self.assertNotEqual(b["kind"], "activity", bid)               # pure activities have no draft
-            self.assertIn("Read by Muse Wonder", d["warning"])
+            self.assertIn("Read by Muse Wonder" if bid in WAITING else "two independent Muse Wonder reads",
+                          d["warning"])
             if "stated_elements" in b:
                 self.assertEqual(d["count_check"]["page_says"], b["stated_elements"])
                 self.assertEqual(d["count_check"]["list_total"], d["elements_total"])
         self.assertFalse(any(b["kind"] == "activity" for b in BUILDS if b["id"] in DRAFTS))
 
-    def test_drafts_are_unverified_and_say_so(self):
+    def test_drafts_say_how_far_they_are(self):
         for d in DRAFTS.values():
-            self.assertEqual(d["status"], "draft", d["id"])
             self.assertFalse(d["hand_check"]["done"], d["id"])
-            self.assertIn("not checked against the kit", d["warning"])
             self.assertRegex(d["read_from"], r"photos? IMG_")
+            if d["id"] in WAITING:
+                self.assertEqual(d["status"], "draft", d["id"])
+                self.assertIn("not checked against the kit", d["warning"])
+            else:
+                self.assertEqual((d["status"], d["warning"]), ("verified", mv.VERIFIED_WARNING), d["id"])
+
+    def test_every_draft_has_an_independent_second_read(self):
+        kit = {kit_key(i): i["quantity"] for i in KIT_ITEMS}
+        for d in DRAFTS.values():
+            r = d["second_read"]
+            with self.subTest(d["id"]):
+                self.assertEqual(r["read_by"], "muse-wonder-1.0")
+                self.assertEqual(r["agrees"], not r["differences"])
+                if r.get("elements") is not None:
+                    self.assertEqual(r["differences"], mv.differences(d["elements"], r["elements"]))
+                    for key, n in mv.counts(r["elements"]).items():
+                        self.assertLessEqual(n, kit.get(key, 0))
+                else:
+                    self.assertFalse(r["agrees"])
+
+    def test_every_booklet_design_passes_the_validator_again(self):
+        owned = {kit_key(i): i["quantity"] for i in KIT_ITEMS}
+        for bid in AGREE:
+            d = DRAFTS[bid]
+            a = d.get("auto_steps")
+            if a is None:
+                continue  # verified, steps not attempted yet (covered above)
+            with self.subTest(bid):
+                self.assertEqual(a["ok"], "steps" in d)
+                if not a["ok"]:
+                    self.assertTrue(a["reason"])
+                    continue
+                check = mv.check_design("\n".join(a["design"]), owned, dict(mv.counts(d["elements"])))
+                self.assertTrue(check.ok, check.errors)
+                self.assertTrue(wd.validate("\n".join(a["design"]), owned).ok)
+                self.assertEqual(bp.step_problems(d), [])
+                self.assertEqual(d["steps"], mv.layer_steps(check.pieces))
 
     def test_totals_and_vocabulary(self):
         for d in DRAFTS.values():
@@ -194,7 +260,7 @@ class TestDrafts(unittest.TestCase):
 
     def test_waiting_drafts_get_no_fit_claim(self):
         manual = {o["id"]: o for o in bp.manual_options(KIT_ITEMS)}
-        for bid in DRAFTS:
+        for bid in WAITING:
             o = manual[bid]
             self.assertEqual((o["status"], o["piece_status"], o["draft"]),
                              ("unverified", BY_ID[bid]["status"], "waiting for a hand-check"))
@@ -205,13 +271,19 @@ class TestDrafts(unittest.TestCase):
 
 
 class TestHandCheck(unittest.TestCase):
-    """The hand-check tool on copies of the drafts (the repo's files are untouched)."""
+    """The hand-check tool on copies of the drafts (the repo's files are
+    untouched), as they were before the second reads: every draft waiting."""
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.dir = Path(self.tmp.name)
         for p in bp.DRAFTS_DIR.glob("*.json"):
-            shutil.copy(p, self.dir)
+            d = json.loads(p.read_text())
+            if d.pop("second_read", None):
+                d.pop("auto_steps", None)
+                d.pop("steps", None)
+                d["status"] = "draft"
+            (self.dir / p.name).write_text(json.dumps(d))
         self.patches = [mock.patch.object(bp, "DRAFTS_DIR", self.dir), mock.patch.object(manual_check, "DRAFTS_DIR", self.dir)]
         for p in self.patches:
             p.start()
@@ -378,24 +450,31 @@ class TestHandCheck(unittest.TestCase):
 
 
 class TestChecklistOrder(unittest.TestCase):
-    def test_the_11_closest_come_first(self):
+    """The queue now: only the drafts whose two reads disagree, the closest
+    of the 11 first, as before."""
+
+    def test_only_the_disagreements_closest_first(self):
         ordered = bp.checklist_order(bp.manual_drafts())
-        self.assertEqual(len(ordered), len(DRAFTS))
-        self.assertEqual([d["id"] for d, _ in ordered[:11]], CLOSEST)
-        self.assertEqual({why for _, why in ordered[:4]}, {bp.CLOSEST["total"]})
-        self.assertEqual({why for _, why in ordered[4:11]}, {bp.CLOSEST["sure"]})
-        self.assertFalse(any(why for _, why in ordered[11:]))
-        for d, _ in ordered[:4]:
-            self.assertEqual(d["count_check"]["page_says"], d["elements_total"])
-        self.assertTrue(all(d["unsure_elements"] == 0 and "read_by" not in d for d, _ in ordered[4:11]))
+        self.assertEqual({d["id"] for d, _ in ordered}, WAITING)
+        n = len(CLOSEST_WAITING)
+        self.assertEqual([d["id"] for d, _ in ordered[:n]], CLOSEST_WAITING)
+        totals = sum(1 for i in CLOSEST_WAITING if i in CLOSEST[:4])
+        self.assertEqual([why for _, why in ordered[:n]], [bp.CLOSEST["total"]] * totals + [bp.CLOSEST["sure"]] * (n - totals))
+        self.assertFalse(any(why for _, why in ordered[n:]))
+        pages = [BOOK[d["id"]] for d, _ in ordered[n:]]
+        self.assertEqual(pages, sorted(pages))
+        self.assertTrue(all(d["second_read"]["differences"] for d, _ in ordered))
 
     def test_the_printable_page_follows_it(self):
         ordered = bp.checklist_order(bp.manual_drafts())
-        page = booklet.render_checklist([d for d, _ in ordered], first={d["id"]: w for d, w in ordered if w})
-        self.assertEqual(page.count('class="start"'), 11)
-        at = [page.index(f"<p class=\"note\">{bid} ·") for bid in CLOSEST]
+        page = booklet.render_checklist([d for d, _ in ordered], first={d["id"]: w for d, w in ordered if w},
+                                        verified=len(AGREE))
+        self.assertEqual(page.count('class="start"'), len(CLOSEST_WAITING))
+        self.assertEqual(page.count('class="card draft"'), len(WAITING))
+        self.assertEqual(page.count("A second read of the page disagrees"), len(WAITING))
+        at = [page.index(f"<p class=\"note\">{d['id']} ·") for d, _ in ordered]
         self.assertEqual(at, sorted(at))
-        self.assertLess(at[-1], page.index('<p class="note">dozy-dolphin ·'))
+        self.assertIn(f"{len(AGREE)} more verified by two reads that agree, not listed", page)
         self.assertIn('<td class="n">#1</td>', page)
         self.assertIn("--record", page)
 
@@ -409,22 +488,25 @@ class TestManualApi(unittest.TestCase):
             status, body = api.call("GET", "/api/builds/options")
             self.assertEqual(status, 200)
             self.assertEqual({k: body["manual"][k] for k in ("builds", "verified", "diagram_readable",
-                                                            "not_yet_piece_verified")},
-                             {"builds": 106, "verified": 1, "diagram_readable": 18, "not_yet_piece_verified": 87})
+                                                            "not_yet_piece_verified", "two_reads_agree")},
+                             {"builds": 106, "verified": 1 + len(AGREE), "diagram_readable": 18 - len(AGREE & set(HAND)),
+                              "not_yet_piece_verified": 87 - len(AGREE & set(WONDER)), "two_reads_agree": len(AGREE)})
+            self.assertEqual(body["manual"]["with_booklet"], 1 + sum(bp.booklet_ready(DRAFTS[i]) for i in AGREE))
             self.assertEqual(sum(o["kind"] == "manual" for o in body["options"]), 106)
-            first = body["options"][0]
+            first = next(o for o in body["options"] if o["id"] == "house-and-tree")
             status, build = api.call("POST", "/api/builds", json_body={"set": first["set"]})
             self.assertEqual((status, build["status"], build["steps"]), (201, "fit", 5))
             status, page = api.call("GET", build["booklet_url"], raw=True)
             self.assertIn("House and tree", page)
             status, catalog = api.call("GET", "/api/manual")
             self.assertEqual((status, len(catalog["builds"])), (200, 106))
-            self.assertEqual((body["manual"]["drafts_waiting"], body["manual"]["hand_checked"]), (len(DRAFTS), 0))
+            self.assertEqual((body["manual"]["drafts_waiting"], body["manual"]["hand_checked"]), (len(WAITING), 0))
             status, page = api.call("GET", "/api/manual/checklist", raw=True)
             self.assertEqual(status, 200)
-            self.assertEqual(page.count('class="card draft"'), len(DRAFTS))
-            self.assertEqual(page.count('class="start"'), 11)
-            self.assertLess(page.index("Submarine"), page.index("Dozy Dolphin"))
+            self.assertEqual(page.count('class="card draft"'), len(WAITING))
+            self.assertEqual(page.count('class="start"'), len(CLOSEST_WAITING))
+            for bid in AGREE & {"submarine", "dozy-dolphin"}:
+                self.assertNotIn(f"<p class=\"note\">{bid} ·", page)
 
     def test_a_hand_checked_draft_gets_its_booklet_through_the_api(self):
         with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as drafts:
@@ -443,7 +525,7 @@ class TestManualApi(unittest.TestCase):
                 with closing(db.connect()) as conn:
                     seed(conn, KIT_ITEMS)
                 status, body = api.call("GET", "/api/builds/options")
-                self.assertEqual(body["manual"]["verified"], 2)
+                self.assertEqual(body["manual"]["verified"], 1 + len(AGREE | {"snappy-crab"}))
                 crab = next(o for o in body["options"] if o["id"] == "snappy-crab")
                 self.assertEqual((crab["status"], crab["has_booklet"], crab["set"]), ("fit", True, "snappy-crab"))
                 status, build = api.call("POST", "/api/builds", json_body={"set": crab["set"]})

@@ -131,5 +131,139 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3619",
+   "IMG_3631"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.2918,
+  "seen": "Super Pug is the dog shown in three grey views on pages 72-73 and in three true-colour views labelled Page 72 in the middle row of page 96.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Head pair partly hidden by eye tiles and muzzle; two side-by-side inferred from the two eyes",
+    "as_read": "lime tall head bricks"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two printed eye tiles"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": true,
+    "doubt": null,
+    "as_read": "dark purple muzzle below eyes"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Ear/shoulder pieces partly hidden behind head and cape; shape and exact count inferred from both front sides",
+    "as_read": "blue curved pieces beside head"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "magenta cape plate on back"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Only the front orange brick is clearly seen; any rear connector is hidden by the wedge plates and cape",
+    "as_read": "orange chest band"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Body sides largely covered by white wedge plates; pair inferred from the two body sides and front blue panel",
+    "as_read": "blue long body bricks"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white wedge panels on both sides"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime clip legs hanging below body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black curved tail at rear"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Small grey feet at the wedge bases are partly hidden; one is clearer than the other and the second is inferred symmetrically",
+    "as_read": "small light grey round feet"
+   }
+  ],
+  "elements_total": 18,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 1, second read 2",
+   "medium_azure 2x4 plate: first read 1, second read 0",
+   "medium_azure 1x2 curved slope: first read 1, second read 2",
+   "lime 1x2 plate with clip: first read 1, second read 2",
+   "light_bluish_gray 1x1 round brick: first read 0, second read 2"
+  ]
  }
 }

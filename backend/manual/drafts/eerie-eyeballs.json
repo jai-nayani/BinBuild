@@ -59,5 +59,65 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3602"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1065,
+  "seen": "Eerie Eyeballs is the small grey two-eyed model at the left edge of page 39 beside its yellow label.",
+  "count_note": "No element total is printed for this example; the partly hidden backbone piece may make the true total differ.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey prints near-white and the ends are partly obscured, so size and colour are not fully certain",
+    "as_read": "two long grey curved slopes above and below the eyes"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "mostly hidden behind the eye tiles and curved slopes; only the grey rims/sides of the eyeball cylinders are visible",
+    "as_read": "two grey cylinders behind the eyeballs"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white printed eye discs"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "backbone is largely hidden behind the curved slopes and eyeballs; only a blue end peeks out, so identification as the blue side-stud brick is a best fit",
+    "as_read": "blue brick end peeking out behind the grey curves"
+   }
+  ],
+  "elements_total": 7,
+  "agrees": false,
+  "differences": [
+   "medium_blue 1x1 1x1 slope (cheese): first read 1, second read 0",
+   "blue 1x4 brick with 4 studs on side: first read 0, second read 1"
+  ]
  }
 }

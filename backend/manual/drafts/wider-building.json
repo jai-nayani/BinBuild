@@ -89,5 +89,107 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3601"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1384,
+  "seen": "The wider building is the two-storey building at the lower left of page 36 below step 3, with a blue upper storey and a black roof.",
+  "count_note": "No element count is printed for this model; total is my visible count of 12.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "blue base plate at bottom"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey prints near-white and cylinders are partly hidden at the edges of the lower storey",
+    "as_read": "two pale grey cylinders in lower storey"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green and caps are partly hidden on the round bricks",
+    "as_read": "lime caps on the grey cylinders"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints pale yellow; side studs and join with orange brick partly hidden",
+    "as_read": "two pale lime blocks with side studs"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange brick between lime blocks"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "blue upper storey with four studs"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple prints dark on the blue brick and its far edge is hidden",
+    "as_read": "small purple plate on blue storey"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "black roof is seen as a wide hat shape; individual curved slopes and how many meet at the centre are hidden",
+    "as_read": "black curved roof pieces"
+   }
+  ],
+  "elements_total": 12,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 1, second read 2",
+   "light_bluish_gray 1x3 curved slope: first read 1, second read 0",
+   "orange 1x2 brick: first read 0, second read 1",
+   "black 1x2 curved slope: first read 0, second read 2"
+  ]
  }
 }

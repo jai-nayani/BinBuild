@@ -911,13 +911,17 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
         : 'No confirmed pieces yet: scan a batch, review it and confirm it first.';
       var manual = body.options.filter(function (o) { return o.kind === 'manual'; });
       var checked = manual.filter(function (o) { return o.piece_status === 'verified'; });
+      var booklets = checked.filter(function (o) { return o.has_booklet; }).length;
       var drafts = manual.filter(function (o) { return o.draft; }).length;
       var unchecked = manual.filter(function (o) { return o.piece_status !== 'verified'; });
       var others = body.options.filter(function (o) { return o.kind !== 'manual'; });
 
       section(list, '📕 From your manual (' + manual.length + ' builds)');
       list.appendChild(el('p', 'note', checked.length + ' with a verified piece list: BinBuild checks your bin for ' +
-        (checked.length === 1 ? 'it' : 'them') + ' and makes ' + (checked.length === 1 ? 'its' : 'their') + ' step-by-step booklet. The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
+        (checked.length === 1 ? 'it' : 'them') + (booklets === checked.length
+          ? ' and makes ' + (checked.length === 1 ? 'its' : 'their') + ' step-by-step booklet.'
+          : '; ' + booklets + ' of them ' + (booklets === 1 ? 'has' : 'have') + ' a step-by-step booklet.') +
+        ' The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
         'parts BinBuild hasn\u2019t verified yet: build them from the book.' +
         (drafts ? ' ' + drafts + ' of them have a draft list read from the book, waiting for a hand-check.' : '')));
       checked.forEach(function (o) { list.appendChild(optionCard(o)); });
@@ -1037,7 +1041,8 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     if (o.kind === 'manual') {
       card.appendChild(el('p', 'where', 'Manual · chapter ' + o.chapter + ' · ' + o.chapter_title + ' · ' + o.where));
       card.appendChild(el('span', 'chip verified', PIECES[o.piece_status] +
-        (o.verified_by === 'hand-checked against the kit' ? ' (hand-checked)' : '')));
+        (o.verified_by === 'hand-checked against the kit' ? ' (hand-checked)'
+          : o.verified_by === 'two independent reads agree' ? ' (two reads of the page agree)' : '')));
       card.appendChild(document.createTextNode(' '));
     }
     var chip = document.createElement('span');

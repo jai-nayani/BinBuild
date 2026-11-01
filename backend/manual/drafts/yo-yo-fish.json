@@ -89,5 +89,95 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3587"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0899,
+  "seen": "The yo-yo fish is the small vertical zigzag fish at the top left of page 13, beside the text saying it bounces in the whirlpool.",
+  "count_note": "No element count is printed on the page; hidden connections between the zigzag segments could not be counted.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two large printed eye tiles at the head"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "partly hidden behind the eye tiles; two small light-grey blocks inferred, one under each eye",
+    "as_read": "light-grey block behind the eyes"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "stud count and exact size partly obscured by the head and viewing angle",
+    "as_read": "flat blue plate forming the head"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellowish in the photo; length and connection partly hidden",
+    "as_read": "yellow-green vertical segment with side studs below the head"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "partly hidden between the lime and orange segments; shape matched to the listed curved piece",
+    "as_read": "blue curved segment in the middle of the body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "turned sideways so its length is partly hidden",
+    "as_read": "orange brick segment below the blue curve"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "small bottom tip partly hidden and shown at an angle; light grey may print near-white",
+    "as_read": "grey cylindrical piece at the bottom tip"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "medium_azure 2x4 plate: first read 2, second read 1",
+   "light_bluish_gray 1x1 round brick: first read 2, second read 1"
+  ]
  }
 }

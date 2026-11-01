@@ -314,11 +314,13 @@ def _parts_html(placements, parts) -> str:
     return '<ul class="parts">' + "".join(items) + "</ul>"
 
 
-def render_checklist(drafts, first=None) -> str:
+def render_checklist(drafts, first=None, verified=0) -> str:
     """The draft piece lists as one printable page for a hand-check at the
     table, in the order given: unsure lines first and highlighted, a swatch per
-    colour, lines numbered as the hand-check tool numbers them. first: {id:
-    why} for the drafts to start with (marked "start here")."""
+    colour, lines numbered as the hand-check tool numbers them, and where a
+    second read differs. first: {id: why} for the drafts to start with (marked
+    "start here"). verified: how many drafts two reads already verified (not
+    on the page)."""
     first = first or {}
     css = PAGE_CSS + """
 .draft h2 { display: flex; justify-content: space-between; gap: 8px; }
@@ -333,6 +335,8 @@ def render_checklist(drafts, first=None) -> str:
 .draft .count { color: #8a5a00; }
 .draft .start { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 8px; background: #ffd84d; margin-left: 4px; }
 .draft td.n { width: 26px; color: #888; font-size: 12px; }
+.draft .second { background: #fde8e4; border-radius: 8px; padding: 6px 10px; font-size: 13px; }
+.draft .second ul { margin: 4px 0 0; padding-left: 18px; }
 """
     waiting = sum(not d["hand_check"]["done"] for d in drafts)
     by_wonder = sum(d.get("read_by") == "muse-wonder-1.0" for d in drafts)
@@ -341,7 +345,9 @@ def render_checklist(drafts, first=None) -> str:
            f"<title>Manual hand-check · BinBuild</title><style>{css}</style></head><body>",
            "<header><h1>✅ Manual hand-check</h1>"
            f"<p>{len(drafts)} draft piece lists read from the book · {waiting} waiting for a check"
-           + (f" · {by_wonder} read by Muse Wonder" if by_wonder else "") + "</p></header><main>",
+           + (f" · {by_wonder} read by Muse Wonder" if by_wonder else "")
+           + (f" · {verified} more verified by two reads that agree, not listed" if verified else "")
+           + "</p></header><main>",
            '<section class="card"><p class="note">For each build: lay these pieces out from the kit next to its page '
            "and build the model once. Tick each line; fix a count or a colour that's wrong. Highlighted lines were "
            "hard to read in the photo; fix them with <code>--set</code> or confirm them with <code>--sure</code>. "
@@ -361,6 +367,11 @@ def render_checklist(drafts, first=None) -> str:
         count = (f' · <span class="count">the page says {cc["page_says"]}'
                  + ("" if cc["matches"] else f', this list has {cc["list_total"]}') + "</span>") if cc else ""
         note = f'<p class="note">Wonder: {html.escape(d["count_note"])}</p>' if d.get("count_note") else ""
+        second = d.get("second_read") or {}
+        if second and not second.get("agrees"):
+            note += ('<div class="second"><b>A second read of the page disagrees</b> (Muse Wonder, '
+                     f'{html.escape(second["on"])}), so check these lines first:<ul>'
+                     + "".join(f"<li>{html.escape(x)}</li>" for x in second["differences"]) + "</ul></div>")
         steps = len(d.get("steps") or [])
         start = (f'<span class="start" title="{html.escape(first[d["id"]])}">start here</span>'
                  if d["id"] in first else "")

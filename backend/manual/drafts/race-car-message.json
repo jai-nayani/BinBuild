@@ -79,5 +79,87 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3630"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0952,
+  "seen": "The race car is the small blue and teal car model in the lower-middle of the purple panel on page 94.",
+  "count_note": "No element count is printed for this model on the page; total is the count of pieces I could identify.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Blue chassis is partly hidden behind the white piece and lime wheels, so its length and side studs are inferred.",
+    "as_read": "dark blue long chassis"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "White piece is partly obscured; only its central stud is clearly visible and its length is inferred.",
+    "as_read": "white piece with one central stud between wheels"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime round wheels"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black curved pieces at top and side"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal curved nose is partly hidden under the chassis and its exact profile is hard to read.",
+    "as_read": "teal curved nose at front end"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "trans_clear",
+    "sure": false,
+    "doubt": "Translucent piece between the black curves is partly hidden and tinted by the purple background, so size is inferred.",
+    "as_read": "clear translucent windshield piece"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": false,
+  "differences": [
+   "medium_azure 2x4 plate: first read 1, second read 0",
+   "dark_purple 1x2 plate: first read 1, second read 0",
+   "blue 1x4 brick with 4 studs on side: first read 0, second read 1",
+   "medium_azure 1x2 curved slope: first read 0, second read 1"
+  ]
  }
 }

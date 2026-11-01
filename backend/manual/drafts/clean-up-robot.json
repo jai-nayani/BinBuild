@@ -79,5 +79,95 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3620"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1109,
+  "seen": "A small robot with a lime eye-head, black central body and magenta-orange base, pictured in the centre of page 75 beside the 'Check out the Cleanup Robot!' label.",
+  "count_note": "No printed element count for this model is visible on the page, so no comparison can be made; hidden connections at the neck and base may affect the count.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white round eye tile on head"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime looks yellow-green in print and the eye tile hides the side studs, so exact lime tall piece is not certain.",
+    "as_read": "yellow-green head block with eye"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey looks near-white; one forms the neck and one an arm, with their bases partly hidden behind the head and arm piece.",
+    "as_read": "light grey cylindrical neck and arm pieces"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": false,
+    "doubt": "Central black bar is partly hidden by the neck, arm and clip pieces, so its end bars are not fully visible.",
+    "as_read": "black long central body bar"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime looks yellow-green; one lime piece at the arm and one hanging below the body are partly obscured, so clip ends are not fully clear.",
+    "as_read": "yellow-green small arm and dangling clip pieces"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "pink-magenta square plate at base"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Partly hidden behind the magenta plate at the base, only part of the orange block is visible.",
+    "as_read": "orange block beside/behind magenta base"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 3, second read 2",
+   "orange 1x2 brick: first read 0, second read 1"
+  ]
  }
 }

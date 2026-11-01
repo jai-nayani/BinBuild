@@ -13,8 +13,14 @@ every piece of it exactly once. From then on it is verified: "What can I
 build?" checks a bin against it and makes its booklet from those steps,
 like house and tree.
 
+Since Nov 1 a second Muse Wonder read checks every draft first
+(backend/manual_verify.py): a draft whose two reads agree on every line is
+verified without a person and leaves this queue. The listing shows the
+drafts still waiting (the reads disagree), and each one's checklist starts
+with the lines where they differ.
+
 From the repo root:
-    python -m backend.manual_check                       # every draft, closest to verified first
+    python -m backend.manual_check                       # the drafts still waiting, closest to verified first
     python -m backend.manual_check snappy-crab           # its checklist (lines numbered), steps, what's left
     python -m backend.manual_check snappy-crab --set "lime 1x2 plate with clip=2" --sure "#4"
     python -m backend.manual_check snappy-crab --record  # type the steps as you build, layer by layer
@@ -46,7 +52,7 @@ from pathlib import Path
 
 from . import booklet as bk
 from .build_plan import (DRAFTS_DIR, checklist_order, draft_set, hand_checked, line_of, manual_drafts,
-                         step_problems)
+                         reads_agree, step_problems)
 from .inventory_vocab import COLORS, FAMILIES
 
 _line = line_of
@@ -73,10 +79,17 @@ def to_place(draft) -> list:
 
 
 def show(draft) -> str:
-    state = "HAND-CHECKED" if hand_checked(draft) else "DRAFT (not verified)"
+    state = ("HAND-CHECKED" if hand_checked(draft) else "VERIFIED (two reads agree)" if reads_agree(draft)
+             else "DRAFT (not verified)")
     out = [f"{draft['name']} ({draft['id']}) · pages {', '.join(map(str, draft['pages']))} · {state}",
            f"Read from {draft['read_from']}.",
            f"{draft['elements_total']} elements, {draft['unsure_elements']} unsure.", ""]
+    second = draft.get("second_read")
+    if second and not second["agrees"]:
+        out[-1:] = ([f"A second read of the page (Muse Wonder, {second['on']}) disagrees; check these first:"]
+                    + [f"  - {x}" for x in second["differences"]] + [""])
+    elif second:
+        out[-1:] = [f"A second read of the page (Muse Wonder, {second['on']}) agrees on every line.", ""]
     numbered = sorted(enumerate(draft["elements"], 1), key=lambda ne: ne[1]["sure"])
     for n, e in numbered:
         mark = "?" if not e["sure"] else " "
@@ -274,9 +287,15 @@ def main(argv=None, ask=input):
             if hand_checked(d):
                 state = "verified, booklet ready" if not step_problems(d) else "hand-checked, steps not complete"
             else:
-                state = f"draft, {d['unsure_elements']} unsure" + (f", {steps} steps" if steps else "")
+                diff = len((d.get("second_read") or {}).get("differences") or [])
+                state = (f"draft, {d['unsure_elements']} unsure" + (f", {steps} steps" if steps else "")
+                         + (f", second read differs on {diff} line{'s' * (diff != 1)}" if diff else ""))
             print(f"{'*' if why else ' '} {d['id']:24} {d['elements_total']:>3} elements  {state}"
                   + (f"  (start here: {why})" if why else ""))
+        agreed = sum(map(reads_agree, drafts.values()))
+        if agreed:
+            print(f"({agreed} more verified by two reads that agree, not listed: python -m backend.manual_verify "
+                  "--report)")
         return 0
     draft = drafts.get(args.build)
     if draft is None:

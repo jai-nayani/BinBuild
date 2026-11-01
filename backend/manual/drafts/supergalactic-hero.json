@@ -5,8 +5,8 @@
   80,
   81
  ],
- "status": "draft",
- "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the “Elements you’ll need” box on page 80, photo IMG_3623, read on Oct 29",
  "elements_total": 21,
  "unsure_elements": 6,
@@ -147,5 +147,161 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3623"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.2066,
+  "seen": "A flying humanoid hero with a white cape, lime suit and large eyes, shown in steps on page 80 and large on page 81.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white triangular cape wings in box and behind body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "small white piece at top of elements box, mostly hidden in built model",
+    "as_read": "small white 1x2 with one central stud in box"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green in the box and torso faces are partly obscured",
+    "as_read": "two yellow-green tall pieces forming the green torso"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green and clips are partly hidden gripping the black bar",
+    "as_read": "two lime arms gripping the black hinge bar"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "teal 2x4 planet plate under the feet"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two large printed eye tiles on the face"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey prints near-white and the head is partly covered by the eye tiles",
+    "as_read": "two pale grey 1x1 head bricks in box and face"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two grey cylindrical legs"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple prints dark blue in the small box; one belt plate may be on the far side",
+    "as_read": "two dark purple belt plates in box, purple band at waist"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "mostly hidden behind the torso and cape, only an edge is visible in step 2",
+    "as_read": "pink 2x2 plate in box, pink edge behind torso"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black bar across the body gripped by both arms"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey prints near-white and pieces are partly behind the head and cape",
+    "as_read": "two pale long curved pieces at bottom of box and behind head"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "small black hair piece in box is partly obscured by the head in the model",
+    "as_read": "black curved hair slope on top of head"
+   }
+  ],
+  "elements_total": 21,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
  }
 }

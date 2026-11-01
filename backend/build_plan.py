@@ -238,6 +238,18 @@ def hand_checked(draft) -> bool:
     return bool(draft and (draft.get("hand_check") or {}).get("done"))
 
 
+def reads_agree(draft) -> bool:
+    """Two independent Muse Wonder reads of the page agree on every line
+    (backend/manual_verify.py)."""
+    return bool(draft and (draft.get("second_read") or {}).get("agrees") is True)
+
+
+def verified(draft) -> bool:
+    """A draft whose list is verified: hand-checked against the kit, or two
+    independent reads of the page agree on it."""
+    return hand_checked(draft) or reads_agree(draft)
+
+
 def line_of(e) -> str:
     """A draft line as the hand-check tool and the recorded steps name it:
     'orange 1x2 brick'."""
@@ -262,14 +274,25 @@ def step_problems(draft) -> list:
 
 
 def booklet_ready(draft) -> bool:
-    """Hand-checked, with steps that place every piece of its list once."""
-    return hand_checked(draft) and not step_problems(draft)
+    """Verified, with steps that place every piece of its list once (recorded
+    in a hand-check, or a design of the picture that passed the validator)."""
+    return verified(draft) and not step_problems(draft)
 
 
 def draft_set(draft) -> dict:
     """A draft as a known set (the shape of backend/sets/house-and-tree.json):
     its checked list is the parts, its recorded steps the steps."""
     hc = draft["hand_check"]
+    if hand_checked(draft):
+        how = [f"Piece list and steps hand-checked against the kit by {hc['by']} on {hc['on']}, "
+               "building the model from the book; the drawings are BinBuild's own."]
+    else:
+        how = ["Piece list verified by two independent Muse Wonder reads of the page that agree on every line. "
+               "Steps worked out by Muse Wonder from the book's picture and checked by BinBuild: every piece held "
+               "by studs, nothing floating, no two pieces in the same space, exactly the pieces on the list; then "
+               "a second, separate Wonder look compared the finished drawing with the book's picture. The "
+               "drawings are BinBuild's own.",
+               "Nobody has built it from these steps yet: if a step doesn't match the book, follow the book."]
     parts = {line_of(e): {k: e[k] for k in ("family", "shape", "size", "color")} for e in draft["elements"]}
     steps = [{"text": step["text"],
               "place": [{"part": p["line"], "at": p["at"], **{k: p[k] for k in ("along", "down") if p.get(k)}}
@@ -279,19 +302,19 @@ def draft_set(draft) -> dict:
     return {"id": draft["id"], "title": draft["name"],
             "subtitle": f"From the manual, {_pages(draft['pages'])}. {pieces} pieces, {len(steps)} steps.",
             "manual": {"page": draft["pages"][0], "pages": draft["pages"]},
-            "notes": [f"Piece list and steps hand-checked against the kit by {hc['by']} on {hc['on']}, "
-                      "building the model from the book; the drawings are BinBuild's own."],
-            "parts": parts, "steps": steps}
+            "notes": how, "parts": parts, "steps": steps}
 
 
 CLOSEST = {"total": "its list matches the total the page prints", "sure": "no unsure lines"}
 
 
 def checklist_order(drafts) -> list:
-    """The drafts in the order to hand-check them, as [(draft, why first or
-    None)]: the closest to verified first (Wonder's lists that match the
-    element total the page prints, then the lists transcribed from the book
-    with no unsure line), then the rest in book order; hand-checked ones last."""
+    """The drafts still waiting for a person, in the order to hand-check them,
+    as [(draft, why first or None)]. Verified drafts (two reads agree, or
+    hand-checked with steps) aren't in it. The closest first (Wonder's lists
+    that match the element total the page prints, then the lists transcribed
+    from the book with no unsure line), then the rest in book order;
+    hand-checked ones still waiting for steps last."""
     def why(d):
         if (d.get("count_check") or {}).get("matches"):
             return "total"
@@ -300,8 +323,12 @@ def checklist_order(drafts) -> list:
         return None
     rank = {"total": 0, "sure": 1, None: 2}
     book = {b["id"]: n for n, b in enumerate(manual_catalog()["builds"])}
-    ordered = sorted(drafts.values(), key=lambda d: (hand_checked(d), rank[why(d)], book.get(d["id"], len(book))))
+    waiting = [d for d in drafts.values() if not reads_agree(d) and not booklet_ready(d)]
+    ordered = sorted(waiting, key=lambda d: (hand_checked(d), rank[why(d)], book.get(d["id"], len(book))))
     return [(d, None if hand_checked(d) else CLOSEST.get(why(d))) for d in ordered]
+
+
+VERIFIED_BY = {True: "hand-checked against the kit", False: "two independent reads agree"}
 
 
 def _pages(pages) -> str:
@@ -311,10 +338,12 @@ def _pages(pages) -> str:
 
 def manual_options(items) -> list:
     """Every build in the manual, in book order with verified builds first.
-    A verified build (one with a set file, or a draft hand-checked with its
-    steps recorded) is planned against the inventory like any known set, so it
-    can get a booklet; every other build is listed as it is, with its piece
-    list marked not yet verified: no fit claim, no booklet."""
+    A verified build with steps (a set file, or a verified draft whose steps
+    place its whole list) is planned against the inventory like any known set,
+    so it can get a booklet. A verified draft without steps (two reads agree,
+    but no design of its picture passed the validator) gets the bin check and
+    says why there is no booklet. Every other build is listed as it is, with
+    its piece list marked not yet verified: no fit claim, no booklet."""
     catalog = manual_catalog()
     drafts = manual_drafts()
     chapters = {c["n"]: c["title"] for c in catalog["chapters"]}
@@ -335,7 +364,17 @@ def manual_options(items) -> list:
             plan = plan_spec(draft_set(draft), items, with_booklet=False)
             entry.update(set=b["id"], piece_status="verified", status=plan["status"], message=plan["message"],
                          missing=plan["missing"], pieces=plan["pieces"], has_booklet=True,
-                         verified_by="hand-checked against the kit")
+                         verified_by=VERIFIED_BY[hand_checked(draft)])
+        elif reads_agree(draft):
+            check = check_pieces([({k: e[k] for k in ("family", "shape", "size", "color")}, e["qty"])
+                                  for e in draft["elements"]], items)
+            pieces = sum(p["need"] for p in check["parts"])
+            fit = (f"You have all {pieces} pieces." if check["fits"] else
+                   "Missing " + ", ".join(f"{p['short']}× {p['label']}" for p in check["missing"]) + ".")
+            why = (draft.get("auto_steps") or {}).get("reason") or "its steps haven't been worked out yet"
+            entry.update(piece_status="verified", status="fit" if check["fits"] else "short", missing=check["missing"],
+                         pieces=pieces, verified_by=VERIFIED_BY[False], no_booklet=why,
+                         message=f"{fit} No step-by-step booklet: {why}. Build it from the book, {_pages(b['pages'])}.")
         else:
             entry["status"] = "unverified"
             told = (f" The page says it uses {b['stated_elements']} elements; which ones isn't listed."

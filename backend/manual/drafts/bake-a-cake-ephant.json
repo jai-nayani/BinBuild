@@ -5,8 +5,8 @@
   50,
   51
  ],
- "status": "draft",
- "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the “Elements you’ll need” box on page 50, photo IMG_3608, read on Oct 29",
  "elements_total": 15,
  "unsure_elements": 0,
@@ -107,5 +107,121 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3608"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.2028,
+  "seen": "The elephant is shown in steps 1-4 on page 50 and as the finished model at the top of page 51.",
+  "count_note": "No numeric element total is printed; the 15 listed pieces are the icons counted in the Elements you'll need box and checked against the step pictures.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light blue body plate in elements box"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two orange leg bricks"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white one-stud plates in box"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white tile with two edge studs, floury back"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple prints blue-purple in the box and on the model's top",
+    "as_read": "small dark purple plate on top"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow and the small rotated box icon is hard to size; matched from the two side studs and the lime head block in the model",
+    "as_read": "two yellow-green tall head bricks"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two black curved pieces forming trunk"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two blue curved ear pieces"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two printed eye tiles"
+   }
+  ],
+  "elements_total": 15,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.1047,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The elephant's forward-facing head has its eye tiles and face/trunk pieces attached only to the side studs of the lime bricks, held sideways rather than seated on studs from below, so it cannot be written in this format"
  }
 }

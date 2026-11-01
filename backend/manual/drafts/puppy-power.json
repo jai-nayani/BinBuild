@@ -5,8 +5,8 @@
   84,
   85
  ],
- "status": "draft",
- "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the “Elements you’ll need” box on page 84, photo IMG_3625, read on Oct 29",
  "elements_total": 15,
  "unsure_elements": 0,
@@ -117,5 +117,131 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3625"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1115,
+  "seen": "Puppy Power is a dog-head model shown in the steps on page 84 and as the large finished model on page 85.",
+  "count_note": "No numeric element total is printed; 15 is the sum of the Elements you'll need box, checked against the step and finished pictures.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long blue side-stud brick at back/base of head"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two orange bricks forming the head"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two black curved ears"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two closed-eye round tiles"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "square pink plate under the eyes"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "two dark bars in the Elements box and partly hidden under the eye plate in the model; dark purple prints bluish-purple",
+    "as_read": "two dark purple plates under/around eyes"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "two teal curved pieces are shown in the Elements box, but they merge/partly hide each other in the finished snout view",
+    "as_read": "teal curved snout pieces"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green in the box and green in the model",
+    "as_read": "green round nose on top of snout"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "small white icons in the Elements box are hard to separate; this piece is partly hidden in the snout",
+    "as_read": "white 1-stud plate in snout"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "small white icons in the Elements box are hard to separate; this piece is partly hidden under the snout/nose",
+    "as_read": "white 2-stud tile in snout"
+   }
+  ],
+  "elements_total": 15,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.4379,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: the eye and snout plates are mounted vertically on the blue brick's side studs via the purple plates, so they are on their sides and not held by top studs"
  }
 }

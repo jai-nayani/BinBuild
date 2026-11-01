@@ -4,8 +4,8 @@
  "pages": [
   49
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 49, photo IMG_3607, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "The frog face is the flat green face on page 49 at the lower right, beside the 'CROAK!' speech bubble.",
@@ -59,5 +59,71 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3607"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0911,
+  "seen": "A green flat frog face with a CROAK! speech bubble on page 49, near the sun.",
+  "count_note": "No printed element total for this example on the page.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "middle partly hidden behind the black strip so stud count is obscured; printed darker green but lime is the only kit colour in this size",
+    "as_read": "long green bar forming the face"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": false,
+    "doubt": "partly hidden under the green pieces, ends and bar handles not clearly visible",
+    "as_read": "black strip crossing the green bar"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "partly hidden behind the black strip and eye tiles, clips not clearly visible; printed green but kit 1x2 lime piece is this",
+    "as_read": "two short green eye stalks"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white eye tiles with black pupils"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
  }
 }

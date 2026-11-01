@@ -49,5 +49,20 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3626"
+  ],
+  "status": "no fixed model",
+  "tries": 1,
+  "usd": 0.0576,
+  "agrees": false,
+  "reason": "The orange robot is pictured only as a very small corner thumbnail beside its caption on page 86, too small to distinguish or count its piece types reliably.",
+  "differences": [
+   "the second read gave no list (no fixed model: The orange robot is pictured only as a very small corner thumbnail beside its caption on page 86, too small to distinguish or count its piece types reliably.)"
+  ]
  }
 }

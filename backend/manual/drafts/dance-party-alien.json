@@ -100,5 +100,108 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3628"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1127,
+  "seen": "The large blue-and-lime combined alien dancing on the left side of page 91, labelled as the ultimate dance party alien.",
+  "count_note": "No printed element count for this model on pages 90-91; total is visible/inferred pieces only, with several body pieces hidden behind the central blue body.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Second blue brick partly hidden behind the first in the central body",
+    "as_read": "dark blue central body bricks with side studs"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow-green and the plate is partly hidden under the blue body",
+    "as_read": "long lime plate across the body"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime uprights partly hidden behind body and eye stalks; count inferred from protruding lime ends",
+    "as_read": "lime upright pieces at ends of body"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Small lime end pieces partly hidden and hard to distinguish from other lime plates",
+    "as_read": "small lime pieces at limb ends"
+   },
+   {
+    "qty": 4,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Eye-stalk stacks partly turned away; rings counted as two per stalk",
+    "as_read": "lime disc stacks under closed eye tiles"
+   },
+   {
+    "qty": 4,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two open eyes and two closed eye tiles"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal plates partly hidden behind blue body; one may be obscured",
+    "as_read": "teal flat pieces at one end of body"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal curved pieces at top end partly overlap the azure plates and each other",
+    "as_read": "teal curved-top pieces at top end"
+   }
+  ],
+  "elements_total": 19,
+  "agrees": false,
+  "differences": [
+   "medium_azure 2x4 plate: first read 1, second read 2",
+   "medium_azure 1x2 curved slope: first read 1, second read 2",
+   "lime 1x2 plate with clip: first read 1, second read 2",
+   "medium_blue 1x1 1x1 slope (cheese): first read 1, second read 0",
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 0, second read 2"
+  ]
  }
 }

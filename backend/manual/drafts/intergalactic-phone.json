@@ -59,5 +59,64 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3624"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0724,
+  "seen": "The small phone model labelled 'Intergalactic phone (to call home)' at the lower left of the yellow page 82 panel.",
+  "count_note": "No element count is printed for this model on the page.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Base plate partly covered by the round plates and black slope, so its exact length is inferred from the visible teal edges.",
+    "as_read": "teal flat plate under the green buttons"
+   },
+   {
+    "qty": 4,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow-green in the photo and the discs are small, though four are visible in a 2x2 group.",
+    "as_read": "four yellow-green round studs"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "The black curved block appears two studs wide, suggesting two side-by-side slopes, but the seam between them is not visible.",
+    "as_read": "black curved block in the middle"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "White tapering piece is small and partly overlapped by the black slope, so its stud count and exact wedge shape are not fully clear.",
+    "as_read": "white tapered plate extending from the black block"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": false,
+  "differences": [
+   "black 1x2 curved slope: first read 1, second read 2"
+  ]
  }
 }

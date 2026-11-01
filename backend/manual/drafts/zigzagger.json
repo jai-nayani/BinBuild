@@ -79,5 +79,75 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3587"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0595,
+  "seen": "The zigzagger is a small sea serpent at the bottom left of page 13, beside its yellow caption box.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "One is horizontal at the left as the tail and one appears upright behind the body; colours look pale white and darker speckled grey and both are partly obscured.",
+    "as_read": "pale long curved tail and upright grey fin"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Partly hidden under the blue brick and fin, so the full length is estimated.",
+    "as_read": "teal flat body plate"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "blue brick with four side studs visible"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "magenta square head tilted as a diamond"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white eye tiles on the head"
+   }
+  ],
+  "elements_total": 7,
+  "agrees": false,
+  "differences": [
+   "white 2x4 wedge plate: first read 1, second read 0",
+   "light_bluish_gray 1x3 curved slope: first read 1, second read 2"
+  ]
  }
 }

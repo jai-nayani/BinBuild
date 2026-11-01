@@ -84,5 +84,74 @@
   "page_says": 9,
   "list_total": 9,
   "matches": true
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3584"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1856,
+  "seen": "A low wide crab with two large eyes and two lime arms ending in blue claws at the bottom left of page 9.",
+  "count_note": "Page says 9 elements but I can count only 8; the ninth is presumably completely hidden under or behind the body, so I have not added a piece just to reach 9.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": false,
+    "doubt": "Central black bar is partly hidden under the body and by the clips gripping its ends.",
+    "as_read": "black horizontal bar through body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Body prints very dark navy and its ends are partly hidden; side studs are inferred from the two eye tiles mounted on its front.",
+    "as_read": "dark blue central body brick"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime arm on each side, one exposed stud"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Claw colour prints teal-dark blue, closest to the listed medium_blue cheese slope; outer shape is partly seen in perspective.",
+    "as_read": "blue claw tip at each arm end"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "large white eye with black pupil"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": false,
+  "differences": [
+   "dark_purple 1x2 plate: first read 1, second read 0"
+  ]
  }
 }

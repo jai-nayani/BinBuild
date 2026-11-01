@@ -4,8 +4,8 @@
  "pages": [
   51
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 51, photo IMG_3608, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A small blue-purple cake with a lime round topping pictured at the lower left of page 51.",
@@ -49,5 +49,115 @@
   "on": null,
   "by": null,
   "notes": ""
- }
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3608"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0798,
+  "seen": "A small stacked cake with a green round topping at the bottom left of page 51, below the elephant.",
+  "count_note": "No element total for this cake is printed on the pages; the small partly angled view may hide a join or layer, so the count is my best visible count and was not adjusted to any printed number.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "White wedge-shaped base is partly hidden under the dark top layer; only its pointed side is clearly visible.",
+    "as_read": "white pointed wedge base"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark top prints blue-purple, which may differ from the real dark purple piece; its area appears larger than one 1x2 plate and the join and studs are partly hidden under the round topping.",
+    "as_read": "dark blue-purple flat cake top"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Small topping prints yellow-green, consistent with lime printing differently, and only its top is visible.",
+    "as_read": "yellow-green round stud on top"
+   }
+  ],
+  "elements_total": 4,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": true,
+  "tries": 1,
+  "usd": 0.3481,
+  "picture_checks": 1,
+  "design": [
+   "4x2 (0,0,0) wedge_plate white studs=+y",
+   "2x1 (0,1,1) plate dark_purple",
+   "2x1 (2,1,1) plate dark_purple",
+   "1x1 (1,1,2) round_plate lime"
+  ]
+ },
+ "steps": [
+  {
+   "text": "Start here: lay this piece on the table.",
+   "place": [
+    {
+     "line": "white 2x4 wedge plate",
+     "at": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add these 2 pieces (1 plate up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "dark_purple 1x2 plate",
+     "at": [
+      0,
+      1,
+      1
+     ]
+    },
+    {
+     "line": "dark_purple 1x2 plate",
+     "at": [
+      2,
+      1,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add this piece (2 plates up), pressing it onto the studs below.",
+   "place": [
+    {
+     "line": "lime 1x1 round plate",
+     "at": [
+      1,
+      1,
+      2
+     ]
+    }
+   ]
+  }
+ ]
 }

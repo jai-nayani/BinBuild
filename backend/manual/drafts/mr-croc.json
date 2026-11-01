@@ -69,5 +69,84 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3593"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.086,
+  "seen": "Mr Croc is the small blue crocodile-like creature at the top centre of page 20, at the start of the dotted line to the hungry T. rex.",
+  "count_note": "No element count is printed for this model; total is my visible count, with head and under-body pieces partly hidden.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light-blue studded body plate"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "dark blue body strip is partly hidden under the azure plate, so size and exact piece are inferred",
+    "as_read": "dark blue strip under body"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple can look blue in print and both pieces are partly obscured by the body",
+    "as_read": "purple tail and side fin pieces"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "only a pink strip is visible under the body, so most of the piece is hidden",
+    "as_read": "pink strip under front body"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey looks near-white and the second grey block is largely hidden behind the first in the small top view",
+    "as_read": "light-grey head blocks at front"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": false,
+    "doubt": "one eye is clearly visible and the second is partly hidden in perspective on the small model",
+    "as_read": "white eye tiles on grey head"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "blue 1x4 brick with 4 studs on side: first read 0, second read 1"
+  ]
  }
 }

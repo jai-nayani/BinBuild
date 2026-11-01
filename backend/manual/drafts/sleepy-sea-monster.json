@@ -99,5 +99,96 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3596"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1265,
+  "seen": "The sleepy sea monster is the small arched blue sea-creature labelled 'A sleepy sea monster ...' in the middle-left of page 24.",
+  "count_note": "No element count is printed for this example on pages 24-25, so 11 is my visible count; several body pieces are partly hidden.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "two dark-blue body segments are partly overlapping and partly hidden behind other pieces",
+    "as_read": "dark blue studded body segments"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "flat blue body section partly hidden under curved pieces; size estimated from visible studs",
+    "as_read": "flat medium-blue body plate"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "the humps overlap the blue body and each other, so the second hump is partly hidden",
+    "as_read": "medium-azure curved humps on body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "pale grey looks near-white in the photo and the piece is partly behind the head",
+    "as_read": "pale grey long curved neck piece"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "one orange brick is clear at the body end and a second orange piece is partly hidden near the head/neck joint",
+    "as_read": "small orange bricks at body/head ends"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple can look blue/purple in print and the head support is mostly hidden behind the eye tiles",
+    "as_read": "small dark purple piece behind closed eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two closed-eye round tiles"
+   }
+  ],
+  "elements_total": 11,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 round plate: first read 1, second read 0",
+   "white 2x2 tile with 2 studs on edge: first read 1, second read 0",
+   "light_bluish_gray 1x3 curved slope: first read 0, second read 1"
+  ]
  }
 }

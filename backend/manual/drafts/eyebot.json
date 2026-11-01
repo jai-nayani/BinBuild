@@ -89,5 +89,96 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3626"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1355,
+  "seen": "Eyebot is the small single-eyed robot at the top of page 87, next to the label 'What might Eyebot spot on the ship?'",
+  "count_note": "No element count is printed for this model; total is the 8 pieces I can identify, with the hidden eye-mount/base connections uncertain as noted.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "single large open eye on front of telescope"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey cylinder is partly hidden behind the eye and body; a second segment may be the headlight brick below it",
+    "as_read": "light grey cylinder holding the eye"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "partly hidden under the eye cylinder, only a grey block is visible",
+    "as_read": "light grey block under eye cylinder"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "small blue piece beside eye mount is partly hidden and scale is hard to judge",
+    "as_read": "small medium-blue slope beside eye"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "magenta flat plate in middle of body"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "pieces print dark blue and are partly hidden under the magenta plate; dark purple can look blue in the book",
+    "as_read": "two dark blue-purple flat pieces sticking out below body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "partly hidden at the base and seen at an angle, so size is estimated",
+    "as_read": "orange brick at one side of base"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 round brick: first read 2, second read 1",
+   "white 2x4 wedge plate: first read 1, second read 0",
+   "medium_blue 1x1 1x1 slope (cheese): first read 0, second read 1"
+  ]
  }
 }

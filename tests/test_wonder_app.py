@@ -84,7 +84,8 @@ class TestWonderInTheApp(unittest.TestCase):
             status, body = self.api.call("GET", "/api/builds/options")
         self.assertEqual(status, 200)
         self.assertEqual([o["kind"] for o in body["options"]], ["manual"] * 106 + ["brickgpt"] * 10)
-        self.assertEqual(body["options"][0]["id"], "house-and-tree")
+        self.assertEqual(body["options"][0]["piece_status"], "verified")
+        self.assertIn("house-and-tree", [o["id"] for o in body["options"] if o.get("piece_status") == "verified"])
         w = body["wonder"]
         self.assertEqual((w["enabled"], w["max_tries"], w["busy"], w["recent"]), (True, 5, False, []))
         self.assertIn("a simple house", w["targets"])

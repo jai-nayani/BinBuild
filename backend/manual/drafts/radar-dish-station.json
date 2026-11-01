@@ -4,8 +4,8 @@
  "pages": [
   78
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 78, photo IMG_3622, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "The Radar dish station is the small white-dish-on-a-green-mast model in the yellow dotted oval on the right side of page 78.",
@@ -69,5 +69,155 @@
   "on": null,
   "by": null,
   "notes": ""
- }
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3622"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0506,
+  "seen": "The Radar dish station is the small T-shaped model in the yellow dotted box on the lower middle of page 78, with a white dish on a green stem.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "small picture; white tapered dish partly seen, stud count not fully clear",
+    "as_read": "white wedge-shaped dish plate"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green and length is partly obscured by connections at both ends",
+    "as_read": "long green stem plate"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "mostly hidden under black piece and stem; colour and size partly hidden",
+    "as_read": "purple square plate at base"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "small black piece at base seen edge-on and partly hidden",
+    "as_read": "black piece at far base end"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "two grey round ends face camera at base; sides partly hidden so exact piece type is uncertain",
+    "as_read": "two grey round knobs at base"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": true,
+  "tries": 1,
+  "usd": 0.3804,
+  "picture_checks": 1,
+  "design": [
+   "1x6 (1,0,0) plate lime",
+   "2x2 (1,0,1) plate magenta",
+   "2x1 (1,0,2) curved_slope black down=+x",
+   "1x1 (1,1,2) round_brick light_bluish_gray",
+   "1x1 (2,1,2) round_brick light_bluish_gray",
+   "4x2 (0,4,1) wedge_plate white studs=-y"
+  ]
+ },
+ "steps": [
+  {
+   "text": "Start here: lay this piece on the table.",
+   "place": [
+    {
+     "line": "lime 1x6 plate",
+     "at": [
+      1,
+      0,
+      0
+     ],
+     "along": "y"
+    }
+   ]
+  },
+  {
+   "text": "Add these 2 pieces (1 plate up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "magenta 2x2 plate",
+     "at": [
+      1,
+      0,
+      1
+     ]
+    },
+    {
+     "line": "white 2x4 wedge plate",
+     "at": [
+      0,
+      4,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add these 3 pieces (2 plates up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "black 1x2 curved slope",
+     "at": [
+      1,
+      0,
+      2
+     ],
+     "down": "+x"
+    },
+    {
+     "line": "light_bluish_gray 1x1 round brick",
+     "at": [
+      1,
+      1,
+      2
+     ]
+    },
+    {
+     "line": "light_bluish_gray 1x1 round brick",
+     "at": [
+      2,
+      1,
+      2
+     ]
+    }
+   ]
+  }
+ ]
 }

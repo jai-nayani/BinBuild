@@ -59,5 +59,65 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3602"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1187,
+  "seen": "Ghost Bat is the small white-winged bat labelled in the middle-left area of page 39.",
+  "count_note": "No element count is printed for this Build Boost example; the printed elements list on page 38 is for Happy Ghost, not Ghost Bat.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white wing plates with studs along one edge"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white round eye tiles with closed eyelash eyes"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "two black blocks partly overlap the centre of the model, so their exact shape and separation are partly hidden",
+    "as_read": "two black rectangular blocks beside the eyes"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "central connecting plate is mostly hidden under the eyes and wings; only a purple-pink edge is visible and book printing may shift the colour",
+    "as_read": "small purple-pink central plate under the eyes"
+   }
+  ],
+  "elements_total": 7,
+  "agrees": false,
+  "differences": [
+   "dark_purple 1x2 plate: first read 1, second read 0",
+   "magenta 2x2 plate: first read 0, second read 1"
+  ]
  }
 }

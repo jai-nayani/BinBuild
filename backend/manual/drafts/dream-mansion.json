@@ -129,5 +129,149 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3598"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1611,
+  "seen": "The dream mansion is the flat blue and white building with entrance gates, path and tree in the centre and lower part of page 29.",
+  "count_note": "No element total is printed for the dream mansion; the small orange and blue animal at the lower edge is included as part of the pictured scene and may be a visiting separate build.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two blue 2x4 plates forming the building"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "trans_clear",
+    "sure": true,
+    "doubt": null,
+    "as_read": "clear 1x2 window plates on the blue plates"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark central section looks dark purple-blue in print and its division into plates is partly unclear",
+    "as_read": "dark purple 2x2-looking central section"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "central 2x2 section looks blue-purple in print; magenta 2x2 is the only listed 2x2 plate that fits",
+    "as_read": "blue-purple 2x2 central plate"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "white piece looks near light grey in print and only one tapered side is clearly visible",
+    "as_read": "white tapered wing plate on side of building"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "black entrance gates are seen at an angle, so exact size and orientation are partly hidden",
+    "as_read": "two black curved entrance gates"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow-green in print and the small gate studs are partly hidden",
+    "as_read": "small lime round stud on each gate"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long lime six-stud path plate"
+   },
+   {
+    "qty": 3,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "light grey looks near-white; one is the tree trunk and two are partly hidden in the small animal at the lower edge",
+    "as_read": "grey round cylinders for tree and animal"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "angled lime tree piece is partly hidden and lime looks yellow in print",
+    "as_read": "angled lime clip piece on the tree"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange brick in the small animal at lower left"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "blue curved animal piece is partly cropped at the page edge",
+    "as_read": "blue curved piece on the small animal"
+   }
+  ],
+  "elements_total": 19,
+  "agrees": false,
+  "differences": [
+   "white 2x4 wedge plate: first read 2, second read 1",
+   "white 2x2 tile with 2 studs on edge: first read 1, second read 0",
+   "lime 1x1 round plate: first read 4, second read 2",
+   "light_bluish_gray 1x1 round brick: first read 2, second read 3",
+   "orange 1x2 brick: first read 0, second read 1",
+   "medium_azure 1x2 curved slope: first read 0, second read 1"
+  ]
  }
 }

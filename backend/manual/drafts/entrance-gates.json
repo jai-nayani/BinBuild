@@ -69,5 +69,47 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3598"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.2105,
+  "seen": "The model is the pair of black entrance gates with lime details on the left side of page 29, beside the blue and white mansion.",
+  "count_note": "No element total is printed for the entrance gates on the page; the 7-element count on page 28 belongs to the house and tree model.",
+  "elements": [
+   {
+    "qty": 4,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Each gate appears to be two joined black curved slopes, but the seams and rear pieces are partly hidden in the photograph.",
+    "as_read": "two black curved gate blocks"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "One small lime studded piece is partly hidden behind each black gate; colour looks pale yellow-green in print and shape is hard to confirm.",
+    "as_read": "small lime stud beside each gate"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": false,
+  "differences": [
+   "lime 1x6 plate: first read 1, second read 0",
+   "light_bluish_gray 1x1 round brick: first read 1, second read 0",
+   "lime 1x2 plate with clip: first read 1, second read 0",
+   "black 1x2 curved slope: first read 2, second read 4"
+  ]
  }
 }

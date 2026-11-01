@@ -59,5 +59,64 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3607"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1118,
+  "seen": "The giraffe face is the blue L-shaped flat face at the left edge of page 49, under the 'CAN'T... QUITE... REACH... THOSE... LEAVES!' speech bubble.",
+  "count_note": "No element count is printed; the left side of this face is cropped by the photo/page edge, so pieces off-frame may be missing from this count. A separate lime T-shaped arrangement below the speech bubble was not counted as part of the face.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "partly hidden behind the horizontal plate and the eye tile, so its full length cannot be counted; size inferred from its 2-stud width and blue colour",
+    "as_read": "horizontal blue 2x4 plate forming top of face; vertical blue plate at right end of face"
+   },
+   {
+    "qty": 3,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "model is cut off at the left edge of the photo, so another round plate may be hidden off-frame; lime also prints yellow-green",
+    "as_read": "three yellow-green round studs along blue plate"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "single printed eye on vertical blue plate"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "partly hidden behind the blue plate and colour prints dark blue/purple, so size and colour are uncertain",
+    "as_read": "small dark rectangle sticking out beside the eye plate"
+   }
+  ],
+  "elements_total": 7,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 round plate: first read 4, second read 3"
+  ]
  }
 }

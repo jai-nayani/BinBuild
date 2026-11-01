@@ -89,5 +89,95 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3624"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0862,
+  "seen": "A small blue-and-white walking sink with two eyes and a white upright piece at the centre-right of the yellow panel on page 82.",
+  "count_note": "No element count is printed for this model; it is pictured very small, so hidden leg/support pieces may be missed.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Model is very small; blue front is partly hidden behind the eye tiles and its full length cannot be counted clearly.",
+    "as_read": "blue front bar holding the eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two printed eye tiles"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "White upright piece is small and angled; stud count and tapered shape cannot be counted clearly.",
+    "as_read": "large white upright sink/mirror piece"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime can print yellow-green and the discs are tiny on the white piece.",
+    "as_read": "two small lime round studs on white piece"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Orange top is partly hidden; two orange patches may be the studs of one brick but size cannot be counted clearly.",
+    "as_read": "orange block on top of body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal base is largely hidden under the blue and orange pieces; size is estimated from the visible outline.",
+    "as_read": "teal flat body under orange block"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Small pale grey protrusion at the end is partly hidden and could be a round brick instead; light grey prints near-white.",
+    "as_read": "small pale grey protrusion at left end"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "medium_azure 1x2 curved slope: first read 1, second read 0",
+   "medium_azure 2x4 plate: first read 0, second read 1"
+  ]
  }
 }

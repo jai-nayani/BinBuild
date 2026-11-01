@@ -99,5 +99,88 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3592"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1341,
+  "seen": "A small blue shark sea monster at the bottom right of page 19 beside the BUILD BOOST box, with a large eye facing the Viking boat.",
+  "count_note": "No element count is printed for this Build Boost example; total is the count I can see.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "vertical head and horizontal lower body appear blue brick-tall, but the joint and side studs are partly hidden behind the black bar and eye",
+    "as_read": "dark blue L-shaped body/head"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "large white eye with black pupil"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long black diagonal bar under body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime piece at the end of the black bar is partly hidden and its clip connection is not visible; lime may print yellow-green",
+    "as_read": "lime piece at top end of black bar"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "white teeth-like piece on the lime piece is small and partly obscured; exact stud count cannot be seen",
+    "as_read": "small white plate/teeth on lime piece"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "teal fin at the far end of the black bar is partly hidden and its size/length cannot be counted clearly",
+    "as_read": "medium azure curved fin at end of black bar"
+   }
+  ],
+  "elements_total": 7,
+  "agrees": false,
+  "differences": [
+   "blue 1x4 brick with 4 studs on side: first read 1, second read 2",
+   "white 2x2 tile with 2 studs on edge: first read 1, second read 0",
+   "medium_blue 1x1 1x1 slope (cheese): first read 1, second read 0",
+   "medium_azure 2x4 plate: first read 1, second read 0",
+   "white 1x2 jumper plate: first read 0, second read 1"
+  ]
  }
 }

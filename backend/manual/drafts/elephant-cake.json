@@ -49,5 +49,54 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3604"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1077,
+  "seen": "A small stacked orange and blue cake at the top left of page 43, separate from the elephant and the green leafy snack below.",
+  "count_note": "No element count is printed for this example; count is from visible pieces only and partly hidden pieces may be missed.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Two stacked orange layers are visible but partly overlapping and printed in orange and pale orange, so the boundary between them is uncertain.",
+    "as_read": "two stacked orange brick layers"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Two small blue wedge shapes beside/below the orange stack; colours print darker blue than medium blue and size is hard to judge at this scale, closest listed piece is the 1x1 cheese slope.",
+    "as_read": "two small blue wedge pieces"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "A dark blue-purple flat piece is partly hidden under the orange stack; colour prints blue-purple and most of it is obscured.",
+    "as_read": "dark flat piece under orange layers"
+   }
+  ],
+  "elements_total": 5,
+  "agrees": false,
+  "differences": [
+   "orange 1x2 brick: first read 1, second read 2"
+  ]
  }
 }

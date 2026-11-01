@@ -5,8 +5,8 @@
   14,
   15
  ],
- "status": "draft",
- "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the “Elements you’ll need” box on page 14, photo IMG_3588, read on Oct 29",
  "elements_total": 16,
  "unsure_elements": 2,
@@ -117,5 +117,132 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3588",
+   "IMG_3589"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1205,
+  "seen": "A goose balancing on one leg on a blue plate, pictured centre of page 15 with instructions and Elements box on page 14.",
+  "count_note": "Elements box shows 16 pieces; far-side eye/headlight and one grey curved slope are hidden behind their near counterparts in the finished-model view.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light blue 2x4 base plate in box and under leg"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two grey round bricks stacked as leg"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two maroon-pink 2x2 plates in body/neck"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange-yellow 1x2 brick forming body"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two long grey curved slopes in box, forming tail/body top"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two teal curved bricks forming domed head"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two grey 1x1 headlight bricks in box for sides of head"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white round eye tiles with closed eyes"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white 2x2 edge-stud tile as beak"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Prints very dark navy/blue on top of head and in box; mapped to the kit's dark purple 1x2 plate, the only matching piece.",
+    "as_read": "dark 1x2 plate with two studs on head top"
+   }
+  ],
+  "elements_total": 16,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.0868,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The two white round eye tiles are shown mounted vertically on the side studs of the headlight bricks, so they are not held by studs underneath and cannot be represented upright in this format"
  }
 }

@@ -99,5 +99,77 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3618"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1012,
+  "seen": "A turquoise sofa with a magenta cushion flying at the top right of page 71, labelled 'A flying sofa'.",
+  "count_note": "No printed element total on the page; a small piece at the far end is partly hidden, so the list may miss a piece concealed under the seat.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "turquoise flat sofa seat/base"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "bright pink square cushion on the seat"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Only one sofa end is clearly seen; the other end is partly hidden and may have a second matching piece.",
+    "as_read": "black curved piece at one end of the sofa"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark piece under one end looks blue-purple in print and is partly hidden behind the seat.",
+    "as_read": "small dark plate under one end"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "Two pale wing-like pieces are shown detached/falling below and behind the sofa, partly shadowed so one looks grey and their exact size/count is uncertain.",
+    "as_read": "pale white wedge wings by the sofa"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": false,
+  "differences": [
+   "blue 1x4 brick with 4 studs on side: first read 1, second read 0",
+   "medium_azure 1x2 curved slope: first read 1, second read 0",
+   "lime 1x2 plate with clip: first read 1, second read 0",
+   "white 2x4 wedge plate: first read 1, second read 2"
+  ]
  }
 }

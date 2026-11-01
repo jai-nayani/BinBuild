@@ -99,5 +99,97 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3618"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.09,
+  "seen": "A small winged snail with eye tiles, labelled 'A flying snail', near the spine at the top centre of page 71.",
+  "count_note": "No element count is printed for this model; the model is pictured very small, so hidden pieces under the body and wings may not be counted.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white round eye tiles at the head"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "model is very small; one large white wing is clear, a second smaller white tapered piece behind the head may be the other wing and is partly hidden",
+    "as_read": "large white pointed wing and smaller white tapered piece"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "small model; pink-magenta square partly hidden in the middle of the body, colour may print differently",
+    "as_read": "magenta square plate in centre of body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "partly hidden under the magenta piece and wings; size cannot be counted with certainty",
+    "as_read": "light blue plate forming the body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark piece at the rear underside is partly hidden and dark purple may look blue-black in print",
+    "as_read": "dark purplish plate at rear of body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "long lime piece under the white wing is partly hidden; lime often looks yellow-green in print and its length is hard to count",
+    "as_read": "long lime-green plate under the wing"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "small black piece on top near the head is partly hidden and its shape is hard to read at this size",
+    "as_read": "small black slope on top near head"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "white 2x4 wedge plate: first read 1, second read 2",
+   "lime 1x2 plate with clip: first read 1, second read 0",
+   "light_bluish_gray 1x3 curved slope: first read 1, second read 0",
+   "lime 1x6 plate: first read 0, second read 1"
+  ]
  }
 }

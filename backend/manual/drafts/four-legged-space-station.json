@@ -89,5 +89,95 @@
   "on": null,
   "by": null,
   "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3622"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1272,
+  "seen": "A four-legged space station near the spine on page 79, standing toward the painted planet with eye tiles on top.",
+  "count_note": "No printed element total for this model on the page; hidden/under-platform pieces make this a best visible estimate.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Turquoise platform partly hidden under upper pieces; size counted from visible edge.",
+    "as_read": "turquoise flat platform"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow-green and strip is partly hidden under eye stalks; length is best estimate.",
+    "as_read": "lime-green strip on platform"
+   },
+   {
+    "qty": 4,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey looks near-white; four legs implied by stance but some are hidden behind platform and each other.",
+    "as_read": "white-grey cylindrical legs/stalks"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white eye-printed round tiles"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Large black arc is partly hidden and may be two curved slopes side by side; count is best estimate.",
+    "as_read": "black curved arc at one end"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "White wing-like plate partly hidden at side of platform; stud count partly obscured.",
+    "as_read": "white flat wing plate with studs"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal curved bump behind eye tiles could be edge of the azure platform; colour matches medium azure as printed.",
+    "as_read": "teal curved bump behind eyes"
+   }
+  ],
+  "elements_total": 12,
+  "agrees": false,
+  "differences": [
+   "lime 1x2 plate with clip: first read 1, second read 0",
+   "lime 1x6 plate: first read 0, second read 1"
+  ]
  }
 }

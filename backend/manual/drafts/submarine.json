@@ -4,8 +4,8 @@
  "pages": [
   8
  ],
- "status": "draft",
- "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
  "read_from": "the picture of the model on page 8, photo IMG_3583, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A horizontal blue submarine with an orange conning tower and periscope eye in the upper half of page 8.",
@@ -144,5 +144,150 @@
   "page_says": 15,
   "list_total": 15,
   "matches": true
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3583"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1703,
+  "seen": "A blue and lime submarine with an orange conning tower and periscope is pictured in the upper centre of page 8.",
+  "count_note": "Total matches the printed 15 elements.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Length and side studs are partly covered by the top pieces and lime plate; these are the long upper and lower blue body bricks.",
+    "as_read": "upper and lower dark-blue body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime is printed yellow-green and the plate extends behind the body, so its full length is partly hidden.",
+    "as_read": "thin green stripe along body"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange conning-tower block"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "Pale plate is partly hidden under the periscope brick and its stud is not clearly visible.",
+    "as_read": "white slab atop orange block"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey prints near-white; one forms the periscope top and the second is the partly hidden grey support at the rear, with its recess not visible.",
+    "as_read": "grey periscope top and rear support"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "horizontal grey periscope cylinder"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white eye at periscope end"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Medium blue is printed dark navy and the small slope is seen at an angle.",
+    "as_read": "small dark-blue slope at rear top"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Medium azure is printed as the same dark blue as the body; identified by the curved top and single raised stud beside the orange block.",
+    "as_read": "blue curved piece left of tower"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": true,
+    "doubt": null,
+    "as_read": "black curved slope at front top"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime is printed bright yellow at the front and its side studs are covered by the round plates.",
+    "as_read": "yellow front end piece"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime is printed yellow; the two large front discs could be mistaken for the tall brick's own studs, but their disc diameter suggests round plates on those studs.",
+    "as_read": "two yellow discs on front"
+   }
+  ],
+  "elements_total": 15,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.1168,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The periscope eye's light-bluish-gray round brick is on its side, held only by the headlight brick's side stud, with the white round tile on its sideways end, so it cannot be held by studs from below in this format"
  }
 }
