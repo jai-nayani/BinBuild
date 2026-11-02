@@ -16,7 +16,7 @@
   stays disabled until all 5 photos pass the check; a tapped panel's photo
   lands in that slot and the batch still uploads top, front, right, back, left;
   tapping a red panel opens that photo's retake; a refused Identify (401)
-  offers the sample bin and opens the build list; no Wonder or Model API call.
+  offers the sample bin and loads it for review; no Wonder or Model API call.
 
 Standard-library unittest. Run from the repo root:
     python3 -m unittest discover -s tests -v
@@ -244,8 +244,8 @@ class TestBehaviour(unittest.TestCase):
     def test_refused_identify_offers_the_sample_bin(self):
         result = play(identify=401)
         self.assertEqual(result["ui"]["sample_offer"], {"shown": True, "button": "Use the sample bin (50 pieces)"})
-        self.assertTrue(result["ui"]["build_view_after_sample"])
-        self.assertIn("GET /api/builds/options", result["requests"])
+        self.assertEqual(result["ui"]["view_after_sample"], ["check-view"], "the sample bin, ready for review")
+        self.assertIn("POST /api/inventory/sample", result["requests"])
 
     def test_no_wonder_or_model_calls(self):
         for scenario in ({}, {"fail": ["right"]}, {"identify": 401}):

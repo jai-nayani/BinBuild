@@ -7,6 +7,12 @@
  * batch still uploads in the fixed order. Once all 5 photos pass the check,
  * "Next" identifies the pieces.
  *
+ * "Use sample images" (and, on the public demo, the offer after a refused
+ * Identify) loads the sample bin instead: 5 photos of the kit with their
+ * pieces already identified (pre-computed, no model call), straight into
+ * "Check the pieces". "What can I build?" shows nothing but a scan prompt
+ * until some pieces are confirmed into the inventory.
+ *
  * Each batch is 5 photos of one handful: top view plus 4 sides. Every snap is
  * reviewed (retake or use) before it joins the batch; a full batch uploads to
  * POST /api/inventory/batch, which saves it, checks every photo and returns a
@@ -424,12 +430,29 @@ var ACCESS_KEY = (function () {
       });
   });
 
-  // No key on the public demo: offer the sample bin (the demo's confirmed pieces) and its builds instead.
+  // No key on the public demo: offer the sample bin instead (its pieces are already identified).
   function offerSampleBin() {
     $('sample-offer').classList.remove('hidden');
-    request('GET', '/api/inventory/summary', null, BUILD_TIMEOUT_MS, function (xhr, body) {
-      var n = !xhr || xhr.status !== 200 || !body ? 0 : body.total_pieces;
-      $('sample-bin-btn').textContent = n ? 'Use the sample bin (' + n + ' pieces)' : 'See what you can build';
+    request('GET', '/api/inventory/sample', null, BUILD_TIMEOUT_MS, function (xhr, body) {
+      var n = !xhr || xhr.status !== 200 || !body ? 0 : body.pieces;
+      $('sample-bin-btn').textContent = n ? 'Use the sample bin (' + n + ' pieces)' : 'Use the sample bin';
+    });
+  }
+
+  // The sample bin: 5 photos of the kit and their verified pieces, loaded as a batch ready for review.
+  function loadSample() {
+    var btn = $('sample-images-btn');
+    btn.disabled = true;
+    setStatus('Loading the sample images…');
+    request('POST', '/api/inventory/sample', null, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
+      btn.disabled = false;
+      if (failure || xhr.status !== 200 || !body || !body.batch_id) {
+        setStatus('✗ Couldn’t load the sample images: ' + (failure || detailOf(xhr, body)), 'error');
+        return;
+      }
+      setStatus('', null);
+      openReview(body.batch_id, { text: '✓ The sample bin: 5 photos of the kit, its pieces already identified. ' +
+        'Check them, then add them to your inventory.', kind: 'ok' });
     });
   }
 
@@ -536,7 +559,10 @@ var ACCESS_KEY = (function () {
     var gen = total(kept.filter(function (d) { return d.generator_type; }));
     var fixed = data.detections.filter(function (d) { return d.status === 'corrected' || d.source === 'manual'; }).length;
 
-    $('check-title').textContent = confirmed ? 'These pieces are in your inventory' : 'Check the pieces';
+    var sample = (data.batch.classifier || '').indexOf('sample') === 0;
+    $('check-title').textContent = (sample ? 'The sample bin: ' : '') +
+      (confirmed ? (sample ? 'in your inventory' : 'These pieces are in your inventory')
+        : (sample ? 'check the pieces' : 'Check the pieces'));
     $('check-intro').textContent = confirmed
       ? 'This batch is added. To change a piece, undo it first.'
       : kept.length
@@ -544,7 +570,8 @@ var ACCESS_KEY = (function () {
         : 'No pieces in this batch yet. Add the pieces Spark missed, or go back and identify it again.';
     $('check-summary').textContent = plural(data.pieces, 'piece', 'pieces') + ' · ' +
       plural(gen, 'plain brick', 'plain bricks') + ' BrickGPT can use' +
-      (fixed ? ' · ' + fixed + ' fixed by you' : '') + (removed.length ? ' · ' + removed.length + ' removed' : '');
+      (fixed ? ' · ' + fixed + (sample ? ' fixed in its earlier review' : ' fixed by you') : '') +
+      (removed.length ? ' · ' + removed.length + ' removed' : '');
     renderDots(kept);
 
     var list = $('check-list');
@@ -962,6 +989,19 @@ var ACCESS_KEY = (function () {
         setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', buildStatus);
         return;
       }
+      if (body.scan_first) { // no confirmed pieces yet: no catalog, only the way to get some
+        $('build-inventory').textContent = body.scan_first;
+        list.appendChild(el('button', 'btn btn-primary', '📷 Scan a handful')).addEventListener('click', function () {
+          show('capture-view');
+          render();
+        });
+        list.appendChild(el('button', 'btn btn-secondary', 'Use sample images')).addEventListener('click', function () {
+          show('capture-view');
+          render();
+          loadSample();
+        });
+        return;
+      }
       var inv = body.inventory;
       $('build-inventory').textContent = inv.total_pieces
         ? inv.total_pieces + ' confirmed pieces in your inventory: ' + inv.generator_ready +
@@ -1144,8 +1184,9 @@ var ACCESS_KEY = (function () {
 
   $('ask-build-btn').addEventListener('click', openBuilds);
   $('build-open-btn').addEventListener('click', openBuilds);
-  $('sample-link').addEventListener('click', openBuilds);
-  $('sample-bin-btn').addEventListener('click', openBuilds);
+  $('sample-images-btn').addEventListener('click', loadSample);
+  $('sample-bin-btn').addEventListener('click', loadSample);
+  $('sample-link').addEventListener('click', function () { show('capture-view'); render(); loadSample(); });
   $('start-btn').addEventListener('click', function () { show('capture-view'); render(); });
   $('home-btn').addEventListener('click', function () { show('hero-view'); });
   $('build-back-btn').addEventListener('click', function () { show('capture-view'); render(); });

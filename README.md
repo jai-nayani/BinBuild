@@ -39,6 +39,8 @@ backend/        FastAPI backend (inventory + generation API)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
   inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
   photo_gate.py          Per-photo checks before any Spark call (blur, light, pieces, fakes)
+  sample_bin.py          "Use sample images": the kit batch's 5 photos and verified pieces, pre-computed
+  sample/                Those 5 small photos (side views cropped to the tabletop) + kit.json
   build_plan.py          The build step: known sets, BrickGPT designs through Path A
   brickgpt_constraint.py Path A: generate (pre-generated designs) -> filter -> patch
   booklet.py             Step-by-step booklet: JSON + printable HTML page with drawings

@@ -103,6 +103,8 @@ body.on-hero #app-header { display: none; }
 .panel.failed .pstate { color: var(--red); }
 .panel.locked { cursor: default; }
 .panel:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.btn-sample { background: var(--card); border: 2px solid var(--line); margin-top: 10px; }
+.btn-sample span { display: block; font-size: 12.5px; font-weight: 600; color: var(--muted); margin-top: 2px; }
 .callout { border: 2px solid #b9cdf0; background: #eef4fd; border-radius: 14px; padding: 12px; margin-top: 10px; }
 .callout p { color: var(--ink); margin: 0 0 6px; }
 
