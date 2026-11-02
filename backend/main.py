@@ -18,6 +18,10 @@ uploaded. A batch with a failed photo answers with a "retake" list (which
 view, why, what to do); the phone retakes just that photo, and classify and
 confirm refuse until every photo has passed.
 
+The public deploy (deploy/modal_app.py) serves the PWA from this same app
+(BINBUILD_APP_DIR) and turns on backend/guard.py: the routes that spend
+credits need the shared key, and every write is rate-limited per IP.
+
 Run locally from the repo root (--host 0.0.0.0 so a phone on the same Wi-Fi
 can reach it):
     uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
@@ -36,12 +40,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal, Optional
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, Response
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import booklet, build_plan, inventory_db, inventory_vocab, photo_gate
+from . import booklet, build_plan, guard, inventory_db, inventory_vocab, photo_gate
 from .sam_client import SamClient, SamError
 from .wonder_client import WonderClient, WonderError
 from .segmenter import COUNT_VIEW, WholePhotoSegmenter
@@ -64,6 +69,9 @@ DEFAULT_SEGMENTER = os.environ.get("BINBUILD_SEGMENTER", "stub")
 # backend runs with BINBUILD_WONDER=1. Read on every request.
 WONDER_FLAG = "BINBUILD_WONDER"
 _wonder_busy = threading.Lock()   # one generation at a time
+# Every POST carries one of these (backend/guard.py; both are no-ops off the public deploy).
+PAID = [Depends(guard.paid)]     # calls a paid API: shared key + per-IP limit
+WRITE = [Depends(guard.write)]   # everything else that writes: per-IP limit
 
 
 def wonder_on() -> bool:
@@ -269,20 +277,24 @@ def create_app() -> FastAPI:
     async def conflict(request, err):
         return JSONResponse(status_code=409, content={"detail": str(err)})
 
-    @app.get("/")
-    async def root():
-        return {
-            "service": "binbuild",
-            "status": "scaffold",
-            "docs": "/docs",
-            "health": "/health",
-        }
+    # The public deploy serves the PWA from this app too (one URL, no CORS):
+    # then "/" is the app, mounted after every API route below.
+    app_dir = os.environ.get("BINBUILD_APP_DIR")
+    if not app_dir:
+        @app.get("/")
+        async def root():
+            return {
+                "service": "binbuild",
+                "status": "scaffold",
+                "docs": "/docs",
+                "health": "/health",
+            }
 
     @app.get("/health")
     async def health():
         return {"status": "ok", "service": "binbuild", "version": "0.1.0"}
 
-    @app.post("/api/inventory/batch", status_code=201)
+    @app.post("/api/inventory/batch", status_code=201, dependencies=WRITE)
     def create_inventory_batch(photos: list[UploadFile] = File(...)):
         """Accept one batch: exactly 5 photos, in order top, front, right, back, left.
 
@@ -354,7 +366,7 @@ def create_app() -> FastAPI:
             raise
         return {"batch_id": batch_id, "photos_saved": len(saved), **state}
 
-    @app.post("/api/inventory/batch/{batch_id}/photos/{view}")
+    @app.post("/api/inventory/batch/{batch_id}/photos/{view}", dependencies=WRITE)
     def retake_batch_photo(batch_id: str, view: str, photo: UploadFile = File(...)):
         """Retake one photo of a batch. Checks the new photo with the photo gate
         and replaces only that view: the other photos keep their results. Any
@@ -398,7 +410,7 @@ def create_app() -> FastAPI:
             return {"batch_id": batch_id, "view": view, "passed": gate["passed"], **notice,
                     **_photo_state(conn, batch_id)}
 
-    @app.post("/api/inventory/batch/{batch_id}/classify")
+    @app.post("/api/inventory/batch/{batch_id}/classify", dependencies=PAID)
     def classify_inventory_batch(batch_id: str, force: bool = False, context: bool = True,
                                  segmenter: Optional[Literal["stub", "sam"]] = None):
         """Find and name the pieces in a batch's top photo and store them as
@@ -509,7 +521,7 @@ def create_app() -> FastAPI:
             return {**inventory_db.batch_review(conn, batch_id), **_photo_state(conn, batch_id),
                     "count_photo": _count_photo(conn, batch_id)}
 
-    @app.post("/api/inventory/batch/{batch_id}/review")
+    @app.post("/api/inventory/batch/{batch_id}/review", dependencies=WRITE)
     def post_batch_review(batch_id: str, review: Review):
         """Correct proposals before confirming: change a piece's family, shape,
         size, colour, plain flag or count; accept or reject it; or add pieces
@@ -526,7 +538,7 @@ def create_app() -> FastAPI:
             except ValueError as err:
                 raise HTTPException(422, str(err))
 
-    @app.post("/api/inventory/batch/{batch_id}/confirm")
+    @app.post("/api/inventory/batch/{batch_id}/confirm", dependencies=WRITE)
     def confirm_inventory_batch(batch_id: str):
         """Add the batch's kept pieces (everything not rejected) to the
         inventory. Confirming again changes nothing ("already_confirmed").
@@ -537,7 +549,7 @@ def create_app() -> FastAPI:
             result = inventory_db.confirm_batch(conn, batch_id)
             return {**result, "summary": inventory_db.inventory_summary(conn)}
 
-    @app.post("/api/inventory/undo-last-batch")
+    @app.post("/api/inventory/undo-last-batch", dependencies=WRITE)
     def undo_last_inventory_batch(batch_id: Optional[str] = None):
         """Take the most recently confirmed batch back out of the inventory and
         reopen it for review. Pass batch_id to make a retry safe: the undo then
@@ -601,7 +613,7 @@ def create_app() -> FastAPI:
                             **({"booklet_url": f"/api/builds/{b['id']}/booklet"} if b["has_booklet"] else {})}
                            for b in recent]}
 
-    @app.post("/api/builds/wonder", status_code=201)
+    @app.post("/api/builds/wonder", status_code=201, dependencies=PAID)
     def generate_wonder_design(request: WonderRequest):
         """Generate a new design from the confirmed inventory with Muse Wonder
         (only with BINBUILD_WONDER=1). One request, one generation: Wonder
@@ -671,7 +683,7 @@ def create_app() -> FastAPI:
         except KeyError as err:
             raise HTTPException(404, err.args[0])
 
-    @app.post("/api/builds/check")
+    @app.post("/api/builds/check", dependencies=WRITE)
     def check_build(request: BuildRequest):
         """Check a build against the confirmed inventory and store nothing:
         the verdict ("fit", "patched", "short" or "not_connected") and the
@@ -682,7 +694,7 @@ def create_app() -> FastAPI:
         return {"request": asked, "verdict": result["status"], "ok": result["status"] in ("fit", "patched"),
                 "details": result.get("details", []), "message": result["message"], "plan": result}
 
-    @app.post("/api/builds", status_code=201)
+    @app.post("/api/builds", status_code=201, dependencies=WRITE)
     def create_build(request: BuildRequest):
         """Plan a build from the confirmed inventory and store it: a known set
         ({"set": "house-and-tree"}) or a BrickGPT design fitted with Path A
@@ -714,6 +726,8 @@ def create_app() -> FastAPI:
                                      f"{build['result']['message']}")
         return HTMLResponse(booklet.render_html(build["result"]["booklet"]))
 
+    if app_dir:
+        app.mount("/", StaticFiles(directory=app_dir, html=True), name="app")
     return app
 
 

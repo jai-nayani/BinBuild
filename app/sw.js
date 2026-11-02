@@ -4,7 +4,7 @@
  * Network first, so a freshly served app.js always wins over the cached one;
  * the cache is only the offline fallback. API calls are never cached.
  */
-var CACHE_NAME = 'binbuild-v11';
+var CACHE_NAME = 'binbuild-v12';
 var SHELL = [
   './',
   './index.html',
@@ -38,8 +38,11 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') { return; }
   var url = new URL(event.request.url);
-  // Never touch API traffic — only the same-origin app shell.
+  // Never touch API traffic — only the same-origin app shell. On the public
+  // deploy the API shares the app's origin, so its paths are skipped by name.
   if (url.origin !== self.location.origin) { return; }
+  if (url.pathname.indexOf('/api/') === 0 || url.pathname === '/health' ||
+      url.pathname.indexOf('/docs') === 0 || url.pathname === '/openapi.json') { return; }
   event.respondWith(
     fetch(event.request).then(function (response) {
       if (response.ok) {

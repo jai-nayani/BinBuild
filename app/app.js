@@ -35,9 +35,29 @@
  * shortfall. Nothing is generated without a tap.
  */
 
-// Where the FastAPI backend lives. Default: the machine that served this page,
-// port 8000. To point somewhere else, replace with e.g. 'http://192.168.1.23:8000'.
-var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + ':8000';
+// Where the FastAPI backend lives. On the home network the app is served on
+// port 8080 and the backend runs on port 8000 of the same machine; the public
+// deploy serves both from one URL, so there it is this page's own origin.
+// To point somewhere else, replace with e.g. 'http://192.168.1.23:8000'.
+var BACKEND_URL = window.location.port === '8080'
+  ? window.location.protocol + '//' + window.location.hostname + ':8000'
+  : window.location.origin;
+
+// The public deploy needs a shared key for the steps that spend credits
+// (Identify, Generate). Open the app once as .../#key=<the key>: it is kept on
+// this device and taken out of the address bar. Nothing else needs it.
+var ACCESS_KEY = (function () {
+  var stored = null;
+  try {
+    var match = /(?:^#|&)key=([^&]+)/.exec(window.location.hash);
+    if (match) {
+      localStorage.setItem('binbuild.accessKey', decodeURIComponent(match[1]));
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+    stored = localStorage.getItem('binbuild.accessKey');
+  } catch (err) { /* no storage: the free steps still work */ }
+  return stored;
+}());
 
 (function () {
   'use strict';
@@ -104,6 +124,7 @@ var BACKEND_URL = window.location.protocol + '//' + window.location.hostname + '
     var xhr = new XMLHttpRequest();
     xhr.open(method, BACKEND_URL + path);
     xhr.timeout = timeout;
+    if (ACCESS_KEY) { xhr.setRequestHeader('X-BinBuild-Key', ACCESS_KEY); }
     if (onProgress) { xhr.upload.onprogress = onProgress; } // must be set before send()
     xhr.onload = function () {
       var body = null;

@@ -105,8 +105,8 @@ class Api:
     def __init__(self, port):
         self.base = f"http://127.0.0.1:{port}"
 
-    def call(self, method, path, json_body=None, files=None, raw=False):
-        body, headers = None, {}
+    def call(self, method, path, json_body=None, files=None, raw=False, headers=None):
+        body, headers = None, dict(headers or {})
         if files is not None:
             boundary = uuid.uuid4().hex
             body = b""

@@ -146,7 +146,9 @@ class FakeFormData {
 }
 
 const sandbox = {
-  window: { location: { protocol: 'http:', hostname: 'phone.test' }, scrollTo() {}, confirm: () => true },
+  // the home-network setup: the app on port 8080, the backend on port 8000
+  window: { location: { protocol: 'http:', hostname: 'phone.test', port: '8080', origin: 'http://phone.test:8080',
+                        hash: '', pathname: '/', search: '' }, scrollTo() {}, confirm: () => true },
   document,
   navigator: {},
   console: { log() {}, warn() {}, error: (...a) => process.stderr.write(a.join(' ') + '\n') },
