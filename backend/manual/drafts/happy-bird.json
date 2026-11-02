@@ -1,0 +1,189 @@
+{
+ "id": "happy-bird",
+ "name": "Happy Bird",
+ "pages": [
+  52
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 52, photo IMG_3609, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small bird with lime wings, an orange head and a white tail in the top middle of page 52, labelled Happy Bird.",
+ "count_note": "No element count for this model is printed on the visible page; total is the 9 pieces I can see.",
+ "elements_total": 9,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange rectangular head/body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "black curved end piece partly seen in profile, so its length is estimated",
+   "as_read": "black curved piece at front of orange brick"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "only a teal strip is visible, mostly hidden under the orange brick and central bar",
+   "as_read": "teal flat strip under orange brick"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "hinge plate",
+   "size": "1x4",
+   "color": "black",
+   "sure": false,
+   "doubt": "central black bar is partly covered by round plates and wing joints, so its ends are hidden",
+   "as_read": "black transverse bar across body"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green and the lower wing is partly hidden by the pink label; clip ends are hidden at the central bar",
+   "as_read": "two lime wing plates with two studs each"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime colour prints yellow-green",
+   "as_read": "two lime round discs on central bar"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "white tapered piece is seen without visible studs, so its size is estimated",
+   "as_read": "large white tapered tail piece"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3609"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0962,
+  "seen": "The Happy Bird is the small flying bird labelled in pink at the top centre of page 52, with lime wings spread either side of an orange body.",
+  "count_note": "No printed element total is visible for this model on the page.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Length partly hidden by the black head piece and central bar",
+    "as_read": "orange rectangular body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Seen at an angle at the front of the body, so its curve and size are partly obscured",
+    "as_read": "black curved head/beak piece"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Only a thin teal strip is visible under the orange and black pieces; most of the plate is hidden",
+    "as_read": "thin medium-azure base under body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "Seen mainly from its underside behind the central bar; studs and exact outline are hidden",
+    "as_read": "white flat wedge-shaped tail"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "color": "black",
+    "sure": false,
+    "doubt": "Centre is covered by the body and lime round plates; only the black bar and its ends are clear",
+    "as_read": "black crossbar through the body"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime often prints yellow-green and the clip ends gripping the black bar are partly hidden",
+    "as_read": "two lime wing plates with studs"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two lime round studded discs on the black bar"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 0,
+  "usd": 0.0,
+  "picture_checks": 0,
+  "reason": "BinBuild's checker has no shape for the black 1x4 hinge plate (no LDraw part matches it), so steps using it can't be checked"
+ }
+}

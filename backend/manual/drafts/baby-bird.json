@@ -1,0 +1,129 @@
+{
+ "id": "baby-bird",
+ "name": "Baby Bird",
+ "pages": [
+  66
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 66, photo IMG_3616, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Baby Bird is the tiny large-eyed bird shown alone beside step 1 and perched on the black wire in the centre of page 66.",
+ "count_note": "No printed element count for Baby Bird is visible on pages 66-67; total is the pieces I can identify from the pictured bird.",
+ "elements_total": 4,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Body/head block looks cream or near-white in print; closest listed piece is the light bluish grey 1x1 headlight brick, and light grey can print near-white.",
+   "as_read": "pale square head/body block"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "large printed eye on head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Purple-blue piece is partly hidden under/behind the head and could be the connecting base; dark purple can print blue-purple.",
+   "as_read": "dark purple rectangle under/beside head"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Blue triangular beak is small and partly turned away; its two shaded faces could be mistaken for two slopes, so count is best seen as one.",
+   "as_read": "blue triangular beak beside eye"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3616"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1566,
+  "seen": "The small Baby Bird creature in the step 1 inset and perched on the wire on page 66, shown alone against the purple background.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark purple prints blue-purple and the piece is partly hidden under/behind the head, so its full 1x2 size cannot be counted directly.",
+    "as_read": "small dark purple-blue block beside the head"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey prints near-white/cream and the recess is not visible; shape looks like a square 1x1 brick, for which this is the only listed piece.",
+    "as_read": "pale square 1x1 head/body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": true,
+    "doubt": null,
+    "as_read": "blue triangular cheese beak/wing beside the eye"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white round eye tile on the head"
+   }
+  ],
+  "elements_total": 4,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.0842,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The white round eye tile is mounted vertically on the side stud of the headlight brick, so it is not held by its bottom resting on a stud below and cannot be represented in this format"
+ }
+}

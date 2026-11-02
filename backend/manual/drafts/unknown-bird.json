@@ -1,0 +1,209 @@
+{
+ "id": "unknown-bird",
+ "name": "Bird (built blindfolded)",
+ "pages": [
+  60
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 60, photo IMG_3613, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Bird is the small blue blindfold-built model at the lower left of page 60, labelled Bird.",
+ "count_note": "No element count is printed for this model on the page.",
+ "elements_total": 10,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "Piece appears pale yellow in the illustration, not orange; shape is a 1x2 brick with two studs.",
+   "as_read": "yellow 1x2 brick forming the front/head"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Second blue brick is partly hidden behind the first in the jumbled body; side-stud rows are partly obscured.",
+   "as_read": "two blue long bricks forming the body"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "light grey 1x1 cube with circular recess at the front"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Only one round brick is clearly visible protruding at the rear; the second is largely hidden in/behind the blue body.",
+   "as_read": "light grey cylinder protruding at rear, plus a hidden second"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Small white piece is partly hidden under the large grey curved slope and its stud is not clearly visible.",
+   "as_read": "small white plate in the middle of the body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "sure": false,
+   "doubt": "Transparent plate is mostly hidden between the blue body and the front brick; only a pale edge is visible.",
+   "as_read": "pale transparent edge near the front"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "small black curved wedge under the large fin"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "large light grey long curved slope raised as a fin/tail"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3613"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0986,
+  "seen": "The Bird is the small illustrated model labelled 'Bird' at the lower left of page 60, beside step 3.",
+  "count_note": "No printed element count for this model was visible; the stacked blue and round-brick duplicates are partly hidden in the illustration.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "Book prints the 1x2 brick yellow-yellow-orange; closest listed piece is the orange 1x2 brick",
+    "as_read": "yellow 1x2 brick with two studs at front"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Blue body appears stacked/layered and partly hidden; second brick is inferred from the stacked blue sections",
+    "as_read": "blue 1x4 side-stud body bricks"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey looks beige-white in the illustration and the recess is partly obscured",
+    "as_read": "grey 1x1 headlight brick under the front brick"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Protruding cylinder looks segmented/hidden behind the body; second round brick may be joined behind the visible one",
+    "as_read": "grey round brick cylinder protruding at rear"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "Small white central piece is partly hidden under the curved slopes and its studs are hard to count",
+    "as_read": "small white plate piece in middle"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "trans_clear",
+    "sure": false,
+    "doubt": "Pale plate on the side of the blue body looks white/clear and is partly hidden",
+    "as_read": "pale clear plate attached to blue side"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Small black slope is partly hidden beneath the large grey curved slope",
+    "as_read": "black curved slope under rear sail"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "large grey curved slope sail on top"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 1,
+  "usd": 0.119,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: a light-bluish-gray 1x1 round brick is shown on its side sticking out of the blue brick, held only by a side stud rather than by a stud underneath"
+ }
+}

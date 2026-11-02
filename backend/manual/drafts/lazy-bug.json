@@ -1,0 +1,122 @@
+{
+ "id": "lazy-bug",
+ "name": "Lazy Bug",
+ "pages": [
+  52
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 52, photo IMG_3609, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Lazy Bug is the blue and white bug model on the left side of page 52, beside its purple label.",
+ "count_note": "No element count is printed for this model on the page; parts of the body stack are hidden behind the wing and plate, so hidden pieces may be missed.",
+ "elements_total": 5,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Dark-blue upper and lower body pieces are partly hidden by the teal plate and each other; colour and 1x4 length cannot be fully counted",
+   "as_read": "dark-blue body bricks above and below teal stripe"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Only a thin teal stripe is visible between the blue bricks, so its full 2x4 size is hidden",
+   "as_read": "thin teal stripe along body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "White wing is partly under the body and its tapered end and exact stud count are partly obscured",
+   "as_read": "large white studded wing"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "closed eye with eyelashes on side"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3609"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1156,
+  "seen": "Lazy Bug is the blue and white bug with a closed eye at the top-left of the spread, next to its purple label.",
+  "count_note": "No printed element count is visible on the page; the second eye and the middles of the stacked body pieces are partly hidden.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "dark blue body pieces are partly hidden and their studs/side studs cannot be counted clearly; colour prints darker than the kit description",
+    "as_read": "two dark-blue body bricks, top and bottom"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "only a thin teal stripe between the blue bricks is visible, most of the plate is hidden",
+    "as_read": "thin teal plate layer in body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "white studded wing is seen at an angle so its stud count and tapered end cannot be counted certainly",
+    "as_read": "large white studded wing"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": false,
+    "doubt": "one closed eye is clear, the second is only a small white half-disc partly hidden behind the top of the body",
+    "as_read": "white closed-eye tile and partial second eye"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": false,
+  "differences": [
+   "white 1x1 round printed tile: first read 1, second read 2"
+  ]
+ }
+}

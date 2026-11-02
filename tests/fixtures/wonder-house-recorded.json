@@ -1,0 +1,26 @@
+{
+ "about": "Live Muse Wonder run on Oct 29 (reasoning effort high), target 'a simple house', the kit's corrected inventory: passed the validator on the first attempt. The design put forward for the hand-build.",
+ "target": "a simple house",
+ "model": "muse-wonder-1.0",
+ "effort": "high",
+ "replies": [
+  {
+   "id": "resp_6ae2e16b6db884ea797c4194",
+   "text": "Title: Simple House\n```design\n2x4 (0,0,0) plate medium_azure\n2x4 (2,0,0) plate medium_azure\n4x1 (0,3,1) side_stud_brick blue\n1x2 (0,1,1) brick orange\n1x2 (3,1,1) brick orange\n1x1 (0,0,1) headlight_brick light_bluish_gray\n1x1 (3,0,1) headlight_brick light_bluish_gray\n2x1 (1,0,1) jumper_plate white\n2x2 (0,2,4) plate magenta\n2x2 (2,2,4) plate magenta\n2x1 (0,0,4) plate dark_purple\n2x1 (2,0,4) plate dark_purple\n2x1 (0,1,4) plate dark_purple\n2x1 (2,1,4) plate dark_purple\n2x1 (0,1,5) curved_slope black down=-x\n2x1 (0,2,5) curved_slope black down=-x\n2x1 (2,1,5) curved_slope black down=+x\n2x1 (2,2,5) curved_slope black down=+x\n1x1 (3,3,5) round_brick light_bluish_gray\n1x1 (3,3,8) round_tile white\n```",
+   "usage": {
+    "input_tokens": 1263,
+    "input_tokens_details": {
+     "cached_tokens": 0
+    },
+    "output_tokens": 9869,
+    "output_tokens_details": {
+     "reasoning_tokens": 9533
+    },
+    "total_tokens": 11132
+   },
+   "seconds": 88.0
+  }
+ ],
+ "valid_design": "2x4 (0,0,0) plate medium_azure\n2x4 (2,0,0) plate medium_azure\n4x1 (0,3,1) side_stud_brick blue\n1x2 (0,1,1) brick orange\n1x2 (3,1,1) brick orange\n1x1 (0,0,1) headlight_brick light_bluish_gray\n1x1 (3,0,1) headlight_brick light_bluish_gray\n2x1 (1,0,1) jumper_plate white\n2x2 (0,2,4) plate magenta\n2x2 (2,2,4) plate magenta\n2x1 (0,0,4) plate dark_purple\n2x1 (2,0,4) plate dark_purple\n2x1 (0,1,4) plate dark_purple\n2x1 (2,1,4) plate dark_purple\n2x1 (0,1,5) curved_slope black down=-x\n2x1 (0,2,5) curved_slope black down=-x\n2x1 (2,1,5) curved_slope black down=+x\n2x1 (2,2,5) curved_slope black down=+x\n1x1 (3,3,5) round_brick light_bluish_gray\n1x1 (3,3,8) round_tile white",
+ "usd": 0.2024
+}

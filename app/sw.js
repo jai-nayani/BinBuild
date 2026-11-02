@@ -1,13 +1,21 @@
-/* BinBuild service worker — caches the app shell so the PWA loads offline.
- * Scaffold only: the shell is cached; API calls are never cached.
+/* BinBuild service worker — keeps a copy of the app shell for offline loads.
+ * Optional: the app works without it, and browsers only run it in a secure
+ * context (HTTPS or localhost), never over plain HTTP on the home network.
+ * Network first, so a freshly served app.js always wins over the cached one;
+ * the cache is only the offline fallback. API calls are never cached.
  */
-var CACHE_NAME = 'binbuild-v1';
+var CACHE_NAME = 'binbuild-v13';
 var SHELL = [
   './',
   './index.html',
+  './style.css',
   './app.js',
   './manifest.json',
   './icon.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-maskable-512.png',
+  './apple-touch-icon.png',
 ];
 
 self.addEventListener('install', function (event) {
@@ -35,11 +43,20 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
   if (event.request.method !== 'GET') { return; }
   var url = new URL(event.request.url);
-  // Never cache API traffic — only the same-origin app shell.
+  // Never touch API traffic — only the same-origin app shell. On the public
+  // deploy the API shares the app's origin, so its paths are skipped by name.
   if (url.origin !== self.location.origin) { return; }
+  if (url.pathname.indexOf('/api/') === 0 || url.pathname === '/health' ||
+      url.pathname.indexOf('/docs') === 0 || url.pathname === '/openapi.json') { return; }
   event.respondWith(
-    caches.match(event.request).then(function (cached) {
-      return cached || fetch(event.request);
+    fetch(event.request).then(function (response) {
+      if (response.ok) {
+        var copy = response.clone();
+        caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, copy); });
+      }
+      return response;
+    }).catch(function () {
+      return caches.match(event.request);
     })
   );
 });

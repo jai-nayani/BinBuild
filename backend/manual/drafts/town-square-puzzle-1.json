@@ -1,0 +1,174 @@
+{
+ "id": "town-square-puzzle-1",
+ "name": "Town square puzzle",
+ "pages": [
+  40,
+  96
+ ],
+ "status": "draft",
+ "warning": "Transcribed from a photo of the book, not checked against the kit. Not a verified piece list: no fit check and no booklet until it is hand-checked.",
+ "read_from": "step 1 on page 40 (\"Find all the flat elements\"), photo IMG_3603, read on Oct 29",
+ "elements_total": 19,
+ "unsure_elements": 5,
+ "elements": [
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": true,
+   "doubt": null,
+   "as_read": "dark purple 1x2 plate"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "drawn yellow",
+   "as_read": "lime 1x1 round plate"
+  },
+  {
+   "qty": 3,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "sure": true,
+   "doubt": null,
+   "as_read": "trans clear 1x2 plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium azure 2x4 plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "magenta 2x2 plate"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 2x2 tile with 2 studs on edge"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "drawn yellow",
+   "as_read": "lime 1x6 plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 1x2 jumper plate"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3603",
+   "IMG_3631"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.3067,
+  "seen": "The left of two flat solved squares for pages 40-41 at the top of the answers on page 96.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light-blue 2x4 plates at top and right of square"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "pink 2x2 plates side by side in middle"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white single-stud 1x2 pieces in bottom row"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "Small in the answer picture; identified by its two bottom-edge studs in the bottom band",
+    "as_read": "white 2x2 piece with two studs along bottom edge"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Dark purple prints dark blue-purple and the pieces are narrow vertical strips in the small answer picture",
+    "as_read": "dark 1x2 vertical strips between white pieces in bottom row"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": false,
+  "differences": [
+   "dark_purple 1x2 plate: first read 4, second read 2",
+   "lime 1x1 round plate: first read 4, second read 0",
+   "trans_clear 1x2 plate: first read 3, second read 0",
+   "lime 1x6 plate: first read 1, second read 0"
+  ]
+ }
+}

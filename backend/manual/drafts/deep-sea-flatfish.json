@@ -1,0 +1,203 @@
+{
+ "id": "deep-sea-flatfish",
+ "name": "Deep-sea flatfish",
+ "pages": [
+  13
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 13, photo IMG_3587, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The deep-sea flatfish is the small cross-shaped fish model at the bottom right of page 13 beside its caption.",
+ "count_note": "No element count is printed on the page; total is my best count of visible pieces, with central/hidden pieces uncertain as marked.",
+ "elements_total": 11,
+ "unsure_elements": 9,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "partly hidden in the centre of the model; length and side studs cannot be counted clearly",
+   "as_read": "vertical blue brick at centre top"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "only a dark upright rectangle is visible, its curved profile is hidden",
+   "as_read": "black upright fin at top"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellowish and the piece is partly hidden under the body; stud count cannot be counted clearly",
+   "as_read": "long lime-yellow fin extending to upper left"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "sure": false,
+   "doubt": "second shorter lime fin; partly hidden under the body and its exact length/clip cannot be seen, closest listed lime piece",
+   "as_read": "shorter lime-yellow fin extending downwards"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "partly hidden and light grey prints near-white; seen as two sideways grey cylinders",
+   "as_read": "two grey cylinders at lower left"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two printed eyes in centre"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey prints near-white and the blocks are partly hidden behind the eye tiles; closest listed piece for the whitish block under the eyes",
+   "as_read": "whitish block carrying the two eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "mostly hidden under the centre; only pink-red patches on the blue and beside the white block are visible",
+   "as_read": "pink-red central patch"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3587"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0923,
+  "seen": "The deep-sea flatfish is the small flat fish model at the bottom right of page 13, beside the text 'Watch out for the deep-sea flatfish!'",
+  "count_note": "No element count is printed on the page; the central body stack is partly hidden, so hidden connecting pieces may not be visible or counted.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Model is small and the dark upright piece is partly behind the body; it prints dark brown-black and its slope profile is not fully visible.",
+    "as_read": "dark upright fin-like slope at top"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "Blue piece is partly hidden behind other body pieces, so its length and side studs cannot be fully counted.",
+    "as_read": "blue vertical brick at back of body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime prints yellow-green and the inner end is hidden in the central stack, so the length is inferred.",
+    "as_read": "long lime fin extending downwards"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Shorter lime arm is partly hidden in the centre and its clip end is not visible; it may be a different lime piece.",
+    "as_read": "shorter lime fin extending to the left"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Light grey prints near-white and the two grey cylinders partly overlap the white central piece and each other.",
+    "as_read": "two pale grey cylinders at the front"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two printed eyes"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "White central piece is partly hidden and its thickness/studs are unclear; it could be the white edge-stud tile instead.",
+    "as_read": "white horizontal piece in centre"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "Pink-red central patch is mostly hidden behind the blue and white pieces, so size and exact colour between magenta and dark purple are uncertain.",
+    "as_read": "pink-red patch in central body"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": false,
+  "differences": [
+   "light_bluish_gray 1x1 headlight brick: first read 2, second read 0",
+   "white 1x2 jumper plate: first read 0, second read 1"
+  ]
+ }
+}

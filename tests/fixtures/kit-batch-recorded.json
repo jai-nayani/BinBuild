@@ -1,0 +1,755 @@
+{
+ "about": "A recorded run on the real kit batch, so the full loop can be replayed without a Baseten call. pieces: Muse Spark's reply from the verified inventory-loop run (whole-photo stub, side views, prompt v2; 50 pieces). checks: Spark's real-LEGO answers for the same 5 photos from the image-guardrails run (yes x5); the first run predates that check. review: the 13 corrections made in review (INVENTORY-LOOP.md); every other piece was accepted as proposed.",
+ "batch_id": "20261028-192429-119901",
+ "photos_sha256": {
+  "back": "bbc1e7b860645e4292c14c01f49dbd80d052fe9ce91dd79588a143d553b72c78",
+  "front": "7df2f363c9cb6fa92c9be5c2a5d86102c0be5e03f4a848c41a2861d96791b56c",
+  "left": "a0596ecdae4517a17fada30f7e15e4a9b9c0a8882d07fc9305d03fcdd6ecfdad",
+  "right": "9f9d1af0f524bbcb2700b88e39a4b7c7ceffa32e970c8a38ab6098d0ef785d14",
+  "top": "23af360d2c892176c19ac6855fc9d79430b4bd8040725c417ee4e7aca37d657d"
+ },
+ "reply": {
+  "checks": [
+   {
+    "image": 1,
+    "real_lego": "yes",
+    "reason": ""
+   },
+   {
+    "image": 2,
+    "real_lego": "yes",
+    "reason": ""
+   },
+   {
+    "image": 3,
+    "real_lego": "yes",
+    "reason": ""
+   },
+   {
+    "image": 4,
+    "real_lego": "yes",
+    "reason": ""
+   },
+   {
+    "image": 5,
+    "real_lego": "yes",
+    "reason": ""
+   }
+  ],
+  "pieces": [
+   {
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "plain": false,
+    "color": "light_bluish_gray",
+    "confidence": 0.96,
+    "at": [
+     0.48,
+     0.102
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "plain": false,
+    "color": "light_bluish_gray",
+    "confidence": 0.96,
+    "at": [
+     0.41,
+     0.132
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "plain": false,
+    "color": "lime",
+    "confidence": 0.94,
+    "at": [
+     0.315,
+     0.205
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "plain": false,
+    "color": "light_bluish_gray",
+    "confidence": 0.92,
+    "at": [
+     0.19,
+     0.235
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "plain": true,
+    "color": "dark_purple",
+    "confidence": 0.95,
+    "at": [
+     0.555,
+     0.225
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.96,
+    "at": [
+     0.435,
+     0.245
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "plain": true,
+    "color": "lime",
+    "confidence": 0.95,
+    "at": [
+     0.68,
+     0.18
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "plain": true,
+    "color": "lime",
+    "confidence": 0.95,
+    "at": [
+     0.74,
+     0.225
+    ]
+   },
+   {
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "plain": false,
+    "color": "black",
+    "confidence": 0.88,
+    "at": [
+     0.335,
+     0.3
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.93,
+    "at": [
+     0.405,
+     0.325
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "plain": true,
+    "color": "magenta",
+    "confidence": 0.96,
+    "at": [
+     0.585,
+     0.31
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x3",
+    "plain": true,
+    "color": "trans_clear",
+    "confidence": 0.92,
+    "at": [
+     0.245,
+     0.345
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "plain": true,
+    "color": "lime",
+    "confidence": 0.96,
+    "at": [
+     0.575,
+     0.36
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "plain": false,
+    "color": "light_bluish_gray",
+    "confidence": 0.92,
+    "at": [
+     0.09,
+     0.37
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x2",
+    "plain": false,
+    "color": "lime",
+    "confidence": 0.9,
+    "at": [
+     0.25,
+     0.395
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "plain": false,
+    "color": "light_bluish_gray",
+    "confidence": 0.95,
+    "at": [
+     0.44,
+     0.395
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "tile",
+    "size": "1x1",
+    "plain": true,
+    "color": "medium_azure",
+    "confidence": 0.94,
+    "at": [
+     0.335,
+     0.41
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "plain": false,
+    "color": "light_bluish_gray",
+    "confidence": 0.95,
+    "at": [
+     0.465,
+     0.425
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.96,
+    "at": [
+     0.565,
+     0.425
+    ]
+   },
+   {
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "plain": false,
+    "color": "light_bluish_gray",
+    "confidence": 0.88,
+    "at": [
+     0.66,
+     0.405
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "plain": true,
+    "color": "magenta",
+    "confidence": 0.96,
+    "at": [
+     0.75,
+     0.38
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "hinge plate",
+    "size": "1x4",
+    "plain": false,
+    "color": "black",
+    "confidence": 0.85,
+    "at": [
+     0.825,
+     0.38
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "plain": true,
+    "color": "dark_purple",
+    "confidence": 0.95,
+    "at": [
+     0.155,
+     0.455
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "plain": true,
+    "color": "dark_purple",
+    "confidence": 0.95,
+    "at": [
+     0.58,
+     0.465
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.88,
+    "at": [
+     0.715,
+     0.485
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.88,
+    "at": [
+     0.835,
+     0.48
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.93,
+    "at": [
+     0.545,
+     0.505
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "tile",
+    "size": "1x1",
+    "plain": true,
+    "color": "medium_azure",
+    "confidence": 0.94,
+    "at": [
+     0.605,
+     0.515
+    ]
+   },
+   {
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "plain": false,
+    "color": "black",
+    "confidence": 0.89,
+    "at": [
+     0.355,
+     0.505
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "tile",
+    "size": "1x3",
+    "plain": true,
+    "color": "light_bluish_gray",
+    "confidence": 0.92,
+    "at": [
+     0.395,
+     0.535
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "tile",
+    "size": "1x2",
+    "plain": true,
+    "color": "black",
+    "confidence": 0.92,
+    "at": [
+     0.45,
+     0.545
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.96,
+    "at": [
+     0.72,
+     0.545
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "plain": false,
+    "color": "lime",
+    "confidence": 0.94,
+    "at": [
+     0.12,
+     0.545
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "plain": false,
+    "color": "lime",
+    "confidence": 0.94,
+    "at": [
+     0.135,
+     0.57
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x3",
+    "plain": true,
+    "color": "trans_clear",
+    "confidence": 0.92,
+    "at": [
+     0.24,
+     0.56
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "plain": true,
+    "color": "medium_azure",
+    "confidence": 0.96,
+    "at": [
+     0.415,
+     0.605
+    ]
+   },
+   {
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "plain": false,
+    "color": "medium_azure",
+    "confidence": 0.89,
+    "at": [
+     0.545,
+     0.575
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "plain": true,
+    "color": "orange",
+    "confidence": 0.96,
+    "at": [
+     0.875,
+     0.575
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "plain": false,
+    "color": "lime",
+    "confidence": 0.94,
+    "at": [
+     0.795,
+     0.595
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "plain": true,
+    "color": "white",
+    "confidence": 0.95,
+    "at": [
+     0.25,
+     0.63
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate with clip",
+    "size": "1x3",
+    "plain": false,
+    "color": "lime",
+    "confidence": 0.88,
+    "at": [
+     0.63,
+     0.615
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "plain": true,
+    "color": "dark_purple",
+    "confidence": 0.95,
+    "at": [
+     0.75,
+     0.635
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "plain": true,
+    "color": "medium_azure",
+    "confidence": 0.96,
+    "at": [
+     0.795,
+     0.675
+    ]
+   },
+   {
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "plain": false,
+    "color": "medium_azure",
+    "confidence": 0.89,
+    "at": [
+     0.33,
+     0.69
+    ]
+   },
+   {
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "plain": false,
+    "color": "black",
+    "confidence": 0.89,
+    "at": [
+     0.61,
+     0.675
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x4",
+    "plain": true,
+    "color": "blue",
+    "confidence": 0.96,
+    "at": [
+     0.435,
+     0.735
+    ]
+   },
+   {
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x3",
+    "plain": true,
+    "color": "trans_clear",
+    "confidence": 0.92,
+    "at": [
+     0.555,
+     0.735
+    ]
+   },
+   {
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "plain": false,
+    "color": "white",
+    "confidence": 0.96,
+    "at": [
+     0.68,
+     0.75
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x4",
+    "plain": true,
+    "color": "blue",
+    "confidence": 0.96,
+    "at": [
+     0.42,
+     0.825
+    ]
+   },
+   {
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "plain": true,
+    "color": "orange",
+    "confidence": 0.96,
+    "at": [
+     0.745,
+     0.815
+    ]
+   }
+  ],
+  "total": 50
+ },
+ "recorded": {
+  "seconds": 44.3,
+  "finish_reason": "stop",
+  "prompt_tokens": 8903,
+  "completion_tokens": 16005
+ },
+ "review": [
+  {
+   "piece": 6,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "plain": false
+  },
+  {
+   "piece": 7,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "plain": false
+  },
+  {
+   "piece": 11,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "plain": true
+  },
+  {
+   "piece": 16,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "plain": false
+  },
+  {
+   "piece": 27,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "plain": false
+  },
+  {
+   "piece": 29,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "plain": false
+  },
+  {
+   "piece": 30,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "plain": false
+  },
+  {
+   "piece": 34,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "plain": true
+  },
+  {
+   "piece": 39,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "plain": false
+  },
+  {
+   "piece": 40,
+   "family": "plate",
+   "shape": "plate with clip",
+   "size": "1x2",
+   "color": "lime",
+   "plain": false
+  },
+  {
+   "piece": 45,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "plain": false
+  },
+  {
+   "piece": 46,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "trans_clear",
+   "plain": true
+  },
+  {
+   "piece": 48,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "plain": false
+  }
+ ]
+}

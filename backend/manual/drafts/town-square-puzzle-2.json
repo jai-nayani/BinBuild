@@ -1,0 +1,148 @@
+{
+ "id": "town-square-puzzle-2",
+ "name": "Town square puzzle (Build Boost)",
+ "pages": [
+  41,
+  96
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the pieces drawn on page 41, photo IMG_3603, read on Oct 29",
+ "elements_total": 9,
+ "unsure_elements": 2,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 1x2 jumper plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": true,
+   "doubt": null,
+   "as_read": "magenta 2x2 plate"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 2x2 tile with 2 studs on edge"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "medium azure 2x4 plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "one hidden under each azure plate",
+   "as_read": "dark purple 1x2 plate"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3603",
+   "IMG_3631"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1202,
+  "seen": "The Build Boost model is the three loose plate clusters on page 41, shown solved as the right-hand of the two squares at top left of page 96.",
+  "count_note": "No element count is printed for this Build Boost puzzle; total is the sum of the pieces visible on p41 and in the solved square on p96.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light-blue 2x4 plates, one in each outer cluster"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Each purple plate is partly hidden under/behind a medium-azure plate on p41, count confirmed as two protruding plates in the solved square on p96.",
+    "as_read": "dark-purple 1x2 plates protruding from the azure plates"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "The two magenta plates overlap the white pieces in the central cluster on p41 and are small in the p96 answer, but the magenta 2x4-looking area resolves to two 2x2 plates.",
+    "as_read": "magenta plates forming the centre/top of the square"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white single-stud 1x2 plates at the top and bottom of the central cluster"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "White 2x2 piece at the side of the central cluster is partly covered by the magenta plates, so its edge studs are not fully visible; it is the white 2x2 in the centre of the solved square.",
+    "as_read": "white 2x2 piece protruding from the central cluster"
+   }
+  ],
+  "elements_total": 9,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 2,
+  "usd": 0.4521,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The pictured Build Boost square is a single flat 6x6 layer of plates/tile butted edge-to-edge, so their footprints are disjoint and no piece rests on another's stud; any stud connection would require overlapping or stacking pieces, moving them from the flat layout shown"
+ }
+}

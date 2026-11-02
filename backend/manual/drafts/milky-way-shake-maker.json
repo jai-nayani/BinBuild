@@ -1,0 +1,168 @@
+{
+ "id": "milky-way-shake-maker",
+ "name": "Mega-2000 Milky Way-shake maker",
+ "pages": [
+  82
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 82, photo IMG_3624, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small stacked tower labelled Mega-2000 Milky Way-shake maker on the left side of page 82.",
+ "count_note": "No element count is printed for this example on the page; total is the count I can see.",
+ "elements_total": 4,
+ "unsure_elements": 4,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Small and rotated in the photo; square grey base looks near-white and its stud/hole details are partly hidden where the round brick joins it.",
+   "as_read": "square grey block at base"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Lying/standing as the middle cylinder in a rotated small model; banding could hide a second cylinder segment, but one round brick with its stud best matches the visible length.",
+   "as_read": "grey cylindrical middle section"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and the tiny stacked discs at the tip overlap; two rings are visible but the exact stack count is partly hidden.",
+   "as_read": "two small lime discs at top tip"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3624"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0677,
+  "seen": "The Mega-2000 Milky Way-shake maker is the small grey-and-lime stacked model beside its label on the left side of page 82.",
+  "count_note": "No element count is printed for this example; the total is the number of pieces I can identify in the small picture.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Model is very small in the photo; the square grey base is identified by shape and colour but its headlight detail is not clearly visible.",
+    "as_read": "square grey 1x1 brick at the base"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Model is very small; the grey cylinder above the base is partly obscured and its exact length is hard to confirm.",
+    "as_read": "grey cylindrical brick stacked on the base"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "The lime tip is tiny and looks yellow-green in print; it appears to be two stacked round plates but the separation between them is unclear.",
+    "as_read": "two thin lime round discs at the top"
+   }
+  ],
+  "elements_total": 4,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": true,
+  "tries": 1,
+  "usd": 0.2325,
+  "picture_checks": 1,
+  "design": [
+   "1x1 (0,0,0) headlight_brick light_bluish_gray",
+   "1x1 (0,0,3) round_brick light_bluish_gray",
+   "1x1 (0,0,6) round_plate lime",
+   "1x1 (0,0,7) round_plate lime"
+  ]
+ },
+ "steps": [
+  {
+   "text": "Start here: lay this piece on the table.",
+   "place": [
+    {
+     "line": "light_bluish_gray 1x1 headlight brick",
+     "at": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add this piece (3 plates up), pressing it onto the studs below.",
+   "place": [
+    {
+     "line": "light_bluish_gray 1x1 round brick",
+     "at": [
+      0,
+      0,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add this piece (6 plates up), pressing it onto the studs below.",
+   "place": [
+    {
+     "line": "lime 1x1 round plate",
+     "at": [
+      0,
+      0,
+      6
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add this piece (7 plates up), pressing it onto the studs below.",
+   "place": [
+    {
+     "line": "lime 1x1 round plate",
+     "at": [
+      0,
+      0,
+      7
+     ]
+    }
+   ]
+  }
+ ]
+}

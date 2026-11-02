@@ -1,0 +1,234 @@
+{
+ "id": "grand-throne",
+ "name": "Very grand throne",
+ "pages": [
+  67
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 67, photo IMG_3616, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The 'very grand throne' is the upper model on page 67, with Baby Bird seated on a black-and-orange throne with turquoise curved ends and lime stud decorations.",
+ "count_note": "No printed element count for this model is visible on the page; total is only pieces I could see, and a far-side bird piece may be hidden.",
+ "elements_total": 14,
+ "unsure_elements": 10,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two black rectangles forming the left side of the throne"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange rectangle next to the black pieces"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal curved pieces at both ends; exact orientation and stud step partly hidden by lime plates and the bird",
+   "as_read": "turquoise curved pieces at the two ends of the throne"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small lime discs are partly overlapping; two appear at each end but stacking may hide exact count",
+   "as_read": "small lime round studs at both ends of the throne"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "looks light grey-white in print and shows a 2x2 circle pattern; the listed white 2x2 edge-stud tile is the closest square white piece, orientation hidden behind the bird",
+   "as_read": "pale grey square plate-like piece behind Baby Bird"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "bird body partly hidden by eye tile and throne; colour looks pale grey-white in print",
+   "as_read": "pale cube forming Baby Bird's body"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white round eye tile on Baby Bird"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "only one blue cheese slope is clearly visible on this side; a matching far-side piece may be hidden by the body",
+   "as_read": "small blue triangular slope beside the eye"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark piece prints blue-purple and is partly hidden under the bird's body",
+   "as_read": "dark purple-blue strip under the eye"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3616"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1245,
+  "seen": "The grand throne with Baby Bird sitting on it is the upper model on page 67, beside the text 'Or a very grand throne?'",
+  "count_note": "No element count is printed on the page; total 16 includes the Baby Bird sitting on the throne as pictured, and some throne pieces behind the bird may be hidden.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "black panel is partly in shadow and its seam is faint",
+    "as_read": "black smooth panel forming one end of throne"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "orange slab partly hidden behind other pieces, could be more stacked",
+    "as_read": "orange rectangular slab next to black panel"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "teal colour and curved shape read from a sideways small photo",
+    "as_read": "two teal curved pieces at opposite ends of throne"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime pieces flanking the bird are partly hidden by the bird and round plates",
+    "as_read": "lime upright pieces on both sides of bird"
+   },
+   {
+    "qty": 4,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "small lime discs overlap; count inferred as two on each side-stud brick",
+    "as_read": "lime round discs on side studs flanking bird"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "light grey-white wing-shaped panel behind bird is partly hidden; closest listed piece, colour looks grey in print",
+    "as_read": "pale tapered back panel behind bird"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple looks blue-purple in print and is partly hidden under bird head",
+    "as_read": "dark purple small piece under bird eye"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "bird head is small and partly obscures the brick behind the eye",
+    "as_read": "pale cube head of bird"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white eye tile on bird"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "only one blue triangle clearly visible; another may be hidden behind head/throne",
+    "as_read": "blue triangular slope below bird eye"
+   }
+  ],
+  "elements_total": 16,
+  "agrees": false,
+  "differences": [
+   "white 2x2 tile with 2 studs on edge: first read 1, second read 0",
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 0, second read 2",
+   "white 2x4 wedge plate: first read 0, second read 1"
+  ]
+ }
+}

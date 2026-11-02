@@ -1,0 +1,194 @@
+{
+ "id": "sleepy-sea-monster",
+ "name": "Sleepy sea monster",
+ "pages": [
+  24
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 24, photo IMG_3596, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small blue S-shaped sea monster with a closed-eye head, labelled 'A sleepy sea monster...' in the middle-left of page 24.",
+ "count_note": "No element count is printed for this model; the model is small and partly self-hidden, so hidden connecting pieces may not be counted.",
+ "elements_total": 12,
+ "unsure_elements": 10,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Small picture; two blue long body segments are partly hidden behind each other and their side studs are hard to count",
+   "as_read": "two dark blue long bricks forming the body"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Flat blue section is partly covered by the curved body pieces, so its size is uncertain",
+   "as_read": "flat medium-blue studded section in the body"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Two azure curved humps are visible but one is partly hidden in the S-bend",
+   "as_read": "two bright azure curved humps"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "One orange brick at the raised tail end and a second partly hidden orange piece under the head; sizes partly obscured",
+   "as_read": "orange brick at tail and orange piece under head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green in the book; only one small round stud spot is clearly visible",
+   "as_read": "small lime round stud on the body"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Pale face base under the eyes is partly hidden; closest listed piece for the two-stud white face plate seen",
+   "as_read": "white face base holding the eyes"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Dark purple can look blue/black in print and the piece on top of the head is partly hidden",
+   "as_read": "dark purple plate on top of head"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two closed-eye round tiles"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3596"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1265,
+  "seen": "The sleepy sea monster is the small arched blue sea-creature labelled 'A sleepy sea monster ...' in the middle-left of page 24.",
+  "count_note": "No element count is printed for this example on pages 24-25, so 11 is my visible count; several body pieces are partly hidden.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "two dark-blue body segments are partly overlapping and partly hidden behind other pieces",
+    "as_read": "dark blue studded body segments"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "flat blue body section partly hidden under curved pieces; size estimated from visible studs",
+    "as_read": "flat medium-blue body plate"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "the humps overlap the blue body and each other, so the second hump is partly hidden",
+    "as_read": "medium-azure curved humps on body"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x3",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "pale grey looks near-white in the photo and the piece is partly behind the head",
+    "as_read": "pale grey long curved neck piece"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "one orange brick is clear at the body end and a second orange piece is partly hidden near the head/neck joint",
+    "as_read": "small orange bricks at body/head ends"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple can look blue/purple in print and the head support is mostly hidden behind the eye tiles",
+    "as_read": "small dark purple piece behind closed eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two closed-eye round tiles"
+   }
+  ],
+  "elements_total": 11,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 round plate: first read 1, second read 0",
+   "white 2x2 tile with 2 studs on edge: first read 1, second read 0",
+   "light_bluish_gray 1x3 curved slope: first read 0, second read 1"
+  ]
+ }
+}

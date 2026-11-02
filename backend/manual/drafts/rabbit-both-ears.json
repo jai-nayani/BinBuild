@@ -1,0 +1,243 @@
+{
+ "id": "rabbit-both-ears",
+ "name": "Rabbit face (both ears)",
+ "pages": [
+  48
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 48, photo IMG_3607, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The both-ears rabbit is the blue flat face in the centre of the upper page with two white wedge ears extending to one side and a speech bubble saying it is listening with both ears.",
+ "count_note": null,
+ "elements_total": 8,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Eye tiles and nose pieces cover part of the blue head; two-plate count inferred from the square 4x4 outline and visible seam",
+   "as_read": "two blue plates forming square head"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white tapered wedge ears"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two printed eye tiles on head"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Printed colour looks dark blue/navy, but closest kit piece is dark purple",
+   "as_read": "dark 1x2 plate at side of nose"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white 1x2 piece with single central stud beside dark plate"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3607"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0556,
+  "seen": "A flat rabbit face with two long white ears on the yellow upper page, beside the 'I'M LISTENING WITH BOTH EARS.' speech bubble.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "partly covered by the eye tiles and nose plates, so the seam between the two head plates is partly hidden",
+    "as_read": "light-blue flat head plates"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "colour looks dark blue in the photo; dark purple can print as blue",
+    "as_read": "dark small plate on face"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white plate with one centre stud"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "printed eye tiles"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long white tapered ears"
+   }
+  ],
+  "elements_total": 8,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": true,
+  "tries": 2,
+  "usd": 0.8763,
+  "picture_checks": 2,
+  "design": [
+   "2x4 (0,0,1) plate medium_azure",
+   "2x4 (2,0,1) plate medium_azure",
+   "2x1 (1,0,2) plate dark_purple",
+   "2x1 (1,1,2) jumper_plate white",
+   "1x1 (0,2,2) round_tile white",
+   "1x1 (3,2,2) round_tile white",
+   "2x4 (0,3,0) wedge_plate white studs=+x",
+   "2x4 (2,3,0) wedge_plate white studs=-x"
+  ]
+ },
+ "steps": [
+  {
+   "text": "Start here: lay these 2 pieces on the table.",
+   "place": [
+    {
+     "line": "white 2x4 wedge plate",
+     "at": [
+      0,
+      3,
+      0
+     ],
+     "along": "y"
+    },
+    {
+     "line": "white 2x4 wedge plate",
+     "at": [
+      2,
+      3,
+      0
+     ],
+     "along": "y"
+    }
+   ]
+  },
+  {
+   "text": "Add these 2 pieces (1 plate up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "medium_azure 2x4 plate",
+     "at": [
+      0,
+      0,
+      1
+     ],
+     "along": "y"
+    },
+    {
+     "line": "medium_azure 2x4 plate",
+     "at": [
+      2,
+      0,
+      1
+     ],
+     "along": "y"
+    }
+   ]
+  },
+  {
+   "text": "Add these 4 pieces (2 plates up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "dark_purple 1x2 plate",
+     "at": [
+      1,
+      0,
+      2
+     ]
+    },
+    {
+     "line": "white 1x2 jumper plate",
+     "at": [
+      1,
+      1,
+      2
+     ]
+    },
+    {
+     "line": "white 1x1 round printed tile",
+     "at": [
+      0,
+      2,
+      2
+     ]
+    },
+    {
+     "line": "white 1x1 round printed tile",
+     "at": [
+      3,
+      2,
+      2
+     ]
+    }
+   ]
+  }
+ ]
+}

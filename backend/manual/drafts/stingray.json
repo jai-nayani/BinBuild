@@ -1,0 +1,201 @@
+{
+ "id": "stingray",
+ "name": "Stingray",
+ "pages": [
+  20
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 20, photo IMG_3593, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The small flat stingray example at the top left of page 20, labelled 'From stingray ... to the super sprinter!'.",
+ "count_note": null,
+ "elements_total": 6,
+ "unsure_elements": 2,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white wing-shaped plates forming the wings"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and part of the plate and its stud count are hidden under the wings.",
+   "as_read": "long yellow-green plate forming the tail"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Mostly hidden under the wedge plates; only the front end beneath the eyes is visible, so its size cannot be counted.",
+   "as_read": "blue plate at the centre/front under the eyes"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two round white eye tiles"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3593"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0839,
+  "seen": "The stingray is the small flat sea creature at the top left of page 20, shown before its transformation into the super sprinter.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two white wing plates forming the ray's fins"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "long lime-green tail plate with studs"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "mostly hidden under the white wing plates; only the blue front section beneath the eyes is clearly visible, so size and extent are inferred",
+    "as_read": "blue plate visible at the head under the eyes"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two round eye tiles"
+   }
+  ],
+  "elements_total": 6,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": true,
+  "tries": 1,
+  "usd": 0.325,
+  "picture_checks": 1,
+  "design": [
+   "6x1 (3,4,0) plate lime",
+   "4x2 (0,3,1) plate medium_azure",
+   "4x2 (2,2,2) wedge_plate white studs=+y",
+   "4x2 (2,4,2) wedge_plate white studs=-y",
+   "1x1 (0,3,2) round_tile white",
+   "1x1 (0,4,2) round_tile white"
+  ]
+ },
+ "steps": [
+  {
+   "text": "Start here: lay this piece on the table.",
+   "place": [
+    {
+     "line": "lime 1x6 plate",
+     "at": [
+      3,
+      4,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add this piece (1 plate up), pressing it onto the studs below.",
+   "place": [
+    {
+     "line": "medium_azure 2x4 plate",
+     "at": [
+      0,
+      3,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add these 4 pieces (2 plates up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "white 2x4 wedge plate",
+     "at": [
+      2,
+      2,
+      2
+     ]
+    },
+    {
+     "line": "white 2x4 wedge plate",
+     "at": [
+      2,
+      4,
+      2
+     ]
+    },
+    {
+     "line": "white 1x1 round printed tile",
+     "at": [
+      0,
+      3,
+      2
+     ]
+    },
+    {
+     "line": "white 1x1 round printed tile",
+     "at": [
+      0,
+      4,
+      2
+     ]
+    }
+   ]
+  }
+ ]
+}

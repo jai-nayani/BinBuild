@@ -1,0 +1,232 @@
+{
+ "id": "fancy-bird-table",
+ "name": "Fancy bird table",
+ "pages": [
+  67
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 67, photo IMG_3616, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small eye bird on a raised lime and teal bird table at the lower left of page 67, beside the 'How about a fancy bird table?' caption.",
+ "count_note": "No element count is printed on the page; underside and far-side pieces of this illustrated example cannot be seen, so the visible count may differ from the physical example.",
+ "elements_total": 13,
+ "unsure_elements": 12,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal colour and stud count partly obscured in the flat illustration",
+   "as_read": "teal flat plate at one end of the table"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "light grey looks near-white and the pair are partly hidden behind the table top",
+   "as_read": "two grey cylinders supporting the table"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green and far studs are partly hidden by the bird",
+   "as_read": "long yellow-green plate forming the table top"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "dark blue strip under the table top is partly hidden; size inferred from its length",
+   "as_read": "dark blue long strip under the lime top"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "small lime discs may be plate studs and any on the far side are hidden",
+   "as_read": "two small lime discs along the table edge"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "headlight brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "pale bird body is partly covered by the eye tile and slopes",
+   "as_read": "pale square bird body behind the eye"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white round eye tile on the bird"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "one blue triangle is partly hidden behind the bird body and purple piece",
+   "as_read": "blue triangular slopes on the bird"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "dark purple prints blue-purple and it is partly hidden under the bird",
+   "as_read": "purple strip under the bird"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "teal curved piece at the table end is partly hidden by the bird",
+   "as_read": "teal curved piece beside the bird"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3616"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1382,
+  "seen": "A bird on a raised table-like platform at the lower left of page 67, labelled 'How about a fancy bird table?'",
+  "count_note": "No printed element count is visible for this model; total is the pieces I could read from the illustration.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal base viewed at an angle; stud count and exact size partly hidden by the legs and lime discs.",
+    "as_read": "teal flat base at the foot"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two grey cylindrical legs"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Lime/yellow in print and partly covered by the bird; not all studs can be counted, length inferred.",
+    "as_read": "yellow-green studded table top"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Teal curved piece beside the bird is partly hidden and its step/stud end is not fully clear; a matching second end may be hidden.",
+    "as_read": "teal curved upright by the bird"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "Small lime discs on the teal base could be exposed studs; counted as round plates as drawn, partly in shadow.",
+    "as_read": "small lime discs on the base"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "headlight brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Bird head prints near-white/cream, matching the light grey 1x1 brick; mostly covered by the eye tile.",
+    "as_read": "pale cube head behind the eye"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "white round eye tile"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "One blue triangle is clear by the eye; the second, as on Baby Bird, is partly hidden behind/below the head.",
+    "as_read": "blue triangular slopes on the bird"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Purple body piece under the head is partly hidden by the head and table top; print colour could look blue-purple.",
+    "as_read": "purple rectangle under the eye"
+   }
+  ],
+  "elements_total": 12,
+  "agrees": false,
+  "differences": [
+   "blue 1x4 brick with 4 studs on side: first read 1, second read 0"
+  ]
+ }
+}

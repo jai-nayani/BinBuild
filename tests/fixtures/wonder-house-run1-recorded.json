@@ -1,0 +1,26 @@
+{
+ "about": "First live Muse Wonder run on Oct 29 (reasoning effort high). Passed the validator on the first attempt. Its prompt predates two fixes: the grey 1x3 curved slopes were missing from the piece list, and the azure curved slope's down= was described misleadingly, so its back pieces likely face the other way from what Wonder meant.",
+ "target": "a simple house",
+ "model": "muse-wonder-1.0",
+ "effort": "high",
+ "replies": [
+  {
+   "id": "resp_6ae2e067168ecb58ba49463e",
+   "text": "Title: Small House with Pitched Roof\n```design\n2x4 (0,0,0) plate medium_azure\n2x4 (2,0,0) plate medium_azure\n2x1 (0,1,1) plate trans_clear\n2x1 (0,1,2) plate trans_clear\n2x1 (0,1,3) plate trans_clear\n1x1 (3,1,1) headlight_brick light_bluish_gray\n1x1 (0,2,1) round_brick light_bluish_gray\n1x1 (3,2,1) round_brick light_bluish_gray\n2x1 (0,3,1) plate dark_purple\n2x1 (2,3,1) plate dark_purple\n2x1 (1,0,1) plate dark_purple\n1x1 (0,0,1) round_plate lime\n1x1 (3,0,1) round_plate lime\n2x1 (0,1,4) curved_slope black down=-x\n2x1 (2,1,4) curved_slope black down=+x\n2x1 (0,2,4) curved_slope black down=-x\n2x1 (2,2,4) curved_slope black down=+x\n2x1 (0,3,2) curved_slope medium_azure down=-x\n2x1 (2,3,2) curved_slope medium_azure down=+x\n```",
+   "usage": {
+    "input_tokens": 1185,
+    "input_tokens_details": {
+     "cached_tokens": 0
+    },
+    "output_tokens": 14367,
+    "output_tokens_details": {
+     "reasoning_tokens": 14030
+    },
+    "total_tokens": 15552
+   },
+   "seconds": 144.9
+  }
+ ],
+ "valid_design": "2x4 (0,0,0) plate medium_azure\n2x4 (2,0,0) plate medium_azure\n2x1 (0,1,1) plate trans_clear\n2x1 (0,1,2) plate trans_clear\n2x1 (0,1,3) plate trans_clear\n1x1 (3,1,1) headlight_brick light_bluish_gray\n1x1 (0,2,1) round_brick light_bluish_gray\n1x1 (3,2,1) round_brick light_bluish_gray\n2x1 (0,3,1) plate dark_purple\n2x1 (2,3,1) plate dark_purple\n2x1 (1,0,1) plate dark_purple\n1x1 (0,0,1) round_plate lime\n1x1 (3,0,1) round_plate lime\n2x1 (0,1,4) curved_slope black down=-x\n2x1 (2,1,4) curved_slope black down=+x\n2x1 (0,2,4) curved_slope black down=-x\n2x1 (2,2,4) curved_slope black down=+x\n2x1 (0,3,2) curved_slope medium_azure down=-x\n2x1 (2,3,2) curved_slope medium_azure down=+x",
+ "usd": 0.2921
+}

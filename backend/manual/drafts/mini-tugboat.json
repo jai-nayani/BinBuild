@@ -1,0 +1,194 @@
+{
+ "id": "mini-tugboat",
+ "name": "Mini-tugboat",
+ "pages": [
+  9
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 9, photo IMG_3584, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small boat with a grey chimney, orange cabin and black bow at the upper right of page 9.",
+ "count_note": "Total matches the printed 10 elements.",
+ "elements_total": 10,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "grey round chimney at rear"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange cabin block"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "lower plate is partly behind the orange cabin and the colour prints dark blue-purple",
+   "as_read": "dark plate on cabin and under white plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "jumper plate",
+   "size": "1x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "only its edge is visible and its central stud is hidden under the round brick",
+   "as_read": "white plate under chimney"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "partly covered by the cabin and bow, so not all studs can be counted",
+   "as_read": "teal deck plate"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "seen from the side as one pink-red strip; the seam between the two plates is not visible and the colour prints redder than magenta",
+   "as_read": "pink-red hull plate strip"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "two side-by-side slopes inferred from the deck width; the far slope is largely hidden behind the near one",
+   "as_read": "black curved bow"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "count_check": {
+  "page_says": 10,
+  "list_total": 10,
+  "matches": true
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3584"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0815,
+  "seen": "The mini-tugboat is the small stacked boat in the upper-right half of page 9.",
+  "count_note": "My total of 10 matches the 10 elements printed on the page.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": false,
+    "doubt": "Bottom hull is only seen edge-on as a red-pink 2x4-length strip; two 2x2 plates are inferred and the joining seam is hidden.",
+    "as_read": "red-pink bottom hull strip"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "light-blue plate deck with two studs"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "The bow appears as one wide black curved mass; two 1-wide slopes side-by-side are inferred from the 2-stud hull width and the seam is almost hidden.",
+    "as_read": "black curved bow at the front"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange cabin block"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "The pieces print dark navy-blue rather than dark purple; one caps the orange cabin and one is the thin strip under the white rear piece.",
+    "as_read": "dark navy cap and rear strip"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "jumper plate",
+    "size": "1x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "Its single central stud is hidden beneath the round brick, so the jumper form is inferred from its 1x2 size.",
+    "as_read": "white rear plate under funnel"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "grey round funnel"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 3,
+  "usd": 0.9795,
+  "picture_checks": 0,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: the light_bluish_gray 1x1 round brick is pictured sitting only on the white 1x2 jumper plate's central stud at the stern; nothing may go on a jumper plate, and moving it to a regular stud would shift it from its pictured position"
+ }
+}

@@ -1,0 +1,129 @@
+{
+ "id": "binoculars",
+ "name": "Binoculars",
+ "pages": [
+  23
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 23, photo IMG_3594, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Binoculars are the small pair of upright grey tubes on a dark base at the bottom-right of page 23, labelled 'Binoculars'.",
+ "count_note": "No element count is printed for the Binoculars alone; the elements list on page 22 is for the main Tiny Tentacles model.",
+ "elements_total": 3,
+ "unsure_elements": 1,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two upright grey cylinders"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "base partly hidden under the two cylinders; dark purple prints blue-purple in the photo",
+   "as_read": "dark base plate under cylinders"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3594"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0455,
+  "seen": "The Binoculars are the small labelled model at the bottom right of page 23 in the blue water area.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "Model is very small; two grey cylinders are identified as round bricks but their studs and exact height are hard to see",
+    "as_read": "two upright grey cylinders"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "Small image and colour appears dark blue-purple; base is partly hidden under the cylinders so size is inferred",
+    "as_read": "dark flat base under both cylinders"
+   }
+  ],
+  "elements_total": 3,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": true,
+  "tries": 1,
+  "usd": 0.151,
+  "picture_checks": 1,
+  "design": [
+   "2x1 (0,0,0) plate dark_purple",
+   "1x1 (0,0,1) round_brick light_bluish_gray",
+   "1x1 (1,0,1) round_brick light_bluish_gray"
+  ]
+ },
+ "steps": [
+  {
+   "text": "Start here: lay this piece on the table.",
+   "place": [
+    {
+     "line": "dark_purple 1x2 plate",
+     "at": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add these 2 pieces (1 plate up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "light_bluish_gray 1x1 round brick",
+     "at": [
+      0,
+      0,
+      1
+     ]
+    },
+    {
+     "line": "light_bluish_gray 1x1 round brick",
+     "at": [
+      1,
+      0,
+      1
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,169 @@
+{
+ "id": "super-sprinter",
+ "name": "Super Sprinter",
+ "pages": [
+  20
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 20, photo IMG_3593, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A stingray-like creature with white wings, eyes, a raised lime tail and blue legs at the lower left of page 20's orange panel.",
+ "count_note": null,
+ "elements_total": 10,
+ "unsure_elements": 8,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "second wedge partly hidden behind the top wedge",
+   "as_read": "white crossed wing plates"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two eye tiles"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime looks yellow-green in print and one end is partly hidden",
+   "as_read": "long lime tail raised up"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "body plate mostly hidden under the wedges",
+   "as_read": "medium azure body under wings"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "legs partly hidden under body and colour may print differently",
+   "as_read": "two medium azure legs"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "small dark blue feet partly hidden; size and exact colour uncertain",
+   "as_read": "dark blue feet at leg ends"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3593"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1032,
+  "seen": "The Super Sprinter is the legged stingray-like creature at the bottom left of the orange panel on page 20.",
+  "count_note": "No element total is printed for this model on the page; total is the sum of the pieces listed above.",
+  "elements": [
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "Second wedge is partly hidden behind the main white wedge and body",
+    "as_read": "white wing wedges forming body"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": true,
+    "doubt": null,
+    "as_read": "lime long plate sticking up at back"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Partly hidden under the white wedges; size estimated from visible azure body section",
+    "as_read": "azure flat body under wedges"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two printed eye tiles at front"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "Legs partly hidden under body and seen in perspective; shape and exact count estimated",
+    "as_read": "two azure legs under body"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "Small dark-blue feet partly hidden and in perspective; dark colour could be printed differently",
+    "as_read": "two small dark blue feet"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 6,
+  "usd": 2.3329,
+  "picture_checks": 1,
+  "reason": "no design passed BinBuild's checker and looked like the book's picture in 6 tries (the last: 7 checker problems left)"
+ }
+}

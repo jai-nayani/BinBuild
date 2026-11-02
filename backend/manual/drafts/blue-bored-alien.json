@@ -1,0 +1,113 @@
+{
+ "id": "blue-bored-alien",
+ "name": "Blue bored alien",
+ "pages": [
+  90,
+  91
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on pages 90, 91, photo IMG_3628, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The small dark-blue alien with two closed eyes in the centre of page 90, shown as the step-2 blue alien example.",
+ "count_note": "No element count is printed on the page; hidden underside pieces cannot be checked, so the total is from visible pieces only.",
+ "elements_total": 5,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Main body is partly covered by the eyes and curved piece and prints dark blue; stud rows and exact length are partly hidden, and it could instead be the blue side-stud brick.",
+   "as_read": "dark blue studded rectangular body"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Teal curved cap is partly hidden behind the body and its colour prints lighter teal than the body.",
+   "as_read": "teal curved cap at one end"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "1x1 slope (cheese)",
+   "size": "1x1",
+   "color": "medium_blue",
+   "sure": false,
+   "doubt": "Small teal triangular tip at the far end is partly hidden; it may instead be a second medium-azure curved slope.",
+   "as_read": "small teal triangular tip at far end"
+  },
+  {
+   "qty": 2,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "two white closed-eye tiles"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3628"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1066,
+  "seen": "The small blue alien with two closed eyes pictured for step 2 in the upper-middle of page 90.",
+  "count_note": "No element count is printed; the model is very small on page 90 and any pieces hidden under/behind the blue body cannot be counted.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "small model; blue body colour prints darker than medium azure and its thickness/underside is hidden, so size and plate-vs-brick build is uncertain",
+    "as_read": "dark blue rectangular body plate"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "small and partly behind the blue body; a second small teal protrusion may be the far end of the same piece",
+    "as_read": "teal curved piece at one end"
+   },
+   {
+    "qty": 2,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two closed eye tiles"
+   }
+  ],
+  "elements_total": 4,
+  "agrees": false,
+  "differences": [
+   "medium_blue 1x1 1x1 slope (cheese): first read 1, second read 0"
+  ]
+ }
+}

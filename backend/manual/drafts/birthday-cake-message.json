@@ -1,0 +1,293 @@
+{
+ "id": "birthday-cake-message",
+ "name": "Birthday cake (message to aliens)",
+ "pages": [
+  95
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 95, photo IMG_3630, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small layered birthday-cake symbol on the right-hand side of page 95, with a flat base, stacked coloured layers and lime studs on top.",
+ "count_note": "No element count for this model is printed on the page.",
+ "elements_total": 10,
+ "unsure_elements": 9,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Base plate is in shadow and partly overlapped by the cake layers, so its size is estimated from the visible top surface.",
+   "as_read": "teal flat base plate"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "Colour looks dark blue-purple in print and the layer is partly hidden behind the black slopes.",
+   "as_read": "dark purple lower cake layer"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange middle cake layer"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "Partly covered by the lime round plates on top, so the 2x2 size is inferred.",
+   "as_read": "pink-magenta upper cake layer"
+  },
+  {
+   "qty": 4,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime looks yellow-green in print and the small round studs overlap each other, so the count is an estimate.",
+   "as_read": "cluster of yellow-green round studs on top"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Pieces are partly hidden behind the cake layers, so their shape and size are inferred from the visible curves.",
+   "as_read": "black curved pieces flanking the cake"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3630"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1611,
+  "seen": "The layered birthday cake is the model at the bottom right of page 95.",
+  "count_note": "No printed element count for this model is visible on the page.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "teal flat base tray"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple/blue lower tier is partly hidden behind a black curved piece; exact number of 1x2 plates making the tier cannot be seen",
+    "as_read": "dark purple lower cake layer"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "pink plate layer between purple and orange layers"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange upper cake layer"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "one black curved piece is partly behind the cake layers, so its exact size is inferred from the visible curve",
+    "as_read": "black curved pieces at both sides of the cake"
+   },
+   {
+    "qty": 4,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow-green in the illustration and the studs overlap in a cluster, so the count is my best reading of four separate round plates",
+    "as_read": "cluster of lime studded rounds on top"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": true,
+  "tries": 3,
+  "usd": 0.9502,
+  "picture_checks": 2,
+  "design": [
+   "4x2 (0,0,0) plate medium_azure",
+   "1x2 (0,0,1) curved_slope black down=+y",
+   "1x2 (1,0,1) plate dark_purple",
+   "1x2 (3,0,1) curved_slope black down=+y",
+   "2x2 (1,0,2) plate magenta",
+   "1x2 (1,0,3) brick orange",
+   "1x1 (1,0,6) round_plate lime",
+   "1x1 (1,1,6) round_plate lime",
+   "1x1 (2,0,3) round_plate lime",
+   "1x1 (2,1,3) round_plate lime"
+  ]
+ },
+ "steps": [
+  {
+   "text": "Start here: lay this piece on the table.",
+   "place": [
+    {
+     "line": "medium_azure 2x4 plate",
+     "at": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add these 3 pieces (1 plate up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "black 1x2 curved slope",
+     "at": [
+      0,
+      0,
+      1
+     ],
+     "along": "y",
+     "down": "+y"
+    },
+    {
+     "line": "dark_purple 1x2 plate",
+     "at": [
+      1,
+      0,
+      1
+     ],
+     "along": "y"
+    },
+    {
+     "line": "black 1x2 curved slope",
+     "at": [
+      3,
+      0,
+      1
+     ],
+     "along": "y",
+     "down": "+y"
+    }
+   ]
+  },
+  {
+   "text": "Add this piece (2 plates up), pressing it onto the studs below.",
+   "place": [
+    {
+     "line": "magenta 2x2 plate",
+     "at": [
+      1,
+      0,
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add these 3 pieces (3 plates up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "orange 1x2 brick",
+     "at": [
+      1,
+      0,
+      3
+     ],
+     "along": "y"
+    },
+    {
+     "line": "lime 1x1 round plate",
+     "at": [
+      2,
+      0,
+      3
+     ]
+    },
+    {
+     "line": "lime 1x1 round plate",
+     "at": [
+      2,
+      1,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "text": "Add these 2 pieces (6 plates up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "lime 1x1 round plate",
+     "at": [
+      1,
+      0,
+      6
+     ]
+    },
+    {
+     "line": "lime 1x1 round plate",
+     "at": [
+      1,
+      1,
+      6
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -8,98 +8,257 @@
   <title>BinBuild</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.svg">
-  <style>
-    :root { --yellow: #ffd500; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e4e0d5; --bg: #fbf8f1; --card: #fff; --green: #1f8a4c; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
-    header { background: var(--yellow); padding: 18px 16px 14px; }
-    header h1 { margin: 0; font-size: 28px; letter-spacing: -0.5px; }
-    header p { margin: 4px 0 0; color: #4d4300; font-size: 14px; }
-    main { padding: 16px; max-width: 640px; margin: 0 auto; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
-    .card h2 { margin: 0 0 6px; font-size: 18px; }
-    .card p { margin: 0 0 12px; color: var(--muted); font-size: 14px; line-height: 1.45; }
-    .btn { display: block; width: 100%; padding: 14px; margin: 8px 0; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; text-align: center; }
-    .btn-primary { background: var(--yellow); color: var(--ink); }
-    .btn-secondary { background: #efebe0; color: var(--ink); }
-    .btn-done { background: var(--green); color: #fff; }
-    .btn:disabled { opacity: 0.45; cursor: default; }
-    .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
-    .thumb { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #eee; }
-    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .thumb button { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(0,0,0,0.65); color: #fff; font-size: 14px; line-height: 1; cursor: pointer; }
-    .thumb .tag { position: absolute; left: 4px; bottom: 4px; background: rgba(0,0,0,0.65); color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 6px; }
-    #status { min-height: 20px; font-size: 14px; color: var(--muted); margin: 4px 0 0; }
-    #status.error { color: #b3261e; }
-    .step { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; }
-    .step .n { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--yellow); font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-    .step p { margin: 3px 0 0; }
-    .hidden { display: none; }
-    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 16px 24px; }
-  </style>
+  <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="BinBuild">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <header>
-    <h1>🧱 BinBuild</h1>
-    <p>Your spare parts are a LEGO set you haven't opened yet.</p>
+<body class="on-hero">
+  <header id="app-header">
+    <button type="button" id="home-btn" aria-label="Back to the start">🧱 BinBuild</button>
   </header>
 
   <main>
-    <!-- Capture + batch loop -->
-    <section id="capture-view">
+    <!-- Native camera inputs, shared by every view. capture="environment" opens the rear camera. -->
+    <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+    <input id="gallery-input" type="file" accept="image/*" hidden>
+    <!-- Retakes one failed photo of an uploaded batch, from the pop-up below. -->
+    <input id="retake-input" type="file" accept="image/*" capture="environment" hidden>
+
+    <!-- 0. Hero: what BinBuild is, then Get started -->
+    <section id="hero-view">
+      <h1 class="hero-title">BinBuild</h1>
+      <p class="tagline">Your spare parts are a LEGO set you haven't opened yet.</p>
+      <svg class="hero-art" viewBox="0 0 300 196" role="img" aria-label="Loose bricks snapping together into a little house">
+        <rect class="table-line" x="20" y="186" width="260" height="3" rx="1.5"/>
+        <g class="plate">
+          <rect x="54" y="172" width="192" height="12" rx="3"/>
+          <rect class="stud" x="62" y="168" width="10" height="5" rx="1.5"/><rect class="stud" x="86" y="168" width="10" height="5" rx="1.5"/><rect class="stud" x="110" y="168" width="10" height="5" rx="1.5"/><rect class="stud" x="134" y="168" width="10" height="5" rx="1.5"/><rect class="stud" x="158" y="168" width="10" height="5" rx="1.5"/><rect class="stud" x="182" y="168" width="10" height="5" rx="1.5"/><rect class="stud" x="206" y="168" width="10" height="5" rx="1.5"/><rect class="stud" x="230" y="168" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick yellow" style="--dx:-62px;--dy:6px;--r:-24deg;--d:0.35s">
+          <rect x="78" y="146" width="72" height="24" rx="3"/><rect class="stud" x="84" y="142" width="10" height="5" rx="1.5"/><rect class="stud" x="108" y="142" width="10" height="5" rx="1.5"/><rect class="stud" x="132" y="142" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick yellow" style="--dx:58px;--dy:10px;--r:18deg;--d:0.5s">
+          <rect x="150" y="146" width="72" height="24" rx="3"/><rect class="stud" x="156" y="142" width="10" height="5" rx="1.5"/><rect class="stud" x="180" y="142" width="10" height="5" rx="1.5"/><rect class="stud" x="204" y="142" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick yellow" style="--dx:-70px;--dy:34px;--r:32deg;--d:0.65s">
+          <rect x="78" y="122" width="48" height="24" rx="3"/><rect class="stud" x="84" y="118" width="10" height="5" rx="1.5"/><rect class="stud" x="108" y="118" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick blue" style="--dx:-30px;--dy:48px;--r:-40deg;--d:0.8s">
+          <rect x="126" y="122" width="24" height="24" rx="3"/><rect class="stud" x="133" y="118" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick yellow" style="--dx:66px;--dy:40px;--r:-22deg;--d:0.95s">
+          <rect x="150" y="122" width="72" height="24" rx="3"/><rect class="stud" x="156" y="118" width="10" height="5" rx="1.5"/><rect class="stud" x="180" y="118" width="10" height="5" rx="1.5"/><rect class="stud" x="204" y="118" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick red" style="--dx:-30px;--dy:70px;--r:6deg;--d:1.1s">
+          <rect x="66" y="98" width="168" height="24" rx="3"/><rect class="stud" x="72" y="94" width="10" height="5" rx="1.5"/><rect class="stud" x="96" y="94" width="10" height="5" rx="1.5"/><rect class="stud" x="120" y="94" width="10" height="5" rx="1.5"/><rect class="stud" x="144" y="94" width="10" height="5" rx="1.5"/><rect class="stud" x="168" y="94" width="10" height="5" rx="1.5"/><rect class="stud" x="192" y="94" width="10" height="5" rx="1.5"/><rect class="stud" x="216" y="94" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick red" style="--dx:60px;--dy:84px;--r:-12deg;--d:1.25s">
+          <rect x="90" y="74" width="120" height="24" rx="3"/><rect class="stud" x="96" y="70" width="10" height="5" rx="1.5"/><rect class="stud" x="120" y="70" width="10" height="5" rx="1.5"/><rect class="stud" x="144" y="70" width="10" height="5" rx="1.5"/><rect class="stud" x="168" y="70" width="10" height="5" rx="1.5"/><rect class="stud" x="192" y="70" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick red" style="--dx:-44px;--dy:104px;--r:26deg;--d:1.4s">
+          <rect x="114" y="50" width="72" height="24" rx="3"/><rect class="stud" x="120" y="46" width="10" height="5" rx="1.5"/><rect class="stud" x="144" y="46" width="10" height="5" rx="1.5"/><rect class="stud" x="168" y="46" width="10" height="5" rx="1.5"/>
+        </g>
+        <g class="brick blue" style="--dx:70px;--dy:118px;--r:-34deg;--d:1.55s">
+          <rect x="138" y="26" width="24" height="24" rx="3"/><rect class="stud" x="145" y="22" width="10" height="5" rx="1.5"/>
+        </g>
+      </svg>
+      <ol class="beats">
+        <li><span class="beat-no">1</span><strong>Scatter</strong><span>Tip out a handful and snap 5 photos.</span></li>
+        <li><span class="beat-no">2</span><strong>Identify</strong><span>BinBuild names every piece it sees.</span></li>
+        <li><span class="beat-no">3</span><strong>Build</strong><span>Get a new build from only your pieces.</span></li>
+      </ol>
+      <button type="button" class="btn btn-primary btn-big" id="start-btn">Get started</button>
+      <button type="button" class="btn btn-link" id="sample-link">Just looking? See what the sample bin builds</button>
+    </section>
+
+    <!-- 1. Capture hub: the 5 photos of one handful, then Identify; Build; Finished -->
+    <section id="capture-view" class="hidden">
       <div class="card">
-        <h2>1. Snap a handful</h2>
-        <p>Scatter a handful of pieces on the table — one flat layer, no stacking — then take a photo. One top shot plus four side shots per batch.</p>
-        <label class="btn btn-primary" for="camera-input">📷 Take a photo</label>
-        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
-        <label class="btn btn-secondary" for="gallery-input">🖼 Choose from gallery</label>
-        <input id="gallery-input" type="file" accept="image/*" multiple hidden>
-        <p id="status" role="status"></p>
+        <h2 id="shot-title">Batch 1 · take 5 photos</h2>
+        <p id="shot-hint">Tap a panel to take that photo. Start with the top view.</p>
+        <div class="grid" id="grid">
+          <button type="button" class="panel tip" id="panel-tip">
+            <svg class="pic" viewBox="0 0 48 40" aria-hidden="true"><rect class="tbl" x="4" y="6" width="40" height="30" rx="4"/><rect class="pr" x="9" y="11" width="9" height="5" rx="1"/><rect class="py" x="26" y="13" width="6" height="6" rx="1"/><rect class="pb" x="36" y="10" width="4" height="8" rx="1"/><rect class="pb" x="11" y="24" width="8" height="4" rx="1"/><rect class="pr" x="24" y="26" width="5" height="5" rx="1"/><rect class="py" x="34" y="27" width="6" height="4" rx="1"/></svg>
+            <span class="pname">Tip out one flat layer</span>
+            <span class="pstate" id="state-tip">How to</span>
+          </button>
+          <label class="panel" for="camera-input" id="panel-top" role="button" tabindex="0">
+            <span class="pic" id="pic-top"><img class="shot hidden" id="thumb-top" alt="Your top photo"><svg viewBox="0 0 48 40" aria-hidden="true"><rect class="tbl" x="10" y="12" width="28" height="22" rx="3"/><rect class="cam" x="16" y="3" width="16" height="6" rx="2"/><path class="los" d="M20 10 V26 M28 10 V26"/></svg></span>
+            <span class="pname">Top view</span>
+            <span class="pstate" id="state-top">Tap to take</span>
+          </label>
+          <label class="panel" for="camera-input" id="panel-front" role="button" tabindex="0">
+            <span class="pic" id="pic-front"><img class="shot hidden" id="thumb-front" alt="Your front photo"><svg viewBox="0 0 48 40" aria-hidden="true"><rect class="tbl" x="12" y="4" width="24" height="22" rx="3"/><rect class="cam" x="18" y="30" width="12" height="8" rx="2"/><path class="los" d="M24 29 V18"/></svg></span>
+            <span class="pname">Front view</span>
+            <span class="pstate" id="state-front">Tap to take</span>
+          </label>
+          <label class="panel" for="camera-input" id="panel-right" role="button" tabindex="0">
+            <span class="pic" id="pic-right"><img class="shot hidden" id="thumb-right" alt="Your right photo"><svg viewBox="0 0 48 40" aria-hidden="true"><rect class="tbl" x="6" y="8" width="24" height="24" rx="3"/><rect class="cam" x="36" y="14" width="8" height="12" rx="2"/><path class="los" d="M35 20 H22"/></svg></span>
+            <span class="pname">Right side</span>
+            <span class="pstate" id="state-right">Tap to take</span>
+          </label>
+          <label class="panel" for="camera-input" id="panel-back" role="button" tabindex="0">
+            <span class="pic" id="pic-back"><img class="shot hidden" id="thumb-back" alt="Your back photo"><svg viewBox="0 0 48 40" aria-hidden="true"><rect class="tbl" x="12" y="14" width="24" height="22" rx="3"/><rect class="cam" x="18" y="2" width="12" height="8" rx="2"/><path class="los" d="M24 11 V22"/></svg></span>
+            <span class="pname">Back side</span>
+            <span class="pstate" id="state-back">Tap to take</span>
+          </label>
+          <label class="panel" for="camera-input" id="panel-left" role="button" tabindex="0">
+            <span class="pic" id="pic-left"><img class="shot hidden" id="thumb-left" alt="Your left photo"><svg viewBox="0 0 48 40" aria-hidden="true"><rect class="tbl" x="18" y="8" width="24" height="24" rx="3"/><rect class="cam" x="4" y="14" width="8" height="12" rx="2"/><path class="los" d="M13 20 H26"/></svg></span>
+            <span class="pname">Left side</span>
+            <span class="pstate" id="state-left">Tap to take</span>
+          </label>
+        </div>
+        <label class="btn btn-link" for="gallery-input" id="gallery-btn">or pick the next photo from your gallery</label>
+        <button class="btn btn-primary" id="upload-btn" disabled>Check my 5 photos (0/5)</button>
+        <progress id="upload-progress" class="hidden" max="100" value="0"></progress>
+        <button class="btn btn-done" id="identify-btn" disabled>Next: identify the pieces</button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <div class="callout hidden" id="sample-offer">
+          <p id="sample-text">Identifying pieces uses a paid AI service, so this public demo needs an access key for it. You can still see what the sample bin builds.</p>
+          <button type="button" class="btn btn-primary" id="sample-bin-btn">Use the sample bin</button>
+        </div>
       </div>
 
-      <div class="card" id="batch-card">
-        <h2>2. This batch <span id="batch-count">(0 photos)</span></h2>
-        <p>Photos in this batch. Tap ✕ to drop one.</p>
-        <div class="thumbs" id="thumbs"></div>
-        <button class="btn btn-primary" id="confirm-btn" disabled>✓ Confirm batch</button>
-        <p id="review-note">After confirming, sweep these pieces aside and snap the next handful.</p>
+      <div class="card">
+        <h2>Build</h2>
+        <p>See what you can build from the pieces you've confirmed, and get a step-by-step booklet.</p>
+        <button class="btn btn-secondary" id="build-open-btn">🧱 What can I build?</button>
       </div>
 
       <div class="card">
-        <h2>3. Finished?</h2>
-        <p>When the whole bin is inventoried, tap Finished to see the summary and ask for a build.</p>
-        <button class="btn btn-done" id="finished-btn" disabled>Finished — show my inventory</button>
-      </div>
-
-      <div class="card">
-        <h2>How it works</h2>
-        <div class="step"><span class="n">1</span><p><strong>Snap</strong> a handful of pieces.</p></div>
-        <div class="step"><span class="n">2</span><p><strong>Review</strong> what the app found — correct or rescan.</p></div>
-        <div class="step"><span class="n">3</span><p><strong>Confirm</strong> the batch into the running inventory.</p></div>
-        <div class="step"><span class="n">4</span><p><strong>Finished</strong> — then ask for a brand-new build from your exact pieces.</p></div>
+        <h2>Finished?</h2>
+        <p id="finished-note">See your batches, check each one's pieces and add them to your inventory.</p>
+        <button class="btn btn-done" id="finished-btn" disabled>Finished — show my batches</button>
       </div>
     </section>
 
-    <!-- Finished state -->
+    <!-- 2. Review: the snap just taken, before it joins the batch -->
+    <section id="review-view" class="hidden">
+      <div class="card">
+        <h2 id="review-title">Check the top view</h2>
+        <p>Are all the pieces in frame and in focus?</p>
+        <img id="review-img" alt="Photo just taken">
+        <div class="row">
+          <label class="btn btn-secondary" for="camera-input" id="review-retake-btn">↺ Retake</label>
+          <button class="btn btn-primary" id="use-btn">✓ Use photo</button>
+        </div>
+        <button class="btn btn-secondary" id="cancel-review-btn">Cancel</button>
+      </div>
+    </section>
+
+    <!-- 3. Finished -->
     <section id="finished-view" class="hidden">
       <div class="card">
-        <h2>🎉 Inventory complete</h2>
-        <p id="finished-summary">Batches confirmed. The full inventory summary will appear here once the backend is wired up.</p>
-        <button class="btn btn-primary" id="ask-build-btn">Ask for a build</button>
+        <h2>🎉 Scanning finished</h2>
+        <p id="finished-summary"></p>
+        <ul class="batches" id="batch-list"></ul>
+        <button class="btn btn-primary" id="ask-build-btn">🧱 What can I build?</button>
         <button class="btn btn-secondary" id="back-btn">← Back to scanning</button>
       </div>
     </section>
+
+    <!-- 4. Check the pieces: review one identified batch, then add it to the inventory (or undo) -->
+    <section id="check-view" class="hidden">
+      <div class="card hidden" id="confirmed-card">
+        <h2 id="confirmed-title">✓ Added to your inventory</h2>
+        <p id="confirmed-text"></p>
+        <button class="btn btn-primary" id="confirmed-build-btn">🧱 What can I build?</button>
+        <button class="btn btn-secondary" id="confirmed-next-btn">📷 Scan the next handful</button>
+        <button class="btn btn-secondary" id="undo-btn">↺ Undo: take these pieces out again</button>
+      </div>
+      <div class="card">
+        <h2 id="check-title">Check the pieces</h2>
+        <p id="check-intro"></p>
+        <p class="review-summary" id="check-summary"></p>
+      </div>
+      <div class="photo-box">
+        <div class="photo-wrap"><img id="check-img" alt="Top photo of the pieces"><svg class="outlines" id="check-outlines" preserveAspectRatio="none" aria-hidden="true"></svg><div id="check-dots"></div></div>
+        <p class="caption" id="check-caption"></p>
+      </div>
+      <div id="check-list"></div>
+      <button class="btn btn-secondary" id="add-piece-btn">＋ Add a piece Spark missed</button>
+      <p class="status" id="check-status" role="status" aria-live="polite"></p>
+      <div class="sticky-bar"><button class="btn btn-done" id="confirm-btn">✓ Add the pieces to my inventory</button></div>
+      <button class="btn btn-secondary" id="check-back-btn">← Back to scanning</button>
+    </section>
+
+    <!-- 5. Build: what the confirmed inventory can build, and booklets -->
+    <section id="build-view" class="hidden">
+      <div class="card">
+        <h2>🧱 What can I build?</h2>
+        <p id="build-inventory"></p>
+        <div id="build-list"></div>
+        <p class="status" id="build-status" role="status" aria-live="polite"></p>
+        <button class="btn btn-secondary" id="build-back-btn">← Back to scanning</button>
+      </div>
+    </section>
+
+    <p class="backend" id="backend-line" role="status"><span class="dot"></span><span id="backend-text">Backend: checking…</span><button type="button" id="backend-retry">Re-check</button></p>
   </main>
+
+  <!-- Pop-up for a photo that failed the check: names the view and retakes only that photo. -->
+  <div class="modal hidden" id="retake-modal" role="alertdialog" aria-modal="true" aria-labelledby="retake-title" aria-describedby="retake-reason retake-text">
+    <div class="modal-card">
+      <p class="count" id="retake-count"></p>
+      <h2 id="retake-title">The top photo is unclear</h2>
+      <img id="retake-img" alt="The photo that needs a retake">
+      <p class="reason" id="retake-reason"></p>
+      <p id="retake-text"></p>
+      <p class="hint" id="retake-hint"></p>
+      <label class="btn btn-primary" for="retake-input" id="retake-btn">📷 Retake top photo</label>
+      <p class="status" id="retake-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Fix one piece, a whole row of pieces, or add a piece Spark missed. -->
+  <div class="modal hidden" id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal-card sheet">
+      <h2 id="edit-title">Fix this piece</h2>
+      <p class="hint" id="edit-now"></p>
+      <label for="edit-family">What kind of piece</label>
+      <select id="edit-family"></select>
+      <label for="edit-shape">Shape</label>
+      <input id="edit-shape" list="shape-list" autocomplete="off" placeholder="e.g. brick, round plate, curved slope">
+      <datalist id="shape-list"></datalist>
+      <label for="edit-size">Size in studs</label>
+      <input id="edit-size" list="size-list" autocomplete="off" inputmode="text" placeholder="e.g. 1x2">
+      <datalist id="size-list"></datalist>
+      <label for="edit-color">Colour</label>
+      <div class="color-row"><span class="swatch" id="edit-swatch"></span><select id="edit-color"></select></div>
+      <label class="check"><input type="checkbox" id="edit-plain"> Plain: nothing extra on it (no studs on the side, no holes, not round, no clip)</label>
+      <div id="edit-count-row" class="hidden">
+        <label for="edit-count">How many</label>
+        <input id="edit-count" type="number" min="1" max="99" value="1">
+      </div>
+      <p class="hint" id="edit-generator"></p>
+      <div class="row">
+        <button class="btn btn-secondary" id="edit-cancel-btn">Cancel</button>
+        <button class="btn btn-primary" id="edit-save-btn">Save</button>
+      </div>
+      <p class="status" id="edit-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
 
   <footer>BinBuild · Meta Global AI Developer Hackathon · Not affiliated with the LEGO Group.</footer>
 
   <script src="app.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(function (reg) { console.log('BinBuild service worker registered:', reg.scope); })
-        .catch(function (err) { console.log('BinBuild service worker failed:', err); });
+    // Optional: the camera flow never depends on the service worker. Over plain
+    // HTTP on the home network (not a secure context) browsers don't offer it.
+    try {
+      if (window.isSecureContext && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(function (reg) { console.log('BinBuild service worker registered:', reg.scope); })
+          .catch(function (err) { console.log('BinBuild service worker failed (app still works):', err); });
+      } else {
+        console.log('BinBuild: no service worker (not a secure context); app runs without it.');
+      }
+    } catch (err) {
+      console.log('BinBuild service worker skipped (app still works):', err);
     }
   </script>
 </body>

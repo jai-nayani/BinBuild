@@ -1,0 +1,1350 @@
+{
+ "manual": "LEGO 5-Minute Builds, the book that came with the 50-piece kit",
+ "read_from": "48 photos of the book (Downloads/lego manual, taken Oct 28), read page by page on Oct 29. Pages 1-7 were not photographed and pages 34-35 are missing, so builds on those pages are not here.",
+ "counted_as": "One entry per model the manual names: by a page title, a label, a caption or the page text. An activity whose example models are not named gets one entry for the activity. Unnamed extra models are mentioned in the note of the build they appear with.",
+ "statuses": {
+  "verified": "The piece list was checked against the kit's confirmed inventory, and the build has a BinBuild booklet.",
+  "diagram-readable": "The page shows which elements the build needs (an 'Elements you'll need' box or the drawn pieces), legible in the full-size photo. Nothing has been transcribed or checked against the kit yet.",
+  "not-yet-piece-verified": "The page shows the model but no list of its elements. Where the page prints a total, it is given; no parts list is."
+ },
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Watery Worlds",
+   "pages": [
+    8,
+    27
+   ]
+  },
+  {
+   "n": 2,
+   "title": "Go Wild in the City",
+   "pages": [
+    28,
+    51
+   ]
+  },
+  {
+   "n": 3,
+   "title": "Up, Up and Away",
+   "pages": [
+    52,
+    73
+   ]
+  },
+  {
+   "n": 4,
+   "title": "Adventures in Space",
+   "pages": [
+    74,
+    96
+   ]
+  }
+ ],
+ "builds": [
+  {
+   "id": "submarine",
+   "name": "Submarine",
+   "chapter": 1,
+   "pages": [
+    8
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "stated_elements": 15,
+   "note": "\"This sneaky submarine is made from 15 elements.\""
+  },
+  {
+   "id": "sailing-ship",
+   "name": "Sailing ship",
+   "chapter": 1,
+   "pages": [
+    8
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "stated_elements": 8,
+   "note": "\"A sailing ship using 8 elements!\""
+  },
+  {
+   "id": "mini-tugboat",
+   "name": "Mini-tugboat",
+   "chapter": 1,
+   "pages": [
+    9
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "stated_elements": 10,
+   "note": "\"A mini-tugboat made from 10 elements.\""
+  },
+  {
+   "id": "snappy-crab",
+   "name": "Snappy crab",
+   "chapter": 1,
+   "pages": [
+    9
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "stated_elements": 9,
+   "note": "\"Snappy crab uses 9 elements.\""
+  },
+  {
+   "id": "dozy-dolphin",
+   "name": "Dozy Dolphin",
+   "chapter": 1,
+   "pages": [
+    10,
+    11
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "yo-yo-fish",
+   "name": "Yo-yo fish",
+   "chapter": 1,
+   "pages": [
+    13
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Whirlpool Wonders (p12-13)"
+  },
+  {
+   "id": "zigzagger",
+   "name": "The zigzagger",
+   "chapter": 1,
+   "pages": [
+    13
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Whirlpool Wonders (p12-13)"
+  },
+  {
+   "id": "deep-sea-flatfish",
+   "name": "Deep-sea flatfish",
+   "chapter": 1,
+   "pages": [
+    13
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Whirlpool Wonders (p12-13)"
+  },
+  {
+   "id": "yoga-goose",
+   "name": "Yoga Goose",
+   "chapter": 1,
+   "pages": [
+    14,
+    15
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "chance-creatures",
+   "name": "Chance Creatures",
+   "chapter": 1,
+   "pages": [
+    16,
+    17
+   ],
+   "kind": "activity",
+   "status": "not-yet-piece-verified",
+   "name_from": "title",
+   "note": "Roll a die made of elements to pick each body part; 3 example creatures pictured on p17, unnamed."
+  },
+  {
+   "id": "viking-longboat",
+   "name": "Viking longboat",
+   "chapter": 1,
+   "pages": [
+    18,
+    19
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title",
+   "note": "Page title: Viking Voyages."
+  },
+  {
+   "id": "shark",
+   "name": "Shark",
+   "chapter": 1,
+   "pages": [
+    19
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Viking Voyages (p18-19)",
+   "note": "Build Boost: make your own sea monster to attack the boat."
+  },
+  {
+   "id": "mr-croc",
+   "name": "Mr Croc",
+   "chapter": 1,
+   "pages": [
+    20
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Watery Walkers (p20-21)"
+  },
+  {
+   "id": "hungry-t-rex",
+   "name": "Hungry T. rex",
+   "chapter": 1,
+   "pages": [
+    20
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Watery Walkers (p20-21)"
+  },
+  {
+   "id": "stingray",
+   "name": "Stingray",
+   "chapter": 1,
+   "pages": [
+    20
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Watery Walkers (p20-21)"
+  },
+  {
+   "id": "super-sprinter",
+   "name": "Super Sprinter",
+   "chapter": 1,
+   "pages": [
+    20
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Watery Walkers (p20-21)"
+  },
+  {
+   "id": "baby-fish",
+   "name": "Baby fish",
+   "chapter": 1,
+   "pages": [
+    21
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Watery Walkers (p20-21)"
+  },
+  {
+   "id": "colorful-chameleon",
+   "name": "Colorful chameleon",
+   "chapter": 1,
+   "pages": [
+    21
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Watery Walkers (p20-21)"
+  },
+  {
+   "id": "tiny-tentacles",
+   "name": "Tiny Tentacles",
+   "chapter": 1,
+   "pages": [
+    22,
+    23
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "guitar",
+   "name": "Guitar",
+   "chapter": 1,
+   "pages": [
+    23
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Tiny Tentacles (p22-23)",
+   "note": "One of Tiny Tentacles' hobbies."
+  },
+  {
+   "id": "paintbrush",
+   "name": "Paintbrush",
+   "chapter": 1,
+   "pages": [
+    23
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Tiny Tentacles (p22-23)",
+   "note": "One of Tiny Tentacles' hobbies."
+  },
+  {
+   "id": "binoculars",
+   "name": "Binoculars",
+   "chapter": 1,
+   "pages": [
+    23
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Tiny Tentacles (p22-23)",
+   "note": "One of Tiny Tentacles' hobbies."
+  },
+  {
+   "id": "golf-club",
+   "name": "Golf club",
+   "chapter": 1,
+   "pages": [
+    23
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Tiny Tentacles (p22-23)",
+   "note": "One of Tiny Tentacles' hobbies."
+  },
+  {
+   "id": "magical-mermaid",
+   "name": "Magical mermaid",
+   "chapter": 1,
+   "pages": [
+    24
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Sea Monster Mash-up (p24-25)"
+  },
+  {
+   "id": "sleepy-sea-monster",
+   "name": "Sleepy sea monster",
+   "chapter": 1,
+   "pages": [
+    24
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Sea Monster Mash-up (p24-25)"
+  },
+  {
+   "id": "sleepy-mermaid",
+   "name": "Sleepy mermaid",
+   "chapter": 1,
+   "pages": [
+    25
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Sea Monster Mash-up (p24-25)",
+   "note": "The two heads swapped."
+  },
+  {
+   "id": "magical-sea-monster",
+   "name": "Magical sea monster",
+   "chapter": 1,
+   "pages": [
+    25
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Sea Monster Mash-up (p24-25)",
+   "note": "The two heads swapped."
+  },
+  {
+   "id": "inspector-duck",
+   "name": "Inspector Duck",
+   "chapter": 1,
+   "pages": [
+    26,
+    27
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "house-and-tree",
+   "name": "House and tree",
+   "chapter": 2,
+   "pages": [
+    28
+   ],
+   "kind": "showcase",
+   "status": "verified",
+   "name_from": "caption",
+   "stated_elements": 7,
+   "set": "house-and-tree",
+   "note": "\"This simple house and tree uses just 7 elements.\" All 7 pieces checked against the confirmed kit inventory; booklet follows the picture on p28."
+  },
+  {
+   "id": "dream-mansion",
+   "name": "Dream mansion",
+   "chapter": 2,
+   "pages": [
+    29
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption"
+  },
+  {
+   "id": "entrance-gates",
+   "name": "Impressive entrance gates",
+   "chapter": 2,
+   "pages": [
+    29
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption"
+  },
+  {
+   "id": "apple-tree",
+   "name": "Tree with green apples",
+   "chapter": 2,
+   "pages": [
+    29
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption"
+  },
+  {
+   "id": "apple-visitor",
+   "name": "Hungry visitor (eats the apples)",
+   "chapter": 2,
+   "pages": [
+    29
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "note": "\"Who's this coming along to eat the green apples on the tree?\""
+  },
+  {
+   "id": "mini-city-car",
+   "name": "Mini City car",
+   "chapter": 2,
+   "pages": [
+    30,
+    31
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title",
+   "note": "Page title: Mini City."
+  },
+  {
+   "id": "mini-city-airplane",
+   "name": "Airplane over Mini City",
+   "chapter": 2,
+   "pages": [
+    31
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Mini City (p30-31)"
+  },
+  {
+   "id": "traffic-light",
+   "name": "Traffic light",
+   "chapter": 2,
+   "pages": [
+    31
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Mini City (p30-31)"
+  },
+  {
+   "id": "mirror-people",
+   "name": "Mirror People",
+   "chapter": 2,
+   "pages": [
+    32,
+    33
+   ],
+   "kind": "activity",
+   "status": "not-yet-piece-verified",
+   "name_from": "title",
+   "note": "Build a person seen only in a mirror; 3 example people pictured on p33, unnamed."
+  },
+  {
+   "id": "tallest-building",
+   "name": "Tallest building",
+   "chapter": 2,
+   "pages": [
+    36
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "City Buildings (p36-37)"
+  },
+  {
+   "id": "wider-building",
+   "name": "Wider building",
+   "chapter": 2,
+   "pages": [
+    36
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "City Buildings (p36-37)",
+   "note": "p37 also pictures two buildings with invented roofs, unnamed."
+  },
+  {
+   "id": "happy-ghost",
+   "name": "Happy Ghost",
+   "chapter": 2,
+   "pages": [
+    38,
+    39
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "text",
+   "note": "Page title: Haunted House."
+  },
+  {
+   "id": "potions-table",
+   "name": "Potions table",
+   "chapter": 2,
+   "pages": [
+    39
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Haunted House (p38-39)"
+  },
+  {
+   "id": "ghost-bat",
+   "name": "Ghost Bat",
+   "chapter": 2,
+   "pages": [
+    39
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Haunted House (p38-39)"
+  },
+  {
+   "id": "eerie-eyeballs",
+   "name": "Eerie Eyeballs",
+   "chapter": 2,
+   "pages": [
+    39
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Haunted House (p38-39)"
+  },
+  {
+   "id": "mini-ghoul",
+   "name": "Mini Ghoul",
+   "chapter": 2,
+   "pages": [
+    39
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Haunted House (p38-39)"
+  },
+  {
+   "id": "town-square-puzzle-1",
+   "name": "Town square puzzle",
+   "chapter": 2,
+   "pages": [
+    40,
+    96
+   ],
+   "kind": "puzzle",
+   "status": "diagram-readable",
+   "name_from": "title",
+   "activity": "Town Square Puzzles (p40-41)",
+   "note": "The flat pieces to rearrange are drawn on p40; the solved square is on p96."
+  },
+  {
+   "id": "town-square-puzzle-2",
+   "name": "Town square puzzle (Build Boost)",
+   "chapter": 2,
+   "pages": [
+    41,
+    96
+   ],
+   "kind": "puzzle",
+   "status": "diagram-readable",
+   "name_from": "title",
+   "activity": "Town Square Puzzles (p40-41)",
+   "note": "The pieces are drawn on p41; the solved square is on p96."
+  },
+  {
+   "id": "hungry-elephant",
+   "name": "Hungry Elephant",
+   "chapter": 2,
+   "pages": [
+    42,
+    43
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "elephant-cake",
+   "name": "Cake for Hungry Elephant",
+   "chapter": 2,
+   "pages": [
+    43
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Hungry Elephant (p42-43)",
+   "note": "p43 also pictures a leafy snack, unnamed."
+  },
+  {
+   "id": "reindeer",
+   "name": "Reindeer",
+   "chapter": 2,
+   "pages": [
+    44,
+    45
+   ],
+   "kind": "activity",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Who Deers Wins (p44-45)",
+   "note": "Build a reindeer, then grow her antlers until she topples."
+  },
+  {
+   "id": "la-la-llama",
+   "name": "La-La Llama",
+   "chapter": 2,
+   "pages": [
+    46,
+    47
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "rabbit-half-listening",
+   "name": "Rabbit face (half-listening)",
+   "chapter": 2,
+   "pages": [
+    48
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Funny Faces (p48-49)"
+  },
+  {
+   "id": "rabbit-both-ears",
+   "name": "Rabbit face (both ears)",
+   "chapter": 2,
+   "pages": [
+    48
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Funny Faces (p48-49)"
+  },
+  {
+   "id": "dog-face",
+   "name": "Dog face",
+   "chapter": 2,
+   "pages": [
+    49
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Funny Faces (p48-49)",
+   "note": "p49 also pictures a sleepy-eyed face, unnamed."
+  },
+  {
+   "id": "frog-face",
+   "name": "Frog face",
+   "chapter": 2,
+   "pages": [
+    49
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Funny Faces (p48-49)"
+  },
+  {
+   "id": "giraffe-face",
+   "name": "Giraffe face",
+   "chapter": 2,
+   "pages": [
+    49
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Funny Faces (p48-49)"
+  },
+  {
+   "id": "bake-a-cake-ephant",
+   "name": "Bake-a-cake-ephant",
+   "chapter": 2,
+   "pages": [
+    50,
+    51
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "blueberry-cake",
+   "name": "Blueberry cake",
+   "chapter": 2,
+   "pages": [
+    51
+   ],
+   "kind": "build-boost",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Bake-a-cake-ephant (p50-51)"
+  },
+  {
+   "id": "happy-bird",
+   "name": "Happy Bird",
+   "chapter": 3,
+   "pages": [
+    52
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "label"
+  },
+  {
+   "id": "lazy-bug",
+   "name": "Lazy Bug",
+   "chapter": 3,
+   "pages": [
+    52
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "label"
+  },
+  {
+   "id": "wise-owl",
+   "name": "Wise Owl",
+   "chapter": 3,
+   "pages": [
+    53
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "label"
+  },
+  {
+   "id": "hot-air-balloon",
+   "name": "Hot-air Balloon",
+   "chapter": 3,
+   "pages": [
+    54,
+    55
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title",
+   "note": "Title partly cut off in the photo; the text names the hot-air balloon."
+  },
+  {
+   "id": "long-flight-airplane",
+   "name": "Long Flight airplane",
+   "chapter": 3,
+   "pages": [
+    56,
+    57
+   ],
+   "kind": "activity",
+   "status": "not-yet-piece-verified",
+   "name_from": "title",
+   "note": "Make the longest plane you can; p57 says the plane there is made from all of the elements (no number given)."
+  },
+  {
+   "id": "playful-plane",
+   "name": "Playful Plane",
+   "chapter": 3,
+   "pages": [
+    58,
+    59
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "unknown-bird",
+   "name": "Bird (built blindfolded)",
+   "chapter": 3,
+   "pages": [
+    60
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Build the Unknown (p60-61)"
+  },
+  {
+   "id": "unknown-helicopter",
+   "name": "Helicopter (built blindfolded)",
+   "chapter": 3,
+   "pages": [
+    61
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Build the Unknown (p60-61)"
+  },
+  {
+   "id": "unknown-airplane",
+   "name": "Airplane (built blindfolded)",
+   "chapter": 3,
+   "pages": [
+    61
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Build the Unknown (p60-61)"
+  },
+  {
+   "id": "scaredy-bat",
+   "name": "Scaredy Bat",
+   "chapter": 3,
+   "pages": [
+    62,
+    63
+   ],
+   "kind": "puzzle",
+   "status": "not-yet-piece-verified",
+   "name_from": "title",
+   "note": "Build him, then find his shadow; answer on p96. Title partly cut off in the photo."
+  },
+  {
+   "id": "flying-bug",
+   "name": "Flying bug",
+   "chapter": 3,
+   "pages": [
+    64
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Match-A-Bug (p64-65)",
+   "note": "p65 pictures two more bugs, unnamed."
+  },
+  {
+   "id": "baby-bird",
+   "name": "Baby Bird",
+   "chapter": 3,
+   "pages": [
+    66
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Fly Away Home (p66-67)"
+  },
+  {
+   "id": "high-wire-home",
+   "name": "High-wire home",
+   "chapter": 3,
+   "pages": [
+    66
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Fly Away Home (p66-67)"
+  },
+  {
+   "id": "grand-throne",
+   "name": "Very grand throne",
+   "chapter": 3,
+   "pages": [
+    67
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Fly Away Home (p66-67)"
+  },
+  {
+   "id": "fancy-bird-table",
+   "name": "Fancy bird table",
+   "chapter": 3,
+   "pages": [
+    67
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Fly Away Home (p66-67)"
+  },
+  {
+   "id": "crazy-color-game",
+   "name": "Crazy Color Game birds",
+   "chapter": 3,
+   "pages": [
+    68,
+    69
+   ],
+   "kind": "activity",
+   "status": "not-yet-piece-verified",
+   "name_from": "title",
+   "note": "Pick elements in colour order; 1 example on p68 and 4 colourful birds on p69, unnamed."
+  },
+  {
+   "id": "moo-airlines",
+   "name": "Moo Airlines",
+   "chapter": 3,
+   "pages": [
+    71
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Take Off! (p70-71)"
+  },
+  {
+   "id": "flying-sofa",
+   "name": "A flying sofa",
+   "chapter": 3,
+   "pages": [
+    71
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Take Off! (p70-71)"
+  },
+  {
+   "id": "flying-snail",
+   "name": "A flying snail",
+   "chapter": 3,
+   "pages": [
+    71
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Take Off! (p70-71)"
+  },
+  {
+   "id": "super-pug",
+   "name": "Super Pug",
+   "chapter": 3,
+   "pages": [
+    72,
+    73,
+    96
+   ],
+   "kind": "puzzle",
+   "status": "not-yet-piece-verified",
+   "name_from": "title",
+   "note": "Shown in greys; rebuild him in his true colours, shown on p96."
+  },
+  {
+   "id": "robot-space-pincers",
+   "name": "Robot with space pincers",
+   "chapter": 4,
+   "pages": [
+    74
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "label"
+  },
+  {
+   "id": "mini-robot-spy-eye",
+   "name": "Mini-robot with a spy-eye",
+   "chapter": 4,
+   "pages": [
+    74
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "label"
+  },
+  {
+   "id": "clean-up-robot",
+   "name": "Clean-up Robot",
+   "chapter": 4,
+   "pages": [
+    75
+   ],
+   "kind": "showcase",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption"
+  },
+  {
+   "id": "space-rocket",
+   "name": "Space Rocket",
+   "chapter": 4,
+   "pages": [
+    76,
+    77
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "radar-dish-station",
+   "name": "Radar dish station",
+   "chapter": 4,
+   "pages": [
+    78
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Planet Base (p78-79)"
+  },
+  {
+   "id": "planet-base-radio-tower",
+   "name": "Planet base with radio tower",
+   "chapter": 4,
+   "pages": [
+    78
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Planet Base (p78-79)"
+  },
+  {
+   "id": "mobile-base",
+   "name": "Mobile base",
+   "chapter": 4,
+   "pages": [
+    78
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Planet Base (p78-79)"
+  },
+  {
+   "id": "four-legged-space-station",
+   "name": "Space station on four legs",
+   "chapter": 4,
+   "pages": [
+    79
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Planet Base (p78-79)"
+  },
+  {
+   "id": "supergalactic-hero",
+   "name": "Supergalactic Hero",
+   "chapter": 4,
+   "pages": [
+    80,
+    81
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "walking-sink",
+   "name": "Walking sink with mirror",
+   "chapter": 4,
+   "pages": [
+    82
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Space Equipment (p82-83)"
+  },
+  {
+   "id": "intergalactic-phone",
+   "name": "Intergalactic phone",
+   "chapter": 4,
+   "pages": [
+    82
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Space Equipment (p82-83)"
+  },
+  {
+   "id": "milky-way-shake-maker",
+   "name": "Mega-2000 Milky Way-shake maker",
+   "chapter": 4,
+   "pages": [
+    82
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Space Equipment (p82-83)"
+  },
+  {
+   "id": "laser-umbrella",
+   "name": "Laser umbrella",
+   "chapter": 4,
+   "pages": [
+    83
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Space Equipment (p82-83)"
+  },
+  {
+   "id": "pancake-maker",
+   "name": "Automatic pancake maker",
+   "chapter": 4,
+   "pages": [
+    83
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Space Equipment (p82-83)"
+  },
+  {
+   "id": "jetpack",
+   "name": "Jetpack",
+   "chapter": 4,
+   "pages": [
+    83
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "label",
+   "activity": "Space Equipment (p82-83)"
+  },
+  {
+   "id": "puppy-power",
+   "name": "Puppy Power",
+   "chapter": 4,
+   "pages": [
+    84,
+    85
+   ],
+   "kind": "instructions",
+   "status": "diagram-readable",
+   "name_from": "title"
+  },
+  {
+   "id": "smoothie-robot",
+   "name": "Green smoothie robot",
+   "chapter": 4,
+   "pages": [
+    86
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Robot Helpers (p86-87)"
+  },
+  {
+   "id": "cookie-jar-robot",
+   "name": "Orange cookie-jar robot",
+   "chapter": 4,
+   "pages": [
+    86
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Robot Helpers (p86-87)"
+  },
+  {
+   "id": "dj-space-elements",
+   "name": "DJ Space-Elements",
+   "chapter": 4,
+   "pages": [
+    87
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Robot Helpers (p86-87)"
+  },
+  {
+   "id": "eyebot",
+   "name": "Eyebot",
+   "chapter": 4,
+   "pages": [
+    87
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Robot Helpers (p86-87)"
+  },
+  {
+   "id": "kitchen-cupboard",
+   "name": "Galactic kitchen cupboard",
+   "chapter": 4,
+   "pages": [
+    87
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "caption",
+   "activity": "Robot Helpers (p86-87)"
+  },
+  {
+   "id": "rocket-shuttle",
+   "name": "Rocket shuttle",
+   "chapter": 4,
+   "pages": [
+    88,
+    89,
+    96
+   ],
+   "kind": "puzzle",
+   "status": "diagram-readable",
+   "name_from": "title",
+   "note": "Page title: Rocket Shuttle Puzzle. Three element piles are drawn on p88; the right one (C) is on p96. p89 also pictures two green aliens and a small rover, unnamed."
+  },
+  {
+   "id": "green-party-alien",
+   "name": "Green party alien",
+   "chapter": 4,
+   "pages": [
+    90,
+    91
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Alien Combiners (p90-91)"
+  },
+  {
+   "id": "blue-bored-alien",
+   "name": "Blue bored alien",
+   "chapter": 4,
+   "pages": [
+    90,
+    91
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Alien Combiners (p90-91)"
+  },
+  {
+   "id": "dance-party-alien",
+   "name": "Ultimate dance party alien",
+   "chapter": 4,
+   "pages": [
+    90,
+    91
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Alien Combiners (p90-91)"
+  },
+  {
+   "id": "alien-commander",
+   "name": "Alien Commander",
+   "chapter": 4,
+   "pages": [
+    92,
+    93,
+    96
+   ],
+   "kind": "puzzle",
+   "status": "not-yet-piece-verified",
+   "name_from": "title",
+   "note": "Spot the right picture (answer on p96); Build Boost: build him with your elements. p93 also pictures two more aliens, unnamed."
+  },
+  {
+   "id": "race-car-message",
+   "name": "Race car (message to aliens)",
+   "chapter": 4,
+   "pages": [
+    94
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Talking to Aliens (p94-95)"
+  },
+  {
+   "id": "birthday-cake-message",
+   "name": "Birthday cake (message to aliens)",
+   "chapter": 4,
+   "pages": [
+    95
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Talking to Aliens (p94-95)"
+  },
+  {
+   "id": "friendly-face-message",
+   "name": "Friendly face (message to aliens)",
+   "chapter": 4,
+   "pages": [
+    95
+   ],
+   "kind": "example",
+   "status": "not-yet-piece-verified",
+   "name_from": "text",
+   "activity": "Talking to Aliens (p94-95)"
+  }
+ ]
+}

@@ -1,0 +1,89 @@
+{
+ "id": "mini-ghoul",
+ "name": "Mini Ghoul",
+ "pages": [
+  39
+ ],
+ "status": "verified",
+ "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "read_from": "the picture of the model on page 39, photo IMG_3602, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "Mini Ghoul is the small white-and-black figure at the bottom-left corner of page 39, beside its yellow label.",
+ "count_note": "No element count is printed for this example model; the elements list on page 38 is for Happy Ghost, not Mini Ghoul.",
+ "elements_total": 3,
+ "unsure_elements": 3,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "Model is small and angled; size inferred from the white square with two studs along one edge",
+   "as_read": "white square body with two studs along one edge"
+  },
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "black",
+   "sure": false,
+   "doubt": "Black pieces are partly hidden behind the white body and shown small, so shape and 1x2 size are best estimates",
+   "as_read": "two black curved pieces below the white body"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3602"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0549,
+  "seen": "A tiny white-headed ghoul with two black dangling legs at the bottom left of page 39, labelled 'Mini Ghoul'.",
+  "count_note": "No printed element count for this Build Boost example; total is based only on visible pieces.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "Model is very small and angled; white 2x2 piece seen from above/side, full stud pattern partly hidden",
+    "as_read": "white 2x2 smooth square with studs along one edge"
+   },
+   {
+    "qty": 2,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "black",
+    "sure": false,
+    "doubt": "Black leg pieces are small and partly hidden behind the white piece; shape best matches black 1x2 curved slopes",
+    "as_read": "two black curved dangling legs"
+   }
+  ],
+  "elements_total": 3,
+  "agrees": true,
+  "differences": []
+ },
+ "auto_steps": {
+  "by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "ok": false,
+  "tries": 3,
+  "usd": 0.8762,
+  "picture_checks": 1,
+  "reason": "Wonder found the pictured model can't be written as pieces held by studs: The picture shows the white tile on top of the two black curved slopes, but curved slopes have no studs and the tile's edge studs face upward, so the tile cannot be stud-held from below; attaching the slopes to those studs would place them on top of the white tile, contradicting the picture"
+ }
+}

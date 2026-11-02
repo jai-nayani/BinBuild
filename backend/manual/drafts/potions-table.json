@@ -1,0 +1,174 @@
+{
+ "id": "potions-table",
+ "name": "Potions table",
+ "pages": [
+  39
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 39, photo IMG_3602, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The Potions table is a small table with grey potion bottles and an eye, at the top centre of page 39 above its yellow label.",
+ "count_note": "No element total is printed for this example; pieces hidden behind the potion bottles or against the painted house background may not be countable.",
+ "elements_total": 9,
+ "unsure_elements": 7,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "cyan flat table top"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "partly hidden as a table leg against the painted background",
+   "as_read": "orange block under one end of the top"
+  },
+  {
+   "qty": 3,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "grey potion bottles are stacked/partly hidden behind each other in the small picture, so the count is my best reading",
+   "as_read": "grey cylindrical potion bottles on the table"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellowish and the small round ends are partly hidden by the bottles",
+   "as_read": "small lime round ends on the bottles"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellowish and the piece is partly hidden behind the bottles",
+   "as_read": "lime block carrying the eye"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "round printed tile",
+   "size": "1x1",
+   "color": "white",
+   "sure": true,
+   "doubt": null,
+   "as_read": "white eye tile on the lime block"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3602"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.1136,
+  "seen": "A small potions table with bottle-like pieces on a flat top is labelled 'Potions table' near the top-centre of page 39.",
+  "count_note": null,
+  "elements": [
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "second table leg partly hidden behind the tabletop and bottles; only one orange leg is fully clear",
+    "as_read": "orange bricks forming table legs"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "partly hidden under the bottles, exact length hard to count",
+    "as_read": "teal-blue flat tabletop"
+   },
+   {
+    "qty": 2,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": true,
+    "doubt": null,
+    "as_read": "two light grey cylindrical potion bottles on the table"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green in the photo and the small discs are partly hidden at the bottle ends",
+    "as_read": "small lime discs on the potion bottles"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "tall 1x1 brick with 2 studs on side",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime prints yellow-green and the piece is partly hidden behind the grey bottles",
+    "as_read": "lime upright behind the bottles holding the eye"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "round printed tile",
+    "size": "1x1",
+    "color": "white",
+    "sure": true,
+    "doubt": null,
+    "as_read": "one white printed eye tile"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple prints blue in the photo; flat cap partly hidden behind the bottles",
+    "as_read": "dark blue-purple flat cap at the far end"
+   }
+  ],
+  "elements_total": 10,
+  "agrees": false,
+  "differences": [
+   "orange 1x2 brick: first read 1, second read 2",
+   "light_bluish_gray 1x1 round brick: first read 3, second read 2",
+   "dark_purple 1x2 plate: first read 0, second read 1"
+  ]
+ }
+}

@@ -1,0 +1,203 @@
+{
+ "id": "tallest-building",
+ "name": "Tallest building",
+ "pages": [
+  36
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 36, photo IMG_3601, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "The tallest building is the upper building on page 36 beside step 2, with its blue base at the left in the photo and its roof at the right.",
+ "count_note": "No printed element count for this model is visible on the page.",
+ "elements_total": 12,
+ "unsure_elements": 10,
+ "elements": [
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": true,
+   "doubt": null,
+   "as_read": "blue base plate"
+  },
+  {
+   "qty": 3,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "two white cylinders on the base are clear, the third white cylinder at the roof is partly behind the curved roof piece",
+   "as_read": "white round cylinders"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "round plate",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints yellow-green in the book",
+   "as_read": "lime caps on base cylinders"
+  },
+  {
+   "qty": 2,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "lime prints pale yellow; second pillar is partly hidden behind the first",
+   "as_read": "pale tall pillars"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "dark blue block partly hidden by pillars and roof, length not fully visible",
+   "as_read": "dark blue cross block"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "light blue curved roof partly hides pieces below it and its far end is not clear",
+   "as_read": "light blue curved roof"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": true,
+   "doubt": null,
+   "as_read": "orange rectangle in roof section"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x2",
+   "color": "dark_purple",
+   "sure": false,
+   "doubt": "small dark piece hanging under roof, colour may print blue-purple and size partly hidden",
+   "as_read": "dark purple hanging plate"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3601"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.2021,
+  "seen": "The tallest building is the step-2 example in the upper-middle of page 36 on the yellow panel, a stacked tower on a blue base plate with a teal curved roof.",
+  "count_note": "No printed element count for this example was visible; total is my visible count and hidden supports behind the middle bands may not be readable.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "blue base plate at bottom"
+   },
+   {
+    "qty": 3,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "pale cylinders look near-white; two on the base and one as chimney on the roof, partly hidden",
+    "as_read": "pale round cylinders on base and roof"
+   },
+   {
+    "qty": 2,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow-green in print",
+    "as_read": "green caps on two base cylinders"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow and length partly hidden behind the blue layer; closest listed lime long piece",
+    "as_read": "pale yellow-green band across middle"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "side studs largely hidden by angle",
+    "as_read": "dark blue band across middle"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": true,
+    "doubt": null,
+    "as_read": "teal curved roof piece"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": true,
+    "doubt": null,
+    "as_read": "orange rectangle in roof section"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x2",
+    "color": "dark_purple",
+    "sure": false,
+    "doubt": "dark purple can look blue/black in print and piece is partly tucked under roof",
+    "as_read": "small dark purple strip under roof"
+   }
+  ],
+  "elements_total": 11,
+  "agrees": false,
+  "differences": [
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 2, second read 0",
+   "lime 1x6 plate: first read 0, second read 1"
+  ]
+ }
+}

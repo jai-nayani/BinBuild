@@ -10,3 +10,12 @@ venv/
 .DS_Store
 .vscode/
 *.swp
+
+# Uploaded batch photos (POST /api/inventory/batch)
+data/
+
+# SQLite inventory (backend/inventory_db.py)
+binbuild.db
+binbuild.db-journal
+binbuild.db-wal
+binbuild.db-shm

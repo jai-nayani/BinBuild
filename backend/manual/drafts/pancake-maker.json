@@ -1,0 +1,267 @@
+{
+ "id": "pancake-maker",
+ "name": "Automatic pancake maker",
+ "pages": [
+  83
+ ],
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
+ "read_from": "the picture of the model on page 83, photo IMG_3624, read by Muse Wonder on Oct 30",
+ "read_by": "muse-wonder-1.0",
+ "seen": "A small chunky machine-like model on page 83, immediately to the right of the green 'Automatic pancake maker' label in the upper-right area of the page.",
+ "count_note": "No element total is printed for this model. The model is small and several pieces are partly hidden, so hidden connectors or plates may have been missed; no pieces were added to reach a target.",
+ "elements_total": 13,
+ "unsure_elements": 13,
+ "elements": [
+  {
+   "qty": 2,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x2",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Small and partly hidden at the top of the model; blue shades are hard to separate in the print",
+   "as_read": "two blue curved-up blocks on top"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "tall 1x1 brick with 2 studs on side",
+   "size": "1x1",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Lime prints yellow-green and the piece is partly behind the blue top pieces",
+   "as_read": "lime upright piece at top right"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "1x6",
+   "color": "lime",
+   "sure": false,
+   "doubt": "Length partly hidden behind the top pieces; lime prints yellow-green",
+   "as_read": "lime long piece across top"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "round brick",
+   "size": "1x1",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Small grey cylinder partly hidden at the side; light grey looks near-white",
+   "as_read": "grey cylinder protruding on left"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick",
+   "size": "1x2",
+   "color": "orange",
+   "sure": false,
+   "doubt": "Only a small orange section is visible behind other pieces",
+   "as_read": "orange block at middle left"
+  },
+  {
+   "qty": 2,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x2",
+   "color": "magenta",
+   "sure": false,
+   "doubt": "A horizontal split suggests two stacked plates but the rear plate is partly hidden",
+   "as_read": "stacked magenta plates in centre front"
+  },
+  {
+   "qty": 1,
+   "family": "tile",
+   "shape": "tile with 2 studs on edge",
+   "size": "2x2",
+   "color": "white",
+   "sure": false,
+   "doubt": "White piece under the magenta plates is partly hidden and could be another white plate type",
+   "as_read": "white studded piece below magenta"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "wedge plate",
+   "size": "2x4",
+   "color": "white",
+   "sure": false,
+   "doubt": "White tapered piece on the right is partly hidden; exact extent cannot be counted",
+   "as_read": "white wedge on right side"
+  },
+  {
+   "qty": 1,
+   "family": "plate",
+   "shape": "plate",
+   "size": "2x4",
+   "color": "medium_azure",
+   "sure": false,
+   "doubt": "Blue lower piece is partly hidden and viewed at an angle",
+   "as_read": "medium blue plate at lower left"
+  },
+  {
+   "qty": 1,
+   "family": "brick",
+   "shape": "brick with 4 studs on side",
+   "size": "1x4",
+   "color": "blue",
+   "sure": false,
+   "doubt": "Dark blue lower piece is partly hidden; blue and dark purple print similarly",
+   "as_read": "dark blue vertical piece at lower left"
+  },
+  {
+   "qty": 1,
+   "family": "slope",
+   "shape": "curved slope",
+   "size": "1x3",
+   "color": "light_bluish_gray",
+   "sure": false,
+   "doubt": "Pale curved piece at the base is partly hidden; light grey looks near-white",
+   "as_read": "pale grey curved piece at bottom"
+  }
+ ],
+ "hand_check": {
+  "done": false,
+  "on": null,
+  "by": null,
+  "notes": ""
+ },
+ "second_read": {
+  "read_by": "muse-wonder-1.0",
+  "on": "2026-11-01",
+  "photos": [
+   "IMG_3624"
+  ],
+  "status": "draft",
+  "tries": 1,
+  "usd": 0.0945,
+  "seen": "The Automatic pancake maker is the small stacked colourful gadget in the middle-right of page 83, next to its label.",
+  "count_note": "No element count is printed for this example; parts of the stack are hidden behind other pieces, so hidden pieces may not be counted.",
+  "elements": [
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "round brick",
+    "size": "1x1",
+    "color": "light_bluish_gray",
+    "sure": false,
+    "doubt": "grey cylinder protruding on the left is partly hidden and light grey can look near-white",
+    "as_read": "grey round protrusion on left"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick with 4 studs on side",
+    "size": "1x4",
+    "color": "blue",
+    "sure": false,
+    "doubt": "dark blue upright piece at the top is partly hidden behind other pieces, studs and length not fully countable",
+    "as_read": "dark blue upright brick at top"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "curved slope",
+    "size": "1x2",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "light blue curved piece at top right is partly obscured, exact form partly hidden",
+    "as_read": "medium azure curved piece top right"
+   },
+   {
+    "qty": 1,
+    "family": "slope",
+    "shape": "1x1 slope (cheese)",
+    "size": "1x1",
+    "color": "medium_blue",
+    "sure": false,
+    "doubt": "small blue sloping piece at the top is partly hidden and could be part of the larger blue pieces",
+    "as_read": "small blue slope at top"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "1x6",
+    "color": "lime",
+    "sure": false,
+    "doubt": "lime looks yellow-green in print and the ends are partly hidden, length not fully countable",
+    "as_read": "lime studded plate across top"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x4",
+    "color": "medium_azure",
+    "sure": false,
+    "doubt": "dark teal-blue lower body is partly hidden behind the stack, size not fully countable",
+    "as_read": "medium azure base at lower left"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "round plate",
+    "size": "1x1",
+    "color": "lime",
+    "sure": false,
+    "doubt": "small lime disc at front lower left is partly hidden; lime looks yellow in print",
+    "as_read": "lime round disc lower left"
+   },
+   {
+    "qty": 1,
+    "family": "tile",
+    "shape": "tile with 2 studs on edge",
+    "size": "2x2",
+    "color": "white",
+    "sure": false,
+    "doubt": "white studded piece in the middle is partly covered by magenta and lime pieces",
+    "as_read": "white partial-stud piece in middle"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "plate",
+    "size": "2x2",
+    "color": "magenta",
+    "sure": true,
+    "doubt": null,
+    "as_read": "magenta studded plate in centre"
+   },
+   {
+    "qty": 1,
+    "family": "plate",
+    "shape": "wedge plate",
+    "size": "2x4",
+    "color": "white",
+    "sure": false,
+    "doubt": "white tapered piece under the magenta plate is partly hidden, full outline not visible",
+    "as_read": "white tapered plate below magenta"
+   },
+   {
+    "qty": 1,
+    "family": "brick",
+    "shape": "brick",
+    "size": "1x2",
+    "color": "orange",
+    "sure": false,
+    "doubt": "small orange piece at the lower tip is partly hidden behind the white piece",
+    "as_read": "orange piece at lower tip"
+   }
+  ],
+  "elements_total": 11,
+  "agrees": false,
+  "differences": [
+   "medium_azure 1x2 curved slope: first read 2, second read 1",
+   "lime 1x1 tall 1x1 brick with 2 studs on side: first read 1, second read 0",
+   "magenta 2x2 plate: first read 2, second read 1",
+   "light_bluish_gray 1x3 curved slope: first read 1, second read 0",
+   "medium_blue 1x1 1x1 slope (cheese): first read 0, second read 1",
+   "lime 1x1 round plate: first read 0, second read 1"
+  ]
+ }
+}
