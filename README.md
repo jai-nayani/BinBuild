@@ -2,8 +2,7 @@
 
 **BinBuild scans a bin of loose LEGO and generates new build guides using only the pieces you already own.**
 
-Built with Meta SAM 3.1, Muse Spark, and inventory-constrained BrickGPT for the
-Meta Global AI Developer Hackathon (Oct 26 – Nov 4, 2026, indie track).
+**Built during the Meta AI Developer Hackathon (Oct 26 – Nov 4)** — indie track, with Meta SAM 3.1, Muse Spark, and inventory-constrained BrickGPT.
 
 > Fan project, not affiliated with or endorsed by the LEGO Group. "LEGO" is a
 > trademark of the LEGO Group.
@@ -21,6 +20,8 @@ Only 8 brick types feed generation (BrickGPT's library): 1×1, 1×2, 1×4, 1×6,
 1×8, 2×2, 2×4, 2×6. Every other piece still gets an inventory record under a
 broad family (plate, slope, wheel, …) or "unknown" — never forced into the
 nearest brick category.
+
+Related work: BrickWright (Pun et al., 2026) generates LEGO builds with LLM agents in a plan-execute-validate loop — the same paradigm as our Wonder designer + validator; we add the inventory constraint (builds limited to exactly the pieces you own). [arXiv:2610.31651](https://arxiv.org/abs/2610.31651)
 
 ## Repo layout
 
