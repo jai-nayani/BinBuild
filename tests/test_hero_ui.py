@@ -203,6 +203,11 @@ class TestPhoneApp(unittest.TestCase):
         for f in ("style.css", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png"):
             self.assertIn(f"'./{f}'", sw)
             self.assertTrue((APP / f).is_file(), f)
+        # it fetches from the server, never from the browser's HTTP cache, which may hold an old page
+        self.assertIn("new Request(url, { cache: 'reload' })", sw)
+        self.assertIn("cache: 'no-cache'", sw)
+        if shutil.which("node"):
+            subprocess.run(["node", "--check", str(APP / "sw.js")], check=True, capture_output=True)
 
 
 def play(**scenario):
