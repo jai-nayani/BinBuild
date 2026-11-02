@@ -9,7 +9,7 @@ tests/test_sample_bin.py).
   carries a guard and only those two are paid; GET routes stay open; with no
   key configured (the home network) nothing changes;
 - one URL: with BINBUILD_APP_DIR the backend serves the PWA at "/" beside
-  the API.
+  the API, with Cache-Control: no-cache so a redeploy reaches every browser.
 
 No Model API call; every database is a temporary one. Standard-library
 unittest. Run from the repo root:
@@ -19,6 +19,7 @@ unittest. Run from the repo root:
 import os
 import tempfile
 import unittest
+import urllib.request
 from pathlib import Path
 from unittest import mock
 
@@ -119,6 +120,9 @@ class TestOneUrl(unittest.TestCase):
             self.assertEqual(api.call("GET", "/health"), (200, {"status": "ok", "service": "binbuild",
                                                                 "version": "0.1.0"}))
             self.assertEqual(api.call("GET", "/api/builds/options")[0], 200)
+            for path in ("/", "/app.js", "/style.css", "/sw.js"):   # no stale page after a redeploy
+                with urllib.request.urlopen(api.base + path) as reply:
+                    self.assertEqual(reply.headers["cache-control"], "no-cache", path)
 
     def test_at_home_the_root_is_still_the_api(self):
         with tempfile.TemporaryDirectory() as tmp, full_loop.server(tmp, None) as api:

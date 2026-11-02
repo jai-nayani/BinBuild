@@ -74,6 +74,17 @@ PAID = [Depends(guard.paid)]     # calls a paid API: shared key + per-IP limit
 WRITE = [Depends(guard.write)]   # everything else that writes: per-IP limit
 
 
+class AppFiles(StaticFiles):
+    """The PWA's files, served with Cache-Control: no-cache so a browser checks
+    for a newer copy on every load (an unchanged file is a cheap 304): after a
+    redeploy nobody keeps an old page from their HTTP cache."""
+
+    async def get_response(self, path, scope):
+        response = await super().get_response(path, scope)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
+
+
 def wonder_on() -> bool:
     return os.environ.get(WONDER_FLAG, "").strip() == "1"
 # Shapes offered when fixing a piece in review (any text is accepted).
@@ -756,7 +767,7 @@ def create_app() -> FastAPI:
         return HTMLResponse(booklet.render_html(build["result"]["booklet"]))
 
     if app_dir:
-        app.mount("/", StaticFiles(directory=app_dir, html=True), name="app")
+        app.mount("/", AppFiles(directory=app_dir, html=True), name="app")
     return app
 
 
