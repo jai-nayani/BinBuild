@@ -6,7 +6,9 @@
 // Scenario: {"notices": {view: retake notice}, "fail": [views that fail, in order],
 //            optional: "order": [views, tapped on the capture grid in this order before each photo],
 //            "tap_failed": a failed view whose red panel is tapped after the check,
-//            "identify": HTTP status for Identify (Next) once all 5 are clear, e.g. 401}.
+//            "identify": HTTP status for Identify (Next) once all 5 are clear, e.g. 401,
+//            "use_sample": tap "Use sample images" at the end,
+//            "open_builds": open "What can I build?" at the end, on an empty bin, then tap its sample button}.
 // Prints JSON: for every pop-up shown, what the pop-up itself shows (its title,
 // its own Retake button, the photo in it, the "How:" hint) and which view the
 // retake was uploaded as. The pop-up's parts are found inside #retake-modal,
@@ -139,6 +141,17 @@ class FakeXHR {
       reply = [scenario.identify, { detail: 'this calls a paid API, so on the public demo it needs the access key' }];
     } else if (p === '/api/inventory/summary') {
       reply = [200, { total_pieces: 50 }];
+    } else if (p === '/api/inventory/sample') {
+      reply = this.method === 'POST' ? [200, { batch_id: 'sample1', sample: true, loaded_now: true }]
+        : [200, { batch_id: 'sample1', photos: 5, pieces: 50, loaded: false }];
+    } else if (p === '/api/inventory/vocab') {
+      reply = [200, { families: [], colors: [], shapes: [], generator_types: [] }];
+    } else if (p === '/api/inventory/batch/sample1/review') {
+      reply = [200, { batch: { id: 'sample1', status: 'classified', classifier: 'sample: the kit batch, pre-computed' },
+                      detections: [], pieces: 50, photos_ready: true, count_photo: null }];
+    } else if (p === '/api/builds/options') {   // an empty bin: the backend sends no catalog, only scan_first
+      reply = [200, { inventory: { total_pieces: 0, generator_ready: 0, other: 0 }, options: [],
+                      scan_first: 'Nothing in your bin yet.' }];
     } else if (retakeMatch) {
       const view = decodeURIComponent(retakeMatch[2]);
       failing = failing.filter((v) => v !== view);
@@ -187,6 +200,8 @@ const VIEWS = ['top', 'front', 'right', 'back', 'left'];
 const pick = (input, name) => { input.files = [{ name, type: 'image/jpeg' }]; input.dispatch('change'); };
 
 const shown = (id) => !byId(id).classList.contains('hidden');
+const visible = () => ['hero-view', 'capture-view', 'review-view', 'finished-view', 'check-view', 'build-view']
+  .filter(shown);
 const panels = () => Object.fromEntries(VIEWS.map((v) => [v,
   ['next', 'taken', 'passed', 'failed', 'locked'].filter((c) => byId('panel-' + v).classSet.has(c))]));
 const ui = { hero_at_start: shown('hero-view'), capture_at_start: shown('capture-view') };
@@ -237,7 +252,28 @@ if (scenario.identify) {
   byId('identify-btn').click();
   ui.sample_offer = { shown: shown('sample-offer'), button: byId('sample-bin-btn').textContent };
   byId('sample-bin-btn').click();
-  ui.build_view_after_sample = shown('build-view');
+  ui.view_after_sample = visible();
+  ui.check_title_after_sample = byId('check-title').textContent;
+}
+if (scenario.use_sample) {
+  const before = uploads.length;
+  byId('sample-images-btn').click();
+  ui.view_after_use_sample = visible();
+  ui.check_title_after_use_sample = byId('check-title').textContent;
+  ui.use_sample_requests = uploads.slice(before).map((u) => u.method + ' ' + u.path);
+}
+if (scenario.open_builds) {
+  byId('build-open-btn').click();
+  const list = byId('build-list').children;
+  ui.builds = {
+    view: visible(), inventory_text: byId('build-inventory').textContent,
+    catalog_entries: list.filter((e) => /\b(option|mrow|chapter|build-section)\b/.test(e.className || '')).length,
+    buttons: list.filter((e) => e.tagName === 'BUTTON').map((e) => e.textContent),
+  };
+  const before = uploads.length;
+  list.filter((e) => e.tagName === 'BUTTON' && e.textContent === 'Use sample images')[0].click();
+  ui.prompt_sample_view = visible();
+  ui.prompt_sample_requests = uploads.slice(before).map((u) => u.method + ' ' + u.path);
 }
 
 const ids = [];

@@ -46,7 +46,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import booklet, build_plan, guard, inventory_db, inventory_vocab, photo_gate
+from . import booklet, build_plan, guard, inventory_db, inventory_vocab, photo_gate, sample_bin
 from .sam_client import SamClient, SamError
 from .wonder_client import WonderClient, WonderError
 from .segmenter import COUNT_VIEW, WholePhotoSegmenter
@@ -463,6 +463,28 @@ def create_app() -> FastAPI:
             return {"classified": True, "run": run, **inventory_db.batch_review(conn, batch_id),
                     **_photo_state(conn, batch_id)}
 
+    @app.get("/api/inventory/sample")
+    def get_sample():
+        """The sample bin: how many photos and pieces it has, and whether it is
+        loaded. Read-only."""
+        info = sample_bin.info()
+        with inventory_db.reading() as conn:
+            row = conn.execute("SELECT status FROM batches WHERE id = ?", (info["batch_id"],)).fetchone()
+        return {**info, "loaded": row is not None, "status": row["status"] if row else None}
+
+    @app.post("/api/inventory/sample", dependencies=WRITE)
+    def load_sample():
+        """Use sample images: load the sample bin (5 photos of the kit and its
+        already-verified pieces, pre-computed) as a batch ready for review, the
+        first time; after that, the same batch. No classification and no paid
+        API call, so it needs no access key. Then review and confirm it like any
+        batch (it is never added twice)."""
+        with closing(inventory_db.connect()) as conn:
+            loaded = sample_bin.load(conn, DATA_DIR)
+            batch_id = loaded["batch"]["id"]
+            return {"batch_id": batch_id, "sample": True, "loaded_now": loaded["loaded"],
+                    **inventory_db.batch_review(conn, batch_id), **_photo_state(conn, batch_id)}
+
     @app.get("/api/inventory/batches")
     def list_inventory_batches():
         """Every batch, newest first: uploaded, classified (waiting for
@@ -582,15 +604,22 @@ def create_app() -> FastAPI:
           one is "unverified": listed with its chapter and pages, its piece
           list not yet verified, no fit claim and no booklet;
         - then the pre-generated BrickGPT designs, with "fit", "patched",
-          "short" or "not_connected"."""
+          "short" or "not_connected".
+        Nothing until there is a bin: with no confirmed pieces yet (no batch
+        scanned and confirmed, no sample loaded and confirmed) there is no
+        catalog at all, only "scan_first" saying what to do."""
         with inventory_db.reading() as conn:
             summary = inventory_db.inventory_summary(conn)
+        inventory = {"total_pieces": summary["total_pieces"], "generator_ready": summary["generator_ready"]["total"],
+                     "other": summary["other"]["total"] + summary["unknown"]["total"]}
+        if not summary["total_pieces"]:
+            return {"inventory": inventory, "options": [],
+                    "scan_first": "Nothing in your bin yet. Scan a handful of pieces, or use the sample images, "
+                                  "then add them to your inventory to see what you can build."}
         found = build_plan.options(summary["items"])
         manual = [o for o in found if o["kind"] == "manual"]
         count = lambda status: sum(o["piece_status"] == status for o in manual)  # noqa: E731
-        return {"inventory": {"total_pieces": summary["total_pieces"],
-                              "generator_ready": summary["generator_ready"]["total"],
-                              "other": summary["other"]["total"] + summary["unknown"]["total"]},
+        return {"inventory": inventory,
                 "manual": {"builds": len(manual), "verified": count("verified"),
                            "diagram_readable": count("diagram-readable"),
                            "not_yet_piece_verified": count("not-yet-piece-verified"),

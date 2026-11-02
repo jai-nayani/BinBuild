@@ -1,5 +1,6 @@
 """The public deploy (deploy/modal_app.py): one URL, the paid routes guarded,
-a fresh demo database.
+an empty bin at the start (visitors scan, or use the sample images:
+tests/test_sample_bin.py).
 
 - guard (backend/guard.py), with BINBUILD_ACCESS_KEY set as on the deploy:
   classify and Wonder generate answer 401 without the key or with a wrong
@@ -8,9 +9,7 @@ a fresh demo database.
   carries a guard and only those two are paid; GET routes stay open; with no
   key configured (the home network) nothing changes;
 - one URL: with BINBUILD_APP_DIR the backend serves the PWA at "/" beside
-  the API;
-- demo database: the kit's 50 pieces as one confirmed batch, seeded once,
-  and the build list renders from it.
+  the API.
 
 No Model API call; every database is a temporary one. Standard-library
 unittest. Run from the repo root:
@@ -23,11 +22,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from backend import build_plan as bp
-from backend import demo_seed
 from backend import guard
-from backend import inventory_db as db
-from test_full_loop import KIT_ITEMS
 
 try:
     import uvicorn  # noqa: F401
@@ -41,37 +36,6 @@ REPO = Path(__file__).resolve().parent.parent
 KEY = "test-key-not-a-secret"
 PUBLIC = {guard.ACCESS_KEY_ENV: KEY}
 CLASSIFY = "/api/inventory/batch/20261102-000000-aaaaaa/classify"
-
-
-def norm(items):
-    return sorted((i["family"], i["shape"], i["size"], i["color"], i["generator_type"], i["quantity"]) for i in items)
-
-
-class TestDemoSeed(unittest.TestCase):
-    def test_the_kit_as_one_confirmed_batch(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "fresh" / "binbuild.db"
-            self.assertTrue(demo_seed.seed(path))
-            self.assertFalse(demo_seed.seed(path))   # already there: left alone
-            with db.reading(path) as conn:
-                summary = db.inventory_summary(conn)
-                batches = db.list_batches(conn)
-                self.assertEqual(db.recent_builds(conn), [])
-        self.assertEqual([(b["id"], b["status"], b["pieces"], b["photos"]) for b in batches],
-                         [(demo_seed.BATCH_ID, "confirmed", 50, 0)])
-        self.assertEqual((summary["total_pieces"], summary["batches_confirmed"]), (50, 1))
-        self.assertEqual(norm(summary["items"]), norm(KIT_ITEMS))
-
-    def test_the_build_list_renders_from_it(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "binbuild.db"
-            demo_seed.seed(path)
-            with db.reading(path) as conn:
-                items = db.inventory_summary(conn)["items"]
-        found = bp.options(items)
-        house = next(o for o in found if o.get("set") == "house-and-tree")
-        self.assertEqual((house["status"], house["has_booklet"]), ("fit", True))
-        self.assertEqual(sum(o["kind"] == "brickgpt" for o in found), 10)
 
 
 @unittest.skipUnless(HAVE_SERVER, "FastAPI or uvicorn not installed")

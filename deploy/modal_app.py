@@ -5,12 +5,13 @@ Deploy from the repo root:
 
 - One web function (modal.asgi_app) serves the API and the PWA's static files
   (BINBUILD_APP_DIR), so the page and the API share an origin: no CORS.
-  max_containers=1: one container holds the demo database and the in-memory
-  rate limits.
-- A fresh demo database at every container start (backend/demo_seed.py): the
-  kit's 50 pieces as one confirmed batch. The image carries only backend/,
-  app/ and the pre-generated Path A designs; never .env, binbuild.db, data/
-  or photos.
+  max_containers=1: one container holds the database and the in-memory rate
+  limits.
+- An empty bin at every container start: nothing to build until a visitor
+  scans a handful or taps "Use sample images" (backend/sample_bin.py: 5 small
+  sample photos and their pre-computed pieces, no model call, no key needed).
+  The image carries only backend/ (with those sample assets), app/ and the
+  pre-generated Path A designs; never .env, binbuild.db, data/ or other photos.
 - Secrets live in Modal, not in the repo or the image:
     binbuild-api-keys  BASETEN_API_KEY, META_MODEL_API_KEY (the paid APIs)
     binbuild-access    BINBUILD_ACCESS_KEY (the shared key for the routes
@@ -60,7 +61,5 @@ def web():
                            "refusing to start with the paid routes open")
     os.environ.pop("BINBUILD_WONDER", None)
 
-    from backend import demo_seed
-    demo_seed.seed()
     from backend.main import app as api
     return api
