@@ -271,7 +271,8 @@ class TestSteps(Drafts):
         short = DESIGN.replace("2x1 (2,1,1) brick orange\n", "")
         check = mv.check_design(mv.wdr.extract(short)[1], OWNED, dict(mv.counts(self.ship["elements"])))
         self.assertTrue(wd.validate(mv.wdr.extract(short)[1], OWNED).ok, "the validator alone would pass it")
-        self.assertEqual(check.errors, ["orange 1x2 brick: the list has 2, the design uses 1"])
+        self.assertEqual(check.errors, ["1 under-count: Brick 1x2 (orange) @ Position(0,0,1) — the list has 2, "
+                                        "the design uses 1"])
 
     def test_cannot_stops(self):
         fake, record, d = self.run_one([read_reply(LIST), "Cannot: the mast is held by the clip plate's clip."])

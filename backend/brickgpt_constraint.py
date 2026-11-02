@@ -22,6 +22,11 @@ the Failure whose design came closest to the bin (fewest short studs).
 contacts (overlapping footprints on adjacent layers). It is NOT a claim of
 physical stability; that needs a hand-built test.
 
+Every problem found names the count, the brick and its grid position, in
+backend/diagnostics.py's shape ("1 floating: Brick 2x4 @ Position(2,1,3)"):
+parse_design raises with one such line per bad brick, and a Failure carries
+them in `details`. Nothing here reads or writes the inventory database.
+
 Run the full inventory x design matrix from the repo root:
     python3 -m backend.brickgpt_constraint
 """
@@ -36,6 +41,8 @@ from collections import Counter
 from dataclasses import dataclass, field
 from math import ceil, comb
 from pathlib import Path
+
+from . import diagnostics as dx
 
 GRID = 20  # BrickGPT works on a 20 x 20 x 20 grid
 MAX_PATCH_ATTEMPTS = 20
@@ -82,6 +89,15 @@ class Brick:
     def cells(self):
         return [(self.x + i, self.y + j) for i in range(self.h) for j in range(self.w)]
 
+    @property
+    def name(self) -> str:
+        """'Brick 2x4', turned as the design places it."""
+        return f"Brick {self.h}x{self.w}"
+
+    def at(self) -> str:
+        """'Brick 2x4 @ Position(2,1,3)'."""
+        return dx.at(self.name, self.x, self.y, self.z)
+
     def __str__(self) -> str:
         return f"{self.h}x{self.w} ({self.x},{self.y},{self.z})"
 
@@ -112,29 +128,50 @@ class Failure:
     still_short: dict  # what was still short when patching stopped
     attempts: int = 0
     tried: list = field(default_factory=list)
+    details: list = field(default_factory=list)  # every problem: count, brick, Position(x,y,z)
+    problem: str = "over-count"  # "floating", "over-count" or "empty"
 
 
 # --- parse ------------------------------------------------------------------
 
 def parse_design(text: str) -> Design:
-    """Parse BrickGPT output: one `SIZE (x,y,z)` brick per line."""
-    bricks, taken = [], set()
+    """Parse BrickGPT output: one `SIZE (x,y,z)` brick per line. Raises
+    ValueError naming every bad brick (one line each: unknown size, off the
+    grid, or overlapping an earlier brick)."""
+    bricks, taken, errors = [], {}, []
     for n, line in enumerate(text.splitlines(), 1):
         line = line.strip()
         if not line:
             continue
         m = _LINE.match(line)
-        if not m:
-            raise ValueError(f"line {n}: can't parse {line!r}")
+        if not m:  # nothing to place: the line number is the only position there is
+            errors.append(f"1 unreadable: line {n} {line!r} — expected 'HxW (x,y,z)'")
+            continue
         brick = Brick(*map(int, m.groups()))
-        brick.kind  # raises if outside the 8-type universe
+        try:
+            brick.kind
+        except ValueError:
+            errors.append(dx.line(1, "unknown part", brick.at(),
+                                  f"not one of the 8 brick types ({', '.join(BRICK_TYPES)})"))
+            continue
+        if not (brick.x + brick.h <= GRID and brick.y + brick.w <= GRID and brick.z < GRID):
+            errors.append(dx.line(1, "off-grid", brick.at(),
+                                  f"covers x {brick.x}-{brick.x + brick.h - 1}, y {brick.y}-{brick.y + brick.w - 1}, "
+                                  f"layer {brick.z}; the grid is 0-{GRID - 1} each way"))
+            continue
+        hits = {}  # earlier brick -> the cells this one shares with it
         for x, y in brick.cells():
-            if not (0 <= x < GRID and 0 <= y < GRID and 0 <= brick.z < GRID):
-                raise ValueError(f"line {n}: {line} leaves the {GRID}^3 grid")
             if (x, y, brick.z) in taken:
-                raise ValueError(f"line {n}: {line} overlaps another brick")
-            taken.add((x, y, brick.z))
+                hits.setdefault(taken[(x, y, brick.z)], []).append((x, y, brick.z))
+            else:
+                taken[(x, y, brick.z)] = brick
+        for other, cells in hits.items():
+            more = f"{len(cells)} cells shared" if len(cells) > 1 else ""
+            overlap = f"{brick.at()} overlaps {other.at()} at {dx.position(*cells[0])}"
+            errors.append(dx.line(1, "collision", overlap, more))
         bricks.append(brick)
+    if errors:
+        raise ValueError("\n".join(errors))
     return tuple(bricks)
 
 
@@ -196,6 +233,21 @@ def parts(design: Design) -> list:
 
 def is_connected(design: Design) -> bool:
     return len(parts(design)) == 1
+
+
+def floating(design: Design) -> list:
+    """One line per group of bricks not joined to the biggest group:
+    '1 floating: Brick 2x4 @ Position(2,1,3)'."""
+    return [dx.line(len(g), "floating", ", ".join(design[i].at() for i in g)) for g in parts(design)[1:]]
+
+
+def over_count(design: Design, inventory: dict) -> list:
+    """One line per type used beyond the bin, with where every brick of it is:
+    '2 over-count: Brick 2x6 @ Position(..), ... — uses 9, owns 7'."""
+    used = count_bricks(design)
+    return [dx.line(n, "over-count", dx.many(f"Brick {t}", [(b.x, b.y, b.z) for b in design if b.kind == t]),
+                    f"uses {used[t]}, owns {inventory.get(t, 0)}")
+            for t, n in shortfall(design, inventory).items()]
 
 
 # --- patch ------------------------------------------------------------------
@@ -360,22 +412,23 @@ def generate(category: str, designs_dir: Path = DESIGNS_DIR) -> Design:
 
 def fit_design(design: Design, inventory: dict, category: str = "",
                max_attempts: int = MAX_PATCH_ATTEMPTS):
-    """Filter, then patch. Returns a Build or a Failure, never a rejected design."""
+    """Filter, then patch. Returns a Build or a Failure, never a rejected design.
+    A Failure's details name every floating group and every over-count with
+    the bricks' positions in the generated design."""
     before = count_bricks(design)
     short = shortfall(design, inventory)
     if not design:
-        return Failure(category, "empty design", short, short)
-    groups = parts(design)
-    if len(groups) > 1:
-        sizes = "+".join(str(len(g)) for g in groups)
-        return Failure(category, f"not connected: {len(groups)} separate parts ({sizes} bricks)",
-                       short, short)
+        return Failure(category, "empty design", short, short, details=["the design has no bricks"], problem="empty")
+    loose, over = floating(design), over_count(design, inventory)
+    if loose:
+        return Failure(category, "not connected: " + "; ".join(loose), short, short,
+                       details=loose + over, problem="floating")
     if not short:
         return Build(category, "fit", design, before, before)
     patched, attempts, log, still = patch(design, inventory, max_attempts)
     if patched is None:
         verdict = "not patchable" if attempts == 0 else "patch failed"
-        return Failure(category, f"{verdict}: {log[-1]}", short, still, attempts, log)
+        return Failure(category, f"{verdict}: {log[-1]}", short, still, attempts, log, details=over)
     return Build(category, "patched", patched, before, count_bricks(patched), attempts,
                  [line for line in log if line.endswith(": ok")])
 

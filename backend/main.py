@@ -8,6 +8,11 @@ confirmed inventory (a known set, or a pre-generated BrickGPT design fitted
 with Path A), and a step-by-step booklet for a build that fits. Live BrickGPT
 generation is off.
 
+Checking a build never writes: POST /api/builds/check and the build list
+read the database read-only (inventory_db.reading) and return a verdict
+with details that name the count, the part and its grid position. Storing a
+build is the separate, explicit POST /api/builds (and a Wonder generation).
+
 Every photo goes through the photo gate (backend/photo_gate.py) when it is
 uploaded. A batch with a failed photo answers with a "retake" list (which
 view, why, what to do); the phone retakes just that photo, and classify and
@@ -566,7 +571,7 @@ def create_app() -> FastAPI:
           list not yet verified, no fit claim and no booklet;
         - then the pre-generated BrickGPT designs, with "fit", "patched",
           "short" or "not_connected"."""
-        with closing(inventory_db.connect()) as conn:
+        with inventory_db.reading() as conn:
             summary = inventory_db.inventory_summary(conn)
         found = build_plan.options(summary["items"])
         manual = [o for o in found if o["kind"] == "manual"]
@@ -586,7 +591,7 @@ def create_app() -> FastAPI:
 
     def _wonder_state():
         from . import wonder_designer
-        with closing(inventory_db.connect()) as conn:
+        with inventory_db.reading() as conn:
             recent = [b for b in inventory_db.recent_builds(conn, 50) if b["request"].get("wonder")][:5]
         return {"enabled": True, "targets": list(wonder_designer.TARGETS), "per_try": wonder_designer.PER_TRY,
                 "max_tries": wonder_designer.MAX_ATTEMPTS, "busy": _wonder_busy.locked(),
@@ -611,7 +616,7 @@ def create_app() -> FastAPI:
         target = "".join(ch for ch in request.target if ch.isprintable()).strip()
         from . import wonder_designer
         from . import wonder_design as wd
-        with closing(inventory_db.connect()) as conn:
+        with inventory_db.reading() as conn:
             summary = inventory_db.inventory_summary(conn)
             batches = inventory_db.confirmed_batches(conn)
         owned = wd.owned_from_items(summary["items"])
@@ -654,24 +659,41 @@ def create_app() -> FastAPI:
                                                      first={d["id"]: why for d, why in ordered if why},
                                                      verified=sum(map(build_plan.reads_agree, drafts.values()))))
 
+    def _plan(request: BuildRequest, with_booklet: bool):
+        """(what was asked, the inventory summary, the plan): read-only."""
+        if bool(request.set) == bool(request.design):
+            raise HTTPException(422, "ask for exactly one of: a known set ('set') or a BrickGPT design ('design')")
+        asked = {"set": request.set} if request.set else {"design": request.design, "samples": request.samples}
+        with inventory_db.reading() as conn:
+            summary = inventory_db.inventory_summary(conn)
+        try:
+            return asked, summary, build_plan.plan(asked, summary["items"], with_booklet)
+        except KeyError as err:
+            raise HTTPException(404, err.args[0])
+
+    @app.post("/api/builds/check")
+    def check_build(request: BuildRequest):
+        """Check a build against the confirmed inventory and store nothing:
+        the verdict ("fit", "patched", "short" or "not_connected") and the
+        details, each naming the count, the part and its grid position, e.g.
+        "1 floating: Brick 2x4 @ Position(2,1,3)". Reads the database
+        read-only; POST /api/builds is the separate call that stores a build."""
+        asked, _, result = _plan(request, with_booklet=False)
+        return {"request": asked, "verdict": result["status"], "ok": result["status"] in ("fit", "patched"),
+                "details": result.get("details", []), "message": result["message"], "plan": result}
+
     @app.post("/api/builds", status_code=201)
     def create_build(request: BuildRequest):
         """Plan a build from the confirmed inventory and store it: a known set
         ({"set": "house-and-tree"}) or a BrickGPT design fitted with Path A
         ({"design": "train"}). A plan that fits comes with a booklet
         (booklet_url); one that doesn't comes back as a named shortfall, with
-        no booklet."""
-        if bool(request.set) == bool(request.design):
-            raise HTTPException(422, "ask for exactly one of: a known set ('set') or a BrickGPT design ('design')")
-        asked = {"set": request.set} if request.set else {"design": request.design, "samples": request.samples}
+        no booklet. Planning reads only; storing is this call's explicit last
+        step (to check without storing, POST /api/builds/check)."""
+        asked, summary, result = _plan(request, with_booklet=True)
         with closing(inventory_db.connect()) as conn:
-            summary = inventory_db.inventory_summary(conn)
-            try:
-                result = build_plan.plan(asked, summary["items"])
-            except KeyError as err:
-                raise HTTPException(404, err.args[0])
             build = inventory_db.create_build(conn, asked, build_plan.snapshot(summary), result)
-            return _build_reply(build)
+        return _build_reply(build)
 
     @app.get("/api/builds/{build_id}")
     def get_build(build_id: int):

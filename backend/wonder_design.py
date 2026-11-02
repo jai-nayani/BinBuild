@@ -24,13 +24,19 @@ what is owned, every piece on the stud grid and inside the 20 x 20 base,
 no two pieces in the same space, and every piece held by studs to the rest
 (one connected model that stands on the table). Connections are vertical
 only: a piece's bottom on the top studs of a piece below. Side studs,
-clips and bars are not counted as connections. Standard library only.
+clips and bars are not counted as connections. Every error names the count,
+the part and its grid position, in backend/diagnostics.py's shape:
+"1 floating: Round Plate 1x1 @ Position(3,0,9) — ...". The validator only
+reads: it takes a design and the owned pieces and returns a verdict with
+its details. Standard library only.
 """
 
 import re
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from . import diagnostics as dx
 
 GRID = 20             # studs, as BrickGPT
 MAX_PLATES = 60       # 20 bricks
@@ -124,6 +130,18 @@ def canonical(size: str) -> str:
     return f"{a}x{b}"
 
 
+def title(code: str) -> str:
+    """'round_plate' -> 'Round Plate'."""
+    return code.replace("_", " ").title()
+
+
+def part_name(key) -> str:
+    """An inventory key as a part: 'Brick 1x2 (orange)'."""
+    family, shape, size, color = key
+    code = {v: c for c, v in CODES.items()}.get((family, shape))
+    return f"{title(code) if code else shape.title()} {size} ({color.replace('_', ' ')})"
+
+
 def part_for(code, size, color):
     """The Part for a code, size (any orientation) and colour, or None."""
     size = canonical(size)
@@ -151,6 +169,15 @@ class Piece:
     @property
     def key(self):
         return inventory_key(self.code, f"{self.h}x{self.w}", self.color)
+
+    @property
+    def name(self) -> str:
+        """'Curved Slope 2x1': the kind of piece, turned as the line places it."""
+        return f"{title(self.code)} {self.h}x{self.w}"
+
+    def at(self) -> str:
+        """'Curved Slope 2x1 @ Position(2,0,7)'."""
+        return dx.at(self.name, self.x, self.y, self.z)
 
     def text(self) -> str:
         d = f" {self.part.direction}={self.direction}" if self.part and self.part.direction and self.direction else ""
@@ -225,68 +252,84 @@ def parse(text):
         if not line:
             continue
         m = LINE.match(line)
-        if not m:
-            errors.append(f"line {n}: can't read {line!r}; expected 'HxW (x,y,z) code color [down|studs|clip=±x|±y]'")
+        if not m:  # nothing to place: the line number is the only position there is
+            errors.append(f"1 unreadable: line {n} {line!r} — can't read it; expected "
+                          "'HxW (x,y,z) code color [down|studs|clip=±x|±y]'")
             continue
         h, w, x, y, z = map(int, m.groups()[:5])
         code, color, dkey, dval = m.group(6), m.group(7), m.group(8), m.group(9)
+        where = dx.at(f"{title(code)} {h}x{w}", x, y, z)
         if code not in CODES:
-            errors.append(f"line {n}: unknown piece code {code!r}; codes are {', '.join(CODES)}")
+            errors.append(dx.line(1, "unknown part", where,
+                                  f"unknown piece code {code!r}; codes are {', '.join(CODES)}"))
             continue
         part = part_for(code, f"{h}x{w}", color) if h > 0 and w > 0 else None
         if part is None:
             sizes = sorted({k[1] for k in PARTS if k[0] == code})
-            errors.append(f"line {n}: you own no {code} of size {h}x{w}; a {code} comes in {', '.join(sizes)}"
-                          + ("" if h > 0 and w > 0 else " (sizes start at 1)"))
+            errors.append(dx.line(1, "unknown part", where, f"you own no {code} of size {h}x{w}; a {code} comes in "
+                                  f"{', '.join(sizes)}" + ("" if h > 0 and w > 0 else " (sizes start at 1)")))
             continue
         if part.direction and dkey != part.direction:
-            errors.append(f"line {n}: a {code} needs '{part.direction}=±x' or '±y'" +
-                          (f", not '{dkey}='" if dkey else ""))
+            errors.append(dx.line(1, "bad direction", where, f"a {code} needs '{part.direction}=±x' or '±y'" +
+                                  (f", not '{dkey}='" if dkey else "")))
             continue
         if not part.direction and dkey:
-            errors.append(f"line {n}: a {code} takes no '{dkey}=' direction")
+            errors.append(dx.line(1, "bad direction", where, f"a {code} takes no '{dkey}=' direction"))
             continue
         piece = Piece(n, h, w, x, y, z, code, color, dval, part)
         if part.direction in ("down", "clip") and h * w > 1:
             long_axis = "x" if h > w else "y"
             if dval[1] != long_axis:
-                errors.append(f"line {n}: {code} {h}x{w} runs along {long_axis}, so its {dkey}= must be ±{long_axis}")
+                errors.append(dx.line(1, "bad direction", where,
+                                      f"{code} {h}x{w} runs along {long_axis}, so its {dkey}= must be ±{long_axis}"))
                 continue
         if part.direction == "studs" and part.code == "wedge_plate":
             short_axis = "x" if h < w else "y"
             if dval[1] != short_axis:
-                errors.append(f"line {n}: a {h}x{w} wedge plate's studs run along a long edge, so studs= must be ±{short_axis}")
+                errors.append(dx.line(1, "bad direction", where, f"a {h}x{w} wedge plate's studs run along a long "
+                                      f"edge, so studs= must be ±{short_axis}"))
                 continue
         pieces.append(piece)
     return pieces, errors
 
 
 def validate(text, owned) -> Check:
-    """owned: {inventory key: quantity} (see owned_from_items)."""
+    """owned: {inventory key: quantity} (see owned_from_items). Reads only:
+    the verdict is Check.ok, the details Check.errors."""
     pieces, errors = parse(text)
     counts = Counter(p.key for p in pieces)
     shortfall = {}
     for key, n in counts.items():
         have = owned.get(key, 0)
+        where = dx.many(part_name(key), [(p.x, p.y, p.z) for p in pieces if p.key == key])
         if key[:3] in EXCLUDED:
-            errors.append(f"{label(key)}: not usable ({EXCLUDED[key[:3]]})")
+            errors.append(dx.line(n, "unusable part", where, EXCLUDED[key[:3]]))
         elif n > have:
             shortfall[label(key)] = n - have
-            errors.append(f"{label(key)}: uses {n}, owns {have}" + ("" if have else " (not in the inventory at all)"))
+            errors.append(dx.line(n - have, "over-count", where, f"uses {n}, owns {have}"
+                                  + ("" if have else " (not in the inventory at all)")))
     taken = {}
     for p in pieces:
         if p.x < 0 or p.y < 0 or p.x + p.h > GRID or p.y + p.w > GRID:
-            errors.append(f"line {p.line}: {p.text()} is off the {GRID}x{GRID} base")
-        if p.z < 0 or p.z + p.part.height > MAX_PLATES:
-            errors.append(f"line {p.line}: {p.text()} is below the table or too high")
+            errors.append(dx.line(1, "off-grid", p.at(), f"covers x {p.x}-{p.x + p.h - 1}, y {p.y}-{p.y + p.w - 1}; "
+                                  f"the base is 0-{GRID - 1} each way"))
+        if p.z < 0:
+            errors.append(dx.line(1, "off-grid", p.at(), "below the table (z starts at 0)"))
+        elif p.z + p.part.height > MAX_PLATES:
+            errors.append(dx.line(1, "off-grid", p.at(), f"its top is at plate {p.z + p.part.height}, "
+                                  f"above the {MAX_PLATES}-plate limit"))
+        hits = {}  # earlier piece's line -> (that piece, the cells this one shares with it)
         for v in sorted(p.voxels()):
-            if v in taken and taken[v] != p.line:
-                errors.append(f"line {p.line}: {p.text()} overlaps line {taken[v]} at stud ({v[0]},{v[1]}), plate {v[2]}")
-                break
-            taken[v] = p.line
+            if v in taken:
+                hits.setdefault(taken[v].line, (taken[v], []))[1].append(v)
+            else:
+                taken[v] = p
+        for q, cells in hits.values():
+            more = f"{len(cells)} cells shared" if len(cells) > 1 else ""
+            errors.append(dx.line(1, "collision", f"{p.at()} overlaps {q.at()} at {dx.position(*cells[0])}", more))
     if pieces:
         _connectivity(pieces, errors)
-    else:
+    elif not errors:  # every line rejected already says where; this is for a design with no lines at all
         errors.append("the design has no pieces")
     return Check(not errors, pieces, errors, shortfall, dict(counts), sum(counts.values()))
 
@@ -318,19 +361,22 @@ def _connectivity(pieces, errors):
         for g in groups.values():
             if g is main:
                 continue
-            lines = ", ".join(str(pieces[i].line) for i in g)
-            errors.append(f"line{'s' if len(g) > 1 else ''} {lines}: not held by any stud to the rest of the model (floating or only resting "
-                          "on a smooth top, a slope or a jumper plate)")
-    if min(p.z for p in pieces) != 0:
-        errors.append("no piece stands on the table (the lowest z must be 0)")
+            errors.append(dx.line(len(g), "floating", ", ".join(pieces[i].at() for i in g),
+                                  "not held by any stud to the rest of the model (floating, or only resting on a "
+                                  "smooth top, a slope or a jumper plate)"))
+    lowest = min(p.z for p in pieces)
+    if lowest != 0:
+        errors.append(dx.line(sum(p.z == lowest for p in pieces), "bad stacking",
+                              ", ".join(p.at() for p in pieces if p.z == lowest),
+                              "no piece stands on the table: the lowest z must be 0"))
     # a piece sitting where a jumper plate's off-grid stud is: not representable
     for p in pieces:
         if p.part.top == "off_grid":
             above = {(cx, cy, p.z + p.part.height) for cx, cy in p.cells()}
             for q in pieces:
                 if q is not p and any((cx, cy, q.z) in above for cx, cy in q.bottom()):
-                    errors.append(f"line {q.line}: sits on the jumper plate on line {p.line}, whose single stud is "
-                                  "half a stud off the grid; nothing may go on a jumper plate")
+                    errors.append(dx.line(1, "bad stacking", q.at(), f"sits on {p.at()}, whose single stud is half "
+                                          "a stud off the grid; nothing may go on a jumper plate"))
 
 
 def owned_from_items(items) -> dict:

@@ -50,6 +50,7 @@ from pathlib import Path
 
 from . import booklet as bk
 from . import build_plan as bp
+from . import diagnostics as dx
 from . import manual_transcribe as mt
 from . import wonder_design as wd
 from . import wonder_designer as wdr
@@ -163,9 +164,18 @@ CANNOT = re.compile(r"^\s*Cannot:\s*(.+)$", re.M | re.I)
 
 
 def list_errors(pieces, want) -> list:
+    """Each part the design uses more or fewer of than the book's list, with
+    where the design places it (backend/diagnostics.py): '1 under-count:
+    Brick 1x2 (orange) @ Position(3,0,1) — the list has 2, the design uses 1'."""
     used = Counter(p.key for p in pieces)
-    return [f"{wd.label(k)}: the list has {want.get(k, 0)}, the design uses {used.get(k, 0)}"
-            for k in list(dict.fromkeys([*want, *used])) if used.get(k, 0) != want.get(k, 0)]
+    out = []
+    for k in dict.fromkeys([*want, *used]):
+        n, listed = used.get(k, 0), want.get(k, 0)
+        if n != listed:
+            where = dx.many(wd.part_name(k), [(p.x, p.y, p.z) for p in pieces if p.key == k])
+            out.append(dx.line(abs(n - listed), "over-count" if n > listed else "under-count", where,
+                               f"the list has {listed}, the design uses {n}"))
+    return out
 
 
 def check_design(body, owned, want):

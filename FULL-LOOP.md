@@ -38,7 +38,8 @@ SAM 3.1 stays a stub.
 | Endpoint | |
 |---|---|
 | `GET /api/builds/options` | Inventory totals (all, generator-ready, other), plus every known set and pre-generated design with `fit` / `patched` / `short` / `not_connected` and a message naming what is missing. |
-| `POST /api/builds` | `{"set": "house-and-tree"}` or `{"design": "train", "samples": 6}`. Plans against the confirmed inventory and stores the build. Answers 201 with the result. A build that fits gets `booklet_url` and `steps`; a shortfall gets `shortfall` (BrickGPT) or `missing` (set), and no booklet. Unknown set or design: 404. Neither or both: 422. |
+| `POST /api/builds/check` | Same body as `POST /api/builds`. Checks the build against the confirmed inventory and **stores nothing** (the database is opened read-only): `verdict` (`fit` / `patched` / `short` / `not_connected`), `ok`, and `details`, each naming the count, the part and its grid position ("1 floating: Brick 2x4 @ Position(2,1,3)"). |
+| `POST /api/builds` | `{"set": "house-and-tree"}` or `{"design": "train", "samples": 6}`. Plans against the confirmed inventory and stores the build: the one explicit save. Answers 201 with the result. A build that fits gets `booklet_url` and `steps`; a shortfall gets `shortfall` (BrickGPT) or `missing` (set), and no booklet. Unknown set or design: 404. Neither or both: 422. |
 | `GET /api/builds/{id}` | The stored build: request, result, booklet JSON, inventory snapshot. |
 | `GET /api/builds/{id}/booklet` | The booklet page (HTML). A shortfall build has none: 404 with the message. |
 

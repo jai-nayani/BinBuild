@@ -88,7 +88,8 @@ differences**.
 `wonder_design.validate(text, owned)` checks:
 - **Owned:** every line is a piece the user owns, with counts within the
   inventory. Too many of a kind is reported as a shortfall, like Path A
-  ("orange 1x2 brick: uses 3, owns 2").
+  ("1 over-count: Brick 1x2 (orange) @ Position(3,0,1), Position(3,0,4),
+  Position(0,1,0) — uses 3, owns 2").
 - **Format:** sizes and directions fit the piece.
 - **Grid:** every piece on the stud grid, inside 20×20.
 - **No overlaps:** each piece fills its footprint for its height (the 6091's
@@ -101,8 +102,15 @@ differences**.
   - Nothing may sit on a jumper plate.
   - Side studs, clips and bars are not counted.
 
-On failure the errors go back to Wonder, numbered by line ("line 9: not held
-by any stud to the rest of the model…"), up to 5 attempts. If none passes,
+Every error leads with the count, then names the part and its exact grid
+position, in one shape for every check (`backend/diagnostics.py`): floating,
+collision, off-grid, over-count, bad stacking, plus unknown part and bad
+direction ("1 floating: Round Plate 1x1 @ Position(3,0,9) — not held by any
+stud to the rest of the model…"). Only an unreadable line, which has nothing
+to place, gives its line number instead. The validator only reads: design
+and owned pieces in, verdict and errors out.
+
+On failure the errors go back to Wonder, up to 5 attempts. If none passes,
 the result names the shortfall and the last errors, with no design.
 
 ## The two live runs

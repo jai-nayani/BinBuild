@@ -25,8 +25,11 @@ Two kinds of build can be planned:
   assigned afterwards from the owned bricks of each size. A design that
   doesn't fit comes back as a named shortfall, never as a design.
 
-A plan that fits carries its booklet (backend/booklet.py). Standard library
-only.
+A plan that fits carries its booklet (backend/booklet.py). One that doesn't
+carries `details`: every problem as count, part and grid position
+(backend/diagnostics.py). Planning only reads: nothing here touches the
+database; storing a plan is the caller's separate, explicit step
+(inventory_db.create_build). Standard library only.
 """
 
 import json
@@ -36,6 +39,8 @@ from pathlib import Path
 
 from . import booklet as bk
 from . import brickgpt_constraint as path_a
+from . import diagnostics as dx
+from . import wonder_design as wd
 from .inventory_vocab import GENERATOR_TYPES
 
 SETS_DIR = Path(__file__).resolve().parent / "sets"
@@ -107,13 +112,34 @@ def plan_set(set_id, items, with_booklet=True) -> dict:
     return plan_spec(sets[set_id], items, with_booklet)
 
 
+def set_details(spec, items) -> list:
+    """Each piece the set needs beyond the inventory, with where its steps
+    place every one: '1 over-count: Brick 1x2 (orange) @ Position(..), ... — needs 2, owns 1'."""
+    have = Counter()
+    for item in items:
+        have[_key(item)] += item["quantity"]
+    spots = {}
+    for step in spec["steps"]:
+        for p in step["place"]:
+            spots.setdefault(p["part"], []).append(tuple(p["at"]))
+    out = []
+    for name, where in spots.items():
+        part = spec["parts"][name]
+        got = have[_key(part)]
+        if len(where) > got:
+            out.append(dx.line(len(where) - got, "over-count", dx.many(wd.part_name(_key(part)), where),
+                               f"needs {len(where)}, owns {got}"))
+    return out
+
+
 def plan_spec(spec, items, with_booklet=True) -> dict:
     set_id = spec["id"]
     check = check_set(spec, items)
     pieces = sum(p["need"] for p in check["parts"])
     result = {"kind": "set", "id": set_id, "title": spec["title"],
               "status": "fit" if check["fits"] else "short", "pieces": pieces,
-              "parts": check["parts"], "missing": check["missing"]}
+              "parts": check["parts"], "missing": check["missing"],
+              "details": [] if check["fits"] else set_details(spec, items)}
     if check["fits"]:
         result["message"] = f"You have all {pieces} pieces."
     else:
@@ -202,17 +228,19 @@ def plan_design(category, items, samples=path_a.DEFAULT_SAMPLES, with_booklet=Tr
     if isinstance(result, path_a.Build):
         out = {**base, "status": result.status, "pieces": len(result.design), "attempts": result.attempts,
                "counts_before": result.counts_before, "counts_after": result.counts_after, "swaps": result.swaps,
-               "message": f"You have the bricks for this: {_counts_text(result.counts_after)}."}
+               "details": [], "message": f"You have the bricks for this: {_counts_text(result.counts_after)}."}
         if with_booklet:
             out["booklet"] = design_booklet(category, result, items)
         return out
-    disconnected = result.reason.startswith("not connected")
+    disconnected = result.problem == "floating"
     out = {**base, "status": "not_connected" if disconnected else "short", "reason": result.reason,
-           "shortfall": result.shortfall, "still_short": result.still_short, "attempts": result.attempts,
-           "short_bricks": sum(result.shortfall.values()), "short_studs": path_a.short_studs(result.shortfall)}
+           "details": result.details, "shortfall": result.shortfall, "still_short": result.still_short,
+           "attempts": result.attempts, "short_bricks": sum(result.shortfall.values()),
+           "short_studs": path_a.short_studs(result.shortfall)}
     owned = _counts_text(base["generator_ready"]) or "none"
     if disconnected:
-        out["message"] = f"This design has a loose part ({result.reason}), so it can't be built from any bin."
+        loose = "; ".join(d for d in result.details if " floating: " in d)
+        out["message"] = f"This design has a loose part ({loose}), so it can't be built from any bin."
     else:
         out["message"] = (f"Short of {out['short_bricks']} bricks: {_counts_text(result.shortfall)}. "
                           f"Bricks BrickGPT can use in your bin: {owned}.")
@@ -397,12 +425,14 @@ def manual_options(items) -> list:
 RANK = {"fit": 0, "patched": 0, "short": 1, "not_connected": 2}
 
 
-def plan(request, items) -> dict:
-    """request: {"set": id} or {"design": category}."""
+def plan(request, items, with_booklet=True) -> dict:
+    """request: {"set": id} or {"design": category}. Reads only: storing the
+    plan is a separate call (inventory_db.create_build)."""
     if request.get("set"):
-        return plan_set(request["set"], items)
+        return plan_set(request["set"], items, with_booklet)
     if request.get("design"):
-        return plan_design(request["design"], items, samples=request.get("samples", path_a.DEFAULT_SAMPLES))
+        return plan_design(request["design"], items, samples=request.get("samples", path_a.DEFAULT_SAMPLES),
+                           with_booklet=with_booklet)
     raise KeyError("ask for a known set ('set') or a BrickGPT design ('design')")
 
 

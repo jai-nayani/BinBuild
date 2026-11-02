@@ -19,6 +19,10 @@ the batch for review, so it can be corrected and confirmed again.
 
 Builds: each request for a build is stored with the inventory it was
 planned against and its result (a plan and booklet, or a named shortfall).
+Storing is always its own explicit call (create_build). Anything that only
+looks (validating a design, planning, listing builds) reads through
+reading(), a read-only connection that can't create, migrate or change the
+database.
 
 Photo gate: every photo carries the result of the local checks (and of
 Spark's "is this real LEGO?" check). A batch can't be classified or confirmed
@@ -153,6 +157,24 @@ def connect(path=None) -> sqlite3.Connection:
                 conn.execute(f"ALTER TABLE {table} ADD COLUMN {name} {kind}")
     conn.execute("CREATE INDEX IF NOT EXISTS batch_photos_sha256 ON batch_photos (sha256)")
     return conn
+
+
+@contextmanager
+def reading(path=None):
+    """A read-only connection, for anything that only looks: validating,
+    planning, listing. It can't create, migrate or write the database; with
+    no database file yet it reads an empty inventory held in memory."""
+    path = Path(path or DB_PATH)
+    if path.is_file():
+        conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True, check_same_thread=False)
+    else:
+        conn = sqlite3.connect(":memory:", check_same_thread=False)
+        conn.executescript(SCHEMA)
+    conn.row_factory = sqlite3.Row
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 
 @contextmanager

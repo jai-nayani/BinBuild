@@ -85,18 +85,25 @@ class TestValidator(unittest.TestCase):
 
     def test_floating_and_resting_on_smooth_tops(self):
         self.assertFails(HOUSE + "1x1 (9,9,0) round_tile white\n1x1 (9,9,5) round_plate lime\n", "not held by any stud")
-        self.assertFails(HOUSE + "1x1 (3,0,9) round_plate lime\n", "line 10: not held")  # on a curved slope
+        self.assertFails(HOUSE + "1x1 (3,0,9) round_plate lime\n",  # on a curved slope
+                         "1 floating: Round Plate 1x1 @ Position(3,0,9) — not held")
         tile_tree = HOUSE.replace("1x1 (1,0,4) round_plate lime", "1x1 (1,0,4) round_tile white")
         self.assertFails(tile_tree + "1x1 (1,0,5) round_plate lime\n", "not held")
 
     def test_overlap_count_owned_grid(self):
-        self.assertFails(HOUSE + "2x1 (3,0,2) plate dark_purple\n", "overlaps line 6")  # line 1 is blank
-        c = self.assertFails(HOUSE + "2x1 (0,1,0) brick orange\n", "orange 1x2 brick: uses 3, owns 2")
+        self.assertFails(HOUSE + "2x1 (3,0,2) plate dark_purple\n",
+                         "1 collision: Plate 2x1 @ Position(3,0,2) overlaps Brick 2x1 @ Position(3,0,1) "
+                         "at Position(3,0,2)")
+        c = self.assertFails(HOUSE + "2x1 (0,1,0) brick orange\n",
+                             "1 over-count: Brick 1x2 (orange) @ Position(3,0,1), Position(3,0,4), Position(0,1,0)"
+                             " — uses 3, owns 2")
         self.assertEqual(c.shortfall, {"orange 1x2 brick": 1})
         c = self.assertFails(HOUSE + "1x2 (0,1,0) plate red\n", "not in the inventory at all")
         self.assertEqual(c.shortfall, {"red 1x2 plate": 1})
         self.assertFails(HOUSE + "2x4 (0,1,0) brick orange\n", "you own no brick of size 2x4")
-        self.assertFails(HOUSE + "1x2 (19,19,0) plate dark_purple\n", "off the 20x20 base")
+        self.assertFails(HOUSE + "1x2 (19,19,0) plate dark_purple\n",
+                         "1 off-grid: Plate 1x2 @ Position(19,19,0) — covers x 19-19, y 19-20; "
+                         "the base is 0-19 each way")
         self.assertFails("2x1 (0,0,1) brick orange\n", "no piece stands on the table")
         self.assertFails(HOUSE + "4x1 (0,1,0) hinge_plate black\n", "unknown piece code 'hinge_plate'")
         self.assertFails("this is not a design\n", "can't read")
@@ -114,7 +121,8 @@ class TestValidator(unittest.TestCase):
         base = "1x2 (0,0,0) curved_slope medium_azure down=+y\n"
         self.assertTrue(check(base + "1x1 (0,1,3) round_plate lime\n").ok)          # on the stud
         self.assertFails(base + "1x1 (0,0,4) round_plate lime\n", "not held")         # on the curve
-        self.assertFails(base + "1x1 (0,0,3) round_plate lime\n", "overlaps line 1")  # inside the curve
+        self.assertFails(base + "1x1 (0,0,3) round_plate lime\n",  # inside the curve
+                         "overlaps Curved Slope 1x2 @ Position(0,0,0) at Position(0,0,3)")
 
     def test_wedge_plate_studs_on_one_long_edge(self):
         base = "2x4 (0,0,0) wedge_plate white studs=+x\n"
@@ -134,7 +142,8 @@ class TestValidator(unittest.TestCase):
     def test_clip_takes_up_the_next_cell(self):
         base = "4x1 (0,0,0) side_stud_brick blue\n2x1 (0,0,3) clip_plate lime clip=+x\n"
         self.assertTrue(check(base).ok)
-        self.assertFails(base + "1x1 (2,0,3) round_plate lime\n", "overlaps line 2")
+        self.assertFails(base + "1x1 (2,0,3) round_plate lime\n",
+                         "overlaps Clip Plate 2x1 @ Position(0,0,3) at Position(2,0,3)")
 
 
 class Scripted:
