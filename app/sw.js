@@ -4,13 +4,18 @@
  * Network first, so a freshly served app.js always wins over the cached one;
  * the cache is only the offline fallback. API calls are never cached.
  */
-var CACHE_NAME = 'binbuild-v12';
+var CACHE_NAME = 'binbuild-v13';
 var SHELL = [
   './',
   './index.html',
+  './style.css',
   './app.js',
   './manifest.json',
   './icon.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-maskable-512.png',
+  './apple-touch-icon.png',
 ];
 
 self.addEventListener('install', function (event) {

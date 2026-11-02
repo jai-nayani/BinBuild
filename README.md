@@ -55,12 +55,16 @@ tests/          Standard-library unit tests (python3 -m unittest discover -s tes
                 Path A: python3 -m unittest backend.test_brickgpt_constraint)
 spike-constraint-kit/  Pre-generated BrickGPT designs and Path A test inventories
 app/            Phone client (PWA, no build step)
-  index.html    Capture loop: snap → review → confirm → Finished
+  index.html    Hero (scatter → identify → build, bricks snapping together), then the
+                capture hub: a 3-column grid of 6 panels (tip out one flat layer + the
+                5 photos) → review → Next: identify → check the pieces → Finished
+  style.css     The look; plain CSS motion, nothing moves with reduced motion
   app.js        5-photo batches, upload, retake pop-up, Identify, Check the pieces,
                 What can I build? (BACKEND_URL at the top)
-  manifest.json PWA manifest
+  manifest.json PWA manifest (standalone; PNG icons for home screens)
   sw.js         Service worker (offline app shell)
-  icon.svg      App icon
+  icon.svg, icon-192.png, icon-512.png, icon-maskable-512.png,
+  apple-touch-icon.png   App icons (180x180 for iPhone home screens)
 ```
 
 ## Run it locally
