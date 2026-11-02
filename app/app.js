@@ -1,4 +1,13 @@
-/* BinBuild PWA — capture loop: snap -> review -> confirm -> upload -> check -> identify -> Finished.
+/* BinBuild PWA — one scrolling instruction booklet: a cover, then 9 steps.
+ *
+ *   1 tip out one flat layer · 2-6 one photo each: top, front, right, back,
+ *   left · 7 check the photos and identify the pieces · 8 check the pieces ·
+ *   9 your build (and its booklet)
+ *
+ * Every step is always on the page; the one to do now is marked (yellow
+ * number), and the app scrolls to it as the batch moves on. Each photo step
+ * shows its guide drawing before "Open camera", which opens the native camera.
+ * When a photo passes the photo check its step number snaps to green.
  *
  * Each batch is 5 photos of one handful: top view plus 4 sides. Every snap is
  * reviewed (retake or use) before it joins the batch; a full batch uploads to
@@ -100,11 +109,31 @@ var ACCESS_KEY = (function () {
     el.classList.toggle('ok', kind === 'ok');
   }
 
-  function show(viewId) {
-    ['capture-view', 'review-view', 'finished-view', 'check-view', 'build-view'].forEach(function (id) {
-      $(id).classList.toggle('hidden', id !== viewId);
-    });
-    window.scrollTo(0, 0);
+  // Steps 2-6 are the 5 views, in VIEWS order; the other steps are fixed.
+  var STEPS = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5', 'step-6', 'step-7', 'step-8', 'step-9'];
+  var focusStep = null; // 'step-8' or 'step-9' once a batch has moved past the photos
+  var snapped = {};     // view -> its step number is green (snapped once, when it passed)
+
+  function stepOf(i) { return STEPS[i + 1]; }
+  function say(key, msg, kind) { setStatus(msg, kind, $('msg-' + key)); } // a note under one photo step
+
+  function reducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function goTo(id) {
+    var target = $(id);
+    if (target && target.scrollIntoView) {
+      target.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+    }
+  }
+
+  // The photo step to do next, or step 7 once all 5 are taken.
+  function captureStep() { return batch || nextSlot() === -1 ? 'step-7' : stepOf(nextSlot()); }
+
+  function markCurrent() {
+    var current = focusStep || captureStep();
+    STEPS.forEach(function (id) { $(id).classList.toggle('current', id === current); });
   }
 
   function nextSlot() { return slots.indexOf(null); } // -1 when the batch is full
@@ -146,64 +175,57 @@ var ACCESS_KEY = (function () {
 
   function render() {
     var next = nextSlot();
-    var batchNo = uploaded.length + 1;
-    if (batch) {
-      $('shot-title').textContent = 'Batch ' + batchNo + (batch.ready ? ' · all 5 photos are clear' : ' · retake needed');
-      $('shot-hint').textContent = batch.ready
-        ? 'Keep the pieces where they are and tap Identify pieces.'
-        : 'Retake the photo marked in red. Keep the pieces where they are.';
-    } else if (next === -1) {
-      $('shot-title').textContent = 'Batch ' + batchNo + ' · all 5 photos taken';
-      $('shot-hint').textContent = 'Upload the batch, or tap ✕ on a photo to retake it.';
-    } else {
-      $('shot-title').textContent = 'Batch ' + batchNo + ' · photo ' + (next + 1) + ' of 5: ' + VIEWS[next].label;
-      $('shot-hint').textContent = VIEWS[next].hint;
-    }
     var full = next === -1;
-    $('snap-btn').classList.toggle('hidden', full || !!batch);
-    $('gallery-btn').classList.toggle('hidden', full || !!batch);
+    VIEWS.forEach(function (v, i) {
+      var photo = slots[i];
+      // after the upload, every view the check didn't ask for again has passed
+      var passed = !!batch && !!photo && !needsRetake(v.key);
+      var no = $('no-' + v.key);
+      no.classList.toggle('taken', !!photo && !batch);
+      no.classList.toggle('failed', needsRetake(v.key));
+      no.classList.toggle('passed', passed);
+      if (passed && !snapped[v.key]) { no.classList.add('snap'); } // yellow -> green, with a small bounce
+      if (!passed) { no.classList.remove('snap'); }
+      snapped[v.key] = passed;
 
-    var thumbs = $('thumbs');
-    thumbs.innerHTML = '';
-    slots.forEach(function (photo, i) {
-      var wrap = document.createElement('div');
-      wrap.className = 'thumb' + (photo ? '' : ' empty') + (i === next && !batch ? ' next' : '') +
-        (needsRetake(VIEWS[i].key) ? ' failed' : '');
-      var tag = document.createElement('span');
-      tag.className = 'tag';
-      tag.textContent = VIEWS[i].key;
+      var box = $('photo-' + v.key);
+      box.innerHTML = '';
       if (photo) {
         var img = document.createElement('img');
         img.src = photo.url;
-        img.alt = VIEWS[i].label;
-        wrap.appendChild(img);
-        if (!batch) { // once uploaded, photos change only through a retake
-          var remove = document.createElement('button');
-          remove.type = 'button';
-          remove.textContent = '✕';
-          remove.disabled = uploading;
-          remove.setAttribute('aria-label', 'Retake the ' + VIEWS[i].label);
-          remove.addEventListener('click', function () {
-            URL.revokeObjectURL(photo.url);
-            slots[i] = null;
-            setStatus('Removed the ' + VIEWS[i].label + '. Take it again.');
-            render();
-          });
-          wrap.appendChild(remove);
-        }
+        img.alt = 'Your ' + v.label;
+        box.appendChild(img);
       }
-      wrap.appendChild(tag);
-      thumbs.appendChild(wrap);
+      var waiting = !batch && i === next; // only the next photo's step offers the camera
+      $('snap-' + v.key).classList.toggle('hidden', !waiting);
+      $('gallery-' + v.key).classList.toggle('hidden', !waiting);
+      var redo = $('redo-' + v.key);
+      redo.classList.toggle('hidden', !photo || !!batch); // once uploaded, photos change only through a retake
+      redo.disabled = uploading;
     });
+    $('no-1').classList.toggle('passed', filled() > 0 || !!batch || uploaded.length > 0);
+    $('no-7').classList.toggle('passed', uploaded.length > 0 && !batch && filled() === 0);
 
     uploadBtn.classList.toggle('hidden', !!batch);
     uploadBtn.disabled = !full || uploading;
-    uploadBtn.textContent = uploading ? 'Uploading…' : '⬆ Upload batch (' + filled() + '/5)';
+    uploadBtn.textContent = uploading ? 'Checking the photos…'
+      : full ? 'Check my 5 photos' : 'Check my 5 photos (' + filled() + ' of 5 taken)';
     identifyBtn.classList.toggle('hidden', !(batch && batch.ready));
     identifyBtn.disabled = busy;
-    identifyBtn.textContent = busy ? 'Identifying… (about a minute)' : '🔍 Identify pieces';
-    $('finished-btn').disabled = uploading || busy || !!batch;
+    identifyBtn.textContent = busy ? 'Identifying… (about a minute)' : 'Identify the pieces';
+    $('finished-btn').disabled = uploading || busy;
+    markCurrent();
   }
+
+  VIEWS.forEach(function (v, i) {
+    $('redo-' + v.key).addEventListener('click', function () {
+      if (!slots[i] || batch || uploading) { return; }
+      URL.revokeObjectURL(slots[i].url);
+      slots[i] = null;
+      say(v.key, 'Removed. Take this one again.');
+      render();
+    });
+  });
 
   // --- snap + review ----------------------------------------------------------
 
@@ -211,17 +233,22 @@ var ACCESS_KEY = (function () {
     var file = input.files && input.files[0];
     input.value = ''; // so picking the same file again still fires "change"
     if (!file) { return; } // camera cancelled: stay where we are
+    if (nextSlot() === -1 || batch) { return; }
+    var view = VIEWS[nextSlot()];
     if (file.type && file.type.indexOf('image/') !== 0) {
-      setStatus('That file is not a photo (' + file.type + ').', 'error');
+      say(view.key, 'That file is not a photo (' + file.type + ').', 'error');
       return;
     }
-    if (nextSlot() === -1 || batch) { return; }
     if (pending) { URL.revokeObjectURL(pending.url); }
     pending = { file: file, url: URL.createObjectURL(file) };
-    var view = VIEWS[nextSlot()];
     $('review-title').textContent = 'Check the ' + view.label;
     $('review-img').src = pending.url;
-    show('review-view');
+    $('review-view').classList.remove('hidden');
+  }
+
+  function closeSheet() {
+    $('review-view').classList.add('hidden');
+    $('review-img').removeAttribute('src');
   }
 
   cameraInput.addEventListener('change', function () { onPicked(cameraInput); });
@@ -232,19 +259,17 @@ var ACCESS_KEY = (function () {
     var i = nextSlot();
     slots[i] = pending;
     pending = null;
-    $('review-img').removeAttribute('src');
-    setStatus(nextSlot() === -1
-      ? 'All 5 photos taken. Upload the batch.'
-      : 'Saved the ' + VIEWS[i].label + '. Next: ' + VIEWS[nextSlot()].label + '.');
-    show('capture-view');
+    closeSheet();
+    say(VIEWS[i].key, '');
+    if (nextSlot() === -1) { setStatus('All 5 photos taken. Check them, then identify the pieces.'); }
     render();
+    goTo(captureStep()); // on to the next photo's step, or to step 7
   });
 
   $('cancel-review-btn').addEventListener('click', function () {
     if (pending) { URL.revokeObjectURL(pending.url); }
     pending = null;
-    $('review-img').removeAttribute('src');
-    show('capture-view');
+    closeSheet();
     render();
   });
 
@@ -263,7 +288,7 @@ var ACCESS_KEY = (function () {
     uploading = true;
     progressEl.value = 0;
     progressEl.classList.remove('hidden');
-    setStatus('Uploading 5 photos to ' + BACKEND_URL + ' …');
+    setStatus('Sending the 5 photos to be checked…');
     render();
 
     post('/api/inventory/batch', form, UPLOAD_TIMEOUT_MS, function (xhr, body, failure) {
@@ -272,8 +297,8 @@ var ACCESS_KEY = (function () {
       if (!failure && xhr.status >= 200 && xhr.status < 300 && body && body.batch_id) {
         batch = { id: body.batch_id, ready: body.ready !== false, retake: body.retake || [] };
         if (batch.ready) {
-          setStatus('✓ Uploaded' + (body.duplicate ? ' (these 5 photos were already sent as ' + body.batch_id + ')' : '') +
-            '. All 5 photos are clear. Tap Identify pieces before you sweep them aside.', 'ok');
+          setStatus('✓ All 5 photos are clear' + (body.duplicate ? ' (they were already sent as ' + body.batch_id + ')' : '') +
+            '. Tap Identify the pieces before you sweep them aside.', 'ok');
         } else {
           setStatus('Uploaded, but ' + batch.retake.length + (batch.retake.length === 1 ? ' photo needs' : ' photos need') +
             ' a retake before the pieces can be identified.', 'error');
@@ -343,7 +368,7 @@ var ACCESS_KEY = (function () {
         batch.retake = body.retake || [];
         if (batch.ready) {
           closeRetake();
-          setStatus('✓ The ' + view + ' photo is clear now. All 5 photos are clear: tap Identify pieces.', 'ok');
+          setStatus('✓ The ' + view + ' photo is clear now. All 5 photos are clear: tap Identify the pieces.', 'ok');
         } else if (body.passed) {
           openRetake({ text: '✓ The ' + view + ' photo is clear now. Next one:', kind: 'ok' });
         } else {
@@ -378,8 +403,9 @@ var ACCESS_KEY = (function () {
           slots.forEach(function (photo) { if (photo) { URL.revokeObjectURL(photo.url); } });
           slots = VIEWS.map(function () { return null; });
           batch = null;
-          setStatus('✓ Found ' + body.pieces + ' pieces (' + countByFamily(body.detections) + '). Check them and add them ' +
-            'to your inventory (Finished lists every batch), then sweep these pieces aside and snap the next handful.', 'ok');
+          focusStep = 'step-8';
+          setStatus('✓ Found ' + body.pieces + ' pieces (' + countByFamily(body.detections) + '). Check them in step 8 ' +
+            'and add them to your inventory, then sweep these pieces aside for the next handful.', 'ok');
           render();
           openReview(found, { text: '✓ Spark found ' + body.pieces + ' pieces. Check them, then add them to your inventory.', kind: 'ok' });
           return;
@@ -387,14 +413,27 @@ var ACCESS_KEY = (function () {
           batch.ready = false;
           batch.retake = body.retake;
           setStatus('Spark could not use ' + (body.retake.length === 1 ? 'one photo' : body.retake.length + ' photos') +
-            '. Nothing was added. Retake it, then tap Identify pieces again.', 'error');
+            '. Nothing was added. Retake it, then tap Identify the pieces again.', 'error');
           openRetake();
+        } else if (!failure && xhr.status === 401) {
+          // the public demo: Identify spends credits, so it needs the access key
+          setStatus('', null);
+          offerSampleBin();
         } else {
-          setStatus('✗ Identify failed: ' + (failure || detailOf(xhr, body)) + ' Nothing was added. Tap Identify pieces to try again.', 'error');
+          setStatus('✗ Identify failed: ' + (failure || detailOf(xhr, body)) + ' Nothing was added. Tap Identify the pieces to try again.', 'error');
         }
         render();
       });
   });
+
+  // No key on the public demo: offer the sample bin (the demo's confirmed pieces) instead, and go straight to step 9.
+  function offerSampleBin() {
+    $('sample-offer').classList.remove('hidden');
+    request('GET', '/api/inventory/summary', null, BUILD_TIMEOUT_MS, function (xhr, body) {
+      var n = !xhr || xhr.status !== 200 || !body ? 0 : body.total_pieces;
+      $('sample-bin-btn').textContent = n ? 'Use the sample bin (' + n + ' pieces)' : 'See what you can build';
+    });
+  }
 
   // --- check the pieces: review one batch, then confirm (or undo) ----------------
 
@@ -442,7 +481,9 @@ var ACCESS_KEY = (function () {
 
   function openReview(batchId, note) {
     var checkStatus = $('check-status');
-    show('check-view');
+    $('check-empty').classList.add('hidden');
+    $('check-body').classList.remove('hidden');
+    goTo('step-8');
     $('check-list').innerHTML = '';
     $('check-dots').innerHTML = '';
     $('confirmed-card').classList.add('hidden');
@@ -525,6 +566,9 @@ var ACCESS_KEY = (function () {
     confirmBtn.disabled = reviewBusy || !data.photos_ready || data.pieces === 0;
     confirmBtn.textContent = reviewBusy ? 'Saving…' : '✓ Add ' + plural(data.pieces, 'piece', 'pieces') + ' to my inventory';
     $('confirmed-card').classList.toggle('hidden', !confirmed);
+    $('no-8').classList.toggle('passed', confirmed);
+    focusStep = confirmed ? 'step-9' : 'step-8';
+    markCurrent();
     if (confirmed) {
       $('confirmed-text').textContent = review.confirmedText ||
         plural(data.pieces, 'piece', 'pieces') + ' from this batch are in your inventory.';
@@ -798,7 +842,6 @@ var ACCESS_KEY = (function () {
             plural(s.generator_ready.total, 'plain brick', 'plain bricks') + ' BrickGPT can use, ' +
             (s.total_pieces - s.generator_ready.total) + ' other pieces.';
           openReview(review.id, { text: '', kind: null });
-          window.scrollTo(0, 0);
         } else {
           renderReview();
           setStatus('✗ Not added: ' + (failure || detailOf(xhr, body)), 'error', checkStatus);
@@ -830,25 +873,26 @@ var ACCESS_KEY = (function () {
       });
   });
 
+  function backToPhotos(note) {
+    focusStep = null;
+    render();
+    goTo(captureStep());
+    if (note) { say(VIEWS[Math.max(nextSlot(), 0)].key, note, 'ok'); }
+  }
+
   $('confirmed-build-btn').addEventListener('click', function () { openBuilds(); });
   $('confirmed-next-btn').addEventListener('click', function () {
-    show('capture-view');
-    setStatus('Sweep those pieces aside and snap the next handful.', 'ok');
-    render();
+    backToPhotos('Sweep those pieces aside and tip out the next handful.');
   });
-  $('check-back-btn').addEventListener('click', function () { show('capture-view'); render(); });
+  $('check-back-btn').addEventListener('click', function () { backToPhotos(); });
 
-  // --- finished ---------------------------------------------------------------
+  // --- all my batches (in step 8) ------------------------------------------------
 
   $('finished-btn').addEventListener('click', function () {
-    var unsent = filled();
-    if (unsent && !window.confirm(unsent + ' photo' + (unsent === 1 ? ' is' : 's are') +
-        ' not uploaded yet and will stay here. Finish anyway?')) { return; }
     var n = uploaded.length;
     $('finished-summary').textContent = (n ? n + (n === 1 ? ' batch' : ' batches') + ' (' + (n * 5) +
       ' photos) identified this session. ' : '') + 'Check each batch’s pieces, then add them to your inventory.';
     loadBatches();
-    show('finished-view');
   });
 
   function loadBatches() {
@@ -878,8 +922,6 @@ var ACCESS_KEY = (function () {
       });
     });
   }
-
-  $('back-btn').addEventListener('click', function () { show('capture-view'); render(); });
 
   // --- build -------------------------------------------------------------------
 
@@ -912,10 +954,21 @@ var ACCESS_KEY = (function () {
     return row;
   }
 
+  var buildsLoaded = false;
+
+  // Step 9 from anywhere: the sample-bin offer, the cover, or a confirmed batch.
   function openBuilds() {
+    focusStep = 'step-9';
+    render();
+    goTo('step-9');
+    loadBuilds();
+  }
+
+  function loadBuilds() {
     var list = $('build-list');
     var buildStatus = $('build-status');
-    show('build-view');
+    buildsLoaded = true;
+    $('build-open-btn').textContent = 'Check my bin again';
     list.innerHTML = '';
     $('build-inventory').textContent = 'Checking your inventory…';
     setStatus('', null, buildStatus);
@@ -1105,9 +1158,18 @@ var ACCESS_KEY = (function () {
     });
   }
 
-  $('ask-build-btn').addEventListener('click', openBuilds);
-  $('build-open-btn').addEventListener('click', openBuilds);
-  $('build-back-btn').addEventListener('click', function () { show('capture-view'); render(); });
+  $('build-open-btn').addEventListener('click', loadBuilds);
+  $('sample-link').addEventListener('click', openBuilds);
+  $('sample-bin-btn').addEventListener('click', openBuilds);
+
+  // Scrolling down to step 9 is enough to see what the bin builds (a read-only call).
+  if (window.IntersectionObserver) {
+    var watcher = new window.IntersectionObserver(function (entries) {
+      if (!buildsLoaded && entries.some(function (e) { return e.isIntersecting; })) { loadBuilds(); }
+      if (buildsLoaded) { watcher.disconnect(); }
+    }, { rootMargin: '0px 0px -25% 0px' });
+    watcher.observe($('step-9'));
+  }
 
   // --- backend reachability ---------------------------------------------------
 

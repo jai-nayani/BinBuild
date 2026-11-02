@@ -55,9 +55,12 @@ tests/          Standard-library unit tests (python3 -m unittest discover -s tes
                 Path A: python3 -m unittest backend.test_brickgpt_constraint)
 spike-constraint-kit/  Pre-generated BrickGPT designs and Path A test inventories
 app/            Phone client (PWA, no build step)
-  index.html    Capture loop: snap → review → confirm → Finished
+  index.html    One scrolling instruction booklet: cover, then steps 1-9 (tip out a
+                layer · 5 guided photos · identify · check the pieces · your build)
+  style.css     The booklet's look; scroll-driven motion only where supported
   app.js        5-photo batches, upload, retake pop-up, Identify, Check the pieces,
                 What can I build? (BACKEND_URL at the top)
+  fonts/        Nunito (SIL Open Font License), bundled so the app works offline
   manifest.json PWA manifest
   sw.js         Service worker (offline app shell)
   icon.svg      App icon

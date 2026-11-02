@@ -3,225 +3,281 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#ffd500">
-  <meta name="description" content="BinBuild — scan a bin of loose LEGO and generate new build guides using only the pieces you already own.">
+  <meta name="theme-color" content="#ffc928">
+  <meta name="description" content="BinBuild: turn a handful of loose bricks into a new build, step by step, using only the pieces you own.">
   <title>BinBuild</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
-  <style>
-    :root { --yellow: #ffd500; --ink: #1c1c1c; --muted: #6b6b6b; --line: #e4e0d5; --bg: #fbf8f1; --card: #fff; --green: #1f8a4c; --red: #b3261e; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
-    header { background: var(--yellow); padding: 18px 16px 14px; }
-    header h1 { margin: 0; font-size: 28px; letter-spacing: -0.5px; }
-    header p { margin: 4px 0 0; color: #4d4300; font-size: 14px; }
-    main { padding: 16px; max-width: 640px; margin: 0 auto; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
-    .card h2 { margin: 0 0 6px; font-size: 18px; }
-    .card p { margin: 0 0 12px; color: var(--muted); font-size: 14px; line-height: 1.45; }
-    .btn { display: block; width: 100%; padding: 14px; margin: 8px 0; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; text-align: center; text-decoration: none; }
-    .btn-primary { background: var(--yellow); color: var(--ink); }
-    .btn-secondary { background: #efebe0; color: var(--ink); }
-    .btn-done { background: var(--green); color: #fff; }
-    .btn:disabled { opacity: 0.45; cursor: default; }
-    .row { display: flex; gap: 10px; }
-    .row .btn { flex: 1; }
-    .thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 12px 0; }
-    .thumb { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #f3f0e8; }
-    .thumb.empty { border-style: dashed; }
-    .thumb.next { border: 2px solid var(--ink); }
-    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .thumb button { position: absolute; top: 3px; right: 3px; width: 24px; height: 24px; border-radius: 50%; border: none; background: rgba(0,0,0,0.65); color: #fff; font-size: 13px; line-height: 1; cursor: pointer; }
-    .thumb .tag { position: absolute; left: 3px; bottom: 3px; background: rgba(0,0,0,0.65); color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 6px; }
-    .thumb.empty .tag { background: none; color: var(--muted); }
-    #review-img { width: 100%; max-height: 60vh; object-fit: contain; border-radius: 10px; background: #111; display: block; margin: 8px 0; }
-    .status { min-height: 20px; font-size: 14px; color: var(--muted); margin: 8px 0 0; line-height: 1.4; }
-    .status.error { color: var(--red); font-weight: 600; }
-    .status.ok { color: var(--green); font-weight: 600; }
-    progress { width: 100%; height: 10px; margin-top: 8px; }
-    .backend { font-size: 12px; color: var(--muted); margin: 0 0 12px; word-break: break-all; }
-    .backend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #bbb; margin-right: 6px; vertical-align: middle; }
-    .backend.up .dot { background: var(--green); }
-    .backend.down .dot { background: var(--red); }
-    .backend button { font-size: 12px; margin-left: 6px; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
-    ul.batches { margin: 8px 0 12px; padding-left: 20px; font-size: 14px; }
-    ul.batches code { font-size: 13px; }
-    .thumb.failed { border: 3px solid var(--red); }
-    .thumb.failed .tag { background: var(--red); }
-    .modal { position: fixed; inset: 0; background: rgba(20, 18, 10, 0.72); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
-    .modal-card { background: var(--card); border-radius: 16px; padding: 18px 16px 12px; width: 100%; max-width: 420px; max-height: 100%; overflow-y: auto; border-top: 6px solid var(--red); }
-    .modal-card h2 { margin: 0 0 8px; font-size: 21px; }
-    .modal-card p { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
-    .modal-card .count { color: var(--red); font-weight: 600; font-size: 13px; margin-bottom: 4px; }
-    .modal-card .reason { font-weight: 600; }
-    .modal-card .hint { color: var(--muted); font-size: 14px; }
-    #retake-img { width: 100%; max-height: 34vh; object-fit: contain; border-radius: 10px; background: #111; display: block; margin: 4px 0 10px; }
-    .option { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 10px 0; }
-    .option.yes { border: 2px solid var(--green); }
-    .option h3 { margin: 0 0 6px; font-size: 16px; }
-    .option p { margin: 8px 0 0; font-size: 14px; }
-    .option .chip { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 10px; background: #efebe0; }
-    .option.yes .chip { background: #dff1e6; color: var(--green); }
-    details summary { cursor: pointer; font-weight: 600; font-size: 15px; margin: 12px 0 4px; }
-    .build-section { font-size: 17px; margin: 18px 0 4px; }
-    .wonder select { width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); margin: 4px 0; }
-    .wonder ul.wparts { margin: 8px 0 4px; padding-left: 18px; font-size: 14px; line-height: 1.5; }
-    .note { font-size: 13px; color: var(--muted); line-height: 1.4; margin: 0 0 8px; }
-    .option .where, .mrow .where { display: block; color: var(--muted); font-size: 12px; margin: 0 0 6px; }
-    .option.verified { border: 2px solid var(--green); background: #f6fbf7; }
-    .option .chip.verified { background: #dff1e6; color: var(--green); }
-    h4.chapter { font-size: 14px; margin: 14px 0 2px; color: var(--ink); }
-    .mrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
-    .mrow .mname { min-width: 0; }
-    .mrow .where { margin: 2px 0 0; }
-    .mrow .chip { flex: none; max-width: 48%; font-size: 11px; font-weight: 600; padding: 3px 7px; border-radius: 9px; text-align: right; }
-    .mrow .chip.unverified { background: #efebe0; color: #5c574a; }
-    .mrow .chip.readable { background: #e7eefb; color: #2d4a7c; }
-    .photo-box { position: sticky; top: 0; z-index: 3; background: var(--bg); padding: 6px 0 4px; text-align: center; }
-    .photo-wrap { position: relative; display: inline-block; max-width: 100%; vertical-align: top; }
-    .photo-wrap img { display: block; max-width: 100%; max-height: 36vh; width: auto; height: auto; border-radius: 10px; background: #111; }
-    .outlines { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
-    .outlines path { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.9); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-    .outlines path.dim { fill: none; stroke-opacity: 0.18; }
-    .outlines path.on { fill: rgba(255,213,0,0.22); stroke: var(--yellow); stroke-width: 3; }
-    .pin { position: absolute; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.7); cursor: pointer; }
-    .pin.dim { opacity: 0.25; }
-    .pin.hollow.on, .pin.hollow.focus { background: transparent !important; }
-    .pin.on { width: 18px; height: 18px; margin: -9px 0 0 -9px; border: 3px solid var(--yellow); box-shadow: 0 0 0 2px #000; z-index: 2; }
-    .pin.focus { width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 4px solid var(--yellow); box-shadow: 0 0 0 2px #000, 0 0 0 6px rgba(255,213,0,0.5); z-index: 3; }
-    .caption { font-size: 13px; color: var(--muted); margin: 4px 0 0; min-height: 18px; }
-    .review-summary { font-size: 14px; font-weight: 600; margin: 4px 0 0; }
-    .piece-group { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin: 8px 0; }
-    .piece-group.sel { border: 2px solid var(--ink); }
-    .piece-group.removed { opacity: 0.65; }
-    .pg-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; cursor: pointer; font-size: 15px; }
-    .swatch { width: 20px; height: 20px; border-radius: 5px; border: 1px solid rgba(0,0,0,0.3); flex: none; display: inline-block; vertical-align: middle; }
-    .badge { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 8px; background: #efebe0; }
-    .badge.gen { background: #fff1a8; }
-    .badge.fixed { background: #dff1e6; color: var(--green); }
-    .pg-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-    .small { padding: 8px 12px; font-size: 14px; border-radius: 10px; border: 1px solid var(--line); background: #faf8f2; color: var(--ink); cursor: pointer; }
-    .small:disabled { opacity: 0.45; }
-    .pg-items { list-style: none; padding: 0; margin: 8px 0 0; }
-    .pg-items li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
-    .pg-items li .who { flex: 1; cursor: pointer; }
-    .pg-items li.focus .who { font-weight: 700; }
-    .section-label { font-size: 14px; font-weight: 700; color: var(--muted); margin: 18px 0 4px; }
-    .sticky-bar { position: sticky; bottom: 0; z-index: 3; background: linear-gradient(rgba(251,248,241,0), var(--bg) 35%); padding: 14px 0 6px; }
-    .modal-card.sheet { border-top-color: var(--yellow); }
-    .sheet label { display: block; font-size: 14px; font-weight: 600; margin: 10px 0 4px; }
-    .sheet input, .sheet select { width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
-    .sheet label.check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; }
-    .sheet label.check input { width: auto; margin-top: 3px; }
-    .sheet .color-row { display: flex; gap: 8px; align-items: center; }
-    .hidden { display: none; }
-    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 16px 24px; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🧱 BinBuild</h1>
-    <p>Your spare parts are a LEGO set you haven't opened yet.</p>
-  </header>
+  <div class="readbar" aria-hidden="true"></div>
 
-  <main>
-    <p class="backend" id="backend-line" role="status"><span class="dot"></span><span id="backend-text">Backend: checking…</span><button type="button" id="backend-retry">Re-check</button></p>
+  <!-- Native camera inputs, shared by every step. capture="environment" opens the rear camera. -->
+  <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+  <input id="gallery-input" type="file" accept="image/*" hidden>
+  <!-- Retakes one failed photo of an uploaded batch, from the pop-up below. -->
+  <input id="retake-input" type="file" accept="image/*" capture="environment" hidden>
 
-    <!-- Native camera inputs, shared by every view. capture="environment" opens the rear camera. -->
-    <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
-    <input id="gallery-input" type="file" accept="image/*" hidden>
-    <!-- Retakes one failed photo of an uploaded batch, from the pop-up below. -->
-    <input id="retake-input" type="file" accept="image/*" capture="environment" hidden>
+  <main class="booklet">
 
-    <!-- 1. Snap: the next photo the batch needs -->
-    <section id="capture-view">
-      <div class="card">
-        <h2 id="shot-title">Batch 1 · photo 1 of 5: top view</h2>
-        <p id="shot-hint">Scatter a handful of pieces in one flat layer, no stacking.</p>
-        <label class="btn btn-primary" for="camera-input" id="snap-btn">📷 Take photo</label>
-        <label class="btn btn-secondary" for="gallery-input" id="gallery-btn">🖼 Choose from gallery</label>
-        <div class="thumbs" id="thumbs"></div>
-        <button class="btn btn-primary" id="upload-btn" disabled>⬆ Upload batch (0/5)</button>
-        <progress id="upload-progress" class="hidden" max="100" value="0"></progress>
-        <button class="btn btn-done hidden" id="identify-btn">🔍 Identify pieces</button>
-        <p class="status" id="status" role="status" aria-live="polite"></p>
+    <!-- Cover -->
+    <section class="page cover" id="cover">
+      <div class="plate" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <h1>BinBuild</h1>
+      <p class="lead">Turn a handful of loose bricks into a new build, using only the pieces in your bin.</p>
+      <ol class="contents">
+        <li><a href="#step-1"><span class="mini">1</span>Tip out one flat layer</a></li>
+        <li><a href="#step-2"><span class="mini">2–6</span>Five photos, one from each side</a></li>
+        <li><a href="#step-7"><span class="mini">7</span>Identify the pieces</a></li>
+        <li><a href="#step-8"><span class="mini">8</span>Check the pieces</a></li>
+        <li><a href="#step-9"><span class="mini">9</span>Your build</a></li>
+      </ol>
+      <a class="btn btn-primary" href="#step-1">Start at step 1</a>
+      <button type="button" class="btn btn-link" id="sample-link">Just looking? See what the sample bin builds</button>
+      <p class="backend" id="backend-line" role="status"><span class="dot"></span><span id="backend-text">Backend: checking…</span><button type="button" id="backend-retry">Re-check</button></p>
+    </section>
+
+    <!-- Step 1: prepare the pile -->
+    <section class="page step" id="step-1">
+      <div class="step-head"><span class="step-no" id="no-1">1</span><h2>Tip out one flat layer</h2></div>
+      <div class="callout">
+        <span class="qty">1x handful</span>
+        <svg class="angle angle-spread" viewBox="0 0 240 112" role="img" aria-label="Bricks spread out in one layer, not piled up">
+          <rect class="table" x="10" y="14" width="100" height="84" rx="8"/>
+          <rect class="b-red" x="22" y="26" width="18" height="9" rx="2"/>
+          <rect class="b-yellow" x="54" y="30" width="12" height="12" rx="2"/>
+          <rect class="b-blue" x="84" y="24" width="9" height="16" rx="2"/>
+          <rect class="b-blue" x="26" y="56" width="16" height="8" rx="2"/>
+          <rect class="b-red" x="58" y="62" width="10" height="10" rx="2"/>
+          <rect class="b-yellow" x="82" y="70" width="14" height="8" rx="2"/>
+          <path class="ok" d="M44 104 l6 6 l12 -14"/>
+          <rect class="table" x="130" y="14" width="100" height="84" rx="8"/>
+          <rect class="b-red" x="164" y="52" width="22" height="10" rx="2"/>
+          <rect class="b-yellow" x="170" y="44" width="16" height="12" rx="2"/>
+          <rect class="b-blue" x="160" y="40" width="12" height="16" rx="2"/>
+          <rect class="b-red" x="176" y="34" width="14" height="12" rx="2"/>
+          <path class="no" d="M174 98 l12 12 M186 98 l-12 12"/>
+        </svg>
       </div>
+      <ul class="tips">
+        <li>One layer, nothing stacked or touching.</li>
+        <li>A plain, light table and good light.</li>
+        <li>Leave the pieces where they are until step 7.</li>
+      </ul>
+    </section>
 
-      <div class="card">
-        <h2>Build</h2>
-        <p>See what you can build from the pieces you've confirmed, and get a step-by-step booklet.</p>
-        <button class="btn btn-secondary" id="build-open-btn">🧱 What can I build?</button>
+    <!-- Steps 2-6: the 5 photos of one handful, in the order the backend expects -->
+    <section class="page step shot" id="step-2" data-view="top">
+      <div class="step-head"><span class="step-no" id="no-top">2</span><h2>Top view</h2></div>
+      <div class="callout">
+        <span class="qty">1x photo</span>
+        <svg class="angle angle-top" viewBox="0 0 240 112" role="img" aria-label="Hold the phone flat, straight above the pieces">
+          <rect class="table" x="28" y="22" width="64" height="64" rx="8"/>
+          <rect class="b-red" x="38" y="32" width="18" height="9" rx="2"/>
+          <rect class="b-yellow" x="64" y="40" width="12" height="12" rx="2"/>
+          <rect class="b-blue" x="44" y="58" width="9" height="16" rx="2"/>
+          <g class="phone"><rect class="cam flat" x="44" y="38" width="32" height="40" rx="5"/><circle class="lens" cx="60" cy="46" r="3"/></g>
+          <rect class="side-table" x="140" y="86" width="90" height="6" rx="2"/>
+          <rect class="b-red" x="158" y="79" width="12" height="7" rx="1"/><rect class="b-yellow" x="176" y="79" width="9" height="7" rx="1"/><rect class="b-blue" x="192" y="79" width="14" height="7" rx="1"/>
+          <g class="phone-side"><rect class="cam" x="165" y="14" width="40" height="8" rx="3"/></g>
+          <path class="sight" d="M175 26 V74 M185 26 V74 M195 26 V74"/>
+        </svg>
       </div>
+      <p class="hint">Hold the phone flat, straight above the pieces, so every piece is in the picture.</p>
+      <div class="shot-photo" id="photo-top"></div>
+      <div class="shot-actions">
+        <label class="btn btn-primary" for="camera-input" id="snap-top">Open camera</label>
+        <label class="btn btn-link" for="gallery-input" id="gallery-top">or choose a photo</label>
+        <button type="button" class="btn btn-secondary hidden" id="redo-top">Take this one again</button>
+      </div>
+      <p class="step-msg" id="msg-top" role="status"></p>
+    </section>
 
-      <div class="card">
-        <h2>Finished?</h2>
-        <p id="finished-note">See your batches, check each one's pieces and add them to your inventory.</p>
-        <button class="btn btn-done" id="finished-btn" disabled>Finished — show my batches</button>
+    <section class="page step shot" id="step-3" data-view="front">
+      <div class="step-head"><span class="step-no" id="no-front">3</span><h2>Front view</h2></div>
+      <div class="callout">
+        <span class="qty">1x photo</span>
+        <svg class="angle angle-front" viewBox="0 0 240 112" role="img" aria-label="Crouch low in front of the pieces and shoot across the table">
+          <rect class="table" x="28" y="22" width="64" height="64" rx="8"/>
+          <rect class="b-red" x="38" y="32" width="18" height="9" rx="2"/>
+          <rect class="b-yellow" x="64" y="40" width="12" height="12" rx="2"/>
+          <rect class="b-blue" x="44" y="58" width="9" height="16" rx="2"/>
+          <path class="sight" d="M60 93 V60"/>
+          <g class="phone"><rect class="cam" x="52" y="94" width="16" height="12" rx="3"/><circle class="lens" cx="60" cy="100" r="3"/></g>
+          <rect class="side-table" x="140" y="86" width="90" height="6" rx="2"/>
+          <rect class="b-red" x="158" y="79" width="12" height="7" rx="1"/><rect class="b-yellow" x="176" y="79" width="9" height="7" rx="1"/><rect class="b-blue" x="192" y="79" width="14" height="7" rx="1"/>
+          <g class="phone-side"><rect class="cam" x="130" y="62" width="8" height="22" rx="2"/></g>
+          <path class="sight" d="M140 72 L226 80"/>
+        </svg>
+      </div>
+      <p class="hint">Crouch low in front of the pieces and shoot across the table.</p>
+      <div class="shot-photo" id="photo-front"></div>
+      <div class="shot-actions">
+        <label class="btn btn-primary" for="camera-input" id="snap-front">Open camera</label>
+        <label class="btn btn-link" for="gallery-input" id="gallery-front">or choose a photo</label>
+        <button type="button" class="btn btn-secondary hidden" id="redo-front">Take this one again</button>
+      </div>
+      <p class="step-msg" id="msg-front" role="status"></p>
+    </section>
+
+    <section class="page step shot" id="step-4" data-view="right">
+      <div class="step-head"><span class="step-no" id="no-right">4</span><h2>Right side</h2></div>
+      <div class="callout">
+        <span class="qty">1x photo</span>
+        <svg class="angle angle-right" viewBox="0 0 240 112" role="img" aria-label="Move a quarter turn round to the right side, still low">
+          <rect class="table" x="28" y="22" width="64" height="64" rx="8"/>
+          <rect class="b-red" x="38" y="32" width="18" height="9" rx="2"/>
+          <rect class="b-yellow" x="64" y="40" width="12" height="12" rx="2"/>
+          <rect class="b-blue" x="44" y="58" width="9" height="16" rx="2"/>
+          <path class="turn" d="M74 104 Q104 104 108 74"/><path class="turn-head" d="M103 78 L108 70 L113 78"/>
+          <path class="sight" d="M101 54 H66"/>
+          <g class="phone"><rect class="cam" x="102" y="48" width="16" height="12" rx="3"/><circle class="lens" cx="110" cy="54" r="3"/></g>
+          <rect class="side-table" x="140" y="86" width="90" height="6" rx="2"/>
+          <rect class="b-red" x="158" y="79" width="12" height="7" rx="1"/><rect class="b-yellow" x="176" y="79" width="9" height="7" rx="1"/><rect class="b-blue" x="192" y="79" width="14" height="7" rx="1"/>
+          <g class="phone-side"><rect class="cam" x="130" y="62" width="8" height="22" rx="2"/></g>
+          <path class="sight" d="M140 72 L226 80"/>
+        </svg>
+      </div>
+      <p class="hint">Move a quarter turn round to the right side. Stay low.</p>
+      <div class="shot-photo" id="photo-right"></div>
+      <div class="shot-actions">
+        <label class="btn btn-primary" for="camera-input" id="snap-right">Open camera</label>
+        <label class="btn btn-link" for="gallery-input" id="gallery-right">or choose a photo</label>
+        <button type="button" class="btn btn-secondary hidden" id="redo-right">Take this one again</button>
+      </div>
+      <p class="step-msg" id="msg-right" role="status"></p>
+    </section>
+
+    <section class="page step shot" id="step-5" data-view="back">
+      <div class="step-head"><span class="step-no" id="no-back">5</span><h2>Back side</h2></div>
+      <div class="callout">
+        <span class="qty">1x photo</span>
+        <svg class="angle angle-back" viewBox="0 0 240 112" role="img" aria-label="Another quarter turn: shoot from the far side">
+          <rect class="table" x="28" y="22" width="64" height="64" rx="8"/>
+          <rect class="b-red" x="38" y="32" width="18" height="9" rx="2"/>
+          <rect class="b-yellow" x="64" y="40" width="12" height="12" rx="2"/>
+          <rect class="b-blue" x="44" y="58" width="9" height="16" rx="2"/>
+          <path class="turn" d="M110 40 Q108 12 76 10"/><path class="turn-head" d="M80 5 L72 10 L80 15"/>
+          <path class="sight" d="M60 17 V52"/>
+          <g class="phone"><rect class="cam" x="52" y="2" width="16" height="12" rx="3"/><circle class="lens" cx="60" cy="8" r="3"/></g>
+          <rect class="side-table" x="140" y="86" width="90" height="6" rx="2"/>
+          <rect class="b-red" x="158" y="79" width="12" height="7" rx="1"/><rect class="b-yellow" x="176" y="79" width="9" height="7" rx="1"/><rect class="b-blue" x="192" y="79" width="14" height="7" rx="1"/>
+          <g class="phone-side"><rect class="cam" x="130" y="62" width="8" height="22" rx="2"/></g>
+          <path class="sight" d="M140 72 L226 80"/>
+        </svg>
+      </div>
+      <p class="hint">Another quarter turn: shoot from the far side.</p>
+      <div class="shot-photo" id="photo-back"></div>
+      <div class="shot-actions">
+        <label class="btn btn-primary" for="camera-input" id="snap-back">Open camera</label>
+        <label class="btn btn-link" for="gallery-input" id="gallery-back">or choose a photo</label>
+        <button type="button" class="btn btn-secondary hidden" id="redo-back">Take this one again</button>
+      </div>
+      <p class="step-msg" id="msg-back" role="status"></p>
+    </section>
+
+    <section class="page step shot" id="step-6" data-view="left">
+      <div class="step-head"><span class="step-no" id="no-left">6</span><h2>Left side</h2></div>
+      <div class="callout">
+        <span class="qty">1x photo</span>
+        <svg class="angle angle-left" viewBox="0 0 240 112" role="img" aria-label="Last one: the left side, still low">
+          <rect class="table" x="28" y="22" width="64" height="64" rx="8"/>
+          <rect class="b-red" x="38" y="32" width="18" height="9" rx="2"/>
+          <rect class="b-yellow" x="64" y="40" width="12" height="12" rx="2"/>
+          <rect class="b-blue" x="44" y="58" width="9" height="16" rx="2"/>
+          <path class="turn" d="M44 10 Q12 12 10 40"/><path class="turn-head" d="M5 36 L10 44 L15 36"/>
+          <path class="sight" d="M19 54 H54"/>
+          <g class="phone"><rect class="cam" x="2" y="48" width="16" height="12" rx="3"/><circle class="lens" cx="10" cy="54" r="3"/></g>
+          <rect class="side-table" x="140" y="86" width="90" height="6" rx="2"/>
+          <rect class="b-red" x="158" y="79" width="12" height="7" rx="1"/><rect class="b-yellow" x="176" y="79" width="9" height="7" rx="1"/><rect class="b-blue" x="192" y="79" width="14" height="7" rx="1"/>
+          <g class="phone-side"><rect class="cam" x="130" y="62" width="8" height="22" rx="2"/></g>
+          <path class="sight" d="M140 72 L226 80"/>
+        </svg>
+      </div>
+      <p class="hint">Last one: the left side, still low.</p>
+      <div class="shot-photo" id="photo-left"></div>
+      <div class="shot-actions">
+        <label class="btn btn-primary" for="camera-input" id="snap-left">Open camera</label>
+        <label class="btn btn-link" for="gallery-input" id="gallery-left">or choose a photo</label>
+        <button type="button" class="btn btn-secondary hidden" id="redo-left">Take this one again</button>
+      </div>
+      <p class="step-msg" id="msg-left" role="status"></p>
+    </section>
+
+    <!-- Step 7: the photo check, then Identify -->
+    <section class="page step" id="step-7">
+      <div class="step-head"><span class="step-no" id="no-7">7</span><h2>Identify the pieces</h2></div>
+      <p class="hint" id="identify-hint">First BinBuild checks each photo is sharp and bright enough. Then it names every piece. Keep the pieces where they are.</p>
+      <button class="btn btn-primary" id="upload-btn" disabled>Check my 5 photos</button>
+      <progress id="upload-progress" class="hidden" max="100" value="0"></progress>
+      <button class="btn btn-done hidden" id="identify-btn">Identify the pieces</button>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+      <div class="callout hidden" id="sample-offer">
+        <span class="qty">On this public demo</span>
+        <p id="sample-text">Identifying pieces uses a paid AI service, so this demo needs an access key for it. You can still see what the sample bin builds.</p>
+        <button type="button" class="btn btn-primary" id="sample-bin-btn">Use the sample bin</button>
       </div>
     </section>
 
-    <!-- 2. Review: the snap just taken, before it joins the batch -->
-    <section id="review-view" class="hidden">
-      <div class="card">
-        <h2 id="review-title">Check the top view</h2>
-        <p>Are all the pieces in frame and in focus?</p>
-        <img id="review-img" alt="Photo just taken">
-        <div class="row">
-          <label class="btn btn-secondary" for="camera-input" id="review-retake-btn">↺ Retake</label>
-          <button class="btn btn-primary" id="use-btn">✓ Use photo</button>
+    <!-- Step 8: check the pieces of one identified batch, then add them to the inventory (or undo) -->
+    <section class="page step" id="step-8">
+      <div class="step-head"><span class="step-no" id="no-8">8</span><h2>Check the pieces</h2></div>
+      <p class="hint" id="check-empty">Your pieces show up here after step 7: fix anything that’s wrong, then add them to your bin.</p>
+      <div id="check-body" class="hidden">
+        <div class="callout done-callout hidden" id="confirmed-card">
+          <h3 id="confirmed-title">Added to your inventory</h3>
+          <p id="confirmed-text"></p>
+          <button class="btn btn-primary" id="confirmed-build-btn">On to step 9: your build</button>
+          <button class="btn btn-secondary" id="confirmed-next-btn">Scan the next handful</button>
+          <button class="btn btn-link" id="undo-btn">Undo: take these pieces out again</button>
         </div>
-        <button class="btn btn-secondary" id="cancel-review-btn">Cancel</button>
-      </div>
-    </section>
-
-    <!-- 3. Finished -->
-    <section id="finished-view" class="hidden">
-      <div class="card">
-        <h2>🎉 Scanning finished</h2>
-        <p id="finished-summary"></p>
-        <ul class="batches" id="batch-list"></ul>
-        <button class="btn btn-primary" id="ask-build-btn">🧱 What can I build?</button>
-        <button class="btn btn-secondary" id="back-btn">← Back to scanning</button>
-      </div>
-    </section>
-
-    <!-- 4. Check the pieces: review one identified batch, then add it to the inventory (or undo) -->
-    <section id="check-view" class="hidden">
-      <div class="card hidden" id="confirmed-card">
-        <h2 id="confirmed-title">✓ Added to your inventory</h2>
-        <p id="confirmed-text"></p>
-        <button class="btn btn-primary" id="confirmed-build-btn">🧱 What can I build?</button>
-        <button class="btn btn-secondary" id="confirmed-next-btn">📷 Scan the next handful</button>
-        <button class="btn btn-secondary" id="undo-btn">↺ Undo: take these pieces out again</button>
-      </div>
-      <div class="card">
-        <h2 id="check-title">Check the pieces</h2>
-        <p id="check-intro"></p>
+        <h3 id="check-title">Check the pieces</h3>
+        <p class="hint" id="check-intro"></p>
         <p class="review-summary" id="check-summary"></p>
+        <div class="photo-box">
+          <div class="photo-wrap"><img id="check-img" alt="Top photo of the pieces"><svg class="outlines" id="check-outlines" preserveAspectRatio="none" aria-hidden="true"></svg><div id="check-dots"></div></div>
+          <p class="caption" id="check-caption"></p>
+        </div>
+        <div id="check-list"></div>
+        <button class="btn btn-secondary" id="add-piece-btn">Add a piece Spark missed</button>
+        <p class="status" id="check-status" role="status" aria-live="polite"></p>
+        <div class="sticky-bar"><button class="btn btn-done" id="confirm-btn">Add the pieces to my inventory</button></div>
+        <button class="btn btn-link" id="check-back-btn">Back to the photos</button>
       </div>
-      <div class="photo-box">
-        <div class="photo-wrap"><img id="check-img" alt="Top photo of the pieces"><svg class="outlines" id="check-outlines" preserveAspectRatio="none" aria-hidden="true"></svg><div id="check-dots"></div></div>
-        <p class="caption" id="check-caption"></p>
-      </div>
-      <div id="check-list"></div>
-      <button class="btn btn-secondary" id="add-piece-btn">＋ Add a piece Spark missed</button>
-      <p class="status" id="check-status" role="status" aria-live="polite"></p>
-      <div class="sticky-bar"><button class="btn btn-done" id="confirm-btn">✓ Add the pieces to my inventory</button></div>
-      <button class="btn btn-secondary" id="check-back-btn">← Back to scanning</button>
+      <details class="batches-box">
+        <summary>All my batches</summary>
+        <p class="hint" id="finished-summary">Every handful you’ve sent, and whether its pieces are checked.</p>
+        <button class="btn btn-secondary" id="finished-btn">Show my batches</button>
+        <ul class="batches" id="batch-list"></ul>
+      </details>
     </section>
 
-    <!-- 5. Build: what the confirmed inventory can build, and booklets -->
-    <section id="build-view" class="hidden">
-      <div class="card">
-        <h2>🧱 What can I build?</h2>
-        <p id="build-inventory"></p>
-        <div id="build-list"></div>
-        <p class="status" id="build-status" role="status" aria-live="polite"></p>
-        <button class="btn btn-secondary" id="build-back-btn">← Back to scanning</button>
-      </div>
+    <!-- Step 9: what the confirmed inventory can build, and its booklet -->
+    <section class="page step" id="step-9">
+      <div class="step-head"><span class="step-no" id="no-9">9</span><h2>Your build</h2></div>
+      <p class="hint">Pick a build that fits your bin. BinBuild makes its step-by-step booklet, drawn from your own pieces.</p>
+      <p class="review-summary" id="build-inventory"></p>
+      <button class="btn btn-primary" id="build-open-btn">Show what I can build</button>
+      <div id="build-list"></div>
+      <p class="status" id="build-status" role="status" aria-live="polite"></p>
     </section>
   </main>
+
+  <!-- Check the photo just taken, before it joins the batch -->
+  <div class="modal hidden" id="review-view" role="dialog" aria-modal="true" aria-labelledby="review-title">
+    <div class="modal-card sheet">
+      <h2 id="review-title">Check the top view</h2>
+      <p class="hint">Are all the pieces in the picture, and sharp?</p>
+      <img id="review-img" alt="Photo just taken">
+      <div class="row">
+        <label class="btn btn-secondary" for="camera-input" id="review-retake-btn">Take it again</label>
+        <button class="btn btn-primary" id="use-btn">Use this photo</button>
+      </div>
+      <button class="btn btn-link" id="cancel-review-btn">Cancel</button>
+    </div>
+  </div>
 
   <!-- Pop-up for a photo that failed the check: names the view and retakes only that photo. -->
   <div class="modal hidden" id="retake-modal" role="alertdialog" aria-modal="true" aria-labelledby="retake-title" aria-describedby="retake-reason retake-text">

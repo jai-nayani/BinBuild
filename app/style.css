@@ -1,0 +1,263 @@
+/* BinBuild: the app as an instruction booklet. Light pages, big numbered
+ * steps, outlined callout boxes; primary colours as accents only (blue for
+ * actions, yellow for "do this now", green for done, red for a retake).
+ * Generic studs and rounded type: nothing from any brand's own artwork.
+ *
+ * Motion: guide drawings loop on the current step, a passed photo's step
+ * number snaps to green, and, where the browser supports scroll-driven
+ * animation, pages rise in as they scroll into view. Without that support
+ * (Firefox) everything shows plainly; with reduced motion nothing moves.
+ */
+
+@font-face {
+  font-family: "Nunito";
+  src: url("fonts/nunito-latin.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --page: #eef2f7; --paper: #ffffff; --ink: #1b2430; --muted: #5b6778; --line: #d9e0ea;
+  --blue: #1e66d0; --blue-soft: #eaf2fd; --blue-line: #9dbbe6;
+  --yellow: #ffc928; --yellow-ring: #e2a800; --yellow-ink: #3d2e00;
+  --green: #23924a; --green-soft: #e3f4e8; --red: #c8312a; --red-soft: #fcebea;
+  --brick-red: #e0463c; --brick-yellow: #ffc928; --brick-blue: #3a7fe0;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--page); color: var(--ink);
+  font-family: "Nunito", ui-rounded, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px; line-height: 1.45; -webkit-text-size-adjust: 100%;
+}
+main.booklet { padding: 16px 12px 8px; max-width: 560px; margin: 0 auto; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.2px; }
+a { color: var(--blue); }
+
+/* --- pages and steps --------------------------------------------------------- */
+
+.page {
+  background: var(--paper); border: 2px solid var(--line); border-radius: 22px;
+  padding: 18px 16px 20px; margin: 0 0 16px; scroll-margin-top: 12px;
+}
+.step-head { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; }
+.step-head h2 { margin: 0; font-size: 22px; line-height: 1.15; }
+.step-no {
+  flex: none; width: 52px; height: 52px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 900; color: var(--muted); background: var(--paper); border: 3px solid var(--line);
+  box-shadow: inset 0 -4px 0 rgba(27, 36, 48, 0.06);
+  transition: background-color 0.25s, border-color 0.25s, color 0.25s;
+}
+.step.current .step-no, .step-no.taken { background: var(--yellow); border-color: var(--yellow-ring); color: var(--yellow-ink); }
+.step-no.passed { background: var(--green); border-color: #1b7a3c; color: #fff; }
+.step-no.failed { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+.step-no.snap { animation: snap 0.45s cubic-bezier(0.3, 1.6, 0.5, 1) 1; }
+@keyframes snap { 0% { transform: scale(1); } 40% { transform: scale(1.28); } 100% { transform: scale(1); } }
+.step.current { border-color: var(--yellow-ring); }
+
+.hint { color: var(--muted); font-size: 15px; margin: 10px 0 12px; }
+.tips { margin: 12px 0 0; padding-left: 20px; color: var(--ink); font-size: 15px; }
+.tips li { margin: 4px 0; }
+
+/* --- the cover ------------------------------------------------------------------ */
+
+.cover h1 { margin: 14px 0 4px; font-size: 40px; letter-spacing: -0.8px; }
+.cover .lead { margin: 0 0 14px; font-size: 18px; color: var(--ink); }
+.plate {
+  display: flex; justify-content: space-between; gap: 8px; padding: 12px 14px;
+  background: var(--yellow); border-radius: 14px; box-shadow: inset 0 -5px 0 var(--yellow-ring);
+}
+.plate span { width: 26px; height: 26px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 2px var(--yellow-ring), inset 0 -3px 0 rgba(0, 0, 0, 0.12); }
+.contents { list-style: none; padding: 0; margin: 0 0 14px; border-top: 2px solid var(--line); }
+.contents li { border-bottom: 2px solid var(--line); }
+.contents a { display: flex; align-items: center; gap: 10px; padding: 9px 2px; color: var(--ink); text-decoration: none; font-weight: 700; }
+.mini {
+  flex: none; min-width: 34px; height: 26px; padding: 0 7px; border-radius: 13px; border: 2px solid var(--line);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: var(--muted);
+}
+
+/* --- callouts and drawings --------------------------------------------------- */
+
+.callout { border: 2px solid var(--blue-line); background: var(--blue-soft); border-radius: 16px; padding: 10px 12px 8px; margin: 0 0 4px; }
+.callout .qty { display: inline-block; font-weight: 900; color: var(--blue); font-size: 15px; margin-bottom: 2px; }
+.callout p { margin: 6px 0 8px; font-size: 15px; }
+.callout h3 { margin: 2px 0 4px; font-size: 18px; }
+.done-callout { border-color: #8fd0a4; background: var(--green-soft); margin-bottom: 16px; }
+.done-callout h3 { color: #1b7a3c; }
+
+.angle { display: block; width: 100%; height: auto; }
+.angle .table { fill: #fff; stroke: var(--ink); stroke-width: 1.6; }
+.angle .side-table { fill: var(--ink); }
+.angle .b-red { fill: var(--brick-red); stroke: #8f1f18; stroke-width: 1; }
+.angle .b-yellow { fill: var(--brick-yellow); stroke: #9a7400; stroke-width: 1; }
+.angle .b-blue { fill: var(--brick-blue); stroke: #164a94; stroke-width: 1; }
+.angle .cam { fill: #fff; stroke: var(--ink); stroke-width: 1.8; }
+.angle .cam.flat { fill: rgba(255, 255, 255, 0.55); stroke-dasharray: 4 3; }
+.angle .lens { fill: var(--ink); }
+.angle .sight { fill: none; stroke: var(--blue); stroke-width: 1.6; stroke-dasharray: 4 4; }
+.angle .turn { fill: none; stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 3 3; }
+.angle .turn-head { fill: none; stroke: var(--muted); stroke-width: 1.6; stroke-linejoin: round; }
+.angle .ok { fill: none; stroke: var(--green); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.angle .no { fill: none; stroke: var(--red); stroke-width: 3; stroke-linecap: round; }
+
+/* Guides play on the step you're on: the phone walks into place, then the line of sight runs. */
+.step.current .angle .phone { animation: 3.2s ease-in-out infinite; }
+.step.current .angle .sight { animation: sight 3.2s linear infinite; }
+.step.current .angle-top .phone { animation-name: arrive-top; }
+.step.current .angle-front .phone { animation-name: arrive-front; }
+.step.current .angle-right .phone { animation-name: arrive-right; }
+.step.current .angle-back .phone { animation-name: arrive-back; }
+.step.current .angle-left .phone { animation-name: arrive-left; }
+@keyframes arrive-top { 0% { transform: translate(0, -14px); opacity: 0; } 35%, 100% { transform: none; opacity: 1; } }
+@keyframes arrive-front { 0% { transform: translate(0, -46px); opacity: 0.2; } 45%, 100% { transform: none; opacity: 1; } }
+@keyframes arrive-right { 0% { transform: translate(-50px, 46px); } 25% { transform: translate(-10px, 40px); } 45%, 100% { transform: none; } }
+@keyframes arrive-back { 0% { transform: translate(50px, 46px); } 25% { transform: translate(40px, 8px); } 45%, 100% { transform: none; } }
+@keyframes arrive-left { 0% { transform: translate(50px, -46px); } 25% { transform: translate(10px, -40px); } 45%, 100% { transform: none; } }
+@keyframes sight { 0%, 45% { opacity: 0; stroke-dashoffset: 0; } 55% { opacity: 1; } 100% { opacity: 1; stroke-dashoffset: -24; } }
+
+/* --- photo steps -------------------------------------------------------------- */
+
+.shot-photo:empty { display: none; }
+.shot-photo { margin: 10px 0 6px; }
+.shot-photo img { display: block; width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; border: 2px solid var(--line); }
+.shot .shot-actions { margin-top: 6px; }
+.step-msg { min-height: 0; margin: 6px 0 0; font-size: 14px; color: var(--muted); }
+.step-msg:empty { display: none; }
+.step-msg.error { color: var(--red); font-weight: 700; }
+.step-msg.ok { color: var(--green); font-weight: 700; }
+
+/* --- buttons and status --------------------------------------------------------- */
+
+.btn {
+  display: block; width: 100%; min-height: 50px; padding: 13px 14px; margin: 8px 0; font: inherit; font-size: 17px; font-weight: 800;
+  border: none; border-radius: 16px; cursor: pointer; text-align: center; text-decoration: none; -webkit-tap-highlight-color: transparent;
+}
+.btn-primary { background: var(--blue); color: #fff; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18); }
+.btn-secondary { background: var(--paper); color: var(--ink); border: 2px solid var(--line); }
+.btn-done { background: var(--green); color: #fff; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18); }
+.btn-link { background: none; color: var(--blue); min-height: 40px; padding: 8px; font-size: 15px; font-weight: 700; }
+.btn:disabled { opacity: 0.4; cursor: default; }
+.row { display: flex; gap: 10px; }
+.row .btn { flex: 1; }
+.status { min-height: 20px; font-size: 15px; color: var(--muted); margin: 8px 0 0; }
+.status.error { color: var(--red); font-weight: 700; }
+.status.ok { color: var(--green); font-weight: 700; }
+progress { width: 100%; height: 10px; margin-top: 8px; accent-color: var(--blue); }
+.backend { font-size: 12px; color: var(--muted); margin: 14px 0 0; word-break: break-all; }
+.backend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #bbb; margin-right: 6px; vertical-align: middle; }
+.backend.up .dot { background: var(--green); }
+.backend.down .dot { background: var(--red); }
+.backend button { font: inherit; font-size: 12px; margin-left: 6px; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
+
+/* --- step 8: check the pieces ------------------------------------------------- */
+
+#check-title { margin: 0 0 4px; font-size: 18px; }
+.review-summary { font-size: 15px; font-weight: 800; margin: 4px 0 0; }
+.photo-box { position: sticky; top: 0; z-index: 3; background: var(--paper); padding: 6px 0 4px; text-align: center; }
+.photo-wrap { position: relative; display: inline-block; max-width: 100%; vertical-align: top; }
+.photo-wrap img { display: block; max-width: 100%; max-height: 36vh; width: auto; height: auto; border-radius: 12px; background: #111; }
+.outlines { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.outlines path { fill: rgba(255, 255, 255, 0.08); stroke: rgba(255, 255, 255, 0.9); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.outlines path.dim { fill: none; stroke-opacity: 0.18; }
+.outlines path.on { fill: rgba(255, 201, 40, 0.22); stroke: var(--yellow); stroke-width: 3; }
+.pin { position: absolute; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7); cursor: pointer; }
+.pin.dim { opacity: 0.25; }
+.pin.hollow.on, .pin.hollow.focus { background: transparent !important; }
+.pin.on { width: 18px; height: 18px; margin: -9px 0 0 -9px; border: 3px solid var(--yellow); box-shadow: 0 0 0 2px #000; z-index: 2; }
+.pin.focus { width: 26px; height: 26px; margin: -13px 0 0 -13px; border: 4px solid var(--yellow); box-shadow: 0 0 0 2px #000, 0 0 0 6px rgba(255, 201, 40, 0.5); z-index: 3; }
+.caption { font-size: 13px; color: var(--muted); margin: 4px 0 0; min-height: 18px; }
+.piece-group { background: var(--paper); border: 2px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 8px 0; }
+.piece-group.sel { border-color: var(--ink); }
+.piece-group.removed { opacity: 0.65; }
+.pg-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; cursor: pointer; font-size: 15px; font-weight: 700; }
+.swatch { width: 20px; height: 20px; border-radius: 5px; border: 1px solid rgba(0, 0, 0, 0.3); flex: none; display: inline-block; vertical-align: middle; }
+.badge { font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 8px; background: var(--page); }
+.badge.gen { background: #fff1b8; color: var(--yellow-ink); }
+.badge.fixed { background: var(--green-soft); color: var(--green); }
+.pg-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.small { font: inherit; padding: 8px 12px; font-size: 14px; font-weight: 700; border-radius: 12px; border: 2px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+.small:disabled { opacity: 0.45; }
+.pg-items { list-style: none; padding: 0; margin: 8px 0 0; }
+.pg-items li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.pg-items li .who { flex: 1; cursor: pointer; }
+.pg-items li.focus .who { font-weight: 800; }
+.section-label { font-size: 14px; font-weight: 800; color: var(--muted); margin: 18px 0 4px; }
+.sticky-bar { position: sticky; bottom: 0; z-index: 3; background: linear-gradient(rgba(255, 255, 255, 0), var(--paper) 35%); padding: 14px 0 6px; }
+.batches-box { margin-top: 16px; border-top: 2px solid var(--line); padding-top: 4px; }
+.batches-box summary { cursor: pointer; font-weight: 800; font-size: 15px; margin: 10px 0 4px; color: var(--muted); }
+ul.batches { margin: 8px 0 4px; padding-left: 20px; font-size: 14px; }
+ul.batches code { font-size: 12px; }
+
+/* --- step 9: builds ----------------------------------------------------------------- */
+
+.option { border: 2px solid var(--line); border-radius: 16px; padding: 12px; margin: 10px 0; background: var(--paper); }
+.option.yes, .option.verified { border-color: #8fd0a4; }
+.option.verified { background: #f6fbf7; }
+.option h3 { margin: 0 0 6px; font-size: 17px; }
+.option p { margin: 8px 0 0; font-size: 14px; }
+.option .chip { display: inline-block; font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 10px; background: var(--page); }
+.option.yes .chip, .option .chip.verified { background: var(--green-soft); color: var(--green); }
+details summary { cursor: pointer; font-weight: 800; font-size: 15px; margin: 12px 0 4px; }
+.build-section { font-size: 18px; margin: 20px 0 4px; }
+#step-9 { min-height: calc(100vh - 28px); } /* the last page can always scroll to the top, even before its list loads */
+.wonder select { width: 100%; padding: 10px; font: inherit; border: 2px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); margin: 4px 0; }
+.wonder ul.wparts { margin: 8px 0 4px; padding-left: 18px; font-size: 14px; }
+.note { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.option .where, .mrow .where { display: block; color: var(--muted); font-size: 12px; margin: 0 0 6px; }
+h4.chapter { font-size: 14px; margin: 14px 0 2px; color: var(--ink); }
+.mrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.mrow .mname { min-width: 0; }
+.mrow .where { margin: 2px 0 0; }
+.mrow .chip { flex: none; max-width: 48%; font-size: 11px; font-weight: 800; padding: 3px 7px; border-radius: 9px; text-align: right; }
+.mrow .chip.unverified { background: var(--page); color: var(--muted); }
+.mrow .chip.readable { background: var(--blue-soft); color: #1d4f9e; }
+
+/* --- pop-ups (the retake pop-up's look and behaviour are unchanged) ----------- */
+
+.modal { position: fixed; inset: 0; background: rgba(20, 24, 32, 0.66); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 30; }
+.modal-card { background: var(--paper); border-radius: 20px; padding: 18px 16px 12px; width: 100%; max-width: 420px; max-height: 100%; overflow-y: auto; border-top: 6px solid var(--red); }
+.modal-card h2 { margin: 0 0 8px; font-size: 21px; }
+.modal-card p { margin: 0 0 10px; font-size: 15px; }
+.modal-card .count { color: var(--red); font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+.modal-card .reason { font-weight: 800; }
+.modal-card .hint { color: var(--muted); font-size: 14px; }
+#retake-img, #review-img { width: 100%; max-height: 40vh; object-fit: contain; border-radius: 12px; background: #111; display: block; margin: 4px 0 10px; }
+.modal-card.sheet { border-top-color: var(--yellow); }
+.sheet label { display: block; font-size: 14px; font-weight: 800; margin: 10px 0 4px; }
+.sheet label.btn { margin: 8px 0; font-size: 17px; }
+.sheet input, .sheet select { width: 100%; padding: 10px; font: inherit; border: 2px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); }
+.sheet label.check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; }
+.sheet label.check input { width: auto; margin-top: 3px; }
+.sheet .color-row { display: flex; gap: 8px; align-items: center; }
+
+.hidden { display: none !important; }
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 16px 28px; }
+
+/* --- scroll-driven motion, only where supported (not Firefox): a reading bar and pages rising in --- */
+
+.readbar { display: none; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes page-in { from { opacity: 0.35; transform: translateY(28px) scale(0.98); } to { opacity: 1; transform: none; } }
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .readbar {
+      display: block; position: fixed; top: 0; left: 0; right: 0; height: 5px; z-index: 20;
+      background: var(--yellow); transform-origin: 0 50%;
+      animation: grow linear both; animation-timeline: scroll(root);
+    }
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .page { animation: page-in linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  }
+}
+
+/* --- reduced motion: nothing moves, nothing scrolls smoothly ------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
