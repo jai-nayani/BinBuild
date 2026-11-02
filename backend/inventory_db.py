@@ -144,9 +144,11 @@ def _now() -> str:
 
 
 def connect(path=None) -> sqlite3.Connection:
-    """Open the database (creating the tables if needed). Autocommit; writes
-    that touch several rows go through _write()."""
-    conn = sqlite3.connect(str(path or DB_PATH), isolation_level=None, check_same_thread=False)
+    """Open the database (creating its folder and tables if needed). Autocommit;
+    writes that touch several rows go through _write()."""
+    path = Path(path or DB_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)  # the deploy's /tmp/binbuild is empty at every start
+    conn = sqlite3.connect(str(path), isolation_level=None, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA)

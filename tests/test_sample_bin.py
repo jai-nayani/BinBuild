@@ -7,7 +7,8 @@
 - sample: "Use sample images" (POST /api/inventory/sample) loads the Oct 28
   kit batch's 5 photos and its verified pieces as one batch ready for review,
   with no access key on the public deploy and without creating any Spark, SAM
-  or Wonder client; the review's 13 corrections are applied; loading twice is
+  or Wonder client, even on a fresh deploy whose database folder doesn't
+  exist yet; the review's 13 corrections are applied; loading twice is
   the same batch, and its pieces are never added twice; after confirm the
   inventory is exactly the kit's 50 pieces;
 - assets: exactly 5 small JPEGs with no camera metadata, matching the
@@ -116,6 +117,18 @@ class TestGateAndSample(unittest.TestCase):
         with urllib.request.urlopen(self.api.base + review["count_photo"]["url"]) as reply:
             self.assertEqual((reply.status, reply.headers["content-type"]), (200, "image/jpeg"))
             self.assertEqual(reply.read(2), b"\xff\xd8")
+
+    def test_a_fresh_deploy_with_no_database_folder(self):
+        # The deploy keeps its database in /tmp/binbuild, empty at every container start: the first
+        # write must make the folder (this 500'd on the live demo once the start-up pre-load was gone).
+        fresh = Path(self.tmp.name) / "binbuild" / "binbuild.db"
+        with mock.patch.object(db, "DB_PATH", fresh):
+            self.assertFalse(fresh.parent.exists())
+            self.assertEqual(self.options()["options"], [], "reading makes nothing")
+            self.assertFalse(fresh.parent.exists())
+            status, body = self.api.call("POST", "/api/inventory/sample")
+            self.assertEqual((status, body.get("pieces")), (200, 50), body)
+            self.assertTrue(fresh.is_file())
 
     def test_confirm_then_build_and_never_twice(self):
         _, body = self.api.call("POST", "/api/inventory/sample")
