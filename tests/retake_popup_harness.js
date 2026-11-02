@@ -3,12 +3,18 @@
 //
 //   node tests/retake_popup_harness.js '<scenario json>'
 //
-// Scenario: {"notices": {view: retake notice}, "fail": [views that fail, in order]}.
+// Scenario: {"notices": {view: retake notice}, "fail": [views that fail, in order],
+//            optional: "order": [views, tapped on the capture grid in this order before each photo],
+//            "tap_failed": a failed view whose red panel is tapped after the check,
+//            "identify": HTTP status for Identify (Next) once all 5 are clear, e.g. 401}.
 // Prints JSON: for every pop-up shown, what the pop-up itself shows (its title,
 // its own Retake button, the photo in it, the "How:" hint) and which view the
 // retake was uploaded as. The pop-up's parts are found inside #retake-modal,
 // not by id, so an id that also exists elsewhere on the page cannot hide a
-// stale label. Used by tests/test_retake_popup.py; no network, no browser.
+// stale label. Also "ui": the hero, each grid panel's state and whether Next
+// is enabled along the way, and the sample-bin offer; "requests": every call
+// the app made. Used by tests/test_retake_popup.py and tests/test_hero_ui.py;
+// no network, no browser.
 
 'use strict';
 const fs = require('fs');
@@ -38,6 +44,7 @@ class El {
     this.dataset = {};
     this.src = attrs.src || '';
     const classes = new Set((attrs.class || '').split(/\s+/).filter(Boolean));
+    this.classSet = classes;
     this.classList = {
       add: (...c) => c.forEach((x) => classes.add(x)),
       remove: (...c) => c.forEach((x) => classes.delete(x)),
@@ -122,11 +129,16 @@ class FakeXHR {
   setRequestHeader() {}
   send(body) {
     const p = this.url.replace(/^https?:\/\/[^/]+/, '');
-    uploads.push({ method: this.method, path: p, files: body && body.entries ? body.entries.map((e) => e[2]) : [] });
+    uploads.push({ method: this.method, path: p, files: body && body.entries ? body.entries.map((e) => e[2]) : [],
+                   sources: body && body.entries ? body.entries.map((e) => e[1].name) : [] });
     let reply;
     const retakeMatch = p.match(/^\/api\/inventory\/batch\/([^/]+)\/photos\/([^/?]+)$/);
     if (p === '/api/inventory/batch') {
       reply = [201, { batch_id: 'b1', ready: failing.length === 0, retake: failing.map((v) => notices[v]) }];
+    } else if (/\/classify$/.test(p) && scenario.identify) {
+      reply = [scenario.identify, { detail: 'this calls a paid API, so on the public demo it needs the access key' }];
+    } else if (p === '/api/inventory/summary') {
+      reply = [200, { total_pieces: 50 }];
     } else if (retakeMatch) {
       const view = decodeURIComponent(retakeMatch[2]);
       failing = failing.filter((v) => v !== view);
@@ -174,10 +186,33 @@ vm.runInContext(fs.readFileSync(path.join(APP, 'app.js'), 'utf8'), sandbox, { fi
 const VIEWS = ['top', 'front', 'right', 'back', 'left'];
 const pick = (input, name) => { input.files = [{ name, type: 'image/jpeg' }]; input.dispatch('change'); };
 
-VIEWS.forEach((v) => { pick(byId('camera-input'), 'shot-' + v + '.jpg'); byId('use-btn').click(); });
+const shown = (id) => !byId(id).classList.contains('hidden');
+const panels = () => Object.fromEntries(VIEWS.map((v) => [v,
+  ['next', 'taken', 'passed', 'failed', 'locked'].filter((c) => byId('panel-' + v).classSet.has(c))]));
+const ui = { hero_at_start: shown('hero-view'), capture_at_start: shown('capture-view') };
+byId('start-btn').click();
+ui.capture_after_start = shown('capture-view');
+ui.hero_after_start = shown('hero-view');
+ui.panels_at_start = panels();
+
+(scenario.order || VIEWS).forEach((v) => {
+  if (scenario.order) { byId('panel-' + v).click(); }
+  pick(byId('camera-input'), 'shot-' + v + '.jpg');
+  byId('use-btn').click();
+});
+ui.panels_before_upload = panels();
+ui.next_enabled_before_upload = !byId('identify-btn').disabled;
 byId('upload-btn').click();
+ui.panels_after_upload = panels();
+ui.next_enabled_after_upload = !byId('identify-btn').disabled;
 
 const modal = byId('retake-modal');
+if (scenario.tap_failed) {
+  modal.classList.add('hidden');   // the user dismisses the first pop-up, then taps a red panel
+  byId('panel-' + scenario.tap_failed).click();
+  ui.tapped_failed_opens = modal.classList.contains('hidden') ? null
+    : find(modal, (e) => e.tagName === 'H2').textContent;
+}
 const inModal = (test) => find(modal, test);
 const popups = [];
 for (let k = 0; k < VIEWS.length + 1 && !modal.classList.contains('hidden'); k++) {
@@ -196,11 +231,23 @@ for (let k = 0; k < VIEWS.length + 1 && !modal.classList.contains('hidden'); k++
   popups.push(shown);
 }
 
+ui.panels_at_end = panels();
+ui.next_enabled_at_end = !byId('identify-btn').disabled;
+if (scenario.identify) {
+  byId('identify-btn').click();
+  ui.sample_offer = { shown: shown('sample-offer'), button: byId('sample-bin-btn').textContent };
+  byId('sample-bin-btn').click();
+  ui.build_view_after_sample = shown('build-view');
+}
+
 const ids = [];
 walk(root, (e) => { if (e.id) { ids.push(e.id); } });
 process.stdout.write(JSON.stringify({
   popups,
-  batch_upload: uploads[0] && uploads[0].files,
+  batch_upload: uploads.find((u) => u.path === '/api/inventory/batch').files,
+  batch_sources: uploads.find((u) => u.path === '/api/inventory/batch').sources,
   modal_open_at_end: !modal.classList.contains('hidden'),
   duplicate_ids: ids.filter((id, i) => ids.indexOf(id) !== i),
+  ui,
+  requests: uploads.map((u) => u.method + ' ' + u.path),
 }));
