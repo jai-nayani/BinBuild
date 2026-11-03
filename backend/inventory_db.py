@@ -385,12 +385,60 @@ def record_classify_error(conn, batch_id, message):
     conn.execute("UPDATE batches SET classify_error = ? WHERE id = ?", (str(message)[:2000], batch_id))
 
 
+UNSURE_CONFIDENCE = 0.9   # a Spark proposal below this is flagged "not sure" in review
+
+
+def is_unsure(d) -> bool:
+    """A classifier proposal Spark itself marked as shaky: it couldn't name
+    the piece or its colour, gave no size, or put its confidence below
+    UNSURE_CONFIDENCE. Only a proposal nobody has touched yet counts: a piece
+    a person added, fixed, accepted or removed is no longer just Spark's."""
+    if d.get("source") != "spark" or d.get("status") != "proposed":
+        return False
+    confidence = d.get("confidence")
+    return (d.get("family") == "unknown" or d.get("color") == "unknown" or not d.get("size")
+            or confidence is None or confidence < UNSURE_CONFIDENCE)
+
+
 def _detection_dict(row) -> dict:
     d = dict(row)
     d["plain"] = bool(d["plain"])
     for key in ("region", "original", "raw"):
         d[key] = json.loads(d[key]) if d[key] else None
+    d["unsure"] = is_unsure(d)
     return d
+
+
+def reclassify_detection(conn, batch_id, detection_id, d) -> dict:
+    """Replace one detection's label with a fresh classification of a close-up
+    of that piece. The piece itself does not move: its id, dot (region), count
+    and review status stay exactly as they were; only what it is called and
+    the classifier's confidence in that change."""
+    with _write(conn):
+        batch = _batch_row(conn, batch_id)
+        if batch["status"] == "confirmed":
+            raise Conflict(f"batch {batch_id} is confirmed; undo it before re-checking a piece")
+        row = conn.execute(
+            "SELECT * FROM detections WHERE id = ? AND batch_id = ?", (detection_id, batch_id)
+        ).fetchone()
+        if row is None:
+            raise NotFound(f"no detection {detection_id} in batch {batch_id}")
+        current = _detection_dict(row)
+        if current["status"] == "rejected":
+            raise Conflict(f"detection {detection_id} in batch {batch_id} is removed; put it back before re-checking it")
+        if not current["unsure"]:
+            raise ValueError(f"detection {detection_id} in batch {batch_id} is not flagged unsure")
+        values = _detection_values({**{k: current[k] for k in EDITABLE}, **{k: d[k] for k in EDITABLE if k in d}})
+        confidence = d.get("confidence")
+        confidence = None if confidence is None else min(max(float(confidence), 0.0), 1.0)
+        raw = {"close_up": d.get("raw"), "whole_photo": current["raw"]}
+        conn.execute(
+            "UPDATE detections SET family = ?, shape = ?, size = ?, color = ?, plain = ?,"
+            " generator_type = ?, confidence = ?, raw = ? WHERE id = ?",
+            (values["family"], values["shape"], values["size"], values["color"], int(values["plain"]),
+             values["generator_type"], confidence, json.dumps(raw), row["id"]),
+        )
+    return next(x for x in batch_review(conn, batch_id)["detections"] if x["id"] == detection_id)
 
 
 def review_batch(conn, batch_id, corrections=(), additions=()):

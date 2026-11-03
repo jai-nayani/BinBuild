@@ -132,6 +132,24 @@ def set_details(spec, items) -> list:
     return out
 
 
+def set_booklet(spec, notes=()) -> dict:
+    """A known set's booklet (backend/booklet.py), whether or not it fits:
+    the finished-model picture (booklet.picture) is the carousel card's cover."""
+    placements, steps = [], []
+    for step in spec["steps"]:
+        add = []
+        for p in step["place"]:
+            add.append(len(placements))
+            placements.append(bk.place(spec["parts"][p["part"]], p["at"], p.get("along", "x"), p.get("down")))
+        steps.append((step["text"], add))
+    manual = spec.get("manual")
+    where = f"the manual, {_pages(manual.get('pages') or [manual['page']])}" if manual else f"known set: {spec['id']}"
+    return bk.booklet(
+        spec["title"], spec["subtitle"], placements, steps,
+        source=f"the pieces in your bin ({where})",
+        notes=list(notes) + spec.get("notes", []))
+
+
 def plan_spec(spec, items, with_booklet=True) -> dict:
     set_id = spec["id"]
     check = check_set(spec, items)
@@ -145,20 +163,8 @@ def plan_spec(spec, items, with_booklet=True) -> dict:
     else:
         result["message"] = "Missing " + ", ".join(f"{p['short']}× {p['label']}" for p in check["missing"]) + "."
     if check["fits"] and with_booklet:
-        placements, steps = [], []
-        for step in spec["steps"]:
-            add = []
-            for p in step["place"]:
-                add.append(len(placements))
-                placements.append(bk.place(spec["parts"][p["part"]], p["at"], p.get("along", "x"), p.get("down")))
-            steps.append((step["text"], add))
-        manual = spec.get("manual")
-        where = f"the manual, {_pages(manual.get('pages') or [manual['page']])}" if manual else f"known set: {set_id}"
-        result["booklet"] = bk.booklet(
-            spec["title"], spec["subtitle"], placements, steps,
-            source=f"the pieces in your bin ({where})",
-            notes=[f"Every piece checked against your confirmed inventory: {result['message']}"]
-            + spec.get("notes", []))
+        result["booklet"] = set_booklet(
+            spec, notes=[f"Every piece checked against your confirmed inventory: {result['message']}"])
     return result
 
 
@@ -387,12 +393,15 @@ def manual_options(items) -> list:
         if b["status"] == "verified" and b.get("set"):
             plan = plan_set(b["set"], items, with_booklet=False)
             entry.update(set=b["set"], status=plan["status"], message=plan["message"], missing=plan["missing"],
-                         pieces=plan["pieces"], has_booklet=True, verified_by="known set with steps")
+                         pieces=plan["pieces"], has_booklet=True, verified_by="known set with steps",
+                         cover=bk.picture(set_booklet(known_sets()[b["set"]])["placements"]))
         elif booklet_ready(draft):
-            plan = plan_spec(draft_set(draft), items, with_booklet=False)
+            spec = draft_set(draft)
+            plan = plan_spec(spec, items, with_booklet=False)
             entry.update(set=b["id"], piece_status="verified", status=plan["status"], message=plan["message"],
                          missing=plan["missing"], pieces=plan["pieces"], has_booklet=True,
-                         verified_by=VERIFIED_BY[hand_checked(draft)])
+                         verified_by=VERIFIED_BY[hand_checked(draft)],
+                         cover=bk.picture(set_booklet(spec)["placements"]))
         elif reads_agree(draft):
             check = check_pieces([({k: e[k] for k in ("family", "shape", "size", "color")}, e["qty"])
                                   for e in draft["elements"]], items)

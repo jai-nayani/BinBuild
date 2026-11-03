@@ -93,7 +93,7 @@ class TestGuard(unittest.TestCase):
         with mock.patch.dict(os.environ, env, clear=True):
             self.assertEqual(self.post(CLASSIFY)[0], 404)   # no key asked for at home
 
-    def test_every_post_is_guarded_and_only_two_are_paid(self):
+    def test_every_post_is_guarded_and_only_the_paid_ones_are_paid(self):
         paid, unguarded = set(), []
         for route in main.app.routes:
             if isinstance(route, APIRoute) and "POST" in route.methods:
@@ -103,7 +103,8 @@ class TestGuard(unittest.TestCase):
                 elif guard.write not in calls:
                     unguarded.append(route.path)
         self.assertEqual(unguarded, [])
-        self.assertEqual(paid, {"/api/inventory/batch/{batch_id}/classify", "/api/builds/wonder"})
+        self.assertEqual(paid, {"/api/inventory/batch/{batch_id}/classify", "/api/builds/wonder",
+                                "/api/inventory/batch/{batch_id}/pieces/{detection_id}/reclassify"})
 
 
 @unittest.skipUnless(HAVE_SERVER, "FastAPI or uvicorn not installed")

@@ -6,7 +6,7 @@
  * the install and every fetch go to the server, past the browser's HTTP cache,
  * so a redeploy shows up on the next load.
  */
-var CACHE_NAME = 'binbuild-v14';
+var CACHE_NAME = 'binbuild-v15';
 var SHELL = [
   './',
   './index.html',

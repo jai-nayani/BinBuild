@@ -149,6 +149,29 @@ h4.chapter { font-size: 14px; margin: 14px 0 2px; color: var(--ink); }
 .mrow .chip.unverified { background: #efebe0; color: #5c574a; }
 .mrow .chip.readable { background: #e7eefb; color: #2d4a7c; }
 
+/* --- build carousel: one booklet build per card, swipe sideways ----------------- */
+
+.build-carousel {
+  display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  padding: 4px 2px 12px; scrollbar-width: none;
+}
+.build-carousel::-webkit-scrollbar { display: none; }
+.build-card {
+  flex: 0 0 78%; scroll-snap-align: center; scroll-snap-stop: always;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 14px 12px; margin: 0; border: 2px solid var(--line); border-radius: 16px;
+  background: var(--card); color: var(--ink); font: inherit; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.build-card:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.build-cover { width: 100%; text-align: center; pointer-events: none; }
+.build-cover svg { max-width: 100%; height: auto; max-height: 240px; }
+.build-name { font-size: 19px; font-weight: 800; line-height: 1.2; text-align: center; }
+.build-pieces { font-size: 14px; font-weight: 600; color: var(--muted); }
+#booklet-frame { width: 100%; height: 68vh; border: 1px solid var(--line); border-radius: 12px; background: #fff; display: block; }
+.badge.unsure { background: #fde8e4; color: var(--red); }
+
 /* --- check the pieces (unchanged) ----------------------------------------------- */
 
 .photo-box { position: sticky; top: 0; z-index: 3; background: var(--bg); padding: 6px 0 4px; text-align: center; }
