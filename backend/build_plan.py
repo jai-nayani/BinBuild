@@ -140,7 +140,8 @@ def set_booklet(spec, notes=()) -> dict:
         add = []
         for p in step["place"]:
             add.append(len(placements))
-            placements.append(bk.place(spec["parts"][p["part"]], p["at"], p.get("along", "x"), p.get("down")))
+            placements.append(bk.place(spec["parts"][p["part"]], p["at"], p.get("along", "x"), p.get("down"),
+                                       p.get("studs")))
         steps.append((step["text"], add))
     manual = spec.get("manual")
     where = f"the manual, {_pages(manual.get('pages') or [manual['page']])}" if manual else f"known set: {spec['id']}"
@@ -329,7 +330,7 @@ def draft_set(draft) -> dict:
                "Nobody has built it from these steps yet: if a step doesn't match the book, follow the book."]
     parts = {line_of(e): {k: e[k] for k in ("family", "shape", "size", "color")} for e in draft["elements"]}
     steps = [{"text": step["text"],
-              "place": [{"part": p["line"], "at": p["at"], **{k: p[k] for k in ("along", "down") if p.get(k)}}
+              "place": [{"part": p["line"], "at": p["at"], **{k: p[k] for k in ("along", "down", "studs") if p.get(k)}}
                         for p in step["place"]]}
              for step in draft["steps"]]
     pieces = sum(e["qty"] for e in draft["elements"])

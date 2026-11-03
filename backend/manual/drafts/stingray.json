@@ -125,13 +125,14 @@
   "usd": 0.325,
   "picture_checks": 1,
   "design": [
-   "6x1 (3,4,0) plate lime",
-   "4x2 (0,3,1) plate medium_azure",
-   "4x2 (2,2,2) wedge_plate white studs=+y",
-   "4x2 (2,4,2) wedge_plate white studs=-y",
-   "1x1 (0,3,2) round_tile white",
-   "1x1 (0,4,2) round_tile white"
-  ]
+   "6x1 (3,3,0) plate lime",
+   "2x4 (2,2,1) plate medium_azure",
+   "2x4 (3,0,2) wedge_plate white studs=-x",
+   "2x4 (3,4,2) wedge_plate white studs=-x",
+   "1x1 (3,3,3) round_tile white",
+   "1x1 (3,4,3) round_tile white"
+  ],
+  "note": "Layout rebuilt 2026-11-03 from the book's photo: the two wedge plates span the wingspan with their tips out, the eyes sit on the wing roots at the centre, the tail runs from the centre; re-checked with the physical validator. (The earlier layout had the wings side by side along the body and the eyes on the blue plate in front of them.)"
  },
  "steps": [
   {
@@ -141,7 +142,7 @@
      "line": "lime 1x6 plate",
      "at": [
       3,
-      4,
+      3,
       0
      ]
     }
@@ -153,46 +154,58 @@
     {
      "line": "medium_azure 2x4 plate",
      "at": [
-      0,
-      3,
+      2,
+      2,
       1
-     ]
+     ],
+     "along": "y"
     }
    ]
   },
   {
-   "text": "Add these 4 pieces (2 plates up), pressing them onto the studs below.",
+   "text": "Add these 2 pieces (2 plates up), pressing them onto the studs below.",
    "place": [
     {
      "line": "white 2x4 wedge plate",
      "at": [
-      2,
-      2,
+      3,
+      0,
       2
-     ]
+     ],
+     "along": "y",
+     "down": "+x",
+     "studs": "-x"
     },
     {
      "line": "white 2x4 wedge plate",
      "at": [
-      2,
-      4,
-      2
-     ]
-    },
-    {
-     "line": "white 1x1 round printed tile",
-     "at": [
-      0,
       3,
+      4,
       2
+     ],
+     "along": "y",
+     "down": "+x",
+     "studs": "-x"
+    }
+   ]
+  },
+  {
+   "text": "Add these 2 pieces (3 plates up), pressing them onto the studs below.",
+   "place": [
+    {
+     "line": "white 1x1 round printed tile",
+     "at": [
+      3,
+      3,
+      3
      ]
     },
     {
      "line": "white 1x1 round printed tile",
      "at": [
-      0,
+      3,
       4,
-      2
+      3
      ]
     }
    ]

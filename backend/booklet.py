@@ -14,7 +14,10 @@ Standard library only.
 import html
 import math
 
-PLATES = {"brick": 3, "plate": 1, "tile": 1, "curved": 2, "slope": 2}  # height of each kind
+PLATES = {"brick": 3, "plate": 1, "tile": 1, "curved": 2, "slope": 2, "wedge": 1}  # height of each kind
+# Curved slopes are not all the same piece: the azure 1x2 (LDraw 6091) stands
+# 4 plates tall with a stud on its flat end, the 1x3 (50950) is a brick tall.
+CURVED_HEIGHTS = {("1x2", "medium_azure"): 4, ("1x3", None): 3}
 STUD_KINDS = ("brick", "plate", "round")  # kinds with studs on top
 SLOPE_LOW = 0.35  # height (plates) of a slope's low end
 
@@ -46,6 +49,8 @@ def kind_of(part) -> str:
     shape = (part.get("shape") or "").lower()
     if "round" in shape:
         return "round"
+    if "wedge" in shape:
+        return "wedge"
     if part["family"] == "slope":
         return "curved" if "curved" in shape else "slope"
     if part["family"] in ("plate", "tile"):
@@ -62,16 +67,25 @@ def label(part) -> str:
     return f"{color} {part['size']} {shape}"
 
 
-def place(part, at, along="x", down=None) -> dict:
+def place(part, at, along="x", down=None, studs=None) -> dict:
     """One part on the grid. along: which axis the part's long side runs on.
-    down: for slopes, the direction the slope falls towards (+x, -x, +y, -y)."""
+    down: for slopes, the direction the slope falls towards (+x, -x, +y, -y).
+    studs: for a wedge plate or the tile with studs on one edge, the edge that
+    carries the studs; the wedge's surface falls away from that edge, and only
+    that edge's cells get studs. Without it a wedge draws as a plain plate."""
     a, b = sorted(int(n) for n in part["size"].split("x"))
     lx, ly = (b, a) if along == "x" else (a, b)
     kind = kind_of(part)
     height = (3 if part["family"] == "brick" else 1) if kind == "round" else PLATES[kind]
+    if kind == "curved":
+        height = CURVED_HEIGHTS.get((part["size"], part["color"]),
+                                    CURVED_HEIGHTS.get((part["size"], None), height))
     if kind in ("curved", "slope") and down is None:
         down = "+x" if along == "x" else "+y"
-    return {"part": dict(part), "at": list(at), "dims": [lx, ly, height], "kind": kind, "down": down}
+    if kind == "wedge" and studs and down is None:
+        down = ("-" if studs[0] == "+" else "+") + studs[1]  # falls away from the studded edge
+    return {"part": dict(part), "at": list(at), "dims": [lx, ly, height], "kind": kind,
+            "down": down, "studs": studs}
 
 
 def parts_list(placements) -> list:
@@ -123,7 +137,7 @@ def _height_fn(p):
     """Top height (plates) at a point (x, y) of a placement's footprint."""
     x0, y0, z0 = p["at"]
     lx, ly, h = p["dims"]
-    if p["kind"] not in ("curved", "slope"):
+    if p["kind"] not in ("curved", "slope", "wedge"):
         return lambda x, y: z0 + h
     axis, sign = p["down"][1], p["down"][0]
     length = lx if axis == "x" else ly
@@ -173,7 +187,27 @@ def _cylinder(out, p, c):
     x0, y0, z0 = p["at"]
     top = z0 + p["dims"][2]
     _stud(out, x0, y0, z0, c, radius=0.47, tall=top - z0)
+    if p["part"]["family"] == "tile":
+        # A round tile is a flat disc: no stud on top. A printed one (the
+        # eye tiles) gets its print as a dark pupil, so eyes read as eyes.
+        if "printed" in (p["part"].get("shape") or ""):
+            (sx, ty) = _xy(x0 + 0.5, y0 + 0.5, top)
+            rx, ry = 0.17 * math.sqrt(2) * COS * STUD, 0.17 * math.sqrt(2) * SIN * STUD
+            out.append(f'<ellipse cx="{sx:.1f}" cy="{ty:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#26221f"/>')
+        return
     _stud(out, x0, y0, top, c)
+
+
+def _on_edge(p, cx, cy, direction) -> bool:
+    """Is this cell on the edge `direction` ("+x", "-y", ...) of the part?"""
+    if not direction:
+        return False
+    x0, y0, _ = p["at"]
+    lx, ly, _ = p["dims"]
+    sign, axis = direction[0], direction[1]
+    if axis == "x":
+        return cx == (x0 + lx - 1 if sign == "+" else x0)
+    return cy == (y0 + ly - 1 if sign == "+" else y0)
 
 
 def _filled(placements, shown) -> set:
@@ -195,7 +229,7 @@ def _column(out, p, cx, cy, c, height, filled):
     lx, ly, h = p["dims"]
     x1, y1 = x0 + lx, y0 + ly
     span = range(z0, z0 + math.ceil(h))
-    sloped = p["kind"] in ("curved", "slope")
+    sloped = p["kind"] in ("curved", "slope", "wedge")
     axis = p["down"][1] if sloped else None
     n_x = 7 if axis == "x" else 2  # samples along a side that runs along x
     n_y = 7 if axis == "y" else 2
@@ -233,8 +267,20 @@ def _column(out, p, cx, cy, c, height, filled):
     for keep, line in ((cy == y0, s_ny), (cx == x1 - 1, s_px), (cy == y1 - 1, s_py), (cx == x0, s_nx)):
         if keep:
             out.append(f'<polyline points="{_pts(line)}" {edge}/>')
-    if p["kind"] in STUD_KINDS:
+    shape = p["part"].get("shape") or ""
+    if p["kind"] == "wedge":
+        # Only the studded edge carries studs; the surface falls away from it.
+        if _on_edge(p, cx, cy, p.get("studs")):
+            _stud(out, cx, cy, z0 + h, c)
+    elif "jumper" in shape:
+        pass  # one stud between the two cells: picture() draws it at the centre
+    elif p["kind"] in STUD_KINDS:
         _stud(out, cx, cy, z0 + h, c)
+    elif p["kind"] == "tile" and p.get("studs") and _on_edge(p, cx, cy, p["studs"]):
+        _stud(out, cx, cy, z0 + h, c)  # the tile with studs along one edge
+    if (p["kind"] == "curved" and p["part"]["color"] == "medium_azure"
+            and p["part"].get("size") in ("1x2", "2x1") and _on_edge(p, cx, cy, p["down"])):
+        _stud(out, cx, cy, height(cx + 0.5, cy + 0.5), c)  # the azure curve's one stud, on its flat end
 
 
 def _bounds(placements):
@@ -271,6 +317,13 @@ def picture(placements, new=(), shown=None, frame=None, max_width=None) -> str:
             _cylinder(out, p, c)
         else:
             _column(out, p, cx, cy, c, _height_fn(p), filled)
+    for i in visible:  # a jumper plate's one stud sits between its two cells
+        p = placements[i]
+        if "jumper" in (p["part"].get("shape") or ""):
+            x0, y0, z0 = p["at"]
+            lx, ly, h = p["dims"]
+            _stud(out, x0 + lx / 2 - 0.5, y0 + ly / 2 - 0.5, z0 + h,
+                  _colors(p, faded=bool(new) and i not in new))
     x, y, w, h = frame
     width = f' width="{min(w, max_width):.0f}"' if max_width else ""
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x:.1f} {y:.1f} {w:.1f} {h:.1f}"{width} '

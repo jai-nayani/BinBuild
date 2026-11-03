@@ -166,7 +166,9 @@
       3,
       0
      ],
-     "along": "y"
+     "along": "y",
+     "down": "-x",
+     "studs": "+x"
     },
     {
      "line": "white 2x4 wedge plate",
@@ -175,7 +177,9 @@
       3,
       0
      ],
-     "along": "y"
+     "along": "y",
+     "down": "+x",
+     "studs": "-x"
     }
    ]
   },

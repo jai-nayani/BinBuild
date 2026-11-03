@@ -354,7 +354,8 @@ def layer_steps(pieces) -> list:
         steps.append({"text": text, "place": [
             {"line": bp.line_of(placements[i]["part"]), "at": placements[i]["at"],
              **({"along": "y"} if placements[i]["dims"][0] < placements[i]["dims"][1] else {}),
-             **({"down": placements[i]["down"]} if placements[i]["down"] else {})} for i in idx]})
+             **({"down": placements[i]["down"]} if placements[i].get("down") else {}),
+             **({"studs": placements[i]["studs"]} if placements[i].get("studs") else {})} for i in idx]})
     return steps
 
 
