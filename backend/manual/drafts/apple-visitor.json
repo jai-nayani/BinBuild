@@ -105,11 +105,12 @@
   "usd": 0.4076,
   "picture_checks": 1,
   "design": [
-   "1x1 (0,0,0) round_brick light_bluish_gray",
    "1x1 (1,0,0) round_brick light_bluish_gray",
-   "2x1 (0,0,3) brick orange",
-   "2x1 (0,0,6) curved_slope medium_azure down=+x"
-  ]
+   "1x1 (2,0,0) round_brick light_bluish_gray",
+   "2x1 (1,0,3) brick orange",
+   "2x1 (0,0,6) curved_slope medium_azure down=-x"
+  ],
+  "note": "Layout re-read 2026-11-02 from a full-resolution crop of page 29 and re-checked with the physical validator: the azure head sits one stud forward, its stud end overhanging the front of the orange body, so one orange stud shows behind it."
  },
  "steps": [
   {
@@ -118,7 +119,7 @@
     {
      "line": "light_bluish_gray 1x1 round brick",
      "at": [
-      0,
+      1,
       0,
       0
      ]
@@ -126,7 +127,7 @@
     {
      "line": "light_bluish_gray 1x1 round brick",
      "at": [
-      1,
+      2,
       0,
       0
      ]
@@ -139,7 +140,7 @@
     {
      "line": "orange 1x2 brick",
      "at": [
-      0,
+      1,
       0,
       3
      ]
@@ -156,9 +157,15 @@
       0,
       6
      ],
-     "down": "-x"
+     "down": "+x"
     }
    ]
   }
- ]
+ ],
+ "drawing": {
+  "view": {
+   "yaw": 20,
+   "elevation": 22
+  }
+ }
 }

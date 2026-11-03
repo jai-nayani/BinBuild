@@ -44,6 +44,8 @@ backend/        FastAPI backend (inventory + generation API)
   build_plan.py          The build step: known sets, BrickGPT designs through Path A
   brickgpt_constraint.py Path A: generate (pre-generated designs) -> filter -> patch
   booklet.py             Step-by-step booklet: JSON + printable HTML page with drawings
+  ldraw_render.py        The drawings: the kit's real part shapes, z-buffered at the book's angle
+  ldraw_mesh.py          Builds ldraw_kit.json.gz (the kit's parts from the LDraw library)
   sets/                  Known sets with verified piece lists (house-and-tree)
   manual/catalog.json    Every build in the kit's manual: name, chapter, pages, piece-list status
   manual/drafts/         Draft piece lists read from the book (verified once two reads agree or a hand-check):
@@ -126,22 +128,26 @@ segmenter interface: one mask per piece, close-ups checked by Spark, outlines
 in review. It is opt-in (`?segmenter=sam` or `BINBUILD_SEGMENTER=sam`); results
 on the kit batch: [SAM-3-1.md](SAM-3-1.md).
 The build API still lists every build in the manual that came with the kit
-(106; 41 have a verified piece list and a bin check — house-and-tree
-hand-checked, 40 more verified by two independent Muse Wonder reads of the
-page agreeing on every line, 11 in all with a validated step-by-step
+(106; 39 have a verified piece list and a bin check — house-and-tree
+hand-checked, 38 more verified by two independent Muse Wonder reads of the
+page agreeing on every line, 9 in all with a validated step-by-step
 booklet), then BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
-In the app, "What can I build?" is a sideways carousel of just those 11
+In the app, "What can I build?" is a sideways carousel of just those 9
 booklet builds — each card the booklet's finished-model picture, its name
 and piece count — and tapping a card opens its step-by-step booklet, with
 Back returning to the same card. (The paintbrush has a verified piece list
 but no booklet: the book's brush lies on its side, which the physical
-validator cannot express, so it stays honestly labelled booklet-less.) Nothing is shown there until pieces are
+validator cannot express, so it stays honestly labelled booklet-less. The
+two cakes' pictures show pieces their agreed lists don't have, so those
+lists went back to the hand-check queue.) The drawings use the parts' real
+shapes, at the angle the book shows each model:
+[BOOKLET-REDESIGN.md](BOOKLET-REDESIGN.md). Nothing is shown there until pieces are
 confirmed (or the sample bin is loaded and confirmed).
 Draft parts lists for the builds that print none were read from the pictures
 by Muse Wonder: [WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md); the second
 reads and auto-generated booklets: [MANUAL-VERIFY.md](MANUAL-VERIFY.md). The
-60 drafts whose reads differ wait in the hand-check queue, differing lines
-first.
+62 drafts whose reads differ (or whose picture disputes the list) wait in the
+hand-check queue, differing lines first.
 A hand-check records the build's steps too, so a hand-checked build gets a
 booklet like house and tree; the retake pop-up fix from the Oct 31 trial is in
 [TRIAL-FIXES.md](TRIAL-FIXES.md).
@@ -160,3 +166,6 @@ just that piece, named again on its own, its row updated where it sits:
 [REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
 No API keys or secrets live in this repo: the Baseten and Meta Model API keys
 are read from the git-ignored `.env` (`BASETEN_API_KEY`, `META_MODEL_API_KEY`).
+
+Part shapes in the booklet drawings (`backend/ldraw_kit.json.gz`) come from the
+[LDraw](https://www.ldraw.org) parts library, licensed CC BY 4.0.

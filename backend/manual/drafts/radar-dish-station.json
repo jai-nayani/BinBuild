@@ -145,14 +145,14 @@
   "usd": 0.3804,
   "picture_checks": 1,
   "design": [
-   "1x6 (2,0,0) plate lime",
-   "2x2 (1,4,1) plate magenta",
-   "2x1 (1,5,2) curved_slope black down=-x",
-   "1x1 (2,4,2) round_brick light_bluish_gray",
-   "1x1 (1,4,2) round_brick light_bluish_gray",
+   "1x6 (1,1,0) plate lime",
+   "2x2 (1,6,1) plate magenta",
+   "2x1 (1,7,2) curved_slope black down=-x",
+   "1x1 (2,6,2) round_brick light_bluish_gray",
+   "1x1 (1,6,2) round_brick light_bluish_gray",
    "4x2 (0,0,1) wedge_plate white studs=+y"
   ],
-  "note": "Model turned 180 degrees 2026-11-03 so the dish reads at the back with the receiver in front, as the book's T-shaped station on page 78; same model, re-checked with the validator."
+  "note": "Mast moved so the dish covers its top end and 4 lime studs show above the base, as in the picture on page 78 (2026-11-02); same pieces, re-checked with the validator."
  },
  "steps": [
   {
@@ -161,8 +161,8 @@
     {
      "line": "lime 1x6 plate",
      "at": [
-      2,
-      0,
+      1,
+      1,
       0
      ],
      "along": "y"
@@ -176,7 +176,7 @@
      "line": "magenta 2x2 plate",
      "at": [
       1,
-      4,
+      6,
       1
      ]
     },
@@ -199,7 +199,7 @@
      "line": "black 1x2 curved slope",
      "at": [
       1,
-      5,
+      7,
       2
      ],
      "down": "-x"
@@ -208,7 +208,7 @@
      "line": "light_bluish_gray 1x1 round brick",
      "at": [
       2,
-      4,
+      6,
       2
      ]
     },
@@ -216,11 +216,27 @@
      "line": "light_bluish_gray 1x1 round brick",
      "at": [
       1,
-      4,
+      6,
       2
      ]
     }
    ]
   }
- ]
+ ],
+ "drawing": {
+  "view": {
+   "yaw": 0,
+   "elevation": 74
+  },
+  "parts": [
+   {
+    "at": [
+     0,
+     0,
+     1
+    ],
+    "narrow": "+x"
+   }
+  ]
+ }
 }

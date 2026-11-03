@@ -1,25 +1,24 @@
 """Build booklets: step-by-step instructions with a picture for every step.
 
 A booklet is plain JSON, stored with the build, and renders to one
-self-contained HTML page (no scripts, no external files). Each step has an
-isometric SVG drawing: the parts added in that step in full colour,
-everything placed before them faded, plus a callout of the parts to find.
+self-contained HTML page (no scripts, no external files). Each step has a
+picture drawn from the real part shapes (LDraw, see ldraw_render): the parts
+added in that step in full colour, everything placed before them faded, plus
+a callout of the parts to find.
 
 Grid: x and y in studs, z in plates (a brick is 3 plates tall). BrickGPT's z
 is in bricks, so its layers are multiplied by 3.
-
-Standard library only.
 """
 
+import base64
 import html
-import math
+import json
+from functools import lru_cache
 
 PLATES = {"brick": 3, "plate": 1, "tile": 1, "curved": 2, "slope": 2, "wedge": 1}  # height of each kind
 # Curved slopes are not all the same piece: the azure 1x2 (LDraw 6091) stands
 # 4 plates tall with a stud on its flat end, the 1x3 (50950) is a brick tall.
 CURVED_HEIGHTS = {("1x2", "medium_azure"): 4, ("1x3", None): 3}
-STUD_KINDS = ("brick", "plate", "round")  # kinds with studs on top
-SLOPE_LOW = 0.35  # height (plates) of a slope's low end
 
 # Approximate colours for drawing, chosen by eye; one per vocabulary name.
 HEX = {
@@ -37,10 +36,6 @@ HEX = {
     "trans_bright_green": "#d7e3a8", "trans_light_blue": "#b0ecea", "trans_dark_blue": "#2034a0",
     "trans_neon_green": "#f2ee88", "unknown": "#b8b8b8",
 }
-
-STUD = 26.0  # pixels per stud in a step picture
-COS, SIN = math.cos(math.pi / 6), 0.5
-PLATE = 0.4  # plate height in studs (3.2 mm on an 8 mm stud pitch)
 
 
 # --- parts and placements -----------------------------------------------------
@@ -67,12 +62,15 @@ def label(part) -> str:
     return f"{color} {part['size']} {shape}"
 
 
-def place(part, at, along="x", down=None, studs=None) -> dict:
+def place(part, at, along="x", down=None, studs=None, clip=None, narrow=None, side=None) -> dict:
     """One part on the grid. along: which axis the part's long side runs on.
     down: for slopes, the direction the slope falls towards (+x, -x, +y, -y).
     studs: for a wedge plate or the tile with studs on one edge, the edge that
     carries the studs; the wedge's surface falls away from that edge, and only
-    that edge's cells get studs. Without it a wedge draws as a plain plate."""
+    that edge's cells get studs. clip: the end a clip plate's clip sticks out of.
+    Drawing only, not part of the validated design: narrow, the end a wedge
+    plate tapers to (which of the two mirror-image wedges it is); side, the way
+    a brick's side studs face."""
     a, b = sorted(int(n) for n in part["size"].split("x"))
     lx, ly = (b, a) if along == "x" else (a, b)
     kind = kind_of(part)
@@ -84,8 +82,10 @@ def place(part, at, along="x", down=None, studs=None) -> dict:
         down = "+x" if along == "x" else "+y"
     if kind == "wedge" and studs and down is None:
         down = ("-" if studs[0] == "+" else "+") + studs[1]  # falls away from the studded edge
-    return {"part": dict(part), "at": list(at), "dims": [lx, ly, height], "kind": kind,
-            "down": down, "studs": studs}
+    out = {"part": dict(part), "at": list(at), "dims": [lx, ly, height], "kind": kind,
+           "down": down, "studs": studs}
+    out.update({k: v for k, v in (("clip", clip), ("narrow", narrow), ("side", side)) if v})
+    return out
 
 
 def parts_list(placements) -> list:
@@ -99,10 +99,12 @@ def parts_list(placements) -> list:
     return list(found.values())
 
 
-def booklet(title, subtitle, placements, steps, source, notes=()) -> dict:
-    """steps: [(text, [placement indices added in this step])]."""
+def booklet(title, subtitle, placements, steps, source, notes=(), view=None) -> dict:
+    """steps: [(text, [placement indices added in this step])]. view: the
+    camera for its pictures (ldraw_render), as the book shows the model."""
     return {
         "title": title, "subtitle": subtitle, "source": source, "notes": list(notes),
+        **({"view": view} if view else {}),
         "placements": placements,
         "parts": [{"label": p["label"], "part": p["part"], "qty": p["qty"]} for p in parts_list(placements)],
         "steps": [{"n": n, "text": text, "add": list(add),
@@ -114,220 +116,34 @@ def booklet(title, subtitle, placements, steps, source, notes=()) -> dict:
 
 # --- drawing --------------------------------------------------------------------
 
-def _shade(hex_color, factor):
-    """factor < 1 darkens, > 1 mixes towards white."""
-    r, g, b = (int(hex_color[i:i + 2], 16) for i in (1, 3, 5))
-    if factor <= 1:
-        r, g, b = (round(c * factor) for c in (r, g, b))
-    else:
-        t = min(factor - 1, 1)
-        r, g, b = (round(c + (255 - c) * t) for c in (r, g, b))
-    return f"#{r:02x}{g:02x}{b:02x}"
+PICTURE = (720, 540)   # largest picture, in pixels (shown at about half that: sharp on phones)
+THUMB = (138, 120)     # a part in a parts list
 
 
-def _xy(x, y, z):
-    return ((x - y) * COS * STUD, (x + y) * SIN * STUD - z * PLATE * STUD)
+@lru_cache(maxsize=512)
+def _png(key) -> tuple:
+    from . import ldraw_render as lr
+    placements, new, shown, frame, view, size = json.loads(key)
+    img = lr.render(placements, shown=shown, new=new, frame=frame, view=view, size=tuple(size))
+    return lr.png(img), img.size
 
 
-def _pts(points):
-    return " ".join(f"{x:.1f},{y:.1f}" for x, y in points)
+def picture(placements, new=(), shown=None, frame=None, view=None, size=PICTURE) -> str:
+    """The placements in `shown` (default all), drawn from their real part
+    shapes (backend/ldraw_render.py), as an SVG holding one PNG. Parts in
+    `new` are in full colour; the others are faded, unless `new` is empty
+    (all full). frame: ldraw_render.bounds() of the whole model, so a
+    booklet's steps share one framing. view: the camera ({"yaw", "elevation"})."""
+    key = json.dumps([placements, sorted(new), None if shown is None else sorted(shown),
+                      list(frame) if frame else None, view, list(size)], sort_keys=True)
+    data, (w, h) = _png(key)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" role="img">'
+            f'<image href="data:image/png;base64,{base64.b64encode(data).decode()}" width="{w}" height="{h}"/></svg>')
 
 
-def _height_fn(p):
-    """Top height (plates) at a point (x, y) of a placement's footprint."""
-    x0, y0, z0 = p["at"]
-    lx, ly, h = p["dims"]
-    if p["kind"] not in ("curved", "slope", "wedge"):
-        return lambda x, y: z0 + h
-    axis, sign = p["down"][1], p["down"][0]
-    length = lx if axis == "x" else ly
-
-    def height(x, y):
-        along = (x - x0) if axis == "x" else (y - y0)
-        t = min(max(along if sign == "+" else length - along, 0), length) / length
-        rise = math.cos(math.pi / 2 * t) if p["kind"] == "curved" else 1 - t
-        return z0 + SLOPE_LOW + (h - SLOPE_LOW) * rise
-    return height
-
-
-def _columns(placements):
-    """Every 1x1 stud column of every part, in drawing order (back to front)."""
-    cols = []
-    for i, p in enumerate(placements):
-        x0, y0, z0 = p["at"]
-        lx, ly, _ = p["dims"]
-        for cx in range(x0, x0 + lx):
-            for cy in range(y0, y0 + ly):
-                cols.append((cx + cy, z0, cx, i))
-    cols.sort()
-    return cols
-
-
-def _colors(p, faded):
-    base = HEX.get(p["part"]["color"], HEX["unknown"])
-    dark = sum(int(base[i:i + 2], 16) for i in (1, 3, 5)) < 200
-    c = {"top": base, "left": _shade(base, 0.86), "right": _shade(base, 0.7),
-         "edge": _shade(base, 1.45) if dark else _shade(base, 0.45)}
-    if faded:
-        c = {k: _shade(v, 1.62) for k, v in c.items()}
-    return c
-
-
-def _stud(out, cx, cy, z, c, radius=0.3, tall=0.42):
-    (sx, sy) = _xy(cx + 0.5, cy + 0.5, z)
-    (_, ty) = _xy(cx + 0.5, cy + 0.5, z + tall)
-    rx, ry = radius * math.sqrt(2) * COS * STUD, radius * math.sqrt(2) * SIN * STUD
-    out.append(f'<ellipse cx="{sx:.1f}" cy="{sy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{c["right"]}" stroke="{c["edge"]}" stroke-width="0.8"/>')
-    out.append(f'<rect x="{sx - rx:.1f}" y="{ty:.1f}" width="{2 * rx:.1f}" height="{sy - ty:.1f}" fill="{c["left"]}"/>')
-    out.append(f'<path d="M{sx - rx:.1f},{ty:.1f}V{sy:.1f}M{sx + rx:.1f},{ty:.1f}V{sy:.1f}" stroke="{c["edge"]}" stroke-width="0.8"/>')
-    out.append(f'<ellipse cx="{sx:.1f}" cy="{ty:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{_shade(c["top"], 1.12)}" stroke="{c["edge"]}" stroke-width="0.8"/>')
-
-
-def _cylinder(out, p, c):
-    x0, y0, z0 = p["at"]
-    top = z0 + p["dims"][2]
-    _stud(out, x0, y0, z0, c, radius=0.47, tall=top - z0)
-    if p["part"]["family"] == "tile":
-        # A round tile is a flat disc: no stud on top. A printed one (the
-        # eye tiles) gets its print as a dark pupil, so eyes read as eyes.
-        if "printed" in (p["part"].get("shape") or ""):
-            (sx, ty) = _xy(x0 + 0.5, y0 + 0.5, top)
-            rx, ry = 0.17 * math.sqrt(2) * COS * STUD, 0.17 * math.sqrt(2) * SIN * STUD
-            out.append(f'<ellipse cx="{sx:.1f}" cy="{ty:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#26221f"/>')
-        return
-    _stud(out, x0, y0, top, c)
-
-
-def _on_edge(p, cx, cy, direction) -> bool:
-    """Is this cell on the edge `direction` ("+x", "-y", ...) of the part?"""
-    if not direction:
-        return False
-    x0, y0, _ = p["at"]
-    lx, ly, _ = p["dims"]
-    sign, axis = direction[0], direction[1]
-    if axis == "x":
-        return cx == (x0 + lx - 1 if sign == "+" else x0)
-    return cy == (y0 + ly - 1 if sign == "+" else y0)
-
-
-def _filled(placements, shown) -> set:
-    """Plate cells (x, y, z) filled by the shown box-shaped parts: faces and
-    studs behind them are never seen, so they are not drawn."""
-    cells = set()
-    for i in shown:
-        p = placements[i]
-        if p["kind"] in ("brick", "plate", "tile"):
-            x0, y0, z0 = p["at"]
-            lx, ly, h = p["dims"]
-            cells.update((x, y, z) for x in range(x0, x0 + lx) for y in range(y0, y0 + ly)
-                         for z in range(z0, z0 + h))
-    return cells
-
-
-def _column(out, p, cx, cy, c, height, filled):
-    x0, y0, z0 = p["at"]
-    lx, ly, h = p["dims"]
-    x1, y1 = x0 + lx, y0 + ly
-    span = range(z0, z0 + math.ceil(h))
-    sloped = p["kind"] in ("curved", "slope", "wedge")
-    axis = p["down"][1] if sloped else None
-    n_x = 7 if axis == "x" else 2  # samples along a side that runs along x
-    n_y = 7 if axis == "y" else 2
-
-    def side(ax, ay, bx, by, n):
-        return [_xy(ax + (bx - ax) * k / (n - 1), ay + (by - ay) * k / (n - 1),
-                    height(ax + (bx - ax) * k / (n - 1), ay + (by - ay) * k / (n - 1))) for k in range(n)]
-
-    s_ny = side(cx, cy, cx + 1, cy, n_x)              # -y edge, along x
-    s_px = side(cx + 1, cy, cx + 1, cy + 1, n_y)      # +x edge, along y
-    s_py = side(cx + 1, cy + 1, cx, cy + 1, n_x)      # +y edge, along x
-    s_nx = side(cx, cy + 1, cx, cy, n_y)              # -x edge, along y
-    edge = f'stroke="{c["edge"]}" stroke-width="1.1" stroke-linejoin="round" fill="none"'
-    if cx == x1 - 1 and not all((cx + 1, cy, z) in filled for z in span):  # right face
-        poly = [_xy(cx + 1, cy, z0), _xy(cx + 1, cy + 1, z0)] + s_px[::-1]
-        out.append(f'<polygon points="{_pts(poly)}" fill="{c["right"]}" stroke="{c["right"]}" stroke-width="1"/>')
-        lines = [[_xy(cx + 1, cy, z0), _xy(cx + 1, cy + 1, z0)]]
-        if cy == y0:
-            lines.append([_xy(cx + 1, cy, z0), s_px[0]])
-        if cy == y1 - 1:
-            lines.append([_xy(cx + 1, cy + 1, z0), s_px[-1]])
-        out.extend(f'<polyline points="{_pts(l)}" {edge}/>' for l in lines)
-    if cy == y1 - 1 and not all((cx, cy + 1, z) in filled for z in span):  # left face
-        poly = [_xy(cx, cy + 1, z0), _xy(cx + 1, cy + 1, z0)] + s_py
-        out.append(f'<polygon points="{_pts(poly)}" fill="{c["left"]}" stroke="{c["left"]}" stroke-width="1"/>')
-        lines = [[_xy(cx, cy + 1, z0), _xy(cx + 1, cy + 1, z0)]]
-        if cx == x0:
-            lines.append([_xy(cx, cy + 1, z0), s_py[-1]])
-        out.extend(f'<polyline points="{_pts(l)}" {edge}/>' for l in lines)
-    if not sloped and (cx, cy, z0 + h) in filled:
-        return  # something sits on this column: its top and stud are hidden
-    top = s_ny + s_px[1:] + s_py[1:] + s_nx[1:]
-    out.append(f'<polygon points="{_pts(top)}" fill="{_shade(c["top"], 1.08) if sloped else c["top"]}" '
-               f'stroke="{c["top"]}" stroke-width="1"/>')
-    for keep, line in ((cy == y0, s_ny), (cx == x1 - 1, s_px), (cy == y1 - 1, s_py), (cx == x0, s_nx)):
-        if keep:
-            out.append(f'<polyline points="{_pts(line)}" {edge}/>')
-    shape = p["part"].get("shape") or ""
-    if p["kind"] == "wedge":
-        # Only the studded edge carries studs; the surface falls away from it.
-        if _on_edge(p, cx, cy, p.get("studs")):
-            _stud(out, cx, cy, z0 + h, c)
-    elif "jumper" in shape:
-        pass  # one stud between the two cells: picture() draws it at the centre
-    elif p["kind"] in STUD_KINDS:
-        _stud(out, cx, cy, z0 + h, c)
-    elif p["kind"] == "tile" and p.get("studs") and _on_edge(p, cx, cy, p["studs"]):
-        _stud(out, cx, cy, z0 + h, c)  # the tile with studs along one edge
-    if (p["kind"] == "curved" and p["part"]["color"] == "medium_azure"
-            and p["part"].get("size") in ("1x2", "2x1") and _on_edge(p, cx, cy, p["down"])):
-        _stud(out, cx, cy, height(cx + 0.5, cy + 0.5), c)  # the azure curve's one stud, on its flat end
-
-
-def _bounds(placements):
-    xs, ys = [], []
-    for p in placements:
-        x0, y0, z0 = p["at"]
-        lx, ly, h = p["dims"]
-        for x in (x0, x0 + lx):
-            for y in (y0, y0 + ly):
-                for z in (z0, z0 + h + 0.5):
-                    sx, sy = _xy(x, y, z)
-                    xs.append(sx)
-                    ys.append(sy)
-    pad = STUD * 0.6
-    return min(xs) - pad, min(ys) - pad, max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad
-
-
-def picture(placements, new=(), shown=None, frame=None, max_width=None) -> str:
-    """SVG of the placements in `shown` (default all). Parts in `new` are in
-    full colour; the others are faded, unless `new` is empty (all full)."""
-    shown = range(len(placements)) if shown is None else shown
-    visible = set(shown)
-    new = set(new)
-    frame = frame or _bounds([placements[i] for i in visible])
-    filled = _filled(placements, visible)
-    out = []
-    for diag, _, cx, i in _columns(placements):
-        if i not in visible:
-            continue
-        p = placements[i]
-        cy = diag - cx
-        c = _colors(p, faded=bool(new) and i not in new)
-        if p["kind"] == "round":
-            _cylinder(out, p, c)
-        else:
-            _column(out, p, cx, cy, c, _height_fn(p), filled)
-    for i in visible:  # a jumper plate's one stud sits between its two cells
-        p = placements[i]
-        if "jumper" in (p["part"].get("shape") or ""):
-            x0, y0, z0 = p["at"]
-            lx, ly, h = p["dims"]
-            _stud(out, x0 + lx / 2 - 0.5, y0 + ly / 2 - 0.5, z0 + h,
-                  _colors(p, faded=bool(new) and i not in new))
-    x, y, w, h = frame
-    width = f' width="{min(w, max_width):.0f}"' if max_width else ""
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x:.1f} {y:.1f} {w:.1f} {h:.1f}"{width} '
-            f'role="img">' + "".join(out) + "</svg>")
+def cover(book) -> str:
+    """The finished model, as the carousel card shows it."""
+    return picture(book["placements"], view=book.get("view"))
 
 
 # --- the page ---------------------------------------------------------------------
@@ -363,7 +179,8 @@ def _parts_html(placements, parts) -> str:
     for part in parts:
         example = next(p for p in placements if label(p["part"]) == part["label"])
         solo = dict(example, at=[0, 0, 0])
-        items.append(f'<li>{picture([solo])}<span><b>{part["qty"]}×</b> {html.escape(part["label"])}</span></li>')
+        items.append(f'<li>{picture([solo], size=THUMB)}<span><b>{part["qty"]}×</b> '
+                     f'{html.escape(part["label"])}</span></li>')
     return '<ul class="parts">' + "".join(items) + "</ul>"
 
 
@@ -425,6 +242,11 @@ def render_checklist(drafts, first=None, verified=0) -> str:
             note += ('<div class="second"><b>A second read of the page disagrees</b> (Muse Wonder, '
                      f'{html.escape(second["on"])}), so check these lines first:<ul>'
                      + "".join(f"<li>{html.escape(x)}</li>" for x in second["differences"]) + "</ul></div>")
+        disputed = d.get("picture_check") or {}
+        if disputed.get("agrees") is False:
+            note += (f'<div class="second"><b>The page\'s picture disagrees with this list</b> '
+                     f'({html.escape(disputed["by"])}, {html.escape(disputed["on"])}), so check these lines first:<ul>'
+                     + "".join(f"<li>{html.escape(x)}</li>" for x in disputed["differences"]) + "</ul></div>")
         steps = len(d.get("steps") or [])
         start = (f'<span class="start" title="{html.escape(first[d["id"]])}">start here</span>'
                  if d["id"] in first else "")
@@ -449,8 +271,9 @@ def render_checklist(drafts, first=None, verified=0) -> str:
 
 def render_html(book) -> str:
     """The booklet as one self-contained HTML page."""
-    placements = book["placements"]
-    frame = _bounds(placements)
+    from .ldraw_render import bounds
+    placements, view = book["placements"], book.get("view")
+    frame = bounds(placements, view)
     total = sum(p["qty"] for p in book["parts"])
     out = [
         "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\">",
@@ -458,7 +281,7 @@ def render_html(book) -> str:
         f"<title>{html.escape(book['title'])} · BinBuild booklet</title><style>{PAGE_CSS}</style></head><body>",
         f"<header><h1>🧱 {html.escape(book['title'])}</h1><p>{html.escape(book['subtitle'])}</p></header><main>",
         '<section class="card"><h2>What you will build</h2>',
-        f'<div class="pic">{picture(placements, frame=frame)}</div>',
+        f'<div class="pic">{picture(placements, frame=frame, view=view)}</div>',
         f"<h2>Find these {total} pieces</h2>{_parts_html(placements, book['parts'])}",
     ]
     out += [f'<p class="note">{html.escape(n)}</p>' for n in book.get("notes", ())]
@@ -469,7 +292,7 @@ def render_html(book) -> str:
         out.append(
             f'<section class="card step"><div class="num">{step["n"]}</div><div class="body">'
             f'{_parts_html(placements, step["parts"])}'
-            f'<div class="pic">{picture(placements, new=step["add"], shown=placed, frame=frame)}</div>'
+            f'<div class="pic">{picture(placements, new=step["add"], shown=placed, frame=frame, view=view)}</div>'
             f'<p>{html.escape(step["text"])}</p></div></section>')
     out.append('<section class="card"><h2>🎉 Done!</h2>'
                f'<p class="note">{len(book["steps"])} steps, {total} pieces. '

@@ -145,15 +145,16 @@
   "usd": 0.8763,
   "picture_checks": 2,
   "design": [
-   "2x4 (0,0,1) plate medium_azure",
-   "2x4 (2,0,1) plate medium_azure",
-   "2x1 (1,0,2) plate dark_purple",
-   "2x1 (1,1,2) jumper_plate white",
-   "1x1 (0,2,2) round_tile white",
-   "1x1 (3,2,2) round_tile white",
+   "2x4 (1,0,1) plate medium_azure",
+   "2x4 (3,0,1) plate medium_azure",
+   "2x1 (2,0,2) plate dark_purple",
+   "2x1 (2,1,2) jumper_plate white",
+   "1x1 (1,2,2) round_tile white",
+   "1x1 (4,2,2) round_tile white",
    "2x4 (0,3,0) wedge_plate white studs=+x",
-   "2x4 (2,3,0) wedge_plate white studs=-x"
-  ]
+   "2x4 (4,3,0) wedge_plate white studs=-x"
+  ],
+  "note": "Layout re-read 2026-11-02 from a full-resolution crop of page 48 and re-checked with the physical validator: each ear's studs run in line with the face's outer column, its tapered half sticks out past the side of the face, and it narrows towards the face. (In the book the ears lie loose next to the face, as a flat picture; here each is held under the face's top row by one stud.)"
  },
  "steps": [
   {
@@ -173,7 +174,7 @@
     {
      "line": "white 2x4 wedge plate",
      "at": [
-      2,
+      4,
       3,
       0
      ],
@@ -189,7 +190,7 @@
     {
      "line": "medium_azure 2x4 plate",
      "at": [
-      0,
+      1,
       0,
       1
      ],
@@ -198,7 +199,7 @@
     {
      "line": "medium_azure 2x4 plate",
      "at": [
-      2,
+      3,
       0,
       1
      ],
@@ -212,7 +213,7 @@
     {
      "line": "dark_purple 1x2 plate",
      "at": [
-      1,
+      2,
       0,
       2
      ]
@@ -220,7 +221,7 @@
     {
      "line": "white 1x2 jumper plate",
      "at": [
-      1,
+      2,
       1,
       2
      ]
@@ -228,7 +229,7 @@
     {
      "line": "white 1x1 round printed tile",
      "at": [
-      0,
+      1,
       2,
       2
      ]
@@ -236,12 +237,36 @@
     {
      "line": "white 1x1 round printed tile",
      "at": [
-      3,
+      4,
       2,
       2
      ]
     }
    ]
   }
- ]
+ ],
+ "drawing": {
+  "view": {
+   "yaw": 180,
+   "elevation": 78
+  },
+  "parts": [
+   {
+    "at": [
+     0,
+     3,
+     0
+    ],
+    "narrow": "-y"
+   },
+   {
+    "at": [
+     4,
+     3,
+     0
+    ],
+    "narrow": "-y"
+   }
+  ]
+ }
 }

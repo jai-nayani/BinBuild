@@ -63,3 +63,59 @@ tile + pupil, jumper centre stud, curved heights, edge-stud tile; every
 booklet build validates against its book list and renders; the stingray's
 wing/eye/tail layout is pinned; the paintbrush stays verified without a
 booklet. Full suite: 280 in tests/ + Path A's 31.
+
+## Nov 2: real part shapes from LDraw
+
+Branch `spike/ldraw-renders`, from `main` cb8e861. Trigger: on the live
+site the pictures still looked very bad next to the book. The schematic
+vector drawings above had reached their limit, so the renderer was
+replaced: every booklet picture is now drawn from the parts' real shapes.
+
+- `backend/ldraw_mesh.py` flattens the LDraw files of the kit's parts
+  (`~/Downloads/ldraw`, BFC winding honoured, colour 16 inherits, edge and
+  conditional lines kept) into `backend/ldraw_kit.json.gz` (160 KB,
+  committed; rebuild with `python -m backend.ldraw_mesh`).
+- `backend/ldraw_render.py` places those meshes on the booklet grid and
+  draws them with a z-buffer (numpy), flat shading and the parts' own edge
+  lines, like a printed instruction book. Hidden studs and faces vanish
+  because they're behind something, not by rule. Each picture is a PNG
+  embedded in the same `<svg>` the pages and carousel already used.
+- Each build is drawn at the angle the book shows it (`"view"` in the set,
+  or `"drawing"` in a draft: render-only hints — camera, which way a wedge
+  tapers — never part of the validated design).
+- The validator's directions now reach the drawing for every directional
+  part: slope fall, wedge studded edge, clip end, side studs.
+
+Real geometry shows real details: the black 1x2 curved slope (11477) has
+its tall half raised one plate, so on the house a brick's studs show under
+the middle of the roof. The book's picture shows the same step.
+
+| Build | Verdict | What changed |
+|---|---|---|
+| Stingray [20] | MATCH | Re-read from a full-resolution crop: wings span the wingspan with all 4 studs of each showing, eyes on the azure plate in front of them, tail back from under the centre. The book centres the tail on the seam between the wings, half a stud off the grid, which studs can't hold; ours sits under the left wing root. |
+| Guitar [23] | MATCH | Neck in line with the body's stud column and under its narrow end; round plate on the body's third stud from the neck. |
+| Binoculars [23] | MATCH | |
+| House and tree [28] | MATCH | Book's low front angle; set untouched. |
+| Hungry visitor (apple) [29] | MATCH | Head one stud forward, its stud end overhanging the front of the body so one orange stud shows behind it, as pictured. |
+| Rabbit face, both ears [48] | MATCH | Ears in line with the face's outer columns, narrowing towards the face, seen from above like the book. In the book the ears lie loose next to the face; here each is held under the face's top row by one stud. |
+| Blueberry cake [51] | **BOOKLET WITHDRAWN** | The picture shows 2 medium blue 1x1 cheese slopes on top that the list doesn't have (the kit has 2). Recorded as a `picture_check` that disagrees; the list is no longer verified and waits for a hand-check. |
+| Flying bug [64] | CLOSE | Book's angle and wing taper. The book's picture is small and partly hidden; the arrangement may differ (the lime clip plate looks on top of the wing there). Noted in the draft. |
+| Radar dish station [78] | MATCH | Mast moved so the dish covers its end and 4 lime studs show above the base, as pictured. |
+| Milky Way-shake maker [82] | MATCH | |
+| Birthday cake [95] | **BOOKLET WITHDRAWN** | The picture shows 3 black curved slopes (list: 2), dark purple either side of the front slope (list: 1) and a middle layer as wide as the 2x2 plate on it (list: one 1x2 brick). `picture_check` disagrees; waits for a hand-check. |
+
+The carousel now has 9 cards. No list was changed or invented: layouts
+moved only within each build's verified pieces (re-validated), and the two
+lists the pictures contradict were withdrawn rather than patched.
+`build_plan.reads_agree` treats a disagreeing `picture_check` like a
+disagreeing second read, and the hand-check page lists its differences.
+
+Tests: `tests/test_booklet_redesign.py` (12) checks every kit part has its
+LDraw mesh, a wedge covers 3/4 of its plate, the eye tile has its print,
+a slope falling the other way is the mirror image, pictures are embedded
+PNGs, every booklet build validates and renders at its angle, the stingray
+and radar layouts, and the withdrawn cakes. `test_full_loop` checks a stud
+under a brick is hidden. Full suite: 285 in tests/ + Path A's 31, run with
+all outside network blocked.
+
+Part shapes: the [LDraw](https://www.ldraw.org) parts library, CC BY 4.0.

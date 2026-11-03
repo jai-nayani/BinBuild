@@ -60,6 +60,7 @@ CLOSEST = ["submarine", "sailing-ship", "mini-tugboat", "snappy-crab",          
 DRAFTS = bp.manual_drafts()
 AGREE = {i for i, d in DRAFTS.items() if bp.reads_agree(d)}   # verified by two reads (backend/manual_verify.py)
 WAITING = set(DRAFTS) - AGREE                                  # the hand-check queue
+DISPUTED = {i for i, d in DRAFTS.items() if (d.get("picture_check") or {}).get("agrees") is False}
 BOOK = {b["id"]: n for n, b in enumerate(BUILDS)}
 VERIFIED = sorted(AGREE | {"house-and-tree"}, key=BOOK.get)
 CLOSEST_WAITING = [i for i in CLOSEST if i in WAITING]
@@ -450,8 +451,9 @@ class TestHandCheck(unittest.TestCase):
 
 
 class TestChecklistOrder(unittest.TestCase):
-    """The queue now: only the drafts whose two reads disagree, the closest
-    of the 11 first, as before."""
+    """The queue now: only the drafts whose two reads disagree or whose
+    page's picture disputes the list they agreed on, the closest of the 11
+    first, as before."""
 
     def test_only_the_disagreements_closest_first(self):
         ordered = bp.checklist_order(bp.manual_drafts())
@@ -463,7 +465,20 @@ class TestChecklistOrder(unittest.TestCase):
         self.assertFalse(any(why for _, why in ordered[n:]))
         pages = [BOOK[d["id"]] for d, _ in ordered[n:]]
         self.assertEqual(pages, sorted(pages))
-        self.assertTrue(all(d["second_read"]["differences"] for d, _ in ordered))
+        self.assertTrue(all(d["second_read"]["differences"] or d["id"] in DISPUTED for d, _ in ordered))
+
+    def test_a_picture_that_disputes_the_list_unverifies_it(self):
+        self.assertEqual(DISPUTED, {"birthday-cake-message", "blueberry-cake"})
+        for bid in DISPUTED:
+            d = DRAFTS[bid]
+            with self.subTest(bid):
+                self.assertTrue(d["second_read"]["agrees"])           # the two reads did agree
+                self.assertTrue(d["picture_check"]["differences"])
+                self.assertFalse(bp.reads_agree(d) or bp.verified(d) or bp.booklet_ready(d))
+                o = next(o for o in bp.manual_options(KIT_ITEMS) if o["id"] == bid)
+                self.assertEqual((o["piece_status"], o["status"], o["has_booklet"]),
+                                 ("not-yet-piece-verified", "unverified", False))
+                self.assertNotIn("cover", o)
 
     def test_the_printable_page_follows_it(self):
         ordered = bp.checklist_order(bp.manual_drafts())
@@ -471,7 +486,8 @@ class TestChecklistOrder(unittest.TestCase):
                                         verified=len(AGREE))
         self.assertEqual(page.count('class="start"'), len(CLOSEST_WAITING))
         self.assertEqual(page.count('class="card draft"'), len(WAITING))
-        self.assertEqual(page.count("A second read of the page disagrees"), len(WAITING))
+        self.assertEqual(page.count("A second read of the page disagrees"), len(WAITING - DISPUTED))
+        self.assertEqual(page.count("The page's picture disagrees with this list"), len(DISPUTED))
         at = [page.index(f"<p class=\"note\">{d['id']} ·") for d, _ in ordered]
         self.assertEqual(at, sorted(at))
         self.assertIn(f"{len(AGREE)} more verified by two reads that agree, not listed", page)

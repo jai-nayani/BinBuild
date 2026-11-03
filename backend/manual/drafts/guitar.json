@@ -105,10 +105,11 @@
   "usd": 0.4602,
   "picture_checks": 1,
   "design": [
-   "6x1 (0,3,0) plate lime",
-   "2x4 (0,0,1) wedge_plate white studs=+x",
-   "1x1 (1,2,2) round_plate lime"
-  ]
+   "6x1 (0,0,0) plate lime",
+   "4x2 (4,0,1) wedge_plate white studs=-y",
+   "1x1 (6,0,2) round_plate lime"
+  ],
+  "note": "Layout re-read 2026-11-02 from a full-resolution crop of page 23 and re-checked with the physical validator: the neck runs in line with the body's stud column and goes under its narrow end; the round plate sits on the body's third stud from the neck."
  },
  "steps": [
   {
@@ -118,7 +119,7 @@
      "line": "lime 1x6 plate",
      "at": [
       0,
-      3,
+      0,
       0
      ]
     }
@@ -130,13 +131,12 @@
     {
      "line": "white 2x4 wedge plate",
      "at": [
-      0,
+      4,
       0,
       1
      ],
-     "along": "y",
-     "down": "-x",
-     "studs": "+x"
+     "down": "+y",
+     "studs": "-y"
     }
    ]
   },
@@ -146,12 +146,28 @@
     {
      "line": "lime 1x1 round plate",
      "at": [
-      1,
-      2,
+      6,
+      0,
       2
      ]
     }
    ]
   }
- ]
+ ],
+ "drawing": {
+  "view": {
+   "yaw": 70,
+   "elevation": 60
+  },
+  "parts": [
+   {
+    "at": [
+     4,
+     0,
+     1
+    ],
+    "narrow": "-x"
+   }
+  ]
+ }
 }

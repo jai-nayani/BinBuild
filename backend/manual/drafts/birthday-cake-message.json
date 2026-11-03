@@ -4,8 +4,8 @@
  "pages": [
   95
  ],
- "status": "verified",
- "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Two reads of the page agreed on this list, but the page's picture shows pieces it doesn't have (see picture_check). Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
  "read_from": "the picture of the model on page 95, photo IMG_3630, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A small layered birthday-cake symbol on the right-hand side of page 95, with a flat base, stacked coloured layers and lime studs on top.",
@@ -156,6 +156,16 @@
   "elements_total": 10,
   "agrees": true,
   "differences": []
+ },
+ "picture_check": {
+  "agrees": false,
+  "by": "BinBuild (a look at the page photo, IMG_3630)",
+  "on": "2026-11-02",
+  "differences": [
+   "black 1x2 curved slope: the picture shows 3 (left, front centre, right); the list has 2",
+   "dark_purple 1x2 plate: the picture shows dark purple plate on both sides of the front black slope, so at least 2; the list has 1",
+   "orange 1x2 brick: the picture shows the middle layer as wide as the 2x2 magenta plate on top of it, with a seam down it (two pieces side by side); the list has 1"
+  ]
  },
  "auto_steps": {
   "by": "muse-wonder-1.0",

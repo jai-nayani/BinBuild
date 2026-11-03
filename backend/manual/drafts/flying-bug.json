@@ -172,7 +172,8 @@
    "2x1 (1,3,2) brick orange",
    "1x1 (1,3,5) round_tile white",
    "1x1 (2,3,5) round_tile white"
-  ]
+  ],
+  "note": "The book's picture of the flying bug is small and partly hidden; this arrangement holds every piece by studs and was judged close to the picture, but the book's layout may differ (the lime clip plate looks on top of the wing there). If a step doesn't match the book, follow the book."
  },
  "steps": [
   {
@@ -192,7 +193,8 @@
       2,
       0,
       0
-     ]
+     ],
+     "clip": "+x"
     }
    ]
   },
@@ -254,5 +256,21 @@
     }
    ]
   }
- ]
+ ],
+ "drawing": {
+  "view": {
+   "yaw": 120,
+   "elevation": 35
+  },
+  "parts": [
+   {
+    "at": [
+     1,
+     0,
+     1
+    ],
+    "narrow": "+y"
+   }
+  ]
+ }
 }
