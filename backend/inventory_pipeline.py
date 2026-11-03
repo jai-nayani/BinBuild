@@ -126,6 +126,32 @@ def classify_batch(conn, batch_id, batch_dir, segmenter, spark, context=True) ->
     return {"classifier": classifier, "pieces": sum(d["count"] for d in detections), "calls": calls}
 
 
+def classify_one_piece(spark, photo: bytes) -> dict:
+    """Name the ONE piece in a close-up photo, through the same single-photo
+    Spark call the whole batch uses (identify_pieces, no side views). The
+    photo must show real LEGO and exactly one piece; anything else is refused
+    and the caller changes nothing. Returns the piece's fields, in the
+    inventory vocabulary; where it sits is the caller's to keep."""
+    from .segmenter import Region
+    try:
+        with Image.open(BytesIO(photo)) as image:
+            upright = ImageOps.exif_transpose(image).convert("RGB")
+    except Exception as err:  # not a photo the phone took
+        raise ValueError(f"that photo can't be read ({err})") from None
+    data, _reply = spark.identify_pieces(jpeg_bytes(upright, REGION_MAX_SIDE))
+    checks = image_checks(data, 1)
+    if checks[1]["answer"] != "yes":
+        raise ValueError("that photo doesn't show a real LEGO piece on a table"
+                         + (f" ({checks[1]['reason']})" if checks[1]["reason"] else "")
+                         + "; take the close-up again")
+    kept = [item for item in data["pieces"] if isinstance(item, dict)]
+    if len(kept) != 1:
+        raise ValueError(f"that close-up shows {len(kept)} pieces, not one; "
+                         "retake it with just this piece in the photo")
+    found = to_detection(kept[0], Region((0, 0, upright.width, upright.height)))
+    return {k: found[k] for k in ("family", "shape", "size", "color", "plain", "confidence", "raw")}
+
+
 # --- SAM 3.1: one close-up per piece ----------------------------------------------
 
 def _mask_image(region, crop_box):

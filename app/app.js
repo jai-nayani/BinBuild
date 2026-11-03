@@ -32,20 +32,25 @@
  * Uses the native camera input (capture="environment"), which works over plain
  * HTTP on the home network. Nothing here needs the service worker.
  *
- * "What can I build?" (GET /api/builds/options) lists every build in the
- * manual that came with the kit first, then the pre-generated BrickGPT
- * designs. A manual build with a verified piece list is checked against the
- * confirmed inventory and can get a step-by-step booklet (POST /api/builds),
- * opened from the backend as a printable page. Every other manual build is
- * listed with its chapter, pages and the status of its piece list, and gets
- * no fit claim and no booklet: it is built from the book.
+ * "What can I build?" (GET /api/builds/options) is a sideways carousel of
+ * the manual builds that have a complete step-by-step booklet — nothing
+ * else: no verified-only, waiting or unverified manual builds, and no
+ * BrickGPT designs. Each card is the booklet's finished-model picture, the
+ * build's name and its piece count. Tapping a card makes that build's
+ * booklet (POST /api/builds) and opens it in the booklet view; Back returns
+ * to the carousel on the same card.
  *
- * When the backend runs with BINBUILD_WONDER=1 (off by default), a third
- * section follows the BrickGPT designs: "Generate a new design". One tap is
+ * When the backend runs with BINBUILD_WONDER=1 (off by default), a
+ * "Generate a new design" section follows the carousel. One tap is
  * one generation (POST /api/builds/wonder): Muse Wonder designs from the
  * confirmed pieces, BinBuild's validator checks every proposal, and only a
  * design that passes is shown, with its parts and booklet; otherwise the
  * shortfall. Nothing is generated without a tap.
+ *
+ * A piece Spark flagged unsure (its "unsure" marker from the backend) also
+ * gets "Retake this piece" in Check the pieces: one clean close-up of just
+ * that piece, named again on its own (POST .../pieces/<id>/reclassify), and
+ * its row updates where it sits — same piece, same dot on the top photo.
  */
 
 // Where the FastAPI backend lives. On the home network the app is served on
@@ -102,6 +107,7 @@ var ACCESS_KEY = (function () {
   var cameraInput = $('camera-input');
   var galleryInput = $('gallery-input');
   var retakeInput = $('retake-input');
+  var pieceInput = $('piece-input');
   var statusEl = $('status');
   var uploadBtn = $('upload-btn');
   var identifyBtn = $('identify-btn');
@@ -115,7 +121,7 @@ var ACCESS_KEY = (function () {
   }
 
   function show(viewId) {
-    ['hero-view', 'capture-view', 'review-view', 'finished-view', 'check-view', 'build-view'].forEach(function (id) {
+    ['hero-view', 'capture-view', 'review-view', 'finished-view', 'check-view', 'build-view', 'booklet-view'].forEach(function (id) {
       $(id).classList.toggle('hidden', id !== viewId);
     });
     document.body.classList.toggle('on-hero', viewId === 'hero-view'); // the hero has no header bar
@@ -469,6 +475,7 @@ var ACCESS_KEY = (function () {
   var review = null;    // { id, data, photo, selected: group key, focus: detection id, open: { key: true } }
   var editing = null;   // { ids: [...], from: detection } or { addition: true }
   var reviewBusy = false;
+  var pieceRetake = null;  // the unsure detection id a close-up is being taken for
 
   function el(tag, cls, text) {
     var node = document.createElement(tag);
@@ -673,6 +680,9 @@ var ACCESS_KEY = (function () {
     if (d.generator_type) { head.appendChild(el('span', 'badge gen', 'BrickGPT brick')); }
     if (d.status === 'corrected') { head.appendChild(el('span', 'badge fixed', 'fixed')); }
     if (d.source === 'manual') { head.appendChild(el('span', 'badge fixed', 'added by you')); }
+    if (!removed && g.items.some(function (item) { return item.unsure; })) {
+      head.appendChild(el('span', 'badge unsure', 'not sure'));
+    }
     head.addEventListener('click', function () { select(g.key); });
     card.appendChild(head);
     if (readOnly) { return card; }
@@ -686,6 +696,9 @@ var ACCESS_KEY = (function () {
         function () { openEditor({ ids: ids(g.items), from: d }); }));
       actions.appendChild(smallButton('✕ Remove' + (many ? ' all ' + g.items.length : ''),
         function () { setPieces(ids(g.items), 'rejected'); }));
+      if (!many && d.unsure) {
+        actions.appendChild(smallButton('📷 Retake this piece', function () { startPieceRetake(d); }));
+      }
     }
     if (many) {
       actions.appendChild(smallButton(review.open[g.key] ? 'Hide ▴' : 'One by one ▾', function () {
@@ -708,6 +721,9 @@ var ACCESS_KEY = (function () {
         } else {
           row.appendChild(smallButton('✎ Fix', function () { openEditor({ ids: [item.id], from: item }); }));
           row.appendChild(smallButton('✕ Remove', function () { setPieces([item.id], 'rejected'); }));
+          if (item.unsure) {
+            row.appendChild(smallButton('📷 Retake this piece', function () { startPieceRetake(item); }));
+          }
         }
         rows.appendChild(row);
       });
@@ -742,6 +758,45 @@ var ACCESS_KEY = (function () {
           : '✓ Put back ' + plural(detectionIds.length, 'piece', 'pieces') + '.', 'ok', checkStatus);
       });
   }
+
+  // --- clean close-up: name one unsure piece again, on its own ---
+
+  function startPieceRetake(item) {
+    if (reviewBusy) { return; }
+    pieceRetake = item.id;
+    review.focus = item.id; // keep its dot ringed while the camera is open
+    renderReview();
+    setStatus('Take one close-up of just this piece: ' + pieceLabel(item) + '.', null, $('check-status'));
+    pieceInput.click();
+  }
+
+  pieceInput.addEventListener('change', function () {
+    var file = pieceInput.files && pieceInput.files[0];
+    pieceInput.value = ''; // so retaking the same piece again still fires "change"
+    if (!file || pieceRetake === null || !review || reviewBusy) { pieceRetake = null; return; }
+    var id = pieceRetake;
+    pieceRetake = null;
+    var form = new FormData();
+    form.append('photo', file, 'close-up.jpg');
+    reviewBusy = true;
+    renderReview();
+    setStatus('Naming that piece again…', null, $('check-status'));
+    request('POST', batchPath('/pieces/' + encodeURIComponent(id) + '/reclassify'), form, IDENTIFY_TIMEOUT_MS,
+      function (xhr, body, failure) {
+        reviewBusy = false;
+        if (failure || xhr.status !== 200 || !body) {
+          renderReview();
+          setStatus('✗ Not updated: ' + (failure || detailOf(xhr, body)), 'error', $('check-status'));
+          return;
+        }
+        for (var k in body) { if (Object.prototype.hasOwnProperty.call(body, k)) { review.data[k] = body[k]; } }
+        review.focus = id; // the same piece, still ringed on the photo
+        renderReview();
+        var updated = body.detection || {};
+        setStatus('✓ Updated: ' + pieceLabel(updated) +
+          (updated.confidence != null ? ' (' + Math.round(updated.confidence * 100) + '% sure)' : '') + '.', 'ok', $('check-status'));
+      });
+  });
 
   // --- fix / add dialog ---
 
@@ -947,40 +1002,61 @@ var ACCESS_KEY = (function () {
 
   // --- build -------------------------------------------------------------------
 
-  var CHIP = {
-    fit: '✓ You can build this', patched: '✓ You can build this (a few bricks swapped for smaller ones)',
-    short: 'Not enough pieces yet', not_connected: "Can't be built: the design has a loose part",
-  };
-
-  var PIECES = {
-    'verified': '✓ Verified piece list',
-    'diagram-readable': 'Parts not verified yet · elements shown in the book',
-    'not-yet-piece-verified': 'Parts not verified yet',
-  };
-
-  function buildable(o) { return o.status === 'fit' || o.status === 'patched'; }
-
   function section(list, text) { list.appendChild(el('h3', 'build-section', text)); }
 
-  // A manual build without a verified piece list: name, where it is, and what is known. No button.
-  function manualRow(o) {
-    var row = el('div', 'mrow');
-    var left = el('div', 'mname');
-    left.appendChild(el('span', null, o.title));
-    left.appendChild(el('span', 'where', o.where.replace('pages', 'pp.').replace('page', 'p.') +
-      (o.activity ? ' · ' + o.activity.replace(/ \(p.*\)$/, '') : '')));
-    row.appendChild(left);
-    row.appendChild(el('span', 'chip ' + (o.piece_status === 'diagram-readable' ? 'readable' : 'unverified'),
-      (o.stated_elements ? o.stated_elements + ' elements · ' : '') +
-      (o.draft ? 'Parts not verified yet · draft list ' + o.draft : PIECES[o.piece_status])));
-    return row;
+  // The carousel: only the manual builds the backend marks has_booklet (the
+  // same marker that used to put a "Make the booklet" button on a build).
+  // Cover, name, piece count — nothing else on a card.
+  var buildCarousel = null;   // the carousel element, while the build view is up
+  var carouselCards = {};     // build id -> its card, for the way back
+  var manualReturn = null;    // { id, scrollLeft } of the card a booklet was opened from
+
+  function carouselCard(o) {
+    var card = el('button', 'build-card');
+    card.type = 'button';
+    card.setAttribute('data-build-id', o.id);
+    var cover = el('span', 'build-cover');
+    if (o.cover) { cover.innerHTML = o.cover; } // booklet.picture()'s finished model, from the backend
+    card.appendChild(cover);
+    card.appendChild(el('span', 'build-name', o.title));
+    card.appendChild(el('span', 'build-pieces', plural(o.pieces, 'piece', 'pieces')));
+    card.addEventListener('click', function () { openManual(o); });
+    carouselCards[o.id] = card;
+    return card;
   }
+
+  function openManual(o) {
+    manualReturn = { id: o.id, scrollLeft: buildCarousel ? buildCarousel.scrollLeft || 0 : 0 };
+    setStatus('Making the booklet…', null, $('build-status'));
+    var ask = o.set ? { set: o.set } : { set: o.id };
+    request('POST', '/api/builds', ask, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
+      if (!failure && xhr.status === 201 && body && body.booklet_url) {
+        $('booklet-title').textContent = o.title;
+        $('booklet-frame').src = BACKEND_URL + body.booklet_url; // the booklet page, as before
+        setStatus('', null, $('build-status'));
+        show('booklet-view');
+      } else {
+        setStatus('✗ ' + (failure || (body && body.message) || detailOf(xhr, body)), 'error', $('build-status'));
+      }
+    });
+  }
+
+  $('booklet-back-btn').addEventListener('click', function () {
+    show('build-view');
+    if (buildCarousel && manualReturn) {
+      buildCarousel.scrollLeft = manualReturn.scrollLeft; // back on the same card
+      var card = carouselCards[manualReturn.id];
+      if (card && card.focus) { card.focus(); }
+    }
+  });
 
   function openBuilds() {
     var list = $('build-list');
     var buildStatus = $('build-status');
     show('build-view');
     list.innerHTML = '';
+    buildCarousel = null;
+    carouselCards = {};
     $('build-inventory').textContent = 'Checking your inventory…';
     setStatus('', null, buildStatus);
     request('GET', '/api/builds/options', null, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
@@ -1007,46 +1083,11 @@ var ACCESS_KEY = (function () {
         ? inv.total_pieces + ' confirmed pieces in your inventory: ' + inv.generator_ready +
           ' plain bricks BrickGPT can use, ' + inv.other + ' other pieces.'
         : 'No confirmed pieces yet: scan a batch, review it and confirm it first.';
-      var manual = body.options.filter(function (o) { return o.kind === 'manual'; });
-      var checked = manual.filter(function (o) { return o.piece_status === 'verified'; });
-      var booklets = checked.filter(function (o) { return o.has_booklet; }).length;
-      var drafts = manual.filter(function (o) { return o.draft; }).length;
-      var unchecked = manual.filter(function (o) { return o.piece_status !== 'verified'; });
-      var others = body.options.filter(function (o) { return o.kind !== 'manual'; });
-
-      section(list, '📕 From your manual (' + manual.length + ' builds)');
-      list.appendChild(el('p', 'note', checked.length + ' with a verified piece list: BinBuild checks your bin for ' +
-        (checked.length === 1 ? 'it' : 'them') + (booklets === checked.length
-          ? ' and makes ' + (checked.length === 1 ? 'its' : 'their') + ' step-by-step booklet.'
-          : '; ' + booklets + ' of them ' + (booklets === 1 ? 'has' : 'have') + ' a step-by-step booklet.') +
-        ' The other ' + unchecked.length + ' are builds from the same book, meant for this kit, whose ' +
-        'parts BinBuild hasn\u2019t verified yet: build them from the book.' +
-        (drafts ? ' ' + drafts + ' of them have a draft list read from the book, waiting for a hand-check.' : '')));
-      checked.forEach(function (o) { list.appendChild(optionCard(o)); });
-      var chapter = null;
-      unchecked.forEach(function (o) {
-        if (o.chapter !== chapter) {
-          chapter = o.chapter;
-          list.appendChild(el('h4', 'chapter', 'Chapter ' + o.chapter + ' · ' + o.chapter_title));
-        }
-        list.appendChild(manualRow(o));
-      });
-
-      section(list, '🤖 BrickGPT designs (' + others.length + ')');
-      var yes = others.filter(buildable);
-      var no = others.filter(function (o) { return !buildable(o); });
-      yes.forEach(function (o) { list.appendChild(optionCard(o)); });
-      if (no.length) {
-        var more = document.createElement('details');
-        var label = document.createElement('summary');
-        label.textContent = 'Not enough pieces yet (' + no.length + ')';
-        more.appendChild(label);
-        no.forEach(function (o) { more.appendChild(optionCard(o)); });
-        list.appendChild(more);
-      }
-      if (!checked.some(buildable) && !yes.length) {
-        setStatus('Nothing with a checked piece list fits your pieces yet; each one says what is missing.', null, buildStatus);
-      }
+      var bookletBuilds = body.options.filter(function (o) { return o.kind === 'manual' && o.has_booklet; });
+      buildCarousel = el('div', 'build-carousel');
+      buildCarousel.id = 'build-carousel';
+      bookletBuilds.forEach(function (o) { buildCarousel.appendChild(carouselCard(o)); });
+      list.appendChild(buildCarousel);
       if (body.wonder && body.wonder.enabled) { list.appendChild(wonderSection(body.wonder, inv)); }
     });
   }
@@ -1126,58 +1167,6 @@ var ACCESS_KEY = (function () {
         out.insertBefore(wonderResult(body), out.firstChild);
       } else {
         setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', status);
-      }
-    });
-  }
-
-  function optionCard(o) {
-    var card = document.createElement('div');
-    card.className = 'option ' + (buildable(o) ? 'yes' : 'no') + (o.piece_status === 'verified' ? ' verified' : '');
-    var title = document.createElement('h3');
-    title.textContent = o.title + (o.kind === 'brickgpt' ? ' · BrickGPT design' : o.kind === 'manual' ? '' : ' · set');
-    card.appendChild(title);
-    if (o.kind === 'manual') {
-      card.appendChild(el('p', 'where', 'Manual · chapter ' + o.chapter + ' · ' + o.chapter_title + ' · ' + o.where));
-      card.appendChild(el('span', 'chip verified', PIECES[o.piece_status] +
-        (o.verified_by === 'hand-checked against the kit' ? ' (hand-checked)'
-          : o.verified_by === 'two independent reads agree' ? ' (two reads of the page agree)' : '')));
-      card.appendChild(document.createTextNode(' '));
-    }
-    var chip = document.createElement('span');
-    chip.className = 'chip';
-    chip.textContent = CHIP[o.status] || o.status;
-    var text = document.createElement('p');
-    text.textContent = o.message;
-    card.appendChild(chip);
-    card.appendChild(text);
-    if (buildable(o) && (o.kind !== 'manual' || o.has_booklet)) {
-      var btn = document.createElement('button');
-      btn.className = 'btn btn-primary';
-      btn.textContent = '📖 Make the booklet';
-      btn.addEventListener('click', function () { makeBooklet(o, btn); });
-      card.appendChild(btn);
-    }
-    return card;
-  }
-
-  function makeBooklet(o, btn) {
-    btn.disabled = true;
-    btn.textContent = 'Making the booklet…';
-    var ask = o.set ? { set: o.set } : o.kind === 'set' ? { set: o.id } : { design: o.id };
-    request('POST', '/api/builds', ask, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
-      if (!failure && xhr.status === 201 && body && body.booklet_url) {
-        // A link, not window.open: phones block pop-ups opened after a network call.
-        var link = document.createElement('a');
-        link.className = 'btn btn-done';
-        link.href = BACKEND_URL + body.booklet_url;
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.textContent = '📖 Open the booklet (' + body.steps + ' steps)';
-        btn.replaceWith(link);
-      } else {
-        btn.disabled = false;
-        btn.textContent = '📖 Make the booklet';
-        setStatus('✗ ' + (failure || (body && body.message) || detailOf(xhr, body)), 'error', $('build-status'));
       }
     });
   }

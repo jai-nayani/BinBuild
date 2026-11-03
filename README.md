@@ -125,12 +125,16 @@ generation is off. SAM 3.1 (Meta Model API) is wired in behind the same
 segmenter interface: one mask per piece, close-ups checked by Spark, outlines
 in review. It is opt-in (`?segmenter=sam` or `BINBUILD_SEGMENTER=sam`); results
 on the kit batch: [SAM-3-1.md](SAM-3-1.md).
-"What can I build?" lists every build in the manual that came with the kit
-first (106; 41 have a verified piece list and a bin check — house-and-tree
+The build API still lists every build in the manual that came with the kit
+(106; 41 have a verified piece list and a bin check — house-and-tree
 hand-checked, 40 more verified by two independent Muse Wonder reads of the
-page agreeing on every line, 11 of those with a validated step-by-step
-booklet; the rest are shown with their pages and parts marked not yet
-verified), then BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
+page agreeing on every line, 12 in all with a validated step-by-step
+booklet), then BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
+In the app, "What can I build?" is a sideways carousel of just those 12
+booklet builds — each card the booklet's finished-model picture, its name
+and piece count — and tapping a card opens its step-by-step booklet, with
+Back returning to the same card. Nothing is shown there until pieces are
+confirmed (or the sample bin is loaded and confirmed).
 Draft parts lists for the builds that print none were read from the pictures
 by Muse Wonder: [WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md); the second
 reads and auto-generated booklets: [MANUAL-VERIFY.md](MANUAL-VERIFY.md). The
@@ -148,7 +152,9 @@ With `BINBUILD_WONDER=1` (off by default, and off for the kid trials) "What
 can I build?" gains a third section, "Generate a new design", wired to that
 designer: [WONDER-IN-APP.md](WONDER-IN-APP.md).
 On the phone, **Check the pieces** reviews an identified batch (dots on the
-photo, fix / remove / add, then add to the inventory, with undo):
+photo, fix / remove / add, then add to the inventory, with undo); a piece
+Spark flagged unsure also gets **Retake this piece** — one clean close-up of
+just that piece, named again on its own, its row updated where it sits:
 [REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
 No API keys or secrets live in this repo: the Baseten and Meta Model API keys
 are read from the git-ignored `.env` (`BASETEN_API_KEY`, `META_MODEL_API_KEY`).

@@ -571,6 +571,54 @@ def create_app() -> FastAPI:
             except ValueError as err:
                 raise HTTPException(422, str(err))
 
+    @app.post("/api/inventory/batch/{batch_id}/pieces/{detection_id}/reclassify", dependencies=PAID)
+    def reclassify_one_piece(batch_id: str, detection_id: int, photo: UploadFile = File(...)):
+        """A clean close-up of ONE piece the classifier flagged unsure: name
+        just that piece again (Muse Spark, the batch's own classifier) and
+        update its row where it sits — same piece, same dot on the top photo.
+        The 5-photo batch and its photo gate are untouched: this photo is
+        never a batch photo. Nothing changes unless the close-up shows
+        exactly one real piece."""
+        if not (photo.content_type or "").startswith("image/"):
+            raise HTTPException(422, f"{photo.filename!r} is not an image ({photo.content_type})")
+        data = photo.file.read(MAX_PHOTO_BYTES + 1)
+        if len(data) > MAX_PHOTO_BYTES:
+            raise HTTPException(413, f"{photo.filename!r} is over {MAX_PHOTO_BYTES // 2**20} MB")
+        if not data:
+            raise HTTPException(422, f"{photo.filename!r} is empty")
+        with closing(inventory_db.connect()) as conn:
+            _ensure_registered(conn, batch_id)
+            _ensure_checked(conn, batch_id)
+            review = inventory_db.batch_review(conn, batch_id)
+            if review["batch"]["status"] == "confirmed":
+                raise inventory_db.Conflict(f"batch {batch_id} is confirmed; undo it before re-checking a piece")
+            try:  # refused before any Spark call: confirmed, removed, or not flagged unsure
+                current = next(d for d in review["detections"] if d["id"] == detection_id)
+            except StopIteration:
+                raise HTTPException(404, f"no piece {detection_id} in batch {batch_id}") from None
+            if current["status"] == "rejected":
+                raise inventory_db.Conflict(f"piece {detection_id} is removed; put it back before re-checking it")
+            if not current["unsure"]:
+                raise HTTPException(422, f"piece {detection_id} is not flagged unsure; "
+                                         "only an unsure piece gets a close-up retake")
+        from . import inventory_pipeline  # needs Pillow; keep the rest of the app importable without it
+        try:
+            spark = SparkClient.from_env()
+        except SparkError as err:
+            raise HTTPException(503, f"Spark is not set up: {err}") from None
+        try:
+            found = inventory_pipeline.classify_one_piece(spark, data)
+        except SparkError as err:
+            raise HTTPException(502, f"Spark failed: {err}") from None
+        except ValueError as err:
+            raise HTTPException(422, str(err)) from None
+        with closing(inventory_db.connect()) as conn:
+            try:
+                updated = inventory_db.reclassify_detection(conn, batch_id, detection_id, found)
+            except ValueError as err:
+                raise HTTPException(422, str(err)) from None
+            return {"reclassified": True, "detection": updated, **inventory_db.batch_review(conn, batch_id)}
+
     @app.post("/api/inventory/batch/{batch_id}/confirm", dependencies=WRITE)
     def confirm_inventory_batch(batch_id: str):
         """Add the batch's kept pieces (everything not rejected) to the

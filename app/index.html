@@ -27,6 +27,8 @@
     <input id="gallery-input" type="file" accept="image/*" hidden>
     <!-- Retakes one failed photo of an uploaded batch, from the pop-up below. -->
     <input id="retake-input" type="file" accept="image/*" capture="environment" hidden>
+    <!-- One clean close-up of a single unsure piece, from Check the pieces. -->
+    <input id="piece-input" type="file" accept="image/*" capture="environment" hidden>
 
     <!-- 0. Hero: what BinBuild is, then Get started -->
     <section id="hero-view">
@@ -187,7 +189,7 @@
       <button class="btn btn-secondary" id="check-back-btn">← Back to scanning</button>
     </section>
 
-    <!-- 5. Build: what the confirmed inventory can build, and booklets -->
+    <!-- 5. Build: a swipeable carousel of the builds that have a booklet -->
     <section id="build-view" class="hidden">
       <div class="card">
         <h2>🧱 What can I build?</h2>
@@ -195,6 +197,15 @@
         <div id="build-list"></div>
         <p class="status" id="build-status" role="status" aria-live="polite"></p>
         <button class="btn btn-secondary" id="build-back-btn">← Back to scanning</button>
+      </div>
+    </section>
+
+    <!-- 6. One build's step-by-step booklet, opened from its carousel card -->
+    <section id="booklet-view" class="hidden">
+      <div class="card">
+        <h2 id="booklet-title">Booklet</h2>
+        <iframe id="booklet-frame" title="Step-by-step booklet"></iframe>
+        <button class="btn btn-secondary" id="booklet-back-btn">← Back to the builds</button>
       </div>
     </section>
 

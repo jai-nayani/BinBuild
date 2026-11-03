@@ -166,8 +166,8 @@ class TestCaptureGrid(unittest.TestCase):
     def test_same_camera_inputs_no_upload_form(self):
         inputs = {e["attrs"]["id"]: e["attrs"] for e in page()
                   if e["tag"] == "input" and e["attrs"].get("type") == "file"}
-        self.assertEqual(set(inputs), {"camera-input", "gallery-input", "retake-input"})
-        for name in ("camera-input", "retake-input"):
+        self.assertEqual(set(inputs), {"camera-input", "gallery-input", "retake-input", "piece-input"})
+        for name in ("camera-input", "retake-input", "piece-input"):
             self.assertEqual((inputs[name].get("capture"), inputs[name].get("accept")), ("environment", "image/*"))
         self.assertFalse([e for e in page() if e["tag"] == "form"])
 
