@@ -218,7 +218,7 @@ differently:
   - wedge plates are drawn as rectangles;
   - round tiles are drawn as round plates;
   - the azure curved slope is drawn 2 plates tall, not 4. That piece is
-    Apple Visitor's top piece, and nothing sits on it.
+    Hungry bird's top piece, and nothing sits on it.
 - **The 29 without a booklet** say why on their card: "No step-by-step
   booklet: … Build it from the book, page N." None was forced.
 

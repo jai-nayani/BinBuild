@@ -77,6 +77,12 @@ class TestCovers(unittest.TestCase):
                 self.assertTrue(o["cover"].startswith("<svg"))
                 self.assertEqual(o["pieces"], sum(p["qty"] for p in book["parts"]))
 
+    def test_apple_visitor_is_shown_as_hungry_bird(self):
+        card = next(o for o in booklet_options(KIT_ITEMS) if o["id"] == "apple-visitor")
+        book = bp.plan_set(card["set"], KIT_ITEMS)["booklet"]
+        self.assertEqual((card["title"], book["title"]), ("Hungry bird", "Hungry bird"))
+        self.assertIn("<title>Hungry bird", bk.render_html(book))
+
     def test_no_cover_without_a_booklet(self):
         for o in bp.options(KIT_ITEMS):
             if not o.get("has_booklet"):

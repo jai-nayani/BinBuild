@@ -42,7 +42,7 @@ All fixed in the function, so they heal every build at once:
 | Guitar [23] | FIXED (renderer) | White rectangle + green bar (a T). The wedge body now tapers with studs on one edge; reads as guitar body + neck. |
 | Binoculars [23] | MATCH | Two upright grey tubes on the dark base, as pictured. (Renderer-neutral; unchanged.) |
 | House and tree [28] | MATCH | Already read as its name; the hand-checked set is untouched. |
-| Hungry visitor (apple) [29] | FIXED (renderer) | The azure head drew 2 plates tall and flat-topped. With its true 4-plate curve and stud end it reads as the creature's head over the orange body on grey legs. |
+| Hungry bird [29] | FIXED (renderer) | The azure head drew 2 plates tall and flat-topped. With its true 4-plate curve and stud end it reads as the creature's head over the orange body on grey legs. |
 | Rabbit face, both ears [48] | FIXED (renderer) | Ears were white rectangles, eyes studded cans, the muzzle studded all over. Now: tapered ears, flat eye discs with pupils, one centre stud on the jumper muzzle. The Nov 1 open question (ear orientation) is answered by the photo: ears extend from the face with studs along the inner edge — as designed. |
 | Blueberry cake [51] | FIXED (renderer) | The wedge base now tapers like a cake slice under the purple layer and lime top. |
 | Flying bug [64] | FIXED (renderer) | Eyes are now flat discs with pupils on the orange head; the wing wedge tapers. |
@@ -96,7 +96,7 @@ the middle of the roof. The book's picture shows the same step.
 | Guitar [23] | MATCH | Neck in line with the body's stud column and under its narrow end; round plate on the body's third stud from the neck. |
 | Binoculars [23] | MATCH | |
 | House and tree [28] | MATCH | Book's low front angle; set untouched. |
-| Hungry visitor (apple) [29] | MATCH | Head one stud forward, its stud end overhanging the front of the body so one orange stud shows behind it, as pictured. |
+| Hungry bird [29] | MATCH | Head one stud forward, its stud end overhanging the front of the body so one orange stud shows behind it, as pictured. |
 | Rabbit face, both ears [48] | MATCH | Ears in line with the face's outer columns, narrowing towards the face, seen from above like the book. In the book the ears lie loose next to the face; here each is held under the face's top row by one stud. |
 | Blueberry cake [51] | **BOOKLET WITHDRAWN** | The picture shows 2 medium blue 1x1 cheese slopes on top that the list doesn't have (the kit has 2). Recorded as a `picture_check` that disagrees; the list is no longer verified and waits for a hand-check. |
 | Flying bug [64] | CLOSE | Book's angle and wing taper. The book's picture is small and partly hidden; the arrangement may differ (the lime clip plate looks on top of the wing there). Noted in the draft. |
