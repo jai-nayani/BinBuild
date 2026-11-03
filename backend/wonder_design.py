@@ -429,7 +429,8 @@ def placements(pieces, turn=False):
         down = p.direction if p.part.direction == "down" else None
         if p.part.top == "low_end" and down:  # 6091's curve falls away from its stud end (LDraw)
             down = ("-" if down[0] == "+" else "+") + down[1]
-        pl = bk.place(part, [p.x, p.y, p.z], along="x" if p.h >= p.w else "y", down=down)
+        pl = bk.place(part, [p.x, p.y, p.z], along="x" if p.h >= p.w else "y", down=down,
+                      studs=p.direction if p.part.direction == "studs" else None)
         pl["dims"][2] = p.part.height
         out.append(pl)
     return out

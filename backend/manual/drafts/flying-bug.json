@@ -206,7 +206,9 @@
       0,
       1
      ],
-     "along": "y"
+     "along": "y",
+     "down": "-x",
+     "studs": "+x"
     },
     {
      "line": "dark_purple 1x2 plate",

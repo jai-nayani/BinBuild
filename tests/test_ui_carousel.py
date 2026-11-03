@@ -64,7 +64,10 @@ def booklet_options(items):
 class TestCovers(unittest.TestCase):
     def test_cover_is_the_booklets_finished_model(self):
         found = booklet_options(KIT_ITEMS)
-        self.assertEqual(len(found), 12)
+        # 11, not 12: the paintbrush's booklet was withdrawn (the book's brush
+        # lies on its side, which the physical validator cannot express).
+        self.assertEqual(len(found), 11)
+        self.assertNotIn("paintbrush", [o["id"] for o in found])
         for o in found:
             with self.subTest(o["id"]):
                 book = bp.plan_set(o["set"], KIT_ITEMS)["booklet"]

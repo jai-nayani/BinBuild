@@ -80,55 +80,7 @@
  "auto_steps": {
   "by": "muse-wonder-1.0",
   "on": "2026-11-01",
-  "ok": true,
-  "tries": 1,
-  "usd": 0.1962,
-  "picture_checks": 1,
-  "design": [
-   "1x1 (0,0,0) round_brick light_bluish_gray",
-   "1x1 (0,0,3) round_brick light_bluish_gray",
-   "1x1 (0,0,6) round_plate lime"
-  ]
- },
- "steps": [
-  {
-   "text": "Start here: lay this piece on the table.",
-   "place": [
-    {
-     "line": "light_bluish_gray 1x1 round brick",
-     "at": [
-      0,
-      0,
-      0
-     ]
-    }
-   ]
-  },
-  {
-   "text": "Add this piece (3 plates up), pressing it onto the studs below.",
-   "place": [
-    {
-     "line": "light_bluish_gray 1x1 round brick",
-     "at": [
-      0,
-      0,
-      3
-     ]
-    }
-   ]
-  },
-  {
-   "text": "Add this piece (6 plates up), pressing it onto the studs below.",
-   "place": [
-    {
-     "line": "lime 1x1 round plate",
-     "at": [
-      0,
-      0,
-      6
-     ]
-    }
-   ]
-  }
- ]
+  "ok": false,
+  "reason": "the book's paintbrush lies on its side (two round bricks end to end, lying down), and BinBuild's checker only connects pieces by studs from above, so it can't be written as a booklet in this format; its piece list is verified, build it from the book, page 23"
+ }
 }

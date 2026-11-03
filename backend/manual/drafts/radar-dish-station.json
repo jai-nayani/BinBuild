@@ -145,13 +145,14 @@
   "usd": 0.3804,
   "picture_checks": 1,
   "design": [
-   "1x6 (1,0,0) plate lime",
-   "2x2 (1,0,1) plate magenta",
-   "2x1 (1,0,2) curved_slope black down=+x",
-   "1x1 (1,1,2) round_brick light_bluish_gray",
-   "1x1 (2,1,2) round_brick light_bluish_gray",
-   "4x2 (0,4,1) wedge_plate white studs=-y"
-  ]
+   "1x6 (2,0,0) plate lime",
+   "2x2 (1,4,1) plate magenta",
+   "2x1 (1,5,2) curved_slope black down=-x",
+   "1x1 (2,4,2) round_brick light_bluish_gray",
+   "1x1 (1,4,2) round_brick light_bluish_gray",
+   "4x2 (0,0,1) wedge_plate white studs=+y"
+  ],
+  "note": "Model turned 180 degrees 2026-11-03 so the dish reads at the back with the receiver in front, as the book's T-shaped station on page 78; same model, re-checked with the validator."
  },
  "steps": [
   {
@@ -160,7 +161,7 @@
     {
      "line": "lime 1x6 plate",
      "at": [
-      1,
+      2,
       0,
       0
      ],
@@ -175,7 +176,7 @@
      "line": "magenta 2x2 plate",
      "at": [
       1,
-      0,
+      4,
       1
      ]
     },
@@ -183,9 +184,11 @@
      "line": "white 2x4 wedge plate",
      "at": [
       0,
-      4,
+      0,
       1
-     ]
+     ],
+     "down": "-y",
+     "studs": "+y"
     }
    ]
   },
@@ -196,24 +199,24 @@
      "line": "black 1x2 curved slope",
      "at": [
       1,
-      0,
+      5,
       2
      ],
-     "down": "+x"
+     "down": "-x"
     },
     {
      "line": "light_bluish_gray 1x1 round brick",
      "at": [
-      1,
-      1,
+      2,
+      4,
       2
      ]
     },
     {
      "line": "light_bluish_gray 1x1 round brick",
      "at": [
-      2,
       1,
+      4,
       2
      ]
     }

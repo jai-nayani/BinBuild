@@ -128,12 +128,14 @@ on the kit batch: [SAM-3-1.md](SAM-3-1.md).
 The build API still lists every build in the manual that came with the kit
 (106; 41 have a verified piece list and a bin check — house-and-tree
 hand-checked, 40 more verified by two independent Muse Wonder reads of the
-page agreeing on every line, 12 in all with a validated step-by-step
+page agreeing on every line, 11 in all with a validated step-by-step
 booklet), then BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
-In the app, "What can I build?" is a sideways carousel of just those 12
+In the app, "What can I build?" is a sideways carousel of just those 11
 booklet builds — each card the booklet's finished-model picture, its name
 and piece count — and tapping a card opens its step-by-step booklet, with
-Back returning to the same card. Nothing is shown there until pieces are
+Back returning to the same card. (The paintbrush has a verified piece list
+but no booklet: the book's brush lies on its side, which the physical
+validator cannot express, so it stays honestly labelled booklet-less.) Nothing is shown there until pieces are
 confirmed (or the sample bin is loaded and confirmed).
 Draft parts lists for the builds that print none were read from the pictures
 by Muse Wonder: [WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md); the second
