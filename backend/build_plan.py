@@ -141,14 +141,14 @@ def set_booklet(spec, notes=()) -> dict:
         for p in step["place"]:
             add.append(len(placements))
             placements.append(bk.place(spec["parts"][p["part"]], p["at"], p.get("along", "x"), p.get("down"),
-                                       p.get("studs")))
+                                       p.get("studs"), p.get("clip"), p.get("narrow"), p.get("side")))
         steps.append((step["text"], add))
     manual = spec.get("manual")
     where = f"the manual, {_pages(manual.get('pages') or [manual['page']])}" if manual else f"known set: {spec['id']}"
     return bk.booklet(
         spec["title"], spec["subtitle"], placements, steps,
         source=f"the pieces in your bin ({where})",
-        notes=list(notes) + spec.get("notes", []))
+        notes=list(notes) + spec.get("notes", []), view=spec.get("view"))
 
 
 def plan_spec(spec, items, with_booklet=True) -> dict:
@@ -275,8 +275,10 @@ def hand_checked(draft) -> bool:
 
 def reads_agree(draft) -> bool:
     """Two independent Muse Wonder reads of the page agree on every line
-    (backend/manual_verify.py)."""
-    return bool(draft and (draft.get("second_read") or {}).get("agrees") is True)
+    (backend/manual_verify.py), and nobody looking at the page since has
+    found the list wrong (a "picture_check" that disagrees)."""
+    return bool(draft and (draft.get("second_read") or {}).get("agrees") is True
+                and (draft.get("picture_check") or {}).get("agrees") is not False)
 
 
 def verified(draft) -> bool:
@@ -329,15 +331,20 @@ def draft_set(draft) -> dict:
                "drawings are BinBuild's own.",
                "Nobody has built it from these steps yet: if a step doesn't match the book, follow the book."]
     parts = {line_of(e): {k: e[k] for k in ("family", "shape", "size", "color")} for e in draft["elements"]}
+    drawing = draft.get("drawing") or {}
+    hints = {tuple(h["at"]): {k: v for k, v in h.items() if k != "at"} for h in drawing.get("parts", [])}
     steps = [{"text": step["text"],
-              "place": [{"part": p["line"], "at": p["at"], **{k: p[k] for k in ("along", "down", "studs") if p.get(k)}}
+              "place": [{"part": p["line"], "at": p["at"],
+                         **{k: p[k] for k in ("along", "down", "studs", "clip") if p.get(k)},
+                         **hints.get(tuple(p["at"]), {})}
                         for p in step["place"]]}
              for step in draft["steps"]]
     pieces = sum(e["qty"] for e in draft["elements"])
     return {"id": draft["id"], "title": draft["name"],
             "subtitle": f"From the manual, {_pages(draft['pages'])}. {pieces} pieces, {len(steps)} steps.",
             "manual": {"page": draft["pages"][0], "pages": draft["pages"]},
-            "notes": how, "parts": parts, "steps": steps}
+            "notes": how, "parts": parts, "steps": steps,
+            **({"view": drawing["view"]} if drawing.get("view") else {})}
 
 
 CLOSEST = {"total": "its list matches the total the page prints", "sure": "no unsure lines"}
@@ -395,14 +402,14 @@ def manual_options(items) -> list:
             plan = plan_set(b["set"], items, with_booklet=False)
             entry.update(set=b["set"], status=plan["status"], message=plan["message"], missing=plan["missing"],
                          pieces=plan["pieces"], has_booklet=True, verified_by="known set with steps",
-                         cover=bk.picture(set_booklet(known_sets()[b["set"]])["placements"]))
+                         cover=bk.cover(set_booklet(known_sets()[b["set"]])))
         elif booklet_ready(draft):
             spec = draft_set(draft)
             plan = plan_spec(spec, items, with_booklet=False)
             entry.update(set=b["id"], piece_status="verified", status=plan["status"], message=plan["message"],
                          missing=plan["missing"], pieces=plan["pieces"], has_booklet=True,
                          verified_by=VERIFIED_BY[hand_checked(draft)],
-                         cover=bk.picture(set_booklet(spec)["placements"]))
+                         cover=bk.cover(set_booklet(spec)))
         elif reads_agree(draft):
             check = check_pieces([({k: e[k] for k in ("family", "shape", "size", "color")}, e["qty"])
                                   for e in draft["elements"]], items)

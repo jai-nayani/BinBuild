@@ -112,11 +112,24 @@ class TestBooklet(unittest.TestCase):
         self.assertEqual((round_brick["dims"][2], round_plate["dims"][2]), (3, 1))
 
     def test_hidden_studs_and_faces_are_not_drawn(self):
-        part = {"family": "brick", "shape": "brick", "size": "1x1", "color": "red"}
-        apart = bk.picture([bk.place(part, [0, 0, 0]), bk.place(part, [3, 0, 0])])
-        stacked = bk.picture([bk.place(part, [0, 0, 0]), bk.place(part, [0, 0, 3])])
-        self.assertEqual(apart.count("<ellipse"), 4)    # two studs, two ellipses each
-        self.assertEqual(stacked.count("<ellipse"), 2)  # the lower stud is under the upper brick
+        import numpy as np
+        from backend import ldraw_render as lr
+
+        red = {"family": "brick", "shape": "brick", "size": "1x1", "color": "red"}
+        pair = [bk.place(red, [0, 0, 0]), bk.place(dict(red, color="blue"), [0, 0, 3])]
+        front = {"yaw": 0, "elevation": 0}
+        frame = lr.bounds(pair, front)
+
+        def red_pixels(img):
+            a = np.asarray(img).astype(int)
+            return int(((a[..., 0] > 2 * a[..., 1]) & (a[..., 0] > 2 * a[..., 2]) & (a[..., 3] > 127)).sum())
+
+        alone = red_pixels(lr.render(pair, shown=[0], frame=frame, view=front))
+        stacked = red_pixels(lr.render(pair, frame=frame, view=front))
+        # seen from the side, the red brick's stud shows above it on its own and
+        # vanishes into the blue brick pressed onto it
+        self.assertLess(stacked, alone * 0.95)
+        self.assertGreater(stacked, alone * 0.8)
 
     def test_page(self):
         book = bp.plan_set("house-and-tree", KIT_ITEMS)["booklet"]

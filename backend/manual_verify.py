@@ -200,33 +200,23 @@ def feedback(errors, by="The checker") -> str:
 # --- does the passing design look like the book's model? ------------------------------------
 
 def booklet_placements(pieces, turn=False) -> list:
-    """The design as the booklet draws it (the house-and-tree path:
-    booklet.place from each step's part, at, along and down)."""
-    return [bk.place(pl["part"], pl["at"], "y" if pl["dims"][0] < pl["dims"][1] else "x", pl["down"])
-            for pl in wd.placements(pieces, turn=turn)]
+    """The design as the booklet draws it."""
+    return wd.placements(pieces, turn=turn)
 
 
 def drawings(pieces) -> list:
-    """The finished model as its booklet draws it, from two opposite corners,
-    as JPEGs (macOS Quick Look renders the SVG; Pillow flattens it)."""
-    import subprocess
-    import tempfile
+    """The finished model as its booklet draws it, from two opposite corners, as JPEGs."""
     from io import BytesIO
     from PIL import Image
+    from . import ldraw_render as lr
     out = []
-    with tempfile.TemporaryDirectory() as tmp:
-        for turn in (False, True):
-            svg = Path(tmp) / f"model-{int(turn)}.svg"
-            svg.write_text(bk.picture(booklet_placements(pieces, turn=turn)))
-            subprocess.run(["qlmanage", "-t", "-s", "900", "-o", tmp, str(svg)], check=True, capture_output=True,
-                           timeout=60)
-            with Image.open(f"{svg}.png") as im:
-                rgba = im.convert("RGBA")
-            flat = Image.new("RGB", rgba.size, "white")
-            flat.paste(rgba, mask=rgba.split()[3])
-            buf = BytesIO()
-            flat.save(buf, "JPEG", quality=90)
-            out.append(buf.getvalue())
+    for turn in (False, True):
+        rgba = lr.render(booklet_placements(pieces, turn=turn), size=(900, 700))
+        flat = Image.new("RGB", rgba.size, "white")
+        flat.paste(rgba, mask=rgba.split()[3])
+        buf = BytesIO()
+        flat.save(buf, "JPEG", quality=90)
+        out.append(buf.getvalue())
     return out
 
 
@@ -234,10 +224,10 @@ def compare_instructions() -> str:
     return (
         "You check building steps against a children's LEGO building book. The first picture is a photo of the "
         "book's page. The other two are BinBuild's drawing of a model built from the kit's pieces, seen from two "
-        "opposite corners. The drawing is simplified: each piece is drawn as a block of its footprint (wedge "
-        "plates as full rectangles, the edge-stud tile as a plate), round tiles look like round plates with a "
-        "stud and no printed eye, and some curved pieces are drawn lower than they are. Its colours are the real "
-        "pieces' colours; the book prints some differently (lime can look yellow, light grey near-white).\n\n"
+        "opposite corners. The drawing uses the real shape of every piece (from the LDraw parts library), but "
+        "it may be seen from a different angle than the book's, and its round eye tiles all carry the same "
+        "eye print. Its colours are the real pieces' colours; the book prints some differently (lime can look "
+        "yellow, light grey near-white).\n\n"
         "Decide whether the drawing is the named model as the book pictures it: the same parts of the model in "
         "the same places (what sits on what, what is on top and what is underneath, which end is which, which "
         "way things face). The model may be turned. A detail the book's picture can't show (a hidden piece one "
@@ -325,7 +315,7 @@ def place(build, draft, client, owned, max_retries=MAX_RETRIES, log=print) -> di
 
 def layer_steps(pieces) -> list:
     """A validated design's layers as draft steps ([{text, place: [{line, at,
-    along, down}]}], the shape build_plan.draft_set reads): one step per
+    along, down, studs, clip}]}], the shape build_plan.draft_set reads): one step per
     height, lowest first. A piece held only by a piece above it (hanging
     under an overhang) goes in with that piece."""
     placements = wd.placements(pieces)
@@ -355,7 +345,8 @@ def layer_steps(pieces) -> list:
             {"line": bp.line_of(placements[i]["part"]), "at": placements[i]["at"],
              **({"along": "y"} if placements[i]["dims"][0] < placements[i]["dims"][1] else {}),
              **({"down": placements[i]["down"]} if placements[i].get("down") else {}),
-             **({"studs": placements[i]["studs"]} if placements[i].get("studs") else {})} for i in idx]})
+             **({"studs": placements[i]["studs"]} if placements[i].get("studs") else {}),
+             **({"clip": placements[i]["clip"]} if placements[i].get("clip") else {})} for i in idx]})
     return steps
 
 

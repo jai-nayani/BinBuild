@@ -4,8 +4,8 @@
  "pages": [
   51
  ],
- "status": "verified",
- "warning": "Verified by two independent Muse Wonder reads of the page that agree on every line (kind and count), within the kit's pieces. Nobody has built it from this list yet.",
+ "status": "draft",
+ "warning": "Read by Muse Wonder from the picture of the model (the page prints no parts list), not checked against the kit. Two reads of the page agreed on this list, but the page's picture shows pieces it doesn't have (see picture_check). Not a verified piece list: no fit claim and no booklet until it is hand-checked.",
  "read_from": "the picture of the model on page 51, photo IMG_3608, read by Muse Wonder on Oct 30",
  "read_by": "muse-wonder-1.0",
  "seen": "A small blue-purple cake with a lime round topping pictured at the lower left of page 51.",
@@ -97,6 +97,14 @@
   "agrees": true,
   "differences": []
  },
+ "picture_check": {
+  "agrees": false,
+  "by": "BinBuild (a look at the page photo, IMG_3608)",
+  "on": "2026-11-02",
+  "differences": [
+   "medium_blue 1x1 slope (cheese): the picture shows 2 on top of the cake, left and right, sloping up away from the lime round plate between them; the list has none (the kit has 2)"
+  ]
+ },
  "auto_steps": {
   "by": "muse-wonder-1.0",
   "on": "2026-11-01",
@@ -161,5 +169,11 @@
     }
    ]
   }
- ]
+ ],
+ "drawing": {
+  "view": {
+   "yaw": 200,
+   "elevation": 22
+  }
+ }
 }

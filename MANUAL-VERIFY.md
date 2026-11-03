@@ -17,6 +17,12 @@ a hand-check overrides the reads, and hand-checked drafts are never touched.
   with the lines where its two reads differ.
 - **Wonder spend: $35.77.**
 
+**Update, Nov 2:** two agreed lists were contradicted by their own page's
+picture (blueberry cake, birthday cake): both reads missed pieces the
+picture shows. Each now carries a `picture_check` that disagrees, which
+unverifies it like a disagreeing second read: 38 verified, 9 booklets (with
+house and tree), 62 in the queue. Details: [BOOKLET-REDESIGN.md](BOOKLET-REDESIGN.md).
+
 ## How it works
 
 ```

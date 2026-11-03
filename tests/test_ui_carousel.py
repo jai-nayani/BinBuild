@@ -64,14 +64,16 @@ def booklet_options(items):
 class TestCovers(unittest.TestCase):
     def test_cover_is_the_booklets_finished_model(self):
         found = booklet_options(KIT_ITEMS)
-        # 11, not 12: the paintbrush's booklet was withdrawn (the book's brush
-        # lies on its side, which the physical validator cannot express).
-        self.assertEqual(len(found), 11)
-        self.assertNotIn("paintbrush", [o["id"] for o in found])
+        # 9: the paintbrush's booklet was withdrawn (the book's brush lies on
+        # its side, which the physical validator cannot express), and the two
+        # cakes' lists are disputed by their pictures (backend/manual/drafts).
+        self.assertEqual(len(found), 9)
+        for gone in ("paintbrush", "birthday-cake-message", "blueberry-cake"):
+            self.assertNotIn(gone, [o["id"] for o in found])
         for o in found:
             with self.subTest(o["id"]):
                 book = bp.plan_set(o["set"], KIT_ITEMS)["booklet"]
-                self.assertEqual(o["cover"], bk.picture(book["placements"]))
+                self.assertEqual(o["cover"], bk.cover(book))
                 self.assertTrue(o["cover"].startswith("<svg"))
                 self.assertEqual(o["pieces"], sum(p["qty"] for p in book["parts"]))
 

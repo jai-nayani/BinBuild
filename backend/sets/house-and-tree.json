@@ -3,6 +3,7 @@
   "title": "House and tree",
   "subtitle": "A little house with a round roof, and a tree. 7 pieces, 5 steps.",
   "manual": {"page": 28, "chapter": 2},
+  "view": {"yaw": 345, "elevation": 16},
   "note": "Arranged as pictured in the manual on page 28 (steps and drawings are BinBuild's own). Piece list checked against the kit's confirmed inventory. Placements: x and y in studs, z in plates.",
   "parts": {
     "grass":    {"family": "plate", "shape": "plate",        "size": "1x6", "color": "lime"},

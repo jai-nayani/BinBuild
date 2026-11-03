@@ -126,13 +126,13 @@
   "picture_checks": 1,
   "design": [
    "6x1 (3,3,0) plate lime",
-   "2x4 (2,2,1) plate medium_azure",
-   "2x4 (3,0,2) wedge_plate white studs=-x",
-   "2x4 (3,4,2) wedge_plate white studs=-x",
-   "1x1 (3,3,3) round_tile white",
-   "1x1 (3,4,3) round_tile white"
+   "4x2 (0,3,1) plate medium_azure",
+   "2x4 (2,0,2) wedge_plate white studs=-x",
+   "2x4 (2,4,2) wedge_plate white studs=-x",
+   "1x1 (1,3,2) round_tile white",
+   "1x1 (1,4,2) round_tile white"
   ],
-  "note": "Layout rebuilt 2026-11-03 from the book's photo: the two wedge plates span the wingspan with their tips out, the eyes sit on the wing roots at the centre, the tail runs from the centre; re-checked with the physical validator. (The earlier layout had the wings side by side along the body and the eyes on the blue plate in front of them.)"
+  "note": "Layout re-read 2026-11-02 from a full-resolution crop of page 20 and re-checked with the physical validator: the two wedge plates span the wingspan with all four studs of each showing, their tips out; the eyes sit on the azure plate in front of the wings, which runs front to back under them; the tail runs back from under the centre. (The book draws the tail centred on the seam between the wings, half a stud off the grid; studs can't hold that, so here it sits under the left wing root.)"
  },
  "steps": [
   {
@@ -154,21 +154,20 @@
     {
      "line": "medium_azure 2x4 plate",
      "at": [
-      2,
-      2,
+      0,
+      3,
       1
-     ],
-     "along": "y"
+     ]
     }
    ]
   },
   {
-   "text": "Add these 2 pieces (2 plates up), pressing them onto the studs below.",
+   "text": "Add these 4 pieces (2 plates up), pressing them onto the studs below.",
    "place": [
     {
      "line": "white 2x4 wedge plate",
      "at": [
-      3,
+      2,
       0,
       2
      ],
@@ -179,36 +178,55 @@
     {
      "line": "white 2x4 wedge plate",
      "at": [
-      3,
+      2,
       4,
       2
      ],
      "along": "y",
      "down": "+x",
      "studs": "-x"
-    }
-   ]
-  },
-  {
-   "text": "Add these 2 pieces (3 plates up), pressing them onto the studs below.",
-   "place": [
+    },
     {
      "line": "white 1x1 round printed tile",
      "at": [
+      1,
       3,
-      3,
-      3
+      2
      ]
     },
     {
      "line": "white 1x1 round printed tile",
      "at": [
-      3,
+      1,
       4,
-      3
+      2
      ]
     }
    ]
   }
- ]
+ ],
+ "drawing": {
+  "view": {
+   "yaw": 250,
+   "elevation": 55
+  },
+  "parts": [
+   {
+    "at": [
+     2,
+     0,
+     2
+    ],
+    "narrow": "-y"
+   },
+   {
+    "at": [
+     2,
+     4,
+     2
+    ],
+    "narrow": "+y"
+   }
+  ]
+ }
 }
