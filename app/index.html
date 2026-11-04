@@ -119,6 +119,7 @@
         <button class="btn btn-primary" id="upload-btn" disabled>Check my 5 photos (0/5)</button>
         <progress id="upload-progress" class="hidden" max="100" value="0"></progress>
         <button class="btn btn-done" id="identify-btn" disabled>Next: identify the pieces</button>
+        <div id="identify-tracker" class="hidden" role="status" aria-live="polite"></div>
         <p class="status" id="status" role="status" aria-live="polite"></p>
         <div class="callout hidden" id="sample-offer">
           <p id="sample-text">Identifying pieces uses a paid AI service, so this public demo needs an access key for it. You can still see what the sample bin builds.</p>
@@ -177,9 +178,12 @@
         <h2 id="check-title">Check the pieces</h2>
         <p id="check-intro"></p>
         <p class="review-summary" id="check-summary"></p>
+        <div id="check-identify-tracker" class="hidden"></div>
+        <p id="check-model" class="hidden"><span class="badge" id="check-model-label"></span></p>
       </div>
       <div class="photo-box">
-        <div class="photo-wrap"><img id="check-img" alt="Top photo of the pieces"><svg class="outlines" id="check-outlines" preserveAspectRatio="none" aria-hidden="true"></svg><div id="check-dots"></div></div>
+        <div class="photo-wrap" id="check-photo"><img id="check-img" alt="Top photo of the pieces" role="button" tabindex="0" aria-expanded="false" aria-label="Enlarge the pieces photo"><svg class="outlines" id="check-outlines" preserveAspectRatio="none" aria-hidden="true"></svg><div id="check-dots"></div></div>
+        <button type="button" class="btn-link mask-toggle hidden" id="mask-toggle">Show dots</button>
         <p class="caption" id="check-caption"></p>
       </div>
       <div id="check-list"></div>
@@ -204,6 +208,7 @@
     <section id="booklet-view" class="hidden">
       <div class="card">
         <h2 id="booklet-title">Booklet</h2>
+        <div id="booklet-models" class="model-chips hidden"></div>
         <iframe id="booklet-frame" title="Step-by-step booklet"></iframe>
         <button class="btn btn-secondary" id="booklet-back-btn">← Back to the builds</button>
       </div>

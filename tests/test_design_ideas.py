@@ -11,6 +11,7 @@ from unittest import mock
 from backend import design_ideas as ideas, full_loop, guard, inventory_db as db, main, sample_bin
 from test_full_loop import KIT_ITEMS, seed
 from test_wonder import HOUSE, OWNED, Scripted
+from test_step_writer_job import FakeSpark, StageJobs
 
 
 TOWER = "1x1 (0,0,0) round_brick light_bluish_gray\n1x1 (0,0,3) round_brick light_bluish_gray\n1x1 (0,0,6) round_plate lime"
@@ -103,7 +104,14 @@ class TestInventoryIdeasApi(unittest.TestCase):
         return job
 
     def test_checked_previews_are_cached_and_selection_keeps_the_same_placements(self):
+        jobs = StageJobs()
+        for patcher in (mock.patch.object(main, "_wonder_jobs", jobs),
+                        mock.patch.object(main.SparkClient, "from_env", return_value=FakeSpark())):
+            patcher.start()
+            self.addCleanup(patcher.stop)
         job = self.start()
+        self.assertEqual(jobs.stages, ["designing", "designing", "checking", "done"])
+        jobs.stages.clear()
         self.assertEqual(len(job["ideas"]), 3)
         self.assertTrue(all(x["cover"].startswith("<svg") for x in job["ideas"]))
         code, options = self.api.call("GET", "/api/builds/options?source=uploaded")
@@ -114,6 +122,7 @@ class TestInventoryIdeasApi(unittest.TestCase):
             "source": "uploaded", "idea_id": selected["id"], "inventory_key": job["inventory_key"]})
         self.assertEqual(code, 202)
         finished = self.wait(started["job_id"])
+        self.assertEqual(jobs.stages, ["checking", "writing", "done"])
         self.assertEqual(finished["build"]["status"], "fit", finished)
         self.assertEqual(finished["build"]["pieces"], selected["pieces"])
         self.assertEqual(finished["build"]["design"].strip(), HOUSE.strip())

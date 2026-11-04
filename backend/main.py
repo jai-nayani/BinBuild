@@ -76,6 +76,21 @@ _wonder_busy = threading.Lock()   # one generation at a time
 _wonder_jobs = {}
 _wonder_jobs_lock = threading.Lock()
 _idea_sets = {}                  # database + inventory fingerprint -> checked alternatives
+
+
+class _StagedWonder:
+    """Report model waits and validation separately without changing replies."""
+
+    def __init__(self, client, update):
+        self.client, self.update = client, update
+
+    def respond(self, *args, **kwargs):
+        self.update(stage="designing")
+        reply = self.client.respond(*args, **kwargs)
+        self.update(stage="checking")
+        return reply
+
+
 # Every POST carries one of these (backend/guard.py; both are no-ops off the public deploy).
 PAID = [Depends(guard.paid)]     # calls a paid API: shared key + per-IP limit
 WRITE = [Depends(guard.write)]   # everything else that writes: per-IP limit
@@ -764,17 +779,21 @@ def create_app() -> FastAPI:
             job_id = secrets.token_urlsafe(24)
             limit = wonder_designer.configured_attempts()
             with _wonder_jobs_lock:
-                _wonder_jobs[job_id] = {"state": "running", "attempt": 1, "max_attempts": limit,
+                _wonder_jobs[job_id] = {"state": "running", "stage": "designing", "attempt": 1, "max_attempts": limit,
                     "message": "Wonder is finding three ideas from these pieces."}
 
             def work():
+                def update(**values):
+                    with _wonder_jobs_lock:
+                        _wonder_jobs[job_id].update(values)
+
                 def progress(n, accepted, errors):
                     with _wonder_jobs_lock:
                         _wonder_jobs[job_id].update(attempt=min(n + 1, limit), message=(
                             f"{accepted} of 3 ideas passed the checker. " +
                             ("Checking the remaining ideas…" if accepted < 3 else "Preparing the previews…")))
                 try:
-                    proposals = design_ideas.propose(client, owned, limit, on_attempt=progress)
+                    proposals = design_ideas.propose(_StagedWonder(client, update), owned, limit, on_attempt=progress)
                     ready = []
                     for idea in proposals:
                         result = wonder_designer.Result(True, idea["title"], title=idea["title"], design=idea["design"])
@@ -795,12 +814,12 @@ def create_app() -> FastAPI:
                                "No design passed the checks for these pieces. Try adding more supported pieces.")
                     with _wonder_jobs_lock:
                         _idea_sets[_idea_slot(key)] = ready
-                        _wonder_jobs[job_id].update(state="done", ideas=_idea_cards(ready), inventory_key=key,
+                        _wonder_jobs[job_id].update(state="done", stage="done", ideas=_idea_cards(ready), inventory_key=key,
                                                     message=message)
                 except Exception:
                     traceback.print_exc()
                     with _wonder_jobs_lock:
-                        _wonder_jobs[job_id].update(state="failed", message="Could not find checked ideas. Please try again.")
+                        _wonder_jobs[job_id].update(state="failed", stage="failed", message="Could not find checked ideas. Please try again.")
                 finally:
                     _wonder_busy.release()
             threading.Thread(target=work, daemon=True).start()
@@ -855,7 +874,8 @@ def create_app() -> FastAPI:
         job_id = secrets.token_urlsafe(24)
         limit = wonder_designer.configured_attempts()
         with _wonder_jobs_lock:
-            _wonder_jobs[job_id] = {"state": "running", "attempt": 0 if selected else 1,
+            _wonder_jobs[job_id] = {"state": "running", "stage": "checking" if selected else "designing",
+                                    "attempt": 0 if selected else 1,
                                     "max_attempts": 0 if selected else limit,
                                     "message": "Preparing the booklet for your selected design." if selected else
                                                f"Try 1 of {limit}: Wonder is designing."}
@@ -884,31 +904,33 @@ def create_app() -> FastAPI:
                     if not check.ok:
                         raise ValueError("the selected design no longer passes the checker")
                 else:
-                    result = wonder_designer.design(client, owned, target, limit, log=lambda *_: None,
+                    result = wonder_designer.design(_StagedWonder(client, update), owned, target, limit, log=lambda *_: None,
                                                     on_attempt=on_attempt)
                     stored = wonder_designer.app_result(result, owned)
                 if "booklet" in stored:
                     from . import step_writer
-                    update(message="Muse Spark is writing the booklet's step words.")
+                    update(stage="writing", message="Muse Spark is writing the booklet's step words.")
                     try:
                         spark = SparkClient.from_env(timeout=90, retries=0)
                         stored["booklet"] = step_writer.write_steps(stored["booklet"], target, spark)
                     except Exception:
                         traceback.print_exc()
                         stored["booklet"]["notes"].append(step_writer.FALLBACK_NOTE)
+                    stored["step_words"] = ("muse-spark" if step_writer.SUCCESS_NOTE in stored["booklet"]["notes"]
+                                            and step_writer.FALLBACK_NOTE not in stored["booklet"]["notes"] else "binbuild")
                     stored["title"] = stored["booklet"]["title"]
                 stored["seconds"] = round(time.monotonic() - started, 1)
                 with closing(inventory_db.connect()) as conn:
                     build = inventory_db.create_build(conn, {"wonder": True, "target": target},
                                                       {**build_plan.snapshot(summary), "batches": batches,
                                                        "inventory_key": key, "source": request.source}, stored)
-                update(state="done", message=stored["message"], build=_build_reply(build))
+                update(state="done", stage="done", message=stored["message"], build=_build_reply(build))
             except WonderError as err:
                 traceback.print_exc()
-                update(state="failed", message=f"Muse Wonder failed: {err}")
+                update(state="failed", stage="failed", message=f"Muse Wonder failed: {err}")
             except Exception:
                 traceback.print_exc()
-                update(state="failed", message="The design job failed. Please try again.")
+                update(state="failed", stage="failed", message="The design job failed. Please try again.")
             finally:
                 _wonder_busy.release()
 

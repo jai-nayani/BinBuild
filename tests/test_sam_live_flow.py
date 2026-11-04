@@ -40,8 +40,12 @@ class TestSamPhoneFlow(unittest.TestCase):
         ui = play({"review": review})
         self.assertEqual([r["path"] for r in ui["requests"]], [
             "/api/inventory/batch/b1/classify?segmenter=stub", "/api/inventory/batch/b1/classify?segmenter=sam"])
-        self.assertEqual([r["status"] for r in ui["requests"]], [
-            "Spark is finding the pieces…", "SAM 3.1 is cutting out each piece…"])
+        self.assertEqual([[s["state"] for s in r["tracker"]] for r in ui["requests"]], [
+            ["active", "waiting", "waiting"], ["done", "active", "waiting"]])
+        self.assertEqual(ui["requests"][1]["tracker"][0]["detail"], "found 2 pieces · 3.5 s")
+        self.assertEqual([s["detail"] for s in ui["tracker"]], [
+            "found 2 pieces · 3.5 s", "2 of 2 cut out · 1.2 s", "4.5 s"])
+        self.assertEqual(ui["review_tracker"], ui["tracker"])
         self.assertEqual(ui["view"], ["check-view"])
         self.assertEqual(ui["status"], "SAM 3.1 cut out 2 of 2 pieces in 1.2 s.")
         self.assertIn("cut out by SAM 3.1", ui["caption"])
@@ -53,6 +57,16 @@ class TestSamPhoneFlow(unittest.TestCase):
                 self.assertEqual(ui["view"], ["check-view"])
                 self.assertEqual(ui["status"], "SAM 3.1 failed, so these are Spark's whole-photo pieces: SAM service unavailable")
                 self.assertEqual(len(ui["requests"]), 2)
+                self.assertEqual([s["state"] for s in ui["tracker"]], ["done", "failed", "failed"])
+
+    def test_existing_identification_has_no_invented_counts_or_times(self):
+        ui = play({"stub_body": {"pieces": 2}, "sam_body": {"pieces": 2}})
+        self.assertEqual([s["detail"] for s in ui["tracker"]], ["already identified"] * 3)
+
+    def test_missing_timings_are_not_filled_in(self):
+        ui = play({"stub_body": {"pieces": 2, "run": {"calls": [{}]}},
+                   "sam_body": {"pieces": 2, "run": {"sam_pass": {"masks": 1, "points": 2}}}})
+        self.assertEqual([s["detail"] for s in ui["tracker"]], ["found 2 pieces", "1 of 2 cut out", "Done"])
 
 
 class TestSamSplitApi(unittest.TestCase):

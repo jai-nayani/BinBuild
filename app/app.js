@@ -118,6 +118,33 @@ var ACCESS_KEY = (function () {
   var uploadBtn = $('upload-btn');
   var identifyBtn = $('identify-btn');
   var progressEl = $('upload-progress');
+  var identifyProgress = null;
+
+  function renderTracker(host, steps) {
+    host.innerHTML = '';
+    host.classList.remove('hidden');
+    var list = el('ol', 'model-tracker');
+    steps.forEach(function (step) {
+      var row = el('li', 'tracker-step ' + step.state);
+      row.setAttribute('data-state', step.state);
+      var mark = { waiting: '○', active: '●', done: '✓', failed: '×' }[step.state];
+      row.appendChild(el('span', 'tracker-mark', mark));
+      var text = el('span', 'tracker-copy');
+      text.appendChild(el('span', 'tracker-label', step.label));
+      text.appendChild(el('small', null, step.detail || (step.state === 'active' ? 'Working…' :
+        step.state === 'waiting' ? 'Waiting' : step.state === 'failed' ? 'Could not finish' : 'Done')));
+      row.appendChild(text);
+      list.appendChild(row);
+    });
+    host.appendChild(list);
+  }
+
+  function identifyTracker() { renderTracker($('identify-tracker'), identifyProgress.steps); }
+  function secondsText(value) { return typeof value === 'number' && isFinite(value) ? value + ' s' : ''; }
+  function doneIdentify(index, detail) {
+    identifyProgress.steps[index].state = 'done';
+    identifyProgress.steps[index].detail = detail;
+  }
 
   function setStatus(msg, kind, el) {
     el = el || statusEl;
@@ -409,27 +436,48 @@ var ACCESS_KEY = (function () {
   identifyBtn.addEventListener('click', function () {
     if (!batch || !batch.ready || busy) { return; }
     busy = true;
-    setStatus('Spark is finding the pieces…');
+    identifyProgress = { id: batch.id, steps: [
+      { label: 'Muse Spark finds the pieces', state: 'active' },
+      { label: 'SAM 3.1 cuts out each piece', state: 'waiting' },
+      { label: 'Muse Spark checks each close-up', state: 'waiting' },
+    ] };
+    identifyTracker();
+    setStatus('');
     render();
     var classify = '/api/inventory/batch/' + encodeURIComponent(batch.id) + '/classify';
     post(classify + '?segmenter=stub', null, IDENTIFY_TIMEOUT_MS,
       function (xhr, body, failure) {
         if (!failure && xhr.status === 200 && body) {
           var wholePhoto = body;
-          setStatus('SAM 3.1 is cutting out each piece…');
+          var calls = body.run && body.run.calls || [];
+          var seconds = calls.filter(function (call) { return typeof call.seconds === 'number'; });
+          doneIdentify(0, body.run ? [typeof body.pieces === 'number' ? 'found ' + body.pieces + ' pieces' : '',
+            seconds.length ? secondsText(Math.round(seconds.reduce(function (n, call) { return n + call.seconds; }, 0) * 10) / 10) : '']
+            .filter(Boolean).join(' · ') : 'already identified');
+          identifyProgress.steps[1].state = 'active';
+          identifyTracker();
           post(classify + '?segmenter=sam', null, IDENTIFY_TIMEOUT_MS, function (samXhr, samBody, samFailure) {
             var result = wholePhoto;
             var note;
             if (!samFailure && samXhr.status === 200 && samBody) {
               result = samBody;
               var pass = samBody.run && samBody.run.sam_pass;
+              identifyProgress.samPass = pass;
+              doneIdentify(1, !samBody.run ? 'already identified' : pass ? [
+                typeof pass.masks === 'number' && typeof pass.points === 'number' ? pass.masks + ' of ' + pass.points + ' cut out' : '',
+                secondsText(pass.sam && pass.sam.seconds)].filter(Boolean).join(' · ') : '');
+              doneIdentify(2, !samBody.run ? 'already identified' : secondsText(pass && pass.spark_tiles && pass.spark_tiles.seconds));
               note = pass
-                ? 'SAM 3.1 cut out ' + pass.masks + ' of ' + pass.points + ' pieces in ' + pass.sam.seconds + ' s.'
+                ? 'SAM 3.1 cut out ' + pass.masks + ' of ' + pass.points + ' pieces' +
+                  (secondsText(pass.sam && pass.sam.seconds) ? ' in ' + secondsText(pass.sam.seconds) : '') + '.'
                 : 'The pieces are ready to check.';
             } else {
+              identifyProgress.steps[1].state = 'failed';
+              identifyProgress.steps[2].state = 'failed';
               note = "SAM 3.1 failed, so these are Spark's whole-photo pieces: " +
                 (samFailure || detailOf(samXhr, samBody));
             }
+            identifyTracker();
             busy = false;
             var found = batch.id;
             uploaded.push({ batchId: found, photos: 5, pieces: result.pieces });
@@ -443,6 +491,8 @@ var ACCESS_KEY = (function () {
           return;
         }
         busy = false;
+        identifyProgress.steps[0].state = 'failed';
+        identifyTracker();
         if (!failure && xhr.status === 422 && body && body.retake && body.retake.length) {
           batch.ready = false;
           batch.retake = body.retake;
@@ -547,7 +597,8 @@ var ACCESS_KEY = (function () {
           }
           var keep = review && review.id === batchId ? review : null;
           review = { id: batchId, data: body, photo: body.count_photo, selected: keep ? keep.selected : null,
-                     focus: null, open: keep ? keep.open : {}, confirmedText: keep ? keep.confirmedText : '' };
+                     focus: null, open: keep ? keep.open : {}, confirmedText: keep ? keep.confirmedText : '',
+                     masks: keep ? keep.masks : true, expanded: keep ? keep.expanded : false };
           if (!note) { setStatus('', null, checkStatus); }
           var img = $('check-img');
           if (review.photo) { img.src = BACKEND_URL + review.photo.url; img.classList.remove('hidden'); } else { img.classList.add('hidden'); }
@@ -607,6 +658,9 @@ var ACCESS_KEY = (function () {
       (fixed ? ' · ' + fixed + (sample ? ' fixed in its earlier review' : ' fixed by you') : '') +
       (removed.length ? ' · ' + removed.length + ' removed' : '');
     renderDots(kept);
+    var tracker = $('check-identify-tracker');
+    tracker.classList.add('hidden');
+    if (!sample && identifyProgress && identifyProgress.id === review.id) { renderTracker(tracker, identifyProgress.steps); }
 
     var list = $('check-list');
     list.innerHTML = '';
@@ -640,18 +694,37 @@ var ACCESS_KEY = (function () {
     var svg = $('check-outlines');
     var photo = review.photo;
     var outlined = kept.some(function (d) { return d.region && d.region.mask && d.region.mask.path; });
+    var sample = (review.data.batch.classifier || '').indexOf('sample') === 0;
+    var run = review.data.batch.run || {};
+    var pass = run.sam_pass || (identifyProgress && identifyProgress.id === review.id && identifyProgress.samPass);
+    var masks = kept.filter(function (d) { return d.region && d.region.mask && d.region.mask.path; }).length;
+    var points = kept.filter(function (d) { return d.region && d.region.point; }).length;
+    var counts = pass && typeof pass.masks === 'number' && typeof pass.points === 'number'
+      ? pass.masks + ' of ' + pass.points : masks + ' of ' + points;
     var caption = outlined
-      ? 'Each outline is one piece, cut out by SAM 3.1. Tap a dot or a row to see which is which.'
+      ? sample ? 'Recorded SAM 3.1 outlines (Oct 28). Each outline is one piece.'
+        : 'Each outline is one piece, cut out by SAM 3.1 (' + counts + ')'
       : 'Each dot is one piece Spark found. Tap a dot or a row to see which is which.';
+    $('check-model').classList.toggle('hidden', !outlined);
+    $('check-model-label').textContent = sample ? '✂ Recorded SAM 3.1 outlines' : '✂ Cut out by SAM 3.1';
+    $('mask-toggle').classList.toggle('hidden', !outlined);
+    $('mask-toggle').textContent = review.masks ? 'Show dots' : 'Show SAM masks';
+    $('mask-toggle').setAttribute('aria-pressed', review.masks ? 'true' : 'false');
+    svg.classList.toggle('hidden', !review.masks);
+    box.classList.toggle('hidden', outlined && review.masks);
+    $('check-photo').classList.toggle('expanded', review.expanded);
+    $('check-img').setAttribute('aria-expanded', review.expanded ? 'true' : 'false');
     box.innerHTML = '';
     svg.innerHTML = '';
     if (!photo) { $('check-caption').textContent = ''; return; }
     svg.setAttribute('viewBox', '0 0 ' + photo.width + ' ' + photo.height);
+    var maskIndex = 0;
     kept.forEach(function (d) {
       var m = d.region && d.region.mask;
       if (!m || !m.path) { return; }
       // the path is in the mask's own pixels; its box is in the photo's
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.style.animationDelay = (maskIndex++ * (masks > 1 ? 1200 / (masks - 1) : 0)) + 'ms';
       path.setAttribute('d', m.path);
       path.setAttribute('transform', 'translate(' + m.box[0] + ' ' + m.box[1] + ') scale(' +
         ((m.box[2] - m.box[0]) / m.size[0]) + ' ' + ((m.box[3] - m.box[1]) / m.size[1]) + ')');
@@ -689,6 +762,21 @@ var ACCESS_KEY = (function () {
     }
     $('check-caption').textContent = caption;
   }
+
+  $('mask-toggle').addEventListener('click', function () {
+    if (!review) { return; }
+    review.masks = !review.masks;
+    renderDots(review.data.detections.filter(function (d) { return d.status !== 'rejected'; }));
+  });
+  function togglePhoto() {
+    if (!review || !review.photo) { return; }
+    review.expanded = !review.expanded;
+    renderDots(review.data.detections.filter(function (d) { return d.status !== 'rejected'; }));
+  }
+  $('check-img').addEventListener('click', togglePhoto);
+  $('check-img').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); togglePhoto(); }
+  });
 
   function smallButton(text, onClick) {
     var b = el('button', 'small', text);
@@ -1072,6 +1160,7 @@ var ACCESS_KEY = (function () {
     var ask = { set: o.set || o.id, source: inventorySource };
     request('POST', '/api/builds', ask, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
       if (!failure && xhr.status === 201 && body && body.booklet_url) {
+        bookletChips(false);
         $('booklet-title').textContent = o.title;
         $('booklet-frame').src = BACKEND_URL + body.booklet_url; // the booklet page, as before
         setStatus('', null, $('build-status'));
@@ -1165,7 +1254,7 @@ var ACCESS_KEY = (function () {
       link.href = BACKEND_URL + r.booklet_url;
       link.addEventListener('click', function (event) {
         event.preventDefault();
-        openWonderBooklet(r.title || 'New design', r.booklet_url);
+        openWonderBooklet(r.title || 'New design', r.booklet_url, r.step_words);
       });
       box.appendChild(link);
     }
@@ -1185,6 +1274,7 @@ var ACCESS_KEY = (function () {
     var cards = el('div', 'idea-cards');
     var out = el('div', 'wresult');
     var status = el('p', 'status');
+    var tracker = el('div', 'hidden');
     var find = el('button', 'btn btn-primary', 'Find three ideas');
     var supported = w.supported_pieces === undefined ? inv.total_pieces : w.supported_pieces;
     find.disabled = !supported || w.busy;
@@ -1203,6 +1293,7 @@ var ACCESS_KEY = (function () {
         if (idea.cover) { cover.innerHTML = idea.cover; }
         card.appendChild(cover);
         card.appendChild(el('h4', null, idea.title));
+        card.appendChild(el('span', 'badge model-chip', '✨ Designed by Muse Wonder · ✓ checked by BinBuild'));
         card.appendChild(el('p', null, idea.description));
         card.appendChild(el('p', 'note', idea.pieces + ' pieces · checked against these pieces'));
         var choose = el('button', 'btn btn-primary', 'Make this booklet');
@@ -1213,7 +1304,7 @@ var ACCESS_KEY = (function () {
             idea_id: idea.id, inventory_key: w.inventory_key, source: inventorySource,
           }, choose, out, status, function (job) {
             if (job.build) { out.insertBefore(wonderResult(job.build), out.firstChild); }
-          }, actionButtons);
+          }, actionButtons, tracker);
         });
         card.appendChild(choose);
         cards.appendChild(card);
@@ -1226,12 +1317,13 @@ var ACCESS_KEY = (function () {
         w.ideas = job.ideas || [];
         w.inventory_key = job.inventory_key;
         drawIdeas();
-      }, actionButtons);
+      }, actionButtons, tracker);
     });
     if (w.busy) { setStatus('A design is already being prepared. Reopen this page when it finishes.', null, status); }
     drawIdeas();
     wrap.appendChild(cards);
     wrap.appendChild(find);
+    wrap.appendChild(tracker);
     wrap.appendChild(status);
     wrap.appendChild(out);
     if (w.recent && w.recent.length) {
@@ -1243,15 +1335,50 @@ var ACCESS_KEY = (function () {
     return wrap;
   }
 
-  function openWonderBooklet(title, url) {
+  function bookletChips(wonder, stepWords) {
+    var chips = $('booklet-models');
+    chips.innerHTML = '';
+    chips.classList.toggle('hidden', !wonder);
+    if (wonder) {
+      chips.appendChild(el('span', 'badge model-chip', 'Designed by Muse Wonder'));
+      if (stepWords === 'muse-spark') {
+        chips.appendChild(el('span', 'badge model-chip', 'Steps written by Muse Spark'));
+      }
+    }
+  }
+
+  function openWonderBooklet(title, url, stepWords) {
     manualReturn = null;
+    bookletChips(true, stepWords);
     $('booklet-title').textContent = title;
     $('booklet-frame').src = BACKEND_URL + url;
     show('booklet-view');
   }
 
-  function runWonderJob(path, payload, btn, out, status, onDone, controls) {
+  function runWonderJob(path, payload, btn, out, status, onDone, controls, tracker) {
     var failedPolls = 0;
+    var ideas = path.indexOf('/ideas') >= 0;
+    var steps = (ideas ? ['Muse Wonder designs', 'BinBuild checks each design'] :
+      ['BinBuild checks it again', 'Muse Spark writes the steps', 'Booklet ready'])
+      .map(function (label) { return { label: label, state: 'waiting' }; });
+    function track(job) {
+      var index = ideas ? { designing: 0, checking: 1 }[job.stage] : { checking: 0, writing: 1 }[job.stage];
+      if (job.stage === 'done') {
+        steps.forEach(function (step, n) {
+          step.state = !ideas && n === 2 && !(job.build && job.build.booklet_url) ? 'failed' : 'done';
+          if (!ideas && n === 1 && job.build && job.build.step_words !== 'muse-spark') {
+            step.state = job.build.step_words === 'binbuild' ? 'failed' : 'waiting';
+            step.detail = job.build.step_words === 'binbuild' ? 'Using BinBuild’s own step words' : 'Step writer not reported';
+          }
+        });
+      } else if (job.stage === 'failed') {
+        steps.forEach(function (step) { if (step.state === 'active') { step.state = 'failed'; } });
+      } else if (index !== undefined) {
+        steps.forEach(function (step, n) { step.state = n < index ? 'done' : n === index ? 'active' : 'waiting'; });
+      }
+      if (tracker) { renderTracker(tracker, steps); }
+    }
+    track({});
     var label = btn.textContent;
     btn.disabled = true;
     (controls || []).forEach(function (control) { control.disabled = true; });
@@ -1283,6 +1410,7 @@ var ACCESS_KEY = (function () {
             return;
           }
           failedPolls = 0;
+          track(body);
           if (body.state === 'running') {
             setStatus(body.message || 'Wonder is checking the ideas…', null, status);
             setTimeout(function () { poll(jobId); }, WONDER_POLL_MS);

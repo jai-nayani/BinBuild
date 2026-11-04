@@ -93,11 +93,13 @@ class TestWonderJobs(unittest.TestCase):
         status, progress = self.poll(job_id)
         self.assertEqual(status, 200)
         self.assertEqual((progress["state"], progress["attempt"], progress["max_attempts"]), ("running", 2, 3))
+        self.assertEqual(progress["stage"], "designing")
         self.assertIn("checker found 2 problems", progress["message"])
         self.assertEqual(self.post()[0], 409)
         self.fake.release.set()
         result = self.finish(job_id)
         self.assertEqual(result["state"], "done")
+        self.assertEqual(result["stage"], "done")
         self.assertEqual(result["build"]["status"], "fit")
         self.assertIn("Found on try 2 of 3", result["build"]["message"])
         self.assertIn("booklet_url", result["build"])
@@ -137,6 +139,7 @@ class TestWonderJobs(unittest.TestCase):
             self.assertEqual(status, 202)
             result = self.finish(start["job_id"])
             self.assertEqual(result["state"], "failed")
+            self.assertEqual(result["stage"], "failed")
             self.assertIn("failed", result["message"])
             deadline = time.monotonic() + 3
             while main._wonder_busy.locked() and time.monotonic() < deadline:
@@ -160,6 +163,8 @@ class TestWonderJobs(unittest.TestCase):
             status, stored = self.api.call("GET", "/api/builds/" + str(result["build"]["build_id"]))
             self.assertEqual(status, 200)
             self.assertIn(step_writer.FALLBACK_NOTE, stored["booklet"]["notes"])
+            self.assertEqual(stored["step_words"], "binbuild")
+            self.assertEqual(result["build"]["step_words"], "binbuild")
 
     def test_missing_key_is_a_fast_503_and_releases_lock(self):
         with mock.patch.object(main.WonderClient, "from_env", side_effect=WonderError("no Meta Model API key")):

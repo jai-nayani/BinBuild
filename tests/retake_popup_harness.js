@@ -106,6 +106,16 @@ function parsePage(html) {
 
 function walk(el, fn) { fn(el); el.children.forEach((c) => walk(c, fn)); }
 function find(el, test) { let hit = null; walk(el, (e) => { if (!hit && test(e)) { hit = e; } }); return hit; }
+function trackerSnapshot(host) {
+  const rows = [];
+  walk(host, (e) => {
+    if (e.attrs['data-state']) {
+      rows.push({ state: e.attrs['data-state'], label: e.children[1].children[0].textContent,
+                  detail: e.children[1].children[1].textContent });
+    }
+  });
+  return rows;
+}
 
 const root = parsePage(fs.readFileSync(path.join(APP, 'index.html'), 'utf8'));
 const byId = (id) => find(root, (e) => e.id === id); // the first in document order, as a browser does
@@ -136,6 +146,7 @@ class FakeXHR {
   send(body) {
     const p = this.url.replace(/^https?:\/\/[^/]+/, '');
     uploads.push({ method: this.method, path: p, status: byId('status').textContent,
+                   tracker: trackerSnapshot(byId('identify-tracker')),
                    files: body && body.entries ? body.entries.map((e) => e[2]) : [],
                    sources: body && body.entries ? body.entries.map((e) => e[1].name) : [],
                    json: typeof body === 'string' ? body : null });
@@ -155,11 +166,13 @@ class FakeXHR {
     } else if (p === '/api/inventory/batch') {
       reply = [201, { batch_id: 'b1', ready: failing.length === 0, retake: failing.map((v) => notices[v]) }];
     } else if (/\/classify\?segmenter=stub$/.test(p) && scenario.identify_flow) {
-      reply = [200, { pieces: 2, detections: [] }];
+      reply = [200, scenario.identify_flow.stub_body || { pieces: 2, detections: [],
+        run: { calls: [{ seconds: 1.2 }, { seconds: 2.3 }] } }];
     } else if (/\/classify\?segmenter=sam$/.test(p) && scenario.identify_flow) {
       reply = scenario.identify_flow.sam_status
         ? [scenario.identify_flow.sam_status, { detail: 'SAM service unavailable' }]
-        : [200, { pieces: 2, detections: [], run: { sam_pass: { masks: 2, points: 2, sam: { seconds: 1.2 } } } }];
+        : [200, scenario.identify_flow.sam_body || { pieces: 2, detections: [],
+          run: { sam_pass: { masks: 2, points: 2, sam: { seconds: 1.2 }, spark_tiles: { seconds: 4.5 } } } }];
     } else if (/\/classify(?:\?.*)?$/.test(p) && scenario.identify) {
       reply = [scenario.identify, { detail: 'this calls a paid API, so on the public demo it needs the access key' }];
     } else if (p === '/api/inventory/summary') {
@@ -289,8 +302,10 @@ if (scenario.identify_flow) {
   byId('identify-btn').click();
   ui.identify_flow = { view: visible(), status: byId('check-status').textContent,
                        caption: byId('check-caption').textContent,
+                       tracker: trackerSnapshot(byId('identify-tracker')),
+                       review_tracker: trackerSnapshot(byId('check-identify-tracker')),
                        requests: uploads.filter((u) => /\/classify\?/.test(u.path))
-                         .map((u) => ({ path: u.path, status: u.status })) };
+                         .map((u) => ({ path: u.path, status: u.status, tracker: u.tracker })) };
 }
 const textsOf = (rootEl) => { const out = []; walk(rootEl, (e) => { if (e.textContent) { out.push(e.textContent); } }); return out; };
 const buttonsIn = (rootEl) => { const out = []; walk(rootEl, (e) => { if (e.tagName === 'BUTTON') { out.push(e); } }); return out; };
@@ -298,6 +313,11 @@ const reviewSnapshot = () => ({
   view: visible(),
   status: byId('check-status').textContent,
   caption: byId('check-caption').textContent,
+  model: shown('check-model') ? byId('check-model-label').textContent : null,
+  masks_visible: shown('check-outlines'), dots_visible: shown('check-dots'),
+  toggle: shown('mask-toggle') ? byId('mask-toggle').textContent : null,
+  photo_expanded: byId('check-photo').classList.contains('expanded'),
+  outlines: byId('check-outlines').children.map((p) => ({ transform: p.attrs.transform, delay: p.style.animationDelay })),
   groups: byId('check-list').children.map((g) => ({
     texts: textsOf(g), buttons: buttonsIn(g).map((b) => b.textContent),
   })),
@@ -319,6 +339,15 @@ if (scenario.use_sample) {
   if (scenario.try_own_pieces) {
     byId('confirmed-next-btn').click();
     ui.try_own_pieces = { view: visible(), status: byId('status').textContent };
+  }
+  if (scenario.review_visuals) {
+    ui.masks = reviewSnapshot();
+    byId('mask-toggle').click();
+    ui.dots = reviewSnapshot();
+    byId('check-img').click();
+    ui.enlarged = reviewSnapshot();
+    byId('check-img').click();
+    ui.shrunk = reviewSnapshot();
   }
 }
 if (scenario.review_actions) {
@@ -376,7 +405,7 @@ if (scenario.open_builds) {
       const timer = timers[nextTimer++];
       const before = status.textContent;
       timer.fn();
-      progress.push({ delay: timer.ms, before, after: status.textContent });
+      progress.push({ delay: timer.ms, before, after: status.textContent, tracker: trackerSnapshot(wonder) });
     }
     const links = [];
     walk(wonder, (e) => { if (e.tagName === 'A') { links.push(e); } });
@@ -389,7 +418,8 @@ if (scenario.open_builds) {
       ({ tag: e.tagName, open: e.getAttribute('open') !== null }));
     if (scenario.wonder_job.open_link && links.length) {
       links[0].click();
-      ui.wonder.booklet = { view: visible(), title: byId('booklet-title').textContent, frame: byId('booklet-frame').src };
+      ui.wonder.booklet = { view: visible(), title: byId('booklet-title').textContent, frame: byId('booklet-frame').src,
+                            chips: textsOf(byId('booklet-models')) };
       byId('booklet-back-btn').click();
       ui.wonder.after_back = visible();
     }
@@ -398,6 +428,7 @@ if (scenario.open_builds) {
     carousel.scrollLeft = scenario.carousel_scroll || 0;
     carousel.children[scenario.tap_card].click();
     ui.booklet = { view: visible(), title: byId('booklet-title').textContent, frame: byId('booklet-frame').src,
+                   chips: textsOf(byId('booklet-models')),
                    requests: uploads.slice(-1).map((u) => u.method + ' ' + u.path + ' ' + (u.json || '')) };
     byId('booklet-back-btn').click();
     ui.after_booklet_back = { view: visible(), scroll_left: carousel.scrollLeft,

@@ -7,6 +7,7 @@
  * so a redeploy shows up on the next load.
  */
 var CACHE_NAME = 'binbuild-v17';
+// v17 UI: model trackers, SAM masks and booklet attribution.
 var SHELL = [
   './',
   './index.html',
