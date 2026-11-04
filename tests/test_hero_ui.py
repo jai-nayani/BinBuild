@@ -256,8 +256,8 @@ class TestBehaviour(unittest.TestCase):
         for scenario in ({}, {"fail": ["right"]}, {"identify": 401}):
             requests = play(**scenario)["requests"]
             self.assertFalse([r for r in requests if "wonder" in r], scenario)
-            self.assertEqual([r for r in requests if r.endswith("/classify")],
-                             ["POST /api/inventory/batch/b1/classify"] if scenario.get("identify") else [])
+            self.assertEqual([r for r in requests if "/classify" in r],
+                             ["POST /api/inventory/batch/b1/classify?segmenter=stub"] if scenario.get("identify") else [])
 
 
 if __name__ == "__main__":

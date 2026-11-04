@@ -171,7 +171,7 @@ class TestCarouselInTheApp(unittest.TestCase):
         self.assertIn('POST /api/builds {"set":"guitar"}', ui["booklet"]["requests"])
         self.assertEqual(ui["after_booklet_back"], {"view": ["build-view"], "scroll_left": 240,
                                                     "focused_card": "guitar"})
-        self.assertFalse([r for r in result["requests"] if "wonder" in r or r.endswith("/classify")])
+        self.assertFalse([r for r in result["requests"] if "wonder" in r or "/classify" in r])
 
     def test_empty_bin_has_no_cards(self):
         ui = play(open_builds=True)["ui"]

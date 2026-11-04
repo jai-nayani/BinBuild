@@ -133,7 +133,8 @@ class FakeXHR {
   setRequestHeader() {}
   send(body) {
     const p = this.url.replace(/^https?:\/\/[^/]+/, '');
-    uploads.push({ method: this.method, path: p, files: body && body.entries ? body.entries.map((e) => e[2]) : [],
+    uploads.push({ method: this.method, path: p, status: byId('status').textContent,
+                   files: body && body.entries ? body.entries.map((e) => e[2]) : [],
                    sources: body && body.entries ? body.entries.map((e) => e[1].name) : [],
                    json: typeof body === 'string' ? body : null });
     let reply;
@@ -147,7 +148,13 @@ class FakeXHR {
       reply = [201, scenario.build_reply || { booklet_url: '/api/builds/7/booklet', steps: 5 }];
     } else if (p === '/api/inventory/batch') {
       reply = [201, { batch_id: 'b1', ready: failing.length === 0, retake: failing.map((v) => notices[v]) }];
-    } else if (/\/classify$/.test(p) && scenario.identify) {
+    } else if (/\/classify\?segmenter=stub$/.test(p) && scenario.identify_flow) {
+      reply = [200, { pieces: 2, detections: [] }];
+    } else if (/\/classify\?segmenter=sam$/.test(p) && scenario.identify_flow) {
+      reply = scenario.identify_flow.sam_status
+        ? [scenario.identify_flow.sam_status, { detail: 'SAM service unavailable' }]
+        : [200, { pieces: 2, detections: [], run: { sam_pass: { masks: 2, points: 2, sam: { seconds: 1.2 } } } }];
+    } else if (/\/classify(?:\?.*)?$/.test(p) && scenario.identify) {
       reply = [scenario.identify, { detail: 'this calls a paid API, so on the public demo it needs the access key' }];
     } else if (p === '/api/inventory/summary') {
       reply = [200, { total_pieces: 50 }];
@@ -159,6 +166,9 @@ class FakeXHR {
     } else if (p === '/api/inventory/batch/sample1/review' && this.method === 'POST') {
       reply = [200, scenario.review_reply || { batch: { id: 'sample1', status: 'classified' },
                       detections: [], pieces: 50, photos_ready: true }];
+    } else if (p === '/api/inventory/batch/b1/review' && scenario.identify_flow) {
+      reply = [200, scenario.identify_flow.review || { batch: { id: 'b1', status: 'classified' },
+                      detections: [], pieces: 2, photos_ready: true, count_photo: null }];
     } else if (p === '/api/inventory/batch/sample1/review') {
       reply = [200, scenario.review || { batch: { id: 'sample1', status: 'classified', classifier: 'sample: the kit batch, pre-computed' },
                       detections: [], pieces: 50, photos_ready: true, count_photo: null }];
@@ -267,6 +277,13 @@ if (scenario.identify) {
   byId('sample-bin-btn').click();
   ui.view_after_sample = visible();
   ui.check_title_after_sample = byId('check-title').textContent;
+}
+if (scenario.identify_flow) {
+  byId('identify-btn').click();
+  ui.identify_flow = { view: visible(), status: byId('check-status').textContent,
+                       caption: byId('check-caption').textContent,
+                       requests: uploads.filter((u) => /\/classify\?/.test(u.path))
+                         .map((u) => ({ path: u.path, status: u.status })) };
 }
 const textsOf = (rootEl) => { const out = []; walk(rootEl, (e) => { if (e.textContent) { out.push(e.textContent); } }); return out; };
 const buttonsIn = (rootEl) => { const out = []; walk(rootEl, (e) => { if (e.tagName === 'BUTTON') { out.push(e); } }); return out; };

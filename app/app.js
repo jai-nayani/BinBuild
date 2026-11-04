@@ -89,7 +89,7 @@ var ACCESS_KEY = (function () {
     { key: 'left', label: 'side 4 (left)', hint: 'Last one: the left side.' },
   ];
   var UPLOAD_TIMEOUT_MS = 120000;
-  var IDENTIFY_TIMEOUT_MS = 240000;
+  var IDENTIFY_TIMEOUT_MS = 115000;
   var HEALTH_TIMEOUT_MS = 4000;
   var BUILD_TIMEOUT_MS = 30000;
   var WONDER_TIMEOUT_MS = 15 * 60000;  // up to 5 tries of about 2 minutes each
@@ -206,7 +206,7 @@ var ACCESS_KEY = (function () {
     uploadBtn.disabled = !full || uploading;
     uploadBtn.textContent = uploading ? 'Checking the photos…' : 'Check my 5 photos (' + filled() + '/5)';
     identifyBtn.disabled = busy || !(batch && batch.ready); // Next: only once all 5 photos passed the check
-    identifyBtn.textContent = busy ? 'Identifying… (about a minute)' : 'Next: identify the pieces';
+    identifyBtn.textContent = busy ? 'Identifying…' : 'Next: identify the pieces';
     $('finished-btn').disabled = uploading || busy || !!batch;
   }
 
@@ -403,23 +403,41 @@ var ACCESS_KEY = (function () {
   identifyBtn.addEventListener('click', function () {
     if (!batch || !batch.ready || busy) { return; }
     busy = true;
-    setStatus('Spark is looking at the pieces… this takes about a minute. Keep the pieces where they are.');
+    setStatus('Spark is finding the pieces…');
     render();
-    post('/api/inventory/batch/' + encodeURIComponent(batch.id) + '/classify', null, IDENTIFY_TIMEOUT_MS,
+    var classify = '/api/inventory/batch/' + encodeURIComponent(batch.id) + '/classify';
+    post(classify + '?segmenter=stub', null, IDENTIFY_TIMEOUT_MS,
       function (xhr, body, failure) {
-        busy = false;
         if (!failure && xhr.status === 200 && body) {
-          var found = batch.id;
-          uploaded.push({ batchId: batch.id, photos: 5, pieces: body.pieces });
-          slots.forEach(function (photo) { if (photo) { URL.revokeObjectURL(photo.url); } });
-          slots = VIEWS.map(function () { return null; });
-          batch = null;
-          setStatus('✓ Found ' + body.pieces + ' pieces (' + countByFamily(body.detections) + '). Check them and add them ' +
-            'to your inventory (Finished lists every batch), then sweep these pieces aside and snap the next handful.', 'ok');
-          render();
-          openReview(found, { text: '✓ Spark found ' + body.pieces + ' pieces. Check them, then add them to your inventory.', kind: 'ok' });
+          var wholePhoto = body;
+          setStatus('SAM 3.1 is cutting out each piece…');
+          post(classify + '?segmenter=sam', null, IDENTIFY_TIMEOUT_MS, function (samXhr, samBody, samFailure) {
+            var result = wholePhoto;
+            var note;
+            if (!samFailure && samXhr.status === 200 && samBody) {
+              result = samBody;
+              var pass = samBody.run && samBody.run.sam_pass;
+              note = pass
+                ? 'SAM 3.1 cut out ' + pass.masks + ' of ' + pass.points + ' pieces in ' + pass.sam.seconds + ' s.'
+                : 'The pieces are ready to check.';
+            } else {
+              note = "SAM 3.1 failed, so these are Spark's whole-photo pieces: " +
+                (samFailure || detailOf(samXhr, samBody));
+            }
+            busy = false;
+            var found = batch.id;
+            uploaded.push({ batchId: found, photos: 5, pieces: result.pieces });
+            slots.forEach(function (photo) { if (photo) { URL.revokeObjectURL(photo.url); } });
+            slots = VIEWS.map(function () { return null; });
+            batch = null;
+            setStatus(note, samFailure || samXhr.status !== 200 ? 'error' : 'ok');
+            render();
+            openReview(found, { text: note, kind: samFailure || samXhr.status !== 200 ? 'error' : 'ok' });
+          });
           return;
-        } else if (!failure && xhr.status === 422 && body && body.retake && body.retake.length) {
+        }
+        busy = false;
+        if (!failure && xhr.status === 422 && body && body.retake && body.retake.length) {
           batch.ready = false;
           batch.retake = body.retake;
           setStatus('Spark could not use ' + (body.retake.length === 1 ? 'one photo' : body.retake.length + ' photos') +
@@ -608,7 +626,7 @@ var ACCESS_KEY = (function () {
     var photo = review.photo;
     var outlined = kept.some(function (d) { return d.region && d.region.mask && d.region.mask.path; });
     var caption = outlined
-      ? 'Each outline is one piece, cut out by SAM. Tap a dot or a row to see which is which.'
+      ? 'Each outline is one piece, cut out by SAM 3.1. Tap a dot or a row to see which is which.'
       : 'Each dot is one piece Spark found. Tap a dot or a row to see which is which.';
     box.innerHTML = '';
     svg.innerHTML = '';
