@@ -251,3 +251,95 @@ footer { text-align: center; color: var(--muted); font-size: 12px; padding: 8px 
   .hero-art .brick { animation: none; }
   .btn, .panel { transition: none; }
 }
+
+/* --- v9 look: one finish over every screen (visual only) -------------------------
+ * Added on top of the rules above; nothing here changes what a screen does.
+ * Mask paths are placed with an SVG transform attribute, so nothing below may
+ * give them a CSS transform: their animation changes colour and opacity only. */
+
+:root {
+  --shadow: 0 1px 0 rgba(60, 45, 0, 0.04), 0 10px 24px -16px rgba(60, 45, 0, 0.38);
+  --ai: linear-gradient(135deg, #1e66d0 0%, #5b3fe0 100%);
+  --stud: rgba(120, 100, 40, 0.075);
+}
+body { background-color: var(--bg); background-image: radial-gradient(var(--stud) 1.6px, transparent 1.9px); background-size: 20px 20px; }
+.card { border-color: #ebe6da; border-radius: 18px; box-shadow: var(--shadow); }
+.card h2 { font-size: 20px; letter-spacing: -0.2px; }
+
+/* header: a yellow plate with studs */
+#app-header {
+  background-color: var(--yellow);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.34) 0 4px, rgba(0, 0, 0, 0.06) 4.6px 5.4px, transparent 5.8px);
+  background-size: 26px 26px; background-position: right 4px center; background-repeat: repeat-x;
+}
+#home-btn { position: relative; padding: 4px 10px; margin-left: -10px; border-radius: 10px; background: var(--yellow); }
+
+/* buttons press like bricks */
+.btn { transition: transform 0.08s ease, box-shadow 0.08s ease; }
+.btn-primary { box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.14), 0 8px 16px -10px rgba(170, 125, 0, 0.75); }
+.btn-done { box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18), 0 8px 16px -10px rgba(20, 100, 50, 0.8); }
+.btn-secondary { background: #f2eee3; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.06); }
+.btn-primary:active:not(:disabled), .btn-done:active:not(:disabled), .btn-secondary:active:not(:disabled) {
+  transform: translateY(2px); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.14);
+}
+.small { border-radius: 999px; padding: 8px 14px; background: #fff; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.05); }
+
+/* hero */
+.hero-title { font-size: 52px; letter-spacing: -1.6px; }
+.powered-label { margin: 2px 0 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.powered { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.powered li { padding: 6px 11px; border-radius: 999px; background: #fff; border: 1px solid #e6e0d2; font-size: 12.5px; color: var(--muted); box-shadow: var(--shadow); }
+.powered b { font-weight: 800; background: var(--ai); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.beats li { border-color: #ebe6da; box-shadow: var(--shadow); }
+
+/* capture: the next photo to take glows */
+.panel.next { box-shadow: 0 0 0 4px rgba(255, 213, 0, 0.45); }
+
+/* model labels: one look everywhere */
+.model-chip, #check-model-label {
+  display: inline-block; background: var(--ai); color: #fff; font-size: 11.5px; font-weight: 700; line-height: 1.35;
+  padding: 4px 10px; border-radius: 999px; box-shadow: 0 6px 12px -8px rgba(60, 40, 200, 0.8);
+}
+
+/* the tracker: a stepper, the active step pulses */
+.model-tracker { padding: 14px 14px 8px; background: #fff; border: 1px solid #e6e0d2; border-radius: 16px; box-shadow: var(--shadow); }
+.tracker-step { position: relative; gap: 12px; padding: 2px 0 14px; font-size: 14.5px; }
+.tracker-step:last-child { padding-bottom: 6px; }
+.tracker-step:not(:last-child)::before { content: ""; position: absolute; left: 11px; top: 28px; bottom: 2px; width: 2px; border-radius: 2px; background: #e6e0d2; }
+.tracker-step.done:not(:last-child)::before { background: var(--green); }
+.tracker-mark {
+  width: 24px; height: 24px; align-self: flex-start; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; border: 2px solid #d9d2c1; background: #fff; color: transparent; font-size: 13px; line-height: 1;
+}
+.tracker-step.done .tracker-mark { background: var(--green); border-color: var(--green); color: #fff; }
+.tracker-step.failed .tracker-mark { background: var(--red); border-color: var(--red); color: #fff; }
+.tracker-step.active .tracker-mark { border-color: var(--blue); background: radial-gradient(circle, var(--blue) 0 4px, #fff 4.6px); animation: tracker-pulse 1.4s ease-out infinite; }
+@keyframes tracker-pulse { 0% { box-shadow: 0 0 0 0 rgba(30, 102, 208, 0.45); } 100% { box-shadow: 0 0 0 9px rgba(30, 102, 208, 0); } }
+.tracker-label { color: var(--ink); font-weight: 700; }
+.tracker-step.waiting .tracker-label { color: var(--muted); font-weight: 600; }
+.tracker-copy small { color: var(--muted); font-variant-numeric: tabular-nums; }
+.tracker-step.done .tracker-copy small { color: var(--green); font-weight: 600; }
+
+/* review: a framed photo, masks that flash in as SAM cuts each piece */
+.photo-wrap img { max-height: 40vh; border-radius: 14px; box-shadow: 0 12px 26px -16px rgba(0, 0, 0, 0.7); }
+.outlines path { fill: rgba(255, 213, 0, 0.34); stroke: #fff; stroke-width: 2.25; animation-name: mask-flash; animation-duration: 0.6s; animation-fill-mode: backwards; }
+@keyframes mask-flash { 0% { opacity: 0; fill: rgba(255, 255, 255, 0.95); } 45% { opacity: 1; fill: rgba(255, 213, 0, 0.85); } 100% { opacity: 1; fill: rgba(255, 213, 0, 0.34); } }
+.mask-toggle { padding: 6px 14px; border-radius: 999px; background: #fff; border: 1px solid #e6e0d2; color: var(--blue); font-size: 13px; font-weight: 700; box-shadow: var(--shadow); }
+.piece-group, .checked-pieces { border-color: #ebe6da; border-radius: 14px; box-shadow: var(--shadow); }
+
+/* ideas: a swipeable row like the book carousel */
+.idea-cards { display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding: 4px 2px 14px; scrollbar-width: none; }
+.idea-cards::-webkit-scrollbar { display: none; }
+.idea-card { flex: 0 0 84%; scroll-snap-align: center; border-color: #ebe6da; border-radius: 18px; box-shadow: var(--shadow); }
+.idea-card h4 { font-size: 20px; font-weight: 800; letter-spacing: -0.2px; margin: 10px 0 6px; }
+.idea-card .build-cover, .build-card .build-cover { border-radius: 14px; padding: 6px; background: #faf8f2 radial-gradient(rgba(120, 100, 40, 0.09) 1.5px, transparent 1.8px) 0 0 / 16px 16px; }
+.build-card { border-width: 1px; border-color: #ebe6da; border-radius: 18px; box-shadow: var(--shadow); }
+
+/* every screen eases in */
+main > section:not(.hidden) { animation: view-in 0.28s ease-out backwards; }
+@keyframes view-in { from { opacity: 0; transform: translateY(8px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  main > section:not(.hidden), .tracker-step.active .tracker-mark, .outlines path { animation: none; }
+  .btn { transition: none; }
+}
