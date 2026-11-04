@@ -30,6 +30,7 @@ import urllib.request
 import uuid
 from contextlib import closing
 from pathlib import Path
+from unittest import mock
 
 from backend import booklet as bk
 from backend import build_plan as bp
@@ -37,7 +38,7 @@ from backend import inventory_db as db
 
 try:
     from PIL import Image
-    from backend import full_loop
+    from backend import full_loop, main
     from test_full_loop import KIT_ITEMS, seed
     HAVE_SERVER = True
 except ImportError:
@@ -323,6 +324,7 @@ class TestCloseUpApi(unittest.TestCase):
     def test_close_up_updates_the_piece_where_it_sits(self):
         before = self.label_of(self.unsure)
         status, body = self.reclassify(self.unsure)
+        self.assertEqual(main.make_spark.call_args, mock.call(80))
         self.assertEqual(status, 200, body)
         self.assertEqual(self.spark.calls, 1)
         after = body["detection"]

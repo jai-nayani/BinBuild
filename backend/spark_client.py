@@ -1,14 +1,19 @@
-"""Muse Spark client, through Baseten's OpenAI-compatible API only.
+"""Muse Spark on Meta's Responses API, with an optional Baseten backup.
 
-Base URL https://inference.baseten.co/v1, model meta-models/muse-spark-open-1026.
-The key comes from BASETEN_API_KEY in the environment, or else from the
-git-ignored .env in the repo root. It is held in memory only: never printed,
-logged, put in an error message or written anywhere. Standard library only.
+Default: muse-spark-1.3 at https://api.meta.ai/v1/responses, using
+META_MODEL_API_KEY (or MODEL_API_KEY). Backup: meta-models/muse-spark-open-1026
+at https://inference.baseten.co/v1, using BASETEN_API_KEY. BINBUILD_SPARK can
+select either provider alone. Keys are loaded through env_value and held in
+memory only: never printed, logged, included in errors or written anywhere.
+Standard library only.
 """
 
 import base64
+import copy
+import http.client
 import json
 import os
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -20,6 +25,9 @@ from . import inventory_vocab as vocab
 BASE_URL = "https://inference.baseten.co/v1"
 MODEL = "meta-models/muse-spark-open-1026"
 KEY_NAME = "BASETEN_API_KEY"
+META_BASE_URL = "https://api.meta.ai/v1"
+META_MODEL = "muse-spark-1.3"
+META_KEY_NAMES = ("META_MODEL_API_KEY", "MODEL_API_KEY")
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 RETRY_STATUS = {429, 500, 502, 503, 504}
 
@@ -184,22 +192,45 @@ class SparkReply:
 
 
 class SparkClient:
-    def __init__(self, api_key, base_url=BASE_URL, model=MODEL, timeout=300, retries=2):
+    default_base_url = BASE_URL
+    default_model = MODEL
+    key_names = (KEY_NAME,)
+
+    def __init__(self, api_key, base_url=None, model=None, timeout=300, retries=2):
         self._api_key = api_key
-        self.base_url = base_url.rstrip("/")
-        self.model = model
+        self.base_url = (base_url or self.default_base_url).rstrip("/")
+        self.model = model or self.default_model
         self.timeout = timeout
         self.retries = retries
 
     @classmethod
     def from_env(cls, env_file=ENV_FILE, **kwargs):
-        return cls(load_api_key(env_file), **kwargs)
+        if cls.key_names == (KEY_NAME,):
+            key = load_api_key(env_file)
+        else:
+            key = next((value for name in cls.key_names if (value := env_value(name, env_file))), "")
+            if not key:
+                raise SparkError("no Meta Model API key: set META_MODEL_API_KEY or MODEL_API_KEY")
+        return cls(key, **kwargs)
 
     def __repr__(self):
-        return f"SparkClient(model={self.model!r}, base_url={self.base_url!r})"
+        return f"{type(self).__name__}(model={self.model!r}, base_url={self.base_url!r})"
 
     def _scrub(self, text: str) -> str:
         return text.replace(self._api_key, "[key]") if self._api_key else text
+
+    def _http_detail(self, error):
+        try:
+            # Scrub before truncation, even when a key crosses the 500-byte edge.
+            detail = error.read(500 + len(self._api_key)).decode("utf-8", "replace")
+        except (OSError, ValueError, http.client.HTTPException) as err:
+            detail = f"could not read error body: {err}"
+        finally:
+            try:
+                error.close()
+            except (OSError, ValueError, http.client.HTTPException):
+                pass
+        return self._scrub(detail)[:500]
 
     def chat(self, messages, max_tokens=16000, temperature=0.0) -> SparkReply:
         body = json.dumps({
@@ -217,22 +248,25 @@ class SparkClient:
                     data = json.load(response)
                 break
             except urllib.error.HTTPError as err:
-                detail = self._scrub(err.read(500).decode("utf-8", "replace"))
-                err.close()
+                detail = self._http_detail(err)
                 if err.code in RETRY_STATUS and attempt < self.retries:
                     time.sleep(3 * 2 ** attempt)
                     continue
                 raise SparkError(f"HTTP {err.code} from Baseten: {detail}") from None
-            except (urllib.error.URLError, TimeoutError, ConnectionError) as err:
+            except (urllib.error.URLError, OSError, http.client.HTTPException) as err:
                 if attempt < self.retries:
                     time.sleep(3 * 2 ** attempt)
                     continue
                 reason = getattr(err, "reason", err)
                 raise SparkError(f"could not reach Baseten: {self._scrub(str(reason))}") from None
+            except (ValueError, UnicodeError) as err:
+                raise SparkError(f"unreadable response from Baseten: {self._scrub(str(err))}") from None
         try:
             choice = data["choices"][0]
             content = choice["message"].get("content") or ""
-        except (KeyError, IndexError, TypeError):
+            if not isinstance(content, str):
+                raise TypeError("content must be text")
+        except (KeyError, IndexError, TypeError, AttributeError):
             raise SparkError("unexpected response shape from Baseten") from None
         return SparkReply(content, choice.get("finish_reason") or "", data.get("usage") or {},
                           round(time.monotonic() - started, 1))
@@ -248,7 +282,10 @@ class SparkClient:
         reply = self.chat([{"role": "user", "content": content}], max_tokens=max_tokens)
         if reply.finish_reason == "length":
             raise SparkError(f"reply cut off at max_tokens={max_tokens} before the JSON was complete")
-        data = parse_json_reply(reply.content)
+        try:
+            data = parse_json_reply(reply.content)
+        except SparkError as err:
+            raise SparkError(self._scrub(str(err))) from None
         if not isinstance(data.get("pieces"), list):
             raise SparkError("reply JSON has no 'pieces' list")
         if not isinstance(data.get("checks"), list):
@@ -267,10 +304,214 @@ class SparkClient:
         reply = self.chat([{"role": "user", "content": content}], max_tokens=max_tokens)
         if reply.finish_reason == "length":
             raise SparkError(f"reply cut off at max_tokens={max_tokens} before the JSON was complete")
-        data = parse_json_reply(reply.content)
+        try:
+            data = parse_json_reply(reply.content)
+        except SparkError as err:
+            raise SparkError(self._scrub(str(err))) from None
         if not isinstance(data.get("tiles"), list):
             raise SparkError("reply JSON has no 'tiles' list")
         return data, reply
+
+
+class MetaSparkClient(SparkClient):
+    default_base_url = META_BASE_URL
+    default_model = META_MODEL
+    key_names = META_KEY_NAMES
+
+    def chat(self, messages, max_tokens=16000, temperature=0.0) -> SparkReply:
+        inputs = []
+        for message in messages:
+            content = message["content"]
+            if isinstance(content, str):
+                content = [{"type": "text", "text": content}]
+            parts = []
+            for part in content:
+                if part["type"] == "text":
+                    parts.append({"type": "output_text" if message["role"] == "assistant" else "input_text",
+                                  "text": part["text"]})
+                elif part["type"] == "image_url":
+                    image = part["image_url"]
+                    parts.append({"type": "input_image", "image_url": image["url"]})
+                else:
+                    raise SparkError("unsupported Spark input content type")
+            inputs.append({"type": "message", "role": message["role"], "content": parts})
+        body = json.dumps({"model": self.model, "input": inputs, "max_output_tokens": max_tokens,
+                           "temperature": temperature, "store": False}).encode()
+        started = time.monotonic()
+        for attempt in range(self.retries + 1):
+            request = urllib.request.Request(f"{self.base_url}/responses", data=body, method="POST",
+                headers={"Authorization": f"Bearer {self._api_key}", "Content-Type": "application/json"})
+            try:
+                with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                    data = json.load(response)
+                break
+            except urllib.error.HTTPError as err:
+                detail = self._http_detail(err)
+                if err.code in RETRY_STATUS and attempt < self.retries:
+                    time.sleep(3 * 2 ** attempt)
+                    continue
+                raise SparkError(f"HTTP {err.code} from Meta Model API: {detail}") from None
+            except (urllib.error.URLError, OSError, http.client.HTTPException) as err:
+                if attempt < self.retries:
+                    time.sleep(3 * 2 ** attempt)
+                    continue
+                raise SparkError(f"could not reach Meta Model API: {self._scrub(str(getattr(err, 'reason', err)))}") from None
+            except (ValueError, UnicodeError) as err:
+                raise SparkError(f"unreadable response from Meta Model API: {self._scrub(str(err))}") from None
+        try:
+            limited = data.get("status") == "incomplete" and (data.get("incomplete_details") or {}).get("reason") in (
+                "max_output_tokens", "max_tokens")
+            if data.get("status") in ("failed", "cancelled") or data.get("error"):
+                raise SparkError("Meta Model API did not complete the response")
+            content = data.get("output_text")
+            if not isinstance(content, str):
+                content = "".join(part["text"] for item in data.get("output", [])
+                                  if item.get("type") == "message" for part in item.get("content", [])
+                                  if part.get("type") == "output_text")
+            if not content and not limited:
+                raise SparkError("Meta Model API returned no output text")
+            return SparkReply(content, "length" if limited else "stop", data.get("usage") or {},
+                              round(time.monotonic() - started, 1))
+        except (KeyError, TypeError, AttributeError):
+            raise SparkError("unexpected response shape from Meta Model API") from None
+
+
+class FallbackSpark:
+    """A per-call deadline and transport/format fallback; never judge an answer."""
+
+    def __init__(self, primary, backup, budget):
+        self.primary, self.backup, self.budget = primary, backup, budget
+        self._records, self._lock = [], threading.Lock()
+
+    def __repr__(self):
+        return f"FallbackSpark(model={self.model!r}, budget={self.budget!r})"
+
+    def _scrub(self, text):
+        for client in (self.primary, self.backup):
+            if client is not None:
+                text = client._scrub(text)
+        return text
+
+    @property
+    def call_count(self):
+        with self._lock:
+            return len(self._records)
+
+    @property
+    def model(self):
+        if self.primary is None:
+            return self.backup.model
+        with self._lock:
+            fallbacks, count = sum(r["fallback"] for r in self._records), len(self._records)
+        if fallbacks:
+            return f"{self.primary.model} + backup {self.backup.model} ({fallbacks} of {count} calls)"
+        return self.primary.model
+
+    def report(self, since=0):
+        with self._lock:
+            records = self._records[since:]
+            return {"answered_by": [r["answered_by"] for r in records if r["answered_by"] is not None],
+                    "fallbacks": sum(r["fallback"] for r in records),
+                    "reasons": [r["reason"] for r in records if r["reason"]]}
+
+    @property
+    def calls(self):
+        with self._lock:
+            return [dict(r) for r in self._records]
+
+    def _call(self, method, *args, **kwargs):
+        started = time.monotonic()
+        reason = "Meta Model API key missing" if self.primary is None else ""
+        fallback = False
+
+        def invoke(client, timeout):
+            # Parallel contact sheets must not change one another's timeouts.
+            local = copy.copy(client)
+            local.timeout, local.retries = timeout, 0
+            result = getattr(local, method)(*args, **kwargs)
+            reply = result if method == "chat" else result[1]
+            if reply.finish_reason == "length":
+                raise SparkError("reply cut off at the output-token limit")
+            if not isinstance(reply.content, str) or not reply.content.strip():
+                raise SparkError("Spark returned no readable output text")
+            if method == "chat":  # BinBuild's step-writer chats request JSON too.
+                parse_json_reply(reply.content)
+            return result
+
+        def record(model):
+            with self._lock:
+                self._records.append({"answered_by": model, "fallback": fallback, "reason": self._scrub(reason)})
+
+        def timed(result):
+            reply = result if method == "chat" else result[1]
+            total = SparkReply(reply.content, reply.finish_reason, reply.usage, round(time.monotonic() - started, 1))
+            return total if method == "chat" else (result[0], total)
+
+        if self.primary is not None:
+            try:
+                result = invoke(self.primary, min(60, self.budget))
+            except SparkError as err:
+                reason = self._scrub(str(err))
+                remaining = self.budget - (time.monotonic() - started)
+                if self.backup is None or remaining < 45:
+                    record(None)
+                    raise SparkError(reason) from None
+            else:
+                record(self.primary.model)
+                return timed(result)
+        else:
+            remaining = self.budget - (time.monotonic() - started)
+        fallback = True
+        try:
+            result = invoke(self.backup, remaining)
+        except SparkError as err:
+            reason += "; backup: " + self._scrub(str(err))
+            record(None)
+            raise SparkError(self._scrub(reason)) from None
+        record(self.backup.model)
+        return timed(result)
+
+    def identify_pieces(self, *args, **kwargs):
+        return self._call("identify_pieces", *args, **kwargs)
+
+    def name_tiles(self, *args, **kwargs):
+        return self._call("name_tiles", *args, **kwargs)
+
+    def chat(self, *args, **kwargs):
+        return self._call("chat", *args, **kwargs)
+
+
+def spark_configuration():
+    mode = os.environ.get("BINBUILD_SPARK", "").strip().lower() or "meta+baseten"
+    models = {"meta+baseten": [META_MODEL, MODEL], "meta": [META_MODEL], "baseten": [MODEL]}
+    if mode not in models:
+        raise SparkError("BINBUILD_SPARK must be meta+baseten, meta, or baseten")
+    return {"mode": mode, "models": models[mode]}
+
+
+def make_spark(budget):
+    mode = spark_configuration()["mode"]
+    if mode == "baseten":
+        return SparkClient.from_env(timeout=budget, retries=0)
+    if mode == "meta":
+        return MetaSparkClient.from_env(timeout=budget, retries=0)
+    primary = backup = None
+    try:
+        primary = MetaSparkClient.from_env(timeout=min(60, budget), retries=0)
+    except SparkError:
+        pass
+    try:
+        backup = SparkClient.from_env(timeout=budget, retries=0)
+    except SparkError:
+        if primary is None:
+            raise
+    return FallbackSpark(primary, backup, budget)
+
+
+def spark_report(client, count, since=0):
+    if isinstance(client, FallbackSpark):
+        return client.report(since)
+    return {"answered_by": [client.model] * count, "fallbacks": 0, "reasons": []}
 
 
 def tiles_by_number(data, count) -> dict:

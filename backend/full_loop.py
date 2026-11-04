@@ -145,7 +145,7 @@ def server(workdir, spark, sam=None):
     from .sam_client import SamError
     patches = [mock.patch.object(inventory_db, "DB_PATH", Path(workdir) / "binbuild.db"),
                mock.patch.object(main, "DATA_DIR", Path(workdir) / "data"),
-               mock.patch.object(main.SparkClient, "from_env", return_value=spark),
+               mock.patch.object(main, "make_spark", return_value=spark),
                mock.patch.object(main.SamClient, "from_env", **(
                    {"return_value": sam} if sam is not None else
                    {"side_effect": SamError("no Meta Model API key (test server)")}))]

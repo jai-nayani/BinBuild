@@ -375,7 +375,7 @@ class TestApi(unittest.TestCase):
         tmp = Path(cls.tmp.name)
         cls.patches = [mock.patch.object(db, "DB_PATH", tmp / "api.db"),
                        mock.patch.object(main, "DATA_DIR", tmp / "data"),
-                       mock.patch.object(main.SparkClient, "from_env", side_effect=AssertionError("Spark called"))]
+                       mock.patch.object(main, "make_spark", side_effect=AssertionError("Spark called"))]
         for p in cls.patches:
             p.start()
         cls.port = _free_port()

@@ -74,7 +74,8 @@ class TestGateAndSample(unittest.TestCase):
         self.ctx = full_loop.server(self.tmp.name, None)
         self.api = self.ctx.__enter__()
         self.paid = [mock.patch.object(cls, "from_env", side_effect=AssertionError(f"{cls.__name__} was created"))
-                     for cls in (main.SparkClient, main.SamClient, main.WonderClient)]
+                     for cls in (main.SamClient, main.WonderClient)]
+        self.paid.append(mock.patch.object(main, "make_spark", side_effect=AssertionError("Spark was created")))
         for p in self.paid:
             p.start()
 

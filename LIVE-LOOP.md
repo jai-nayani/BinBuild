@@ -13,6 +13,16 @@ checks image usability and performs a probabilistic physical-photo check; it
 cannot prove a photo is genuine. See [SAM-3-1.md](SAM-3-1.md) and
 [IMAGE-GUARDRAILS.md](IMAGE-GUARDRAILS.md).
 
+Spark now defaults to Muse Spark 1.3 on the Meta Model API, with Baseten's
+`meta-models/muse-spark-open-1026` as an automatic backup (`BINBUILD_SPARK=meta+baseten`).
+The primary gets at most 60 seconds without retries; transport errors,
+unreadable replies or cut-off output use the backup only when at least 45
+seconds remain in the call budget. A missing Meta key uses Baseten directly.
+Fallback never depends on an answer, including “no”, “uncertain” or a wrong
+piece count. Use `BINBUILD_SPARK=baseten` or `meta` for one provider alone.
+Reports name the actual answering models, including mixed contact sheets.
+Measured Spark numbers in these docs used Baseten's model unless stated otherwise.
+
 Wonder chooses the objects from the supported, confirmed shapes, colours and
 quantities. There is no fixed target menu. Each alternative is validated
 before its preview appears; rejected or repeated layouts are sent back for

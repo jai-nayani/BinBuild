@@ -78,6 +78,7 @@ class TestStepWriterJob(unittest.TestCase):
             self.assertEqual(build["step_words"], "muse-spark")
             book = build["booklet"]
             self.assertEqual(spark.calls, 1)
+            self.assertEqual(main.make_spark.call_args, mock.call(180))
             self.assertEqual(book["title"], "My Little House")
             self.assertTrue(all(step["text"] == "Place the pieces shown." for step in book["steps"]))
             self.assertIn(step_writer.SUCCESS_NOTE, book["notes"])

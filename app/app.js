@@ -141,6 +141,15 @@ var ACCESS_KEY = (function () {
 
   function identifyTracker() { renderTracker($('identify-tracker'), identifyProgress.steps); }
   function secondsText(value) { return typeof value === 'number' && isFinite(value) ? value + ' s' : ''; }
+  function sparkAnswer(report) {
+    var models = [];
+    (report && report.answered_by || []).forEach(function (model) {
+      var label = model === 'muse-spark-1.3' ? 'Muse Spark 1.3' : model === 'meta-models/muse-spark-open-1026'
+        ? report.fallbacks ? 'Baseten backup' : 'Muse Spark Open (Baseten)' : model;
+      if (models.indexOf(label) < 0) { models.push(label); }
+    });
+    return models.join(' + ');
+  }
   function doneIdentify(index, detail) {
     identifyProgress.steps[index].state = 'done';
     identifyProgress.steps[index].detail = detail;
@@ -454,7 +463,8 @@ var ACCESS_KEY = (function () {
           var calls = body.run && body.run.calls || [];
           var seconds = calls.filter(function (call) { return typeof call.seconds === 'number'; });
           doneIdentify(0, body.run ? [typeof body.pieces === 'number' ? 'found ' + body.pieces + ' pieces' : '',
-            seconds.length ? secondsText(Math.round(seconds.reduce(function (n, call) { return n + call.seconds; }, 0) * 10) / 10) : '']
+            seconds.length ? secondsText(Math.round(seconds.reduce(function (n, call) { return n + call.seconds; }, 0) * 10) / 10) : '',
+            sparkAnswer(body.run.spark)]
             .filter(Boolean).join(' · ') : 'already identified');
           identifyProgress.steps[1].state = 'active';
           identifyTracker();
@@ -468,7 +478,9 @@ var ACCESS_KEY = (function () {
               doneIdentify(1, !samBody.run ? 'already identified' : pass ? [
                 typeof pass.masks === 'number' && typeof pass.points === 'number' ? pass.masks + ' of ' + pass.points + ' cut out' : '',
                 secondsText(pass.sam && pass.sam.seconds)].filter(Boolean).join(' · ') : '');
-              doneIdentify(2, !samBody.run ? 'already identified' : secondsText(pass && pass.spark_tiles && pass.spark_tiles.seconds));
+              doneIdentify(2, !samBody.run ? 'already identified' : [
+                secondsText(pass && pass.spark_tiles && pass.spark_tiles.seconds), sparkAnswer(pass && pass.spark)]
+                .filter(Boolean).join(' · '));
               note = pass
                 ? 'SAM 3.1 cut out ' + pass.masks + ' of ' + pass.points + ' pieces' +
                   (secondsText(pass.sam && pass.sam.seconds) ? ' in ' + secondsText(pass.sam.seconds) : '') + '.'

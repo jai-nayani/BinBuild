@@ -68,6 +68,22 @@ class TestSamPhoneFlow(unittest.TestCase):
                    "sam_body": {"pieces": 2, "run": {"sam_pass": {"masks": 1, "points": 2}}}})
         self.assertEqual([s["detail"] for s in ui["tracker"]], ["found 2 pieces", "1 of 2 cut out", "Done"])
 
+    def test_tracker_names_the_actual_primary_backup_or_mixed_models(self):
+        meta, baseten = "muse-spark-1.3", "meta-models/muse-spark-open-1026"
+        for models, fallbacks, label in (([meta], 0, "Muse Spark 1.3"),
+                                         ([baseten], 1, "Baseten backup"),
+                                         ([meta, baseten], 1, "Muse Spark 1.3 + Baseten backup"),
+                                         ([baseten], 0, "Muse Spark Open (Baseten)")):
+            with self.subTest(models=models, fallbacks=fallbacks):
+                report = {"answered_by": models, "fallbacks": fallbacks, "reasons": []}
+                ui = play({"stub_body": {"pieces": 21, "run": {"calls": [{"seconds": 38}], "spark": report}},
+                           "sam_body": {"pieces": 21, "run": {"sam_pass": {
+                               "masks": 21, "points": 21, "sam": {"seconds": 1.2},
+                               "spark_tiles": {"seconds": 7}, "spark": report}}}})
+                self.assertEqual(ui["tracker"][0]["detail"], "found 21 pieces · 38 s · " + label)
+                self.assertEqual(ui["tracker"][1]["detail"], "21 of 21 cut out · 1.2 s")
+                self.assertEqual(ui["tracker"][2]["detail"], "7 s · " + label)
+
 
 class TestSamSplitApi(unittest.TestCase):
     @classmethod

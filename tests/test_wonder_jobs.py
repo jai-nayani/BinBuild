@@ -55,7 +55,7 @@ class TestWonderJobs(unittest.TestCase):
         self.env.start()
         self.client = mock.patch.object(main.WonderClient, "from_env", return_value=self.fake)
         self.client.start()
-        self.spark = mock.patch.object(main.SparkClient, "from_env", return_value=OfflineSpark())
+        self.spark = mock.patch.object(main, "make_spark", return_value=OfflineSpark())
         self.spark.start()
 
     def tearDown(self):
@@ -152,7 +152,7 @@ class TestWonderJobs(unittest.TestCase):
 
         fake = Scripted([reply(HOUSE, "Little house")])
         with mock.patch.object(main.WonderClient, "from_env", return_value=fake), \
-                mock.patch.object(main.SparkClient, "from_env", side_effect=SparkError("offline fake")), \
+                mock.patch.object(main, "make_spark", side_effect=SparkError("offline fake")), \
                 mock.patch.object(main.traceback, "print_exc") as logged:
             status, start = self.post()
             self.assertEqual(status, 202)

@@ -120,7 +120,8 @@ class TestOneUrl(unittest.TestCase):
             self.assertIn("<title>BinBuild</title>", page)
             self.assertEqual(api.call("GET", "/app.js", raw=True)[0], 200)
             self.assertEqual(api.call("GET", "/health"), (200, {"status": "ok", "service": "binbuild",
-                                                                "version": "0.1.0"}))
+                                                                "version": "0.1.0", "spark": {"mode": "meta+baseten",
+                                                                    "models": ["muse-spark-1.3", "meta-models/muse-spark-open-1026"]}}))
             self.assertEqual(api.call("GET", "/api/builds/options")[0], 200)
             for path in ("/", "/app.js", "/style.css", "/sw.js"):   # no stale page after a redeploy
                 with urllib.request.urlopen(api.base + path) as reply:

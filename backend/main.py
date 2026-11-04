@@ -54,7 +54,7 @@ from . import booklet, build_plan, design_ideas, guard, inventory_db, inventory_
 from .sam_client import SamClient, SamError
 from .wonder_client import WonderClient, WonderError
 from .segmenter import COUNT_VIEW, WholePhotoSegmenter
-from .spark_client import SparkClient, SparkError
+from .spark_client import FallbackSpark, SparkError, make_spark, spark_configuration, spark_report
 
 # One batch = one handful of pieces: top view + 4 sides, uploaded in this order.
 BATCH_VIEWS = ("top", "front", "right", "back", "left")
@@ -348,7 +348,7 @@ def create_app() -> FastAPI:
 
     @app.get("/health")
     async def health():
-        return {"status": "ok", "service": "binbuild", "version": "0.1.0"}
+        return {"status": "ok", "service": "binbuild", "version": "0.1.0", "spark": spark_configuration()}
 
     @app.post("/api/inventory/batch", status_code=201, dependencies=WRITE)
     def create_inventory_batch(photos: list[UploadFile] = File(...)):
@@ -503,14 +503,19 @@ def create_app() -> FastAPI:
                 except SamError as err:
                     raise HTTPException(503, f"SAM 3.1 is not set up: {err}")
             try:
-                spark = SparkClient.from_env(timeout=100, retries=0)
+                spark = make_spark(110)
+            except SparkError as err:
+                raise HTTPException(503, f"Spark is not set up: {err}") from None
+            try:
                 run = {}
                 if batch["status"] != "classified" or force:
                     run = inventory_pipeline.classify_batch(
                         conn, batch_id, _batch_dir(batch_id), WholePhotoSegmenter(), spark, context=context)
+                    run["spark"] = spark_report(spark, len(run["calls"]))
             except SparkError as err:
                 raise HTTPException(502, f"Spark failed: {err}")
             if sam is not None:
+                before = spark.call_count if isinstance(spark, FallbackSpark) else 0
                 try:
                     sam_run = inventory_pipeline.refine_with_sam(
                         conn, batch_id, _batch_dir(batch_id), sam, spark, context=context)
@@ -518,6 +523,7 @@ def create_app() -> FastAPI:
                     raise HTTPException(502, f"The SAM pass failed, so the whole-photo proposals are kept "
                                              f"for review: {err}")
                 sam_run["sam"].pop("recorded", None)
+                sam_run["spark"] = spark_report(spark, sam_run["spark_tiles"]["calls"], before)
                 run = {**run, "sam_pass": sam_run}
             return {"classified": True, "run": run, **inventory_db.batch_review(conn, batch_id),
                     **_photo_state(conn, batch_id)}
@@ -651,7 +657,7 @@ def create_app() -> FastAPI:
                                          "only an unsure piece gets a close-up retake")
         from . import inventory_pipeline  # needs Pillow; keep the rest of the app importable without it
         try:
-            spark = SparkClient.from_env()
+            spark = make_spark(80)
         except SparkError as err:
             raise HTTPException(503, f"Spark is not set up: {err}") from None
         try:
@@ -911,7 +917,7 @@ def create_app() -> FastAPI:
                     from . import step_writer
                     update(stage="writing", message="Muse Spark is writing the booklet's step words.")
                     try:
-                        spark = SparkClient.from_env(timeout=90, retries=0)
+                        spark = make_spark(180)
                         stored["booklet"] = step_writer.write_steps(stored["booklet"], target, spark)
                     except Exception:
                         traceback.print_exc()

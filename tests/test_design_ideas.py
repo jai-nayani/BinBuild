@@ -106,7 +106,7 @@ class TestInventoryIdeasApi(unittest.TestCase):
     def test_checked_previews_are_cached_and_selection_keeps_the_same_placements(self):
         jobs = StageJobs()
         for patcher in (mock.patch.object(main, "_wonder_jobs", jobs),
-                        mock.patch.object(main.SparkClient, "from_env", return_value=FakeSpark())):
+                        mock.patch.object(main, "make_spark", return_value=FakeSpark())):
             patcher.start()
             self.addCleanup(patcher.stop)
         job = self.start()
