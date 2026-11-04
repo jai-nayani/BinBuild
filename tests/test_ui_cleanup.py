@@ -26,6 +26,31 @@ class TestCleanPhoneFlow(unittest.TestCase):
         self.assertIn("One by one ▾", ui["groups"][2]["buttons"])
         self.assertFalse(any("Remove" in b for g in ui["groups"] for b in g["buttons"]))
 
+    def test_sample_labels_are_checked_without_unsure_badges_or_paid_retakes(self):
+        for count in (50, 7):
+            with self.subTest(count=count):
+                pieces = [detection(n, "brick", "brick", "1x2", "red", .4, n <= 9) for n in range(1, count + 1)]
+                body = review_body(pieces)
+                body["batch"]["classifier"] = "sample: labels checked in the Oct 28 review"
+                result = play(use_sample=True, review=body, review_visuals=True, open_one_by_one=True)
+                for snapshot in ("masks", "expanded_rows"):
+                    ui = result["ui"][snapshot]
+                    self.assertEqual(ui["folded"], [{"summary": f"✓ {count} pieces, checked in the Oct 28 review", "open": False}])
+                    self.assertEqual(len(ui["groups"]), 1, "every sample piece is inside the folded list")
+                    self.assertNotIn("not sure", ui["groups"][0]["texts"])
+                    self.assertFalse(any("Retake this piece" in b for b in ui["groups"][0]["buttons"]))
+                self.assertFalse(any("/reclassify" in request for request in result["requests"]))
+
+    def test_live_unsure_labels_still_have_badges_and_retakes_outside_the_fold(self):
+        pieces = [detection(n, "brick", "brick", "1x2", "red", .4, n == 1) for n in range(1, 4)]
+        ui = play(use_sample=True, review=review_body(pieces), review_visuals=True, open_one_by_one=True)["ui"]
+        for snapshot in ("masks", "expanded_rows"):
+            groups = ui[snapshot]["groups"]
+            self.assertEqual(ui[snapshot]["folded"], [{"summary": "✓ 2 pieces look right", "open": False}])
+            self.assertIn("not sure", groups[0]["texts"])
+            self.assertIn("📷 Retake this piece", groups[0]["buttons"])
+            self.assertEqual(len(groups), 2)
+
     def test_confirm_and_undo_send_the_same_accept_confirm_and_undo_requests(self):
         pieces = [detection(1, "brick", "brick", "1x2", "red", .9, False),
                   detection(2, "plate", "plate", "1x2", "blue", .9, False, status="corrected")]

@@ -358,6 +358,11 @@ if (scenario.use_sample) {
   }
   if (scenario.review_visuals) {
     ui.masks = reviewSnapshot();
+    if (scenario.open_one_by_one) {
+      const one = buttonsIn(byId('check-list')).find((b) => b.textContent === 'One by one ▾');
+      if (one) { one.click(); }
+      ui.expanded_rows = reviewSnapshot();
+    }
     byId('mask-toggle').click();
     ui.dots = reviewSnapshot();
     byId('check-img').click();

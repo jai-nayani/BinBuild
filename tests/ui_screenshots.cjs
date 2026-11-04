@@ -132,6 +132,8 @@ async function main() {
   samGate.resolve();
   await page.locator('#check-view').waitFor({ state: 'visible' });
   await page.locator('#check-outlines path').first().waitFor();
+  assert.equal(await page.locator('#check-list .badge.unsure').count(), 2, 'live uncertainty stays visible');
+  assert.equal(await page.getByRole('button', { name: '📷 Retake this piece', exact: true }).count(), 2);
   await shot('identify-finished', '#check-identify-tracker');
   await shot('review-live-fake-masks', '#check-photo');
   await page.locator('#mask-toggle').click();
@@ -171,6 +173,10 @@ async function main() {
   await page.goto(origin);
   await page.locator('#sample-link').click();
   await page.locator('#check-outlines path').first().waitFor();
+  assert.equal(await page.locator('#check-list .badge.unsure').count(), 0, 'sample labels were human checked');
+  assert.equal(await page.getByRole('button', { name: '📷 Retake this piece', exact: true }).count(), 0);
+  assert.equal(await page.locator('.checked-pieces > summary').textContent(),
+    '✓ ' + fixture.review.pieces + ' pieces, checked in the Oct 28 review');
   await shot('review-sample-masks', '#check-photo');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   assert.equal(await page.locator('#check-outlines path').first().evaluate(e => getComputedStyle(e).animationName), 'none');

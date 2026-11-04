@@ -665,15 +665,17 @@ var ACCESS_KEY = (function () {
 
     var list = $('check-list');
     list.innerHTML = '';
-    var unsure = kept.filter(function (d) { return d.unsure; });
-    var checked = kept.filter(function (d) { return !d.unsure; });
+    var unsure = kept.filter(function (d) { return !sample && d.unsure; });
+    var checked = kept.filter(function (d) { return sample || !d.unsure; });
     unsure.forEach(function (d) {
       list.appendChild(groupCard({ key: groupKey(d), first: d, items: [d] }, confirmed));
     });
     if (checked.length) {
       var folded = el('details', 'checked-pieces');
       if (review.checkedOpen) { folded.setAttribute('open', ''); }
-      folded.appendChild(el('summary', null, '✓ ' + plural(total(checked), 'piece looks', 'pieces look') + ' right'));
+      folded.appendChild(el('summary', null, sample
+        ? '✓ ' + plural(total(checked), 'piece', 'pieces') + ', checked in the Oct 28 review'
+        : '✓ ' + plural(total(checked), 'piece looks', 'pieces look') + ' right'));
       groupsOf(checked).forEach(function (g) { folded.appendChild(groupCard(g, confirmed)); });
       folded.addEventListener('toggle', function () { review.checkedOpen = folded.open; });
       list.appendChild(folded);
@@ -803,6 +805,7 @@ var ACCESS_KEY = (function () {
 
   function groupCard(g, readOnly) {
     var d = g.first;
+    var sample = (review.data.batch.classifier || '').indexOf('sample') === 0;
     var removed = d.status === 'rejected';
     var many = g.items.length > 1;
     var card = el('div', 'piece-group' + (review.selected === g.key ? ' sel' : '') + (removed ? ' removed' : ''));
@@ -813,7 +816,7 @@ var ACCESS_KEY = (function () {
     head.appendChild(el('span', null, total(g.items) + '× ' + pieceLabel(d)));
     if (d.status === 'corrected') { head.appendChild(el('span', 'badge fixed', 'fixed')); }
     if (d.source === 'manual') { head.appendChild(el('span', 'badge fixed', 'added by you')); }
-    if (!removed && g.items.some(function (item) { return item.unsure; })) {
+    if (!sample && !removed && g.items.some(function (item) { return item.unsure; })) {
       head.appendChild(el('span', 'badge unsure', 'not sure'));
     }
     head.addEventListener('click', function () { select(g.key); });
@@ -827,7 +830,7 @@ var ACCESS_KEY = (function () {
     } else {
       actions.appendChild(smallButton('Fix',
         function () { openEditor({ ids: ids(g.items), from: d }); }));
-      if (!many && d.unsure) {
+      if (!sample && !many && d.unsure) {
         actions.appendChild(smallButton('📷 Retake this piece', function () { startPieceRetake(d); }));
       }
     }
@@ -853,7 +856,7 @@ var ACCESS_KEY = (function () {
           row.appendChild(smallButton('↩ Put back', function () { setPieces([item.id], 'accepted'); }));
         } else {
           row.appendChild(smallButton('Fix', function () { openEditor({ ids: [item.id], from: item }); }));
-          if (item.unsure) {
+          if (!sample && item.unsure) {
             row.appendChild(smallButton('📷 Retake this piece', function () { startPieceRetake(item); }));
           }
         }
