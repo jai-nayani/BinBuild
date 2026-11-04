@@ -41,7 +41,7 @@
  * to the carousel on the same card.
  *
  * When the backend runs with BINBUILD_WONDER=1 (off by default), a
- * "Generate a new design" section follows the carousel. One tap is
+ * "Generate a new design" section precedes the carousel. One tap is
  * one generation (POST /api/builds/wonder): Muse Wonder designs from the
  * confirmed pieces, BinBuild's validator checks every proposal, and only a
  * design that passes is shown, with its parts and booklet; otherwise the
@@ -92,7 +92,7 @@ var ACCESS_KEY = (function () {
   var IDENTIFY_TIMEOUT_MS = 115000;
   var HEALTH_TIMEOUT_MS = 4000;
   var BUILD_TIMEOUT_MS = 30000;
-  var WONDER_TIMEOUT_MS = 15 * 60000;  // up to 5 tries of about 2 minutes each
+  var WONDER_POLL_MS = 4000;
 
   var slots = VIEWS.map(function () { return null; }); // confirmed { file, url } per view
   var pending = null;   // { file, url } under review, not yet in the batch
@@ -1105,8 +1105,11 @@ var ACCESS_KEY = (function () {
       buildCarousel = el('div', 'build-carousel');
       buildCarousel.id = 'build-carousel';
       bookletBuilds.forEach(function (o) { buildCarousel.appendChild(carouselCard(o)); });
+      if (body.wonder && body.wonder.enabled) {
+        list.appendChild(wonderSection(body.wonder, inv));
+        section(list, "From the kit's book");
+      }
       list.appendChild(buildCarousel);
-      if (body.wonder && body.wonder.enabled) { list.appendChild(wonderSection(body.wonder, inv)); }
     });
   }
 
@@ -1129,8 +1132,10 @@ var ACCESS_KEY = (function () {
     if (r.booklet_url) {
       var link = el('a', 'btn btn-done', '📖 Open the booklet' + (r.steps ? ' (' + r.steps + ' steps)' : ''));
       link.href = BACKEND_URL + r.booklet_url;
-      link.target = '_blank';
-      link.rel = 'noopener';
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        openWonderBooklet(r.title || 'New design', r.booklet_url);
+      });
       box.appendChild(link);
     }
     if (r.tries) {
@@ -1142,9 +1147,9 @@ var ACCESS_KEY = (function () {
 
   function wonderSection(w, inv) {
     var wrap = el('div', 'wonder');
-    section(wrap, '✨ New design from your pieces');
-    wrap.appendChild(el('p', 'note', 'Muse Wonder invents something new from all ' + inv.total_pieces +
-      ' of your confirmed pieces. BinBuild checks every design (only pieces you own, every piece held by studs) ' +
+    section(wrap, '✨ Design something new from my pieces');
+    wrap.appendChild(el('p', 'note', 'Muse Wonder invents something new using your confirmed pieces. ' +
+      'BinBuild checks every design (only pieces you own, every piece held by studs) ' +
       'before you see it. Each try takes about ' + Math.round(w.per_try.seconds / 60) + ' min and costs about $' +
       w.per_try.usd.toFixed(2) + '; if a design fails the check, Wonder tries again, up to ' + w.max_tries + ' tries.'));
     var pick = el('select', 'wtarget');
@@ -1167,24 +1172,64 @@ var ACCESS_KEY = (function () {
     return wrap;
   }
 
+  function openWonderBooklet(title, url) {
+    manualReturn = null;
+    $('booklet-title').textContent = title;
+    $('booklet-frame').src = BACKEND_URL + url;
+    show('booklet-view');
+  }
+
   function generateDesign(target, btn, pick, out, status) {
-    var started = Date.now();
     btn.disabled = true;
     pick.disabled = true;
-    var tick = setInterval(function () {
-      btn.textContent = 'Designing ' + target + '… ' + Math.round((Date.now() - started) / 1000) + ' s';
-    }, 1000);
-    setStatus('Muse Wonder is designing. Keep this screen open: it takes a minute or two, longer if it needs another try.', null, status);
-    request('POST', '/api/builds/wonder', { target: target }, WONDER_TIMEOUT_MS, function (xhr, body, failure) {
-      clearInterval(tick);
+    out.innerHTML = '';
+    btn.textContent = 'Designing ' + target + '…';
+    setStatus('Starting the design…', null, status);
+
+    function finish() {
       btn.disabled = false;
       pick.disabled = false;
       btn.textContent = '✨ Generate a new design';
-      if (!failure && xhr.status === 201 && body) {
-        setStatus('', null, status);
-        out.insertBefore(wonderResult(body), out.firstChild);
+    }
+
+    function poll(jobId) {
+      request('GET', '/api/builds/wonder/jobs/' + encodeURIComponent(jobId), null, BUILD_TIMEOUT_MS,
+        function (xhr, body, failure) {
+          if (failure || xhr.status !== 200 || !body) {
+            finish();
+            setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', status);
+          } else if (body.state === 'running') {
+            setStatus(body.message || 'Muse Wonder is designing…', null, status);
+            setTimeout(function () { poll(jobId); }, WONDER_POLL_MS);
+          } else if (body.state === 'done' && body.build) {
+            finish();
+            setStatus(body.message || '', null, status);
+            out.insertBefore(wonderResult(body.build), out.firstChild);
+          } else {
+            finish();
+            setStatus('✗ ' + (body.message || 'The design job could not be completed.'), 'error', status);
+          }
+        });
+    }
+
+    request('POST', '/api/builds/wonder', { target: target }, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
+      if (!failure && xhr.status === 202 && body && body.job_id) {
+        setStatus('Muse Wonder is designing…', null, status);
+        setTimeout(function () { poll(body.job_id); }, WONDER_POLL_MS);
       } else {
-        setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', status);
+        finish();
+        if (!failure && xhr.status === 401) {
+          setStatus('Designing a new model calls Muse Wonder, so the public demo needs the access key.', 'error', status);
+          var example = el('a', 'btn btn-secondary', 'See a recorded Wonder design');
+          example.href = BACKEND_URL + '/api/wonder/example';
+          example.addEventListener('click', function (event) {
+            event.preventDefault();
+            openWonderBooklet('Recorded Wonder design', '/api/wonder/example');
+          });
+          out.appendChild(example);
+        } else {
+          setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', status);
+        }
       }
     });
   }

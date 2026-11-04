@@ -126,6 +126,8 @@ const document = {
 const notices = scenario.notices;
 let failing = scenario.fail.slice();
 const uploads = [];
+let wonderPoll = 0;
+const timers = [];
 
 class FakeXHR {
   constructor() { this.upload = {}; this.status = 0; this.responseText = ''; }
@@ -144,6 +146,10 @@ class FakeXHR {
       reply = [200, scenario.reclassify_reply];
     } else if (p === '/api/builds/options' && scenario.build_options) {
       reply = [200, scenario.build_options];
+    } else if (p === '/api/builds/wonder' && this.method === 'POST' && scenario.wonder_job) {
+      reply = scenario.wonder_job.post || [202, { job_id: 'job-1' }];
+    } else if (/^\/api\/builds\/wonder\/jobs\//.test(p) && scenario.wonder_job) {
+      reply = scenario.wonder_job.polls[wonderPoll++] || [500, { detail: 'unexpected poll' }];
     } else if (p === '/api/builds' && this.method === 'POST') {
       reply = [201, scenario.build_reply || { booklet_url: '/api/builds/7/booklet', steps: 5 }];
     } else if (p === '/api/inventory/batch') {
@@ -204,7 +210,7 @@ const sandbox = {
   FormData: FakeFormData,
   URL: { createObjectURL: (f) => 'blob:' + f.name, revokeObjectURL() {} },
   fetch: () => Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) }),
-  setTimeout: () => 0,
+  setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; },
   clearTimeout() {},
   setInterval: () => 0,
   clearInterval() {},
@@ -338,6 +344,7 @@ if (scenario.open_builds) {
   const carousel = byId('build-carousel');
   ui.builds = {
     view: visible(), inventory_text: byId('build-inventory').textContent,
+    list_order: list.map((e) => ({ tag: e.tagName, className: e.className || '', text: e.textContent })),
     catalog_entries: list.filter((e) => /\b(option|mrow|chapter|build-section)\b/.test(e.className || '')).length,
     buttons: list.filter((e) => e.tagName === 'BUTTON').map((e) => e.textContent),
     carousel: carousel ? {
@@ -349,6 +356,32 @@ if (scenario.open_builds) {
       list_texts: textsOf(byId('build-list')),
     } : null,
   };
+  if (scenario.wonder_job) {
+    const wonder = find(byId('build-list'), (e) => e.className === 'wonder');
+    const pick = find(wonder, (e) => e.tagName === 'SELECT');
+    pick.value = scenario.wonder_job.target || 'a simple house';
+    const button = buttonsIn(wonder).find((b) => b.textContent === '✨ Generate a new design');
+    const status = find(wonder, (e) => e.className === 'status');
+    let nextTimer = timers.length;
+    button.click();
+    const progress = [];
+    for (let i = 0; i < 12 && nextTimer < timers.length; i++) {
+      const timer = timers[nextTimer++];
+      const before = status.textContent;
+      timer.fn();
+      progress.push({ delay: timer.ms, before, after: status.textContent });
+    }
+    const links = [];
+    walk(wonder, (e) => { if (e.tagName === 'A') { links.push(e); } });
+    ui.wonder = { progress, status: status.textContent, button_disabled: button.disabled,
+                  text: textsOf(wonder), links: links.map((e) => ({ text: e.textContent, href: e.href })) };
+    if (scenario.wonder_job.open_link && links.length) {
+      links[0].click();
+      ui.wonder.booklet = { view: visible(), title: byId('booklet-title').textContent, frame: byId('booklet-frame').src };
+      byId('booklet-back-btn').click();
+      ui.wonder.after_back = visible();
+    }
+  }
   if (scenario.tap_card !== undefined && carousel) {
     carousel.scrollLeft = scenario.carousel_scroll || 0;
     carousel.children[scenario.tap_card].click();
