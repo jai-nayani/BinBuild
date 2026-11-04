@@ -93,6 +93,12 @@ class StepWriterTest(unittest.TestCase):
         self.assertEqual(result["steps"][0]["text"], self.book["steps"][0]["text"])
         self.assertEqual(result["steps"][1]["text"], data["steps"][1]["text"])
 
+    def test_round_parts_are_not_renamed_as_wheels(self):
+        data = good_reply()
+        data["steps"][0]["text"] = "Place the red brick as a wheel."
+        result = self.write(FakeSpark(data))
+        self.assertEqual(result["steps"][0]["text"], self.book["steps"][0]["text"])
+
     def test_multiword_colors_do_not_count_as_separate_colors(self):
         self.assertEqual(step_writer._colors_in("a dark blue plate"), {"dark_blue"})
         self.assertEqual(step_writer._colors_in("a light bluish gray brick"), {"light_bluish_gray"})

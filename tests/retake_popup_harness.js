@@ -144,9 +144,9 @@ class FakeXHR {
     const reclassifyMatch = p.match(/^\/api\/inventory\/batch\/([^/]+)\/pieces\/(\d+)\/reclassify$/);
     if (reclassifyMatch && scenario.reclassify_reply) {
       reply = [200, scenario.reclassify_reply];
-    } else if (p === '/api/builds/options' && scenario.build_options) {
+    } else if (p.split('?')[0] === '/api/builds/options' && scenario.build_options) {
       reply = [200, scenario.build_options];
-    } else if (p === '/api/builds/wonder' && this.method === 'POST' && scenario.wonder_job) {
+    } else if (/^\/api\/builds\/wonder(?:\/ideas)?$/.test(p) && this.method === 'POST' && scenario.wonder_job) {
       reply = scenario.wonder_job.post || [202, { job_id: 'job-1' }];
     } else if (/^\/api\/builds\/wonder\/jobs\//.test(p) && scenario.wonder_job) {
       reply = scenario.wonder_job.polls[wonderPoll++] || [500, { detail: 'unexpected poll' }];
@@ -178,7 +178,7 @@ class FakeXHR {
     } else if (p === '/api/inventory/batch/sample1/review') {
       reply = [200, scenario.review || { batch: { id: 'sample1', status: 'classified', classifier: 'sample: the kit batch, pre-computed' },
                       detections: [], pieces: 50, photos_ready: true, count_photo: null }];
-    } else if (p === '/api/builds/options') {   // an empty bin: the backend sends no catalog, only scan_first
+    } else if (p.split('?')[0] === '/api/builds/options') {   // an empty bin: the backend sends no catalog, only scan_first
       reply = [200, { inventory: { total_pieces: 0, generator_ready: 0, other: 0 }, options: [],
                       scan_first: 'Nothing in your bin yet.' }];
     } else if (retakeMatch) {
@@ -313,6 +313,13 @@ if (scenario.use_sample) {
   ui.view_after_use_sample = visible();
   ui.check_title_after_use_sample = byId('check-title').textContent;
   ui.use_sample_requests = uploads.slice(before).map((u) => u.method + ' ' + u.path);
+  ui.sample_actions = { confirm: byId('confirm-btn').textContent, next: byId('confirmed-next-btn').textContent,
+                        back: byId('check-back-btn').textContent, title: byId('confirmed-title').textContent,
+                        text: byId('confirmed-text').textContent };
+  if (scenario.try_own_pieces) {
+    byId('confirmed-next-btn').click();
+    ui.try_own_pieces = { view: visible(), status: byId('status').textContent };
+  }
 }
 if (scenario.review_actions) {
   ui.review_before = reviewSnapshot();
@@ -359,9 +366,8 @@ if (scenario.open_builds) {
   };
   if (scenario.wonder_job) {
     const wonder = find(byId('build-list'), (e) => e.className === 'wonder');
-    const pick = find(wonder, (e) => e.tagName === 'SELECT');
-    pick.value = scenario.wonder_job.target || 'a simple house';
-    const button = buttonsIn(wonder).find((b) => b.textContent === '✨ Generate a new design');
+    const button = buttonsIn(wonder).find((b) => b.textContent ===
+      (scenario.wonder_job.find ? 'Find three ideas' : 'Make this booklet'));
     const status = find(wonder, (e) => e.className === 'status');
     let nextTimer = timers.length;
     button.click();
@@ -376,6 +382,11 @@ if (scenario.open_builds) {
     walk(wonder, (e) => { if (e.tagName === 'A') { links.push(e); } });
     ui.wonder = { progress, status: status.textContent, button_disabled: button.disabled,
                   text: textsOf(wonder), links: links.map((e) => ({ text: e.textContent, href: e.href })) };
+    const allNodes = []; walk(wonder, (e) => allNodes.push(e));
+    ui.wonder.selects = allNodes.filter((e) => e.tagName === 'SELECT').length;
+    ui.wonder.ideas = allNodes.filter((e) => e.className === 'idea-card').map((e) => textsOf(e));
+    ui.wonder.saved = allNodes.filter((e) => e.className === 'saved-designs').map((e) =>
+      ({ tag: e.tagName, open: e.getAttribute('open') !== null }));
     if (scenario.wonder_job.open_link && links.length) {
       links[0].click();
       ui.wonder.booklet = { view: visible(), title: byId('booklet-title').textContent, frame: byId('booklet-frame').src };

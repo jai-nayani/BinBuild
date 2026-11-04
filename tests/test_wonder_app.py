@@ -102,7 +102,8 @@ class TestWonderInTheApp(unittest.TestCase):
         self.assertIn("house-and-tree", [o["id"] for o in body["options"] if o.get("piece_status") == "verified"])
         w = body["wonder"]
         self.assertEqual((w["enabled"], w["max_tries"], w["busy"], w["recent"]), (True, 3, False, []))
-        self.assertIn("a simple house", w["targets"])
+        self.assertNotIn("targets", w)
+        self.assertEqual(w["ideas"], [])
         self.assertEqual(self.calls, 0)
 
     def test_recorded_run_gives_a_validated_design_with_a_booklet(self):

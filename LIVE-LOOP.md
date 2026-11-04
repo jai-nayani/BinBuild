@@ -3,8 +3,8 @@
 Five photos (top and four sides) → photo quality gate → **Muse Spark** finds
 and names pieces and supplies centre points → **SAM 3.1** cuts out masks at
 those points → Spark checks the masked close-ups → review and confirm →
-inventory → **Muse Wonder** proposes placements → BinBuild's validator checks
-the design → Spark writes the step words → illustrated booklet.
+inventory → **Muse Wonder** proposes three different designs → BinBuild checks
+each design → choose a checked preview → Spark writes the step words → booklet.
 
 The phone makes the whole-photo and SAM passes as separate requests. SAM does
 not identify pieces or independently discover ones that Spark missed. If SAM
@@ -13,10 +13,15 @@ checks image usability and performs a probabilistic physical-photo check; it
 cannot prove a photo is genuine. See [SAM-3-1.md](SAM-3-1.md) and
 [IMAGE-GUARDRAILS.md](IMAGE-GUARDRAILS.md).
 
-Wonder is asked to design from the supported, confirmed pieces; the validator
-checks inventory counts and the represented geometry and connections. A
-failed check is sent back for another attempt, up to the configured limit.
-The background job is polled by the phone. Spark writes words only: BinBuild
+Wonder chooses the objects from the supported, confirmed shapes, colours and
+quantities. There is no fixed target menu. Each alternative is validated
+before its preview appears; rejected or repeated layouts are sent back for
+another attempt, up to the configured limit. If fewer than three pass, the app
+shows only those that passed. These proposals are not physical build tests.
+The cache is tied to the exact inventory and source; changed pieces clear the
+choices, and stale selections are refused. Choosing a preview uses that same
+checked layout rather than asking for a new design. Both long operations are
+polled background jobs. Spark writes words only: BinBuild
 keeps the checked pieces, placements, and pictures. If Spark cannot provide
 usable step words, the booklet retains BinBuild's original text.
 
@@ -24,6 +29,15 @@ The sample bin contains the **Oct 28** kit photographs and corrections, plus
 pre-computed outlines from SAM replies recorded **Oct 28 ET**. Loading it needs
 no model call. The recorded Wonder example is from an **Oct 29** run on the
 kit's inventory, not the viewer's bin; no model call is needed to see it.
+
+Sample pieces and uploaded pieces are separate build contexts. The sample
+journey says "Use these sample pieces" and "Try with my own pieces". Book
+designs appear only when every required part fits the selected inventory.
+Past generated designs are collapsed under "Saved designs for these pieces"
+and are filtered to that same inventory. Wheels and axle connections are not
+supported, so vehicle suggestions are rejected; round bricks must not be
+renamed as wheels in the step text. Finding fresh ideas is an explicit paid
+action; simply loading sample images or reading the build list calls no model.
 
 ## Recorded measurements
 

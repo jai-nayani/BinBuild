@@ -137,6 +137,11 @@ details summary { cursor: pointer; font-weight: 600; font-size: 15px; margin: 12
 .build-section { font-size: 17px; margin: 18px 0 4px; }
 .wonder select { width: 100%; padding: 10px; font-size: 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); margin: 4px 0; }
 .wonder ul.wparts { margin: 8px 0 4px; padding-left: 18px; font-size: 14px; line-height: 1.5; }
+.idea-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.idea-card { padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.idea-card h4 { font-size: 19px; margin: 8px 0; }
+.idea-card p { font-size: 14px; line-height: 1.4; }
+.saved-designs { margin-top: 18px; }
 .note { font-size: 13px; color: var(--muted); line-height: 1.4; margin: 0 0 8px; }
 .option .where, .mrow .where { display: block; color: var(--muted); font-size: 12px; margin: 0 0 6px; }
 .option.verified { border: 2px solid var(--green); background: #f6fbf7; }

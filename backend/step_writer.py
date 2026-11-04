@@ -61,6 +61,7 @@ def _request(book, target):
         "model. Use only the pieces listed for each numbered step, and describe where they go "
         "only when the picture supports it. Never add, remove or change pieces. The layer heights "
         "are in plates above the table. Keep every step under 240 characters. "
+        "Name the actual parts: never call upright round bricks wheels or invent moving attachments. "
         "Return JSON only: {\"title\": \"short title\", \"steps\": [{\"n\": 1, \"text\": \"...\"}]}. "
         "Return exactly one step for each supplied number, in order.\n"
         + json.dumps({"target": target, "title": book["title"], "steps": layers}, ensure_ascii=False)
@@ -108,7 +109,9 @@ def write_steps(book, target, spark):
         if not isinstance(text, str):
             continue
         text = text.strip()
-        if 1 <= len(text) <= 240 and _colors_in(text) <= _step_colors(book, source):
+        invented_wheels = re.search(r"\b(wheel|wheels|axle|axles)\b", text, re.I) and not any(
+            book["placements"][i]["part"].get("family") == "wheel" for i in source["add"])
+        if 1 <= len(text) <= 240 and not invented_wheels and _colors_in(text) <= _step_colors(book, source):
             updated["text"] = text
     result.setdefault("notes", []).append(SUCCESS_NOTE)
     return result

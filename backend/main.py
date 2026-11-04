@@ -28,6 +28,7 @@ can reach it):
 """
 
 import hashlib
+import copy
 import json
 import os
 import re
@@ -49,7 +50,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import booklet, build_plan, guard, inventory_db, inventory_vocab, photo_gate, sample_bin
+from . import booklet, build_plan, design_ideas, guard, inventory_db, inventory_vocab, photo_gate, sample_bin
 from .sam_client import SamClient, SamError
 from .wonder_client import WonderClient, WonderError
 from .segmenter import COUNT_VIEW, WholePhotoSegmenter
@@ -74,6 +75,7 @@ WONDER_FLAG = "BINBUILD_WONDER"
 _wonder_busy = threading.Lock()   # one generation at a time
 _wonder_jobs = {}
 _wonder_jobs_lock = threading.Lock()
+_idea_sets = {}                  # database + inventory fingerprint -> checked alternatives
 # Every POST carries one of these (backend/guard.py; both are no-ops off the public deploy).
 PAID = [Depends(guard.paid)]     # calls a paid API: shared key + per-IP limit
 WRITE = [Depends(guard.write)]   # everything else that writes: per-IP limit
@@ -245,12 +247,35 @@ class Review(BaseModel):
 
 class WonderRequest(BaseModel):
     target: str = Field(default="a simple house", min_length=3, max_length=60)
+    source: Optional[Literal["sample", "uploaded"]] = None
+    idea_id: Optional[str] = None
+    inventory_key: Optional[str] = None
+
+
+class IdeasRequest(BaseModel):
+    source: Literal["sample", "uploaded"] = "uploaded"
 
 
 class BuildRequest(BaseModel):
     set: Optional[str] = None     # a known set, e.g. "house-and-tree"
     design: Optional[str] = None  # a BrickGPT category with a pre-generated design, e.g. "train"
     samples: int = Field(default=6, ge=4, le=8)
+    source: Optional[Literal["sample", "uploaded"]] = None
+
+
+def _build_inventory(conn, source=None):
+    batches = inventory_db.confirmed_batches(conn)
+    if source is not None:
+        batches = [b for b in batches if (b == sample_bin.BATCH_ID) == (source == "sample")]
+    return inventory_db.inventory_summary(conn, batches if source is not None else None), batches
+
+
+def _idea_slot(key):
+    return str(inventory_db.DB_PATH), key
+
+
+def _idea_cards(ideas):
+    return [{k: v for k, v in idea.items() if k not in ("result", "design")} for idea in ideas]
 
 
 def _build_reply(build) -> dict:
@@ -636,7 +661,9 @@ def create_app() -> FastAPI:
             _ensure_registered(conn, batch_id)
             _ensure_checked(conn, batch_id)
             result = inventory_db.confirm_batch(conn, batch_id)
-            return {**result, "summary": inventory_db.inventory_summary(conn)}
+            source = "sample" if batch_id == sample_bin.BATCH_ID else "uploaded"
+            summary, _ = _build_inventory(conn, source)
+            return {**result, "summary": summary}
 
     @app.post("/api/inventory/undo-last-batch", dependencies=WRITE)
     def undo_last_inventory_batch(batch_id: Optional[str] = None):
@@ -650,12 +677,13 @@ def create_app() -> FastAPI:
             return {**result, "summary": inventory_db.inventory_summary(conn)}
 
     @app.get("/api/inventory/summary")
-    def get_inventory_summary():
+    def get_inventory_summary(source: Optional[Literal["sample", "uploaded"]] = None):
         """The confirmed inventory: the 8 generator-ready BrickGPT brick types
         by colour, then every other piece by broad family and colour, and
         unknown pieces on their own."""
         with closing(inventory_db.connect()) as conn:
-            return inventory_db.inventory_summary(conn)
+            summary, _ = _build_inventory(conn, source)
+            return summary
 
     @app.get("/api/inventory")
     def get_inventory():
@@ -663,20 +691,15 @@ def create_app() -> FastAPI:
         return get_inventory_summary()
 
     @app.get("/api/builds/options")
-    def get_build_options():
-        """Everything there is to build, manual first:
-        - every build in the manual that came with the kit (kind "manual"):
-          a verified build is checked against the confirmed inventory ("fit"
-          or "short", with what is missing) and can get a booklet; every other
-          one is "unverified": listed with its chapter and pages, its piece
-          list not yet verified, no fit claim and no booklet;
-        - then the pre-generated BrickGPT designs, with "fit", "patched",
-          "short" or "not_connected".
-        Nothing until there is a bin: with no confirmed pieces yet (no batch
-        scanned and confirmed, no sample loaded and confirmed) there is no
-        catalog at all, only "scan_first" saying what to do."""
+    def get_build_options(source: Optional[Literal["sample", "uploaded"]] = None):
+        """Read inventory, matching booklets and cached ideas; never call a model.
+
+        The phone names the source so sample pieces cannot enter real builds.
+        With a source, only booklets whose parts fit are returned. Omitting it
+        preserves the older catalog API for tools that inspect missing parts.
+        """
         with inventory_db.reading() as conn:
-            summary = inventory_db.inventory_summary(conn)
+            summary, _ = _build_inventory(conn, source)
         inventory = {"total_pieces": summary["total_pieces"], "generator_ready": summary["generator_ready"]["total"],
                      "other": summary["other"]["total"] + summary["unknown"]["total"]}
         if not summary["total_pieces"]:
@@ -686,6 +709,8 @@ def create_app() -> FastAPI:
         found = build_plan.options(summary["items"])
         manual = [o for o in found if o["kind"] == "manual"]
         count = lambda status: sum(o["piece_status"] == status for o in manual)  # noqa: E731
+        visible = found if source is None else [o for o in manual
+                   if o.get("has_booklet") and o.get("status") == "fit"]
         return {"inventory": inventory,
                 "manual": {"builds": len(manual), "verified": count("verified"),
                            "diagram_readable": count("diagram-readable"),
@@ -695,19 +720,100 @@ def create_app() -> FastAPI:
                            "two_reads_agree": sum(o.get("verified_by") == "two independent reads agree" for o in manual),
                            "with_booklet": sum(o["piece_status"] == "verified" and o["has_booklet"] for o in manual),
                            "read_from": build_plan.manual_catalog()["read_from"]},
-                "options": found, **({"wonder": _wonder_state()} if wonder_on() else {})}
+                "options": visible,
+                **({"context": {"source": source, "inventory_key": design_ideas.inventory_key(summary, source)}}
+                   if source else {}),
+                **({"wonder": _wonder_state(summary, source)} if wonder_on() else {})}
 
-    def _wonder_state():
+    def _wonder_state(summary, source=None):
         from . import wonder_designer
+        key = design_ideas.inventory_key(summary, source)
         with inventory_db.reading() as conn:
-            recent = [b for b in inventory_db.recent_builds(conn, 50) if b["request"].get("wonder")][:5]
-        return {"enabled": True, "targets": list(wonder_designer.TARGETS), "per_try": wonder_designer.PER_TRY,
+            recent = [b for b in inventory_db.recent_builds(conn, 50, include_inventory=True) if b["request"].get("wonder")
+                      and b["inventory_snapshot"].get("inventory_key", design_ideas.inventory_key(
+                          b["inventory_snapshot"], source)) == key][:5]
+        with _wonder_jobs_lock:
+            ideas = _idea_cards(_idea_sets.get(_idea_slot(key), []))
+        from . import wonder_design as wd
+        usable = sum(n for *_, n, part in wd.usable_pieces(wd.owned_from_items(summary["items"])))
+        return {"enabled": True, "ideas": ideas, "inventory_key": key, "per_try": wonder_designer.PER_TRY,
+                "supported_pieces": usable,
                 "max_tries": wonder_designer.configured_attempts(), "busy": _wonder_busy.locked(),
                 "recent": [{"build_id": b["id"], "created_at": b["created_at"], "target": b["request"].get("target"),
                             "title": b["result"].get("title"), "status": b["result"].get("status"),
                             "pieces": b["result"].get("pieces"), "message": b["result"].get("message"),
                             **({"booklet_url": f"/api/builds/{b['id']}/booklet"} if b["has_booklet"] else {})}
                            for b in recent]}
+
+    @app.post("/api/builds/wonder/ideas", status_code=202, dependencies=PAID)
+    def find_design_ideas(request: IdeasRequest):
+        """Ask for three checked alternatives for this exact inventory."""
+        if not wonder_on():
+            raise HTTPException(404, f"generating new designs is off (start the backend with {WONDER_FLAG}=1)")
+        from . import wonder_designer, wonder_design as wd
+        with inventory_db.reading() as conn:
+            summary, _ = _build_inventory(conn, request.source)
+        owned = wd.owned_from_items(summary["items"])
+        if not wd.usable_pieces(owned):
+            raise HTTPException(422, "No supported pieces to design with yet. Review and confirm your pieces first.")
+        key = design_ideas.inventory_key(summary, request.source)
+        if not _wonder_busy.acquire(blocking=False):
+            raise HTTPException(409, "a new design is already being made; wait for it to finish")
+        try:
+            client = WonderClient.from_env()
+            job_id = secrets.token_urlsafe(24)
+            limit = wonder_designer.configured_attempts()
+            with _wonder_jobs_lock:
+                _wonder_jobs[job_id] = {"state": "running", "attempt": 1, "max_attempts": limit,
+                    "message": "Wonder is finding three ideas from these pieces."}
+
+            def work():
+                def progress(n, accepted, errors):
+                    with _wonder_jobs_lock:
+                        _wonder_jobs[job_id].update(attempt=min(n + 1, limit), message=(
+                            f"{accepted} of 3 ideas passed the checker. " +
+                            ("Checking the remaining ideas…" if accepted < 3 else "Preparing the previews…")))
+                try:
+                    proposals = design_ideas.propose(client, owned, limit, on_attempt=progress)
+                    ready = []
+                    for idea in proposals:
+                        result = wonder_designer.Result(True, idea["title"], title=idea["title"], design=idea["design"])
+                        stored = wonder_designer.app_result(result, owned)
+                        if stored["status"] != "fit":
+                            continue
+                        stored["message"] = (f"A checked design using {stored['pieces']} of these pieces. "
+                                             "Nobody has built it yet.")
+                        if request.source == "sample":
+                            stored["booklet"]["source"] = "A new design from the sample pieces"
+                            stored["booklet"]["notes"][0] = (
+                                "Designed by Muse Wonder from the sample pieces and checked by BinBuild. "
+                                "This example is not made from your own pieces.")
+                        stored.pop("usd", None)  # selection is not another Wonder design call
+                        ready.append({**idea, "id": secrets.token_urlsafe(18), "result": stored,
+                                      "cover": booklet.cover(stored["booklet"])})
+                    message = (f"{len(ready)} checked ideas from these pieces." if ready else
+                               "No design passed the checks for these pieces. Try adding more supported pieces.")
+                    with _wonder_jobs_lock:
+                        _idea_sets[_idea_slot(key)] = ready
+                        _wonder_jobs[job_id].update(state="done", ideas=_idea_cards(ready), inventory_key=key,
+                                                    message=message)
+                except Exception:
+                    traceback.print_exc()
+                    with _wonder_jobs_lock:
+                        _wonder_jobs[job_id].update(state="failed", message="Could not find checked ideas. Please try again.")
+                finally:
+                    _wonder_busy.release()
+            threading.Thread(target=work, daemon=True).start()
+        except WonderError as err:
+            _wonder_busy.release()
+            raise HTTPException(503, f"Muse Wonder is not set up: {err}")
+        except BaseException:
+            if "job_id" in locals():
+                with _wonder_jobs_lock:
+                    _wonder_jobs.pop(job_id, None)
+            _wonder_busy.release()
+            raise
+        return {"job_id": job_id, "inventory_key": key}
 
     @app.post("/api/builds/wonder", status_code=202, dependencies=PAID)
     def generate_wonder_design(request: WonderRequest):
@@ -718,15 +824,27 @@ def create_app() -> FastAPI:
         from . import wonder_designer
         from . import wonder_design as wd
         with inventory_db.reading() as conn:
-            summary = inventory_db.inventory_summary(conn)
-            batches = inventory_db.confirmed_batches(conn)
+            summary, batches = _build_inventory(conn, request.source)
         owned = wd.owned_from_items(summary["items"])
+        key = design_ideas.inventory_key(summary, request.source)
+        selected = None
+        if request.idea_id:
+            if request.inventory_key != key:
+                raise HTTPException(409, "Your pieces changed. Find three new ideas before choosing a design.")
+            with _wonder_jobs_lock:
+                selected = next((copy.deepcopy(i) for i in _idea_sets.get(_idea_slot(key), [])
+                                 if i["id"] == request.idea_id), None)
+            if selected is None:
+                raise HTTPException(404, "These ideas expired. Find three new ideas from your pieces.")
+            target = selected["title"]
+        elif design_ideas.UNSUPPORTED.search(target):
+            raise HTTPException(422, "Wheel and axle attachments are not supported yet. Choose another design idea.")
         if not wd.usable_pieces(owned):
             raise HTTPException(422, "no confirmed pieces yet: scan a batch, check it and add it to your inventory first")
         if not _wonder_busy.acquire(blocking=False):
             raise HTTPException(409, "a new design is already being made; wait for it to finish")
         try:
-            client = WonderClient.from_env()
+            client = None if selected else WonderClient.from_env()
         except WonderError as err:
             _wonder_busy.release()
             raise HTTPException(503, f"Muse Wonder is not set up: {err}")
@@ -737,8 +855,10 @@ def create_app() -> FastAPI:
         job_id = secrets.token_urlsafe(24)
         limit = wonder_designer.configured_attempts()
         with _wonder_jobs_lock:
-            _wonder_jobs[job_id] = {"state": "running", "attempt": 1, "max_attempts": limit,
-                                    "message": f"Try 1 of {limit}: Wonder is designing."}
+            _wonder_jobs[job_id] = {"state": "running", "attempt": 0 if selected else 1,
+                                    "max_attempts": 0 if selected else limit,
+                                    "message": "Preparing the booklet for your selected design." if selected else
+                                               f"Try 1 of {limit}: Wonder is designing."}
 
         def work():
             started = time.monotonic()
@@ -758,9 +878,15 @@ def create_app() -> FastAPI:
                     update(attempt=n, message="The design passed the checker; making its booklet.")
 
             try:
-                result = wonder_designer.design(client, owned, target, limit, log=lambda *_: None,
-                                                on_attempt=on_attempt)
-                stored = wonder_designer.app_result(result, owned)
+                if selected:
+                    stored = selected["result"]
+                    check = wd.validate(selected["design"], owned)
+                    if not check.ok:
+                        raise ValueError("the selected design no longer passes the checker")
+                else:
+                    result = wonder_designer.design(client, owned, target, limit, log=lambda *_: None,
+                                                    on_attempt=on_attempt)
+                    stored = wonder_designer.app_result(result, owned)
                 if "booklet" in stored:
                     from . import step_writer
                     update(message="Muse Spark is writing the booklet's step words.")
@@ -774,7 +900,8 @@ def create_app() -> FastAPI:
                 stored["seconds"] = round(time.monotonic() - started, 1)
                 with closing(inventory_db.connect()) as conn:
                     build = inventory_db.create_build(conn, {"wonder": True, "target": target},
-                                                      {**build_plan.snapshot(summary), "batches": batches}, stored)
+                                                      {**build_plan.snapshot(summary), "batches": batches,
+                                                       "inventory_key": key, "source": request.source}, stored)
                 update(state="done", message=stored["message"], build=_build_reply(build))
             except WonderError as err:
                 traceback.print_exc()
@@ -841,9 +968,14 @@ def create_app() -> FastAPI:
             raise HTTPException(422, "ask for exactly one of: a known set ('set') or a BrickGPT design ('design')")
         asked = {"set": request.set} if request.set else {"design": request.design, "samples": request.samples}
         with inventory_db.reading() as conn:
-            summary = inventory_db.inventory_summary(conn)
+            summary, _ = _build_inventory(conn, request.source)
         try:
-            return asked, summary, build_plan.plan(asked, summary["items"], with_booklet)
+            result = build_plan.plan(asked, summary["items"], with_booklet)
+            if request.source == "sample" and result.get("booklet"):
+                result["booklet"]["source"] = "The sample kit's book, using the sample pieces"
+                result["booklet"]["notes"] = [n.replace("your confirmed inventory", "the sample inventory")
+                                                for n in result["booklet"]["notes"]]
+            return asked, summary, result
         except KeyError as err:
             raise HTTPException(404, err.args[0])
 

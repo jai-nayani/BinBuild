@@ -9,12 +9,49 @@ from test_ui_carousel import OPTIONS, play
 
 def options():
     result = copy.deepcopy(OPTIONS)
-    result["wonder"] = {"enabled": True, "busy": False, "targets": ["a simple house"], "recent": [],
+    result["wonder"] = {"enabled": True, "busy": False, "inventory_key": "test-inventory", "ideas": [
+        {"id": "idea-1", "title": "Azure Lookout", "description": "A small lookout from your plates.",
+         "pieces": 12, "cover": "<svg></svg>"}], "recent": [],
                         "max_tries": 3, "per_try": {"seconds": 120, "usd": 0.25}}
     return result
 
 
 class TestWonderJobsOnPhone(unittest.TestCase):
+    def test_find_ideas_renders_three_checked_cards_without_a_fixed_menu(self):
+        o = options()
+        o["wonder"]["ideas"] = []
+        o["wonder"]["recent"] = [{"title": "Old house", "status": "fit", "message": "Saved",
+                                  "booklet_url": "/api/builds/4/booklet"}]
+        choices = [{"id": str(n), "title": title, "description": "Uses your particular pieces.",
+                    "pieces": n + 3, "cover": "<svg></svg>"}
+                   for n, title in enumerate(("Lime lookout", "Purple garden", "Azure sculpture"))]
+        job = {"find": True, "polls": [[200, {"state": "done", "ideas": choices,
+                                             "inventory_key": "changed", "message": "3 checked ideas."}]]}
+        result = play(open_builds=True, build_options=o, wonder_job=job)
+        ui = result["ui"]["wonder"]
+        self.assertEqual(ui["selects"], 0)
+        self.assertEqual(len(ui["ideas"]), 3)
+        self.assertIn("Lime lookout", ui["ideas"][0])
+        self.assertEqual(ui["saved"], [{"tag": "DETAILS", "open": False}])
+        self.assertIn("POST /api/builds/wonder/ideas", result["requests"])
+
+    def test_uploaded_book_carousel_hides_designs_with_missing_pieces(self):
+        o = options()
+        o["options"][0]["status"] = "short"
+        result = play(open_builds=True, build_options=o)
+        self.assertEqual([c["id"] for c in result["ui"]["builds"]["carousel"]["cards"]], ["guitar"])
+
+    def test_sample_confirmation_offers_trying_own_pieces_without_claiming_a_scan(self):
+        sample = {"batch": {"id": "sample1", "status": "confirmed", "classifier": "sample: recorded"},
+                  "detections": [], "pieces": 50, "photos_ready": True, "count_photo": None}
+        ui = play(use_sample=True, review=sample, try_own_pieces=True)["ui"]
+        self.assertEqual(ui["sample_actions"]["title"], "✓ The sample is ready")
+        self.assertEqual(ui["sample_actions"]["next"], "📷 Try with my own pieces")
+        self.assertEqual(ui["sample_actions"]["back"], "← Back to the start")
+        self.assertIn("sample pieces", ui["sample_actions"]["text"])
+        self.assertNotIn("Sweep", ui["try_own_pieces"]["status"])
+        self.assertEqual(ui["try_own_pieces"]["view"], ["capture-view"])
+
     def test_design_first_polls_and_opens_booklet(self):
         job = {"open_link": True, "polls": [
             [200, {"state": "running", "attempt": 1, "max_attempts": 3,
@@ -27,10 +64,9 @@ class TestWonderJobsOnPhone(unittest.TestCase):
         result = play(open_builds=True, build_options=options(), wonder_job=job)
         ui = result["ui"]
         self.assertEqual([(x["tag"], x["className"], x["text"]) for x in ui["builds"]["list_order"]], [
-            ("DIV", "wonder", ""), ("H3", "build-section", "From the kit's book"), ("DIV", "build-carousel", "")])
-        self.assertIn("✨ Design something new from my pieces", ui["wonder"]["text"])
-        self.assertTrue(any("up to 3 tries" in text and "$0.25" in text and "Recorded Wonder runs on Oct 29" in text
-                            and "actual time and cost vary" in text for text in ui["wonder"]["text"]))
+            ("DIV", "wonder", ""), ("H3", "build-section", "Book designs that fit your pieces"), ("DIV", "build-carousel", "")])
+        self.assertIn("Three ideas from my pieces", ui["wonder"]["text"])
+        self.assertTrue(any("up to 3 attempts" in text for text in ui["wonder"]["text"]))
         self.assertEqual([p["delay"] for p in ui["wonder"]["progress"]], [4000, 4000])
         self.assertIn("Try 1 of 3: the checker found 2 problems", ui["wonder"]["progress"][0]["after"])
         self.assertEqual([r for r in result["requests"] if "/api/builds/wonder" in r], [
@@ -90,7 +126,7 @@ class TestWonderJobsOnPhone(unittest.TestCase):
         ui = result["ui"]["wonder"]
         self.assertEqual(len([r for r in result["requests"] if "/jobs/" in r]), 4)
         self.assertEqual(ui["status"], "Lost contact with the design job. It may still finish: reopen What can I "
-                         "build? to see it under Designs made before.")
+                         "build? to see it under Saved designs for these pieces.")
         self.assertFalse(ui["button_disabled"])
 
     def test_job_failure_and_lost_job_are_shown(self):
@@ -106,6 +142,6 @@ class TestWonderJobsOnPhone(unittest.TestCase):
                 self.assertEqual(ui["links"], [])
                 self.assertEqual(len(ui["progress"]), 1)
 
-    def test_service_worker_cache_is_version_16(self):
+    def test_service_worker_cache_is_version_17(self):
         worker = (Path(__file__).resolve().parent.parent / "app" / "sw.js").read_text()
-        self.assertIn("var CACHE_NAME = 'binbuild-v16';", worker)
+        self.assertIn("var CACHE_NAME = 'binbuild-v17';", worker)

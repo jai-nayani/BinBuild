@@ -104,6 +104,7 @@ class TestGuard(unittest.TestCase):
                     unguarded.append(route.path)
         self.assertEqual(unguarded, [])
         self.assertEqual(paid, {"/api/inventory/batch/{batch_id}/classify", "/api/builds/wonder",
+                                "/api/builds/wonder/ideas",
                                 "/api/inventory/batch/{batch_id}/pieces/{detection_id}/reclassify"})
 
 

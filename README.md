@@ -15,8 +15,8 @@
    SAM 3.1 cuts out masks and Spark checks the close-ups. You correct or
    rescan the proposals, then confirm the batch into the running inventory.
 3. **Repeat until "Finished"** — sweep pieces aside and scan the next handful.
-4. **Ask for a build** — Muse Wonder proposes a new model using supported,
-   confirmed pieces. The validator checks the placements against the inventory;
+4. **Ask for a build** — Muse Wonder offers up to three ideas using supported,
+   confirmed pieces. Each preview passes the placement and inventory checks;
    Spark can write the words for a step-by-step booklet. The kit's booklets
    remain available too.
 
@@ -39,6 +39,7 @@ backend/        FastAPI backend (inventory + generation API)
   wonder_design.py       Supported piece geometry, design format, and validator
   wonder_client.py       Muse Wonder via the Meta Model API (key from .env, never logged)
   wonder_designer.py     Wonder designs from confirmed pieces, validated and retried
+  design_ideas.py        Three inventory-specific proposals, checked before showing previews
   designs/               Validated Wonder designs (not yet hand-built)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
   step_writer.py         Spark words for checked booklet steps, with safe fallback
@@ -125,8 +126,12 @@ outlines from Oct 28 ET without a model call. The original recorded run still
 needed 11 label corrections after the SAM pass. Details and prior recorded
 measurements: [LIVE-LOOP.md](LIVE-LOOP.md), [SAM-3-1.md](SAM-3-1.md).
 
-When Wonder is enabled, "What can I build?" offers new designs from supported
-confirmed pieces. Generation runs as a polled background job; the validator
+When Wonder is enabled, "What can I build?" offers up to three distinct,
+checked previews chosen by Wonder from the current pieces, with no fixed
+target menu. Changing the inventory clears the choices. Sample pieces stay
+separate from uploaded pieces, and book designs appear only when all their
+parts match that selected inventory. Selecting a preview keeps its checked
+placements. Finding ideas runs as a polled background job; the validator
 checks piece counts and represented connections, and Spark can write the
 booklet's step text. If no design passes, the app reports the failure instead
 of offering a booklet. Generated designs have not yet been hand-built. The

@@ -168,7 +168,7 @@ class TestCarouselInTheApp(unittest.TestCase):
         self.assertEqual(ui["booklet"]["view"], ["booklet-view"])
         self.assertEqual(ui["booklet"]["title"], "Guitar")
         self.assertTrue(ui["booklet"]["frame"].endswith("/api/builds/7/booklet"), ui["booklet"])
-        self.assertIn('POST /api/builds {"set":"guitar"}', ui["booklet"]["requests"])
+        self.assertIn('POST /api/builds {"set":"guitar","source":"uploaded"}', ui["booklet"]["requests"])
         self.assertEqual(ui["after_booklet_back"], {"view": ["build-view"], "scroll_left": 240,
                                                     "focused_card": "guitar"})
         self.assertFalse([r for r in result["requests"] if "wonder" in r or "/classify" in r])

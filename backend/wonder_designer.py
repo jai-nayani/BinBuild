@@ -36,7 +36,6 @@ from . import wonder_design as wd
 MAX_ATTEMPTS = 3
 REPO = Path(__file__).resolve().parent.parent
 # What the app offers to design, and what one try costs (two live runs, Oct 29: $0.20-0.29, 88-145 s).
-TARGETS = ("a chair", "a table", "a bed", "a boat", "a simple house", "a little car", "an animal", "a robot")
 PER_TRY = {"usd": 0.25, "seconds": 120}
 
 

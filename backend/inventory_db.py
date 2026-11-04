@@ -575,13 +575,17 @@ def undo_last_batch(conn, expected_batch_id=None):
     return {"batch_id": row["id"], "pieces_removed": pieces}
 
 
-def inventory_summary(conn) -> dict:
+def inventory_summary(conn, batch_ids=None) -> dict:
     """The confirmed inventory in two layers: the 8 generator-ready brick types
     by colour, then everything else by broad family and colour, with unknown
     pieces on their own."""
+    where, args = "", []
+    if batch_ids is not None:
+        args = list(batch_ids)
+        where = " WHERE batch_id IN (" + ",".join("?" for _ in args) + ")" if args else " WHERE 0"
     rows = conn.execute(
         "SELECT family, shape, size, color, generator_type, SUM(quantity) AS quantity FROM inventory_items"
-        " GROUP BY family, shape, size, color, generator_type ORDER BY family, size, color, shape"
+        + where + " GROUP BY family, shape, size, color, generator_type ORDER BY family, size, color, shape", args
     ).fetchall()
     generator = {t: {"total": 0, "colors": {}} for t in vocab.GENERATOR_TYPES}
     families = {}
@@ -595,7 +599,10 @@ def inventory_summary(conn) -> dict:
             group = families.setdefault(r["family"], {"total": 0, "colors": {}})
         group["total"] += r["quantity"]
         group["colors"][r["color"]] = group["colors"].get(r["color"], 0) + r["quantity"]
-    (confirmed,) = conn.execute("SELECT COUNT(*) FROM batches WHERE status = 'confirmed'").fetchone()
+    if batch_ids is None:
+        (confirmed,) = conn.execute("SELECT COUNT(*) FROM batches WHERE status = 'confirmed'").fetchone()
+    else:
+        confirmed = len(args)
     gen_total = sum(g["total"] for g in generator.values())
     other_total = sum(f["total"] for f in families.values())
     return {
@@ -617,7 +624,7 @@ def create_build(conn, request, snapshot, result) -> dict:
     return get_build(conn, cur.lastrowid)
 
 
-def recent_builds(conn, limit=20) -> list:
+def recent_builds(conn, limit=20, include_inventory=False) -> list:
     """The newest builds, request and result parsed, booklets left out."""
     out = []
     for row in conn.execute("SELECT * FROM builds ORDER BY id DESC LIMIT ?", (limit,)):
@@ -626,7 +633,10 @@ def recent_builds(conn, limit=20) -> list:
         result = json.loads(build["result"]) if build["result"] else {}
         build["has_booklet"] = "booklet" in result
         build["result"] = {k: v for k, v in result.items() if k != "booklet"}
-        build.pop("inventory_snapshot", None)
+        if include_inventory:
+            build["inventory_snapshot"] = json.loads(build["inventory_snapshot"]) if build["inventory_snapshot"] else {}
+        else:
+            build.pop("inventory_snapshot", None)
         out.append(build)
     return out
 

@@ -42,10 +42,10 @@
  *
  * When the backend runs with BINBUILD_WONDER=1 (off by default), a
  * "Generate a new design" section precedes the carousel. One tap is
- * one generation (POST /api/builds/wonder): Muse Wonder designs from the
- * confirmed pieces, BinBuild's validator checks every proposal, and only a
- * design that passes is shown, with its parts and booklet; otherwise the
- * shortfall. Nothing is generated without a tap.
+ * inventory-specific ideas (POST /api/builds/wonder/ideas): Wonder chooses
+ * three alternatives, BinBuild checks each before showing its preview, and
+ * a selection uses those same placements for its booklet. Sample and uploaded
+ * pieces stay separate. Nothing is generated without a tap.
  *
  * A piece Spark flagged unsure (its "unsure" marker from the backend) also
  * gets "Retake this piece" in Check the pieces: one clean close-up of just
@@ -93,6 +93,12 @@ var ACCESS_KEY = (function () {
   var HEALTH_TIMEOUT_MS = 4000;
   var BUILD_TIMEOUT_MS = 30000;
   var WONDER_POLL_MS = 4000;
+  var inventorySource = 'uploaded';
+  try { inventorySource = localStorage.getItem('binbuild.inventorySource') === 'sample' ? 'sample' : 'uploaded'; } catch (err) {}
+  function setInventorySource(source) {
+    inventorySource = source;
+    try { localStorage.setItem('binbuild.inventorySource', source); } catch (err) {}
+  }
 
   var slots = VIEWS.map(function () { return null; }); // confirmed { file, url } per view
   var pending = null;   // { file, url } under review, not yet in the batch
@@ -475,8 +481,8 @@ var ACCESS_KEY = (function () {
         return;
       }
       setStatus('', null);
-      openReview(body.batch_id, { text: '✓ The sample bin: 5 photos of the kit, its pieces already identified. ' +
-        'Check them, then add them to your inventory.', kind: 'ok' });
+      openReview(body.batch_id, { text: '✓ These sample pieces are already identified. ' +
+        'Use them to explore builds. Your own pieces stay separate.', kind: 'ok' });
     });
   }
 
@@ -585,10 +591,13 @@ var ACCESS_KEY = (function () {
     var fixed = data.detections.filter(function (d) { return d.status === 'corrected' || d.source === 'manual'; }).length;
 
     var sample = (data.batch.classifier || '').indexOf('sample') === 0;
+    setInventorySource(sample ? 'sample' : 'uploaded');
     $('check-title').textContent = (sample ? 'The sample bin: ' : '') +
-      (confirmed ? (sample ? 'in your inventory' : 'These pieces are in your inventory')
+      (confirmed ? (sample ? 'ready to explore' : 'These pieces are in your inventory')
         : (sample ? 'check the pieces' : 'Check the pieces'));
-    $('check-intro').textContent = confirmed
+    $('check-intro').textContent = sample
+      ? 'These sample pieces and recorded outlines are ready to explore. Your own pieces stay separate.'
+      : confirmed
       ? 'This batch is added. To change a piece, undo it first.'
       : kept.length
         ? 'Tap a row to see those pieces on the photo. Fix anything that’s wrong, remove anything that isn’t a piece, then add them to your inventory.'
@@ -612,10 +621,16 @@ var ACCESS_KEY = (function () {
     var confirmBtn = $('confirm-btn');
     confirmBtn.parentNode.classList.toggle('hidden', confirmed);
     confirmBtn.disabled = reviewBusy || !data.photos_ready || data.pieces === 0;
-    confirmBtn.textContent = reviewBusy ? 'Saving…' : '✓ Add ' + plural(data.pieces, 'piece', 'pieces') + ' to my inventory';
+    confirmBtn.textContent = reviewBusy ? 'Saving…' : sample ? '✓ Use these sample pieces' :
+      '✓ Add ' + plural(data.pieces, 'piece', 'pieces') + ' to my inventory';
+    $('confirmed-title').textContent = sample ? '✓ The sample is ready' : '✓ Added to your inventory';
+    $('confirmed-next-btn').textContent = sample ? '📷 Try with my own pieces' : '📷 Scan the next handful';
+    $('confirmed-build-btn').textContent = sample ? '🧱 Explore sample builds' : '🧱 What can I build?';
+    $('undo-btn').textContent = sample ? '↺ Stop using these sample pieces' : '↺ Undo: take these pieces out again';
+    $('check-back-btn').textContent = sample ? '← Back to the start' : '← Back to scanning';
     $('confirmed-card').classList.toggle('hidden', !confirmed);
     if (confirmed) {
-      $('confirmed-text').textContent = review.confirmedText ||
+      $('confirmed-text').textContent = sample ? 'Explore builds from these sample pieces. Your own pieces stay separate.' : review.confirmedText ||
         plural(data.pieces, 'piece', 'pieces') + ' from this batch are in your inventory.';
     }
   }
@@ -931,9 +946,7 @@ var ACCESS_KEY = (function () {
         if (!failure && xhr.status === 200 && body) {
           var s = body.summary;
           review.confirmedText = plural(body.pieces_in_batch, 'piece', 'pieces') + ' from this batch are in your inventory. ' +
-            'Your inventory now has ' + plural(s.total_pieces, 'piece', 'pieces') + ': ' +
-            plural(s.generator_ready.total, 'plain brick', 'plain bricks') + ' BrickGPT can use, ' +
-            (s.total_pieces - s.generator_ready.total) + ' other pieces.';
+            'Your inventory now has ' + plural(s.total_pieces, 'piece', 'pieces') + '.';
           openReview(review.id, { text: '', kind: null });
           window.scrollTo(0, 0);
         } else {
@@ -951,6 +964,11 @@ var ACCESS_KEY = (function () {
 
   $('undo-btn').addEventListener('click', function () {
     if (!review || reviewBusy) { return; }
+    if (inventorySource === 'sample') {
+      setInventorySource('uploaded');
+      show('hero-view');
+      return;
+    }
     reviewBusy = true;
     request('POST', '/api/inventory/undo-last-batch?batch_id=' + encodeURIComponent(review.id), null, REVIEW_TIMEOUT_MS,
       function (xhr, body, failure) {
@@ -969,11 +987,16 @@ var ACCESS_KEY = (function () {
 
   $('confirmed-build-btn').addEventListener('click', function () { openBuilds(); });
   $('confirmed-next-btn').addEventListener('click', function () {
+    var fromSample = inventorySource === 'sample';
+    setInventorySource('uploaded');
     show('capture-view');
-    setStatus('Sweep those pieces aside and snap the next handful.', 'ok');
+    setStatus(fromSample ? 'Scatter your own pieces in one flat layer, then take the five photos.' :
+      'Sweep those pieces aside and snap the next handful.', 'ok');
     render();
   });
-  $('check-back-btn').addEventListener('click', function () { show('capture-view'); render(); });
+  $('check-back-btn').addEventListener('click', function () {
+    show(inventorySource === 'sample' ? 'hero-view' : 'capture-view'); render();
+  });
 
   // --- finished ---------------------------------------------------------------
 
@@ -1046,7 +1069,7 @@ var ACCESS_KEY = (function () {
   function openManual(o) {
     manualReturn = { id: o.id, scrollLeft: buildCarousel ? buildCarousel.scrollLeft || 0 : 0 };
     setStatus('Making the booklet…', null, $('build-status'));
-    var ask = o.set ? { set: o.set } : { set: o.id };
+    var ask = { set: o.set || o.id, source: inventorySource };
     request('POST', '/api/builds', ask, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
       if (!failure && xhr.status === 201 && body && body.booklet_url) {
         $('booklet-title').textContent = o.title;
@@ -1077,7 +1100,7 @@ var ACCESS_KEY = (function () {
     carouselCards = {};
     $('build-inventory').textContent = 'Checking your inventory…';
     setStatus('', null, buildStatus);
-    request('GET', '/api/builds/options', null, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
+    request('GET', '/api/builds/options?source=' + inventorySource, null, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
       if (failure || xhr.status !== 200 || !body) {
         $('build-inventory').textContent = '';
         setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', buildStatus);
@@ -1098,18 +1121,25 @@ var ACCESS_KEY = (function () {
       }
       var inv = body.inventory;
       $('build-inventory').textContent = inv.total_pieces
-        ? inv.total_pieces + ' confirmed pieces in your inventory: ' + inv.generator_ready +
-          ' plain bricks BrickGPT can use, ' + inv.other + ' other pieces.'
+        ? inv.total_pieces + (inventorySource === 'sample' ? ' sample pieces. Your own pieces are separate.' :
+          ' confirmed pieces. These ideas will use only the pieces you have.')
         : 'No confirmed pieces yet: scan a batch, review it and confirm it first.';
-      var bookletBuilds = body.options.filter(function (o) { return o.kind === 'manual' && o.has_booklet; });
+      $('build-back-btn').textContent = inventorySource === 'sample' ? '← Back to the sample pieces' : '← Back to scanning';
+      var bookletBuilds = body.options.filter(function (o) {
+        return o.kind === 'manual' && o.has_booklet && o.status === 'fit';
+      });
       buildCarousel = el('div', 'build-carousel');
       buildCarousel.id = 'build-carousel';
       bookletBuilds.forEach(function (o) { buildCarousel.appendChild(carouselCard(o)); });
       if (body.wonder && body.wonder.enabled) {
         list.appendChild(wonderSection(body.wonder, inv));
-        section(list, "From the kit's book");
       }
-      list.appendChild(buildCarousel);
+      if (bookletBuilds.length) {
+        if (body.wonder && body.wonder.enabled || inventorySource === 'sample') {
+          section(list, inventorySource === 'sample' ? "From the sample kit's book" : 'Book designs that fit your pieces');
+        }
+        list.appendChild(buildCarousel);
+      }
     });
   }
 
@@ -1118,7 +1148,8 @@ var ACCESS_KEY = (function () {
   function wonderResult(r) {
     var box = el('div', 'option ' + (r.booklet_url ? 'yes' : 'no'));
     box.appendChild(el('h3', null, (r.title || 'New design') + ' · Muse Wonder'));
-    box.appendChild(el('span', 'chip', r.booklet_url ? '✓ Checked: only your pieces, all held by studs'
+    box.appendChild(el('span', 'chip', r.booklet_url ? (inventorySource === 'sample'
+      ? '✓ Checked: sample pieces, all held by studs' : '✓ Checked: only your pieces, all held by studs')
       : r.status === 'short' ? 'Not enough pieces' : 'No design passed the check'));
     box.appendChild(el('p', null, r.message));
     if (r.parts) {
@@ -1138,7 +1169,7 @@ var ACCESS_KEY = (function () {
       });
       box.appendChild(link);
     }
-    if (r.tries) {
+    if (r.tries && r.tries.length) {
       box.appendChild(el('p', 'note', r.tries.length + (r.tries.length === 1 ? ' try' : ' tries') + ', ' +
         Math.round(r.seconds) + ' s, $' + Number(r.usd).toFixed(2) + '.'));
     }
@@ -1147,28 +1178,67 @@ var ACCESS_KEY = (function () {
 
   function wonderSection(w, inv) {
     var wrap = el('div', 'wonder');
-    section(wrap, '✨ Design something new from my pieces');
-    wrap.appendChild(el('p', 'note', 'Muse Wonder invents something new using your confirmed pieces. ' +
-      'BinBuild checks every design (only pieces you own, every piece held by studs) ' +
-      'before you see it. Recorded Wonder runs on Oct 29 took about ' + Math.round(w.per_try.seconds / 60) +
-      ' min and cost about $' + w.per_try.usd.toFixed(2) + ' per try; actual time and cost vary. ' +
-      'If a design fails the check, Wonder tries again, up to ' + w.max_tries + ' tries.'));
-    var pick = el('select', 'wtarget');
-    pick.setAttribute('aria-label', 'What to design');
-    w.targets.forEach(function (t) { var o = el('option', null, t); o.value = t; pick.appendChild(o); });
-    wrap.appendChild(pick);
-    var btn = el('button', 'btn btn-primary', '✨ Generate a new design');
+    section(wrap, inventorySource === 'sample' ? 'Three ideas from the sample pieces' : 'Three ideas from my pieces');
+    wrap.appendChild(el('p', 'note', 'Wonder chooses objects from the shapes, colours and quantities here. ' +
+      'Each preview must pass the piece and connection checks. Finding ideas calls Muse Wonder; ' +
+      'up to ' + w.max_tries + ' attempts. A checked design still needs a physical build test.'));
+    var cards = el('div', 'idea-cards');
     var out = el('div', 'wresult');
     var status = el('p', 'status');
-    btn.disabled = !inv.total_pieces || w.busy;
-    if (w.busy) { setStatus('A new design is already being made. Check back in a minute.', null, status); }
-    btn.addEventListener('click', function () { generateDesign(pick.value, btn, pick, out, status); });
-    wrap.appendChild(btn);
+    var find = el('button', 'btn btn-primary', 'Find three ideas');
+    var supported = w.supported_pieces === undefined ? inv.total_pieces : w.supported_pieces;
+    find.disabled = !supported || w.busy;
+    if (supported < inv.total_pieces) {
+      wrap.appendChild(el('p', 'note', 'Ideas use the ' + supported + ' pieces whose shapes we can check. ' +
+        'The remaining pieces stay in your inventory.'));
+    }
+    var actionButtons = [find];
+
+    function drawIdeas() {
+      cards.innerHTML = '';
+      actionButtons = [find];
+      (w.ideas || []).slice(0, 3).forEach(function (idea) {
+        var card = el('div', 'idea-card');
+        var cover = el('div', 'build-cover');
+        if (idea.cover) { cover.innerHTML = idea.cover; }
+        card.appendChild(cover);
+        card.appendChild(el('h4', null, idea.title));
+        card.appendChild(el('p', null, idea.description));
+        card.appendChild(el('p', 'note', idea.pieces + ' pieces · checked against these pieces'));
+        var choose = el('button', 'btn btn-primary', 'Make this booklet');
+        choose.disabled = w.busy;
+        actionButtons.push(choose);
+        choose.addEventListener('click', function () {
+          runWonderJob('/api/builds/wonder', {
+            idea_id: idea.id, inventory_key: w.inventory_key, source: inventorySource,
+          }, choose, out, status, function (job) {
+            if (job.build) { out.insertBefore(wonderResult(job.build), out.firstChild); }
+          }, actionButtons);
+        });
+        card.appendChild(choose);
+        cards.appendChild(card);
+      });
+      find.textContent = (w.ideas || []).length ? 'Find different ideas' : 'Find three ideas';
+    }
+
+    find.addEventListener('click', function () {
+      runWonderJob('/api/builds/wonder/ideas', { source: inventorySource }, find, out, status, function (job) {
+        w.ideas = job.ideas || [];
+        w.inventory_key = job.inventory_key;
+        drawIdeas();
+      }, actionButtons);
+    });
+    if (w.busy) { setStatus('A design is already being prepared. Reopen this page when it finishes.', null, status); }
+    drawIdeas();
+    wrap.appendChild(cards);
+    wrap.appendChild(find);
     wrap.appendChild(status);
     wrap.appendChild(out);
     if (w.recent && w.recent.length) {
-      wrap.appendChild(el('p', 'section-label', 'Designs made before'));
-      w.recent.forEach(function (r) { wrap.appendChild(wonderResult(r)); });
+      var saved = el('details', 'saved-designs');
+      saved.appendChild(el('summary', null, 'Saved designs for these pieces'));
+      w.recent.forEach(function (r) { saved.appendChild(wonderResult(r)); });
+      wrap.appendChild(saved);
     }
     return wrap;
   }
@@ -1180,20 +1250,18 @@ var ACCESS_KEY = (function () {
     show('booklet-view');
   }
 
-  function generateDesign(target, btn, pick, out, status) {
+  function runWonderJob(path, payload, btn, out, status, onDone, controls) {
     var failedPolls = 0;
+    var label = btn.textContent;
     btn.disabled = true;
-    pick.disabled = true;
+    (controls || []).forEach(function (control) { control.disabled = true; });
     out.innerHTML = '';
-    btn.textContent = 'Designing ' + target + '…';
-    setStatus('Starting the design…', null, status);
-
+    btn.textContent = 'Preparing…';
+    setStatus('Starting…', null, status);
     function finish() {
-      btn.disabled = false;
-      pick.disabled = false;
-      btn.textContent = '✨ Generate a new design';
+      (controls || []).forEach(function (control) { control.disabled = false; });
+      btn.disabled = false; btn.textContent = label;
     }
-
     function poll(jobId) {
       request('GET', '/api/builds/wonder/jobs/' + encodeURIComponent(jobId), null, BUILD_TIMEOUT_MS,
         function (xhr, body, failure) {
@@ -1209,28 +1277,29 @@ var ACCESS_KEY = (function () {
             } else {
               finish();
               setStatus('Lost contact with the design job. It may still finish: reopen What can I build? ' +
-                'to see it under Designs made before.', 'error', status);
+                (path.indexOf('/ideas') >= 0 ? 'to recover your ideas.' :
+                  'to see it under Saved designs for these pieces.'), 'error', status);
             }
             return;
           }
           failedPolls = 0;
           if (body.state === 'running') {
-            setStatus(body.message || 'Muse Wonder is designing…', null, status);
+            setStatus(body.message || 'Wonder is checking the ideas…', null, status);
             setTimeout(function () { poll(jobId); }, WONDER_POLL_MS);
-          } else if (body.state === 'done' && body.build) {
+          } else if (body.state === 'done') {
             finish();
             setStatus(body.message || '', null, status);
-            out.insertBefore(wonderResult(body.build), out.firstChild);
+            onDone(body);
           } else {
             finish();
             setStatus('✗ ' + (body.message || 'The design job could not be completed.'), 'error', status);
           }
         });
     }
-
-    request('POST', '/api/builds/wonder', { target: target }, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
+    request('POST', path, payload, BUILD_TIMEOUT_MS, function (xhr, body, failure) {
       if (!failure && xhr.status === 202 && body && body.job_id) {
-        setStatus('Muse Wonder is designing…', null, status);
+        setStatus(path.indexOf('/ideas') >= 0 ? 'Wonder is finding ideas from these pieces…' :
+          'Preparing the booklet for this design…', null, status);
         setTimeout(function () { poll(body.job_id); }, WONDER_POLL_MS);
       } else {
         finish();
@@ -1255,9 +1324,12 @@ var ACCESS_KEY = (function () {
   $('sample-images-btn').addEventListener('click', loadSample);
   $('sample-bin-btn').addEventListener('click', loadSample);
   $('sample-link').addEventListener('click', function () { show('capture-view'); render(); loadSample(); });
-  $('start-btn').addEventListener('click', function () { show('capture-view'); render(); });
+  $('start-btn').addEventListener('click', function () { setInventorySource('uploaded'); show('capture-view'); render(); });
   $('home-btn').addEventListener('click', function () { show('hero-view'); });
-  $('build-back-btn').addEventListener('click', function () { show('capture-view'); render(); });
+  $('build-back-btn').addEventListener('click', function () {
+    if (inventorySource === 'sample' && review) { openReview(review.id); }
+    else { show('capture-view'); render(); }
+  });
 
   // --- backend reachability ---------------------------------------------------
 
