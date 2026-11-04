@@ -1150,8 +1150,9 @@ var ACCESS_KEY = (function () {
     section(wrap, '✨ Design something new from my pieces');
     wrap.appendChild(el('p', 'note', 'Muse Wonder invents something new using your confirmed pieces. ' +
       'BinBuild checks every design (only pieces you own, every piece held by studs) ' +
-      'before you see it. Each try takes about ' + Math.round(w.per_try.seconds / 60) + ' min and costs about $' +
-      w.per_try.usd.toFixed(2) + '; if a design fails the check, Wonder tries again, up to ' + w.max_tries + ' tries.'));
+      'before you see it. Recorded Wonder runs on Oct 29 took about ' + Math.round(w.per_try.seconds / 60) +
+      ' min and cost about $' + w.per_try.usd.toFixed(2) + ' per try; actual time and cost vary. ' +
+      'If a design fails the check, Wonder tries again, up to ' + w.max_tries + ' tries.'));
     var pick = el('select', 'wtarget');
     pick.setAttribute('aria-label', 'What to design');
     w.targets.forEach(function (t) { var o = el('option', null, t); o.value = t; pick.appendChild(o); });
