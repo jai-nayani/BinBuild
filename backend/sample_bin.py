@@ -44,7 +44,7 @@ QUALITY = 70
 # Side views keep only the tabletop: the fraction of the upright photo cut off the top.
 CROP_TOP = {"front": 0.36, "right": 0.28, "back": 0.40, "left": 0.33}
 CLASSIFIER = ("sample: the kit batch's verified pieces (Oct 28), with outlines from a recorded "
-              "SAM 3.1 run (Oct 29), pre-computed; no model call")
+              "SAM 3.1 run (Oct 28), pre-computed; no model call")
 
 
 def manifest() -> dict:
@@ -237,6 +237,6 @@ if __name__ == "__main__":
         for p in make():
             print(f"{p['file']}: {p['width']}x{p['height']}, {p['bytes'] // 1024} KB")
     elif sys.argv[1:] == ["outlines"]:
-        print(f"Added {outlines()} recorded SAM 3.1 outlines (Oct 29); no model call.")
+        print(f"Added {outlines()} recorded SAM 3.1 outlines (Oct 28); no model call.")
     else:
         raise SystemExit("usage: python -m backend.sample_bin make|outlines")

@@ -131,7 +131,8 @@ class TestWonderJobs(unittest.TestCase):
             def respond(self, *args, **kwargs):
                 raise RuntimeError("unexpected internal failure")
 
-        with mock.patch.object(main.WonderClient, "from_env", return_value=Broken()):
+        with mock.patch.object(main.WonderClient, "from_env", return_value=Broken()), \
+                mock.patch.object(main.traceback, "print_exc") as logged:
             status, start = self.post()
             self.assertEqual(status, 202)
             result = self.finish(start["job_id"])
@@ -141,6 +142,24 @@ class TestWonderJobs(unittest.TestCase):
             while main._wonder_busy.locked() and time.monotonic() < deadline:
                 time.sleep(0.01)
             self.assertFalse(main._wonder_busy.locked())
+            logged.assert_called_once_with()
+
+    def test_step_writer_setup_error_is_logged_and_keeps_the_booklet(self):
+        from backend import step_writer
+
+        fake = Scripted([reply(HOUSE, "Little house")])
+        with mock.patch.object(main.WonderClient, "from_env", return_value=fake), \
+                mock.patch.object(main.SparkClient, "from_env", side_effect=SparkError("offline fake")), \
+                mock.patch.object(main.traceback, "print_exc") as logged:
+            status, start = self.post()
+            self.assertEqual(status, 202)
+            result = self.finish(start["job_id"])
+            self.assertEqual(result["state"], "done", result)
+            self.assertEqual(result["build"]["status"], "fit")
+            logged.assert_called_once_with()
+            status, stored = self.api.call("GET", "/api/builds/" + str(result["build"]["build_id"]))
+            self.assertEqual(status, 200)
+            self.assertIn(step_writer.FALLBACK_NOTE, stored["booklet"]["notes"])
 
     def test_missing_key_is_a_fast_503_and_releases_lock(self):
         with mock.patch.object(main.WonderClient, "from_env", side_effect=WonderError("no Meta Model API key")):

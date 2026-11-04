@@ -121,7 +121,7 @@ The app requests a whole-photo Muse Spark pass, then a SAM 3.1 mask and Spark
 close-up pass, before the user reviews and confirms the proposed inventory.
 A failed SAM pass leaves the whole-photo proposals available for review. The
 sample bin provides the Oct 28 kit batch, verified labels, and recorded SAM
-outlines from Oct 29 without a model call. The original recorded run still
+outlines from Oct 28 ET without a model call. The original recorded run still
 needed 11 label corrections after the SAM pass. Details and prior recorded
 measurements: [LIVE-LOOP.md](LIVE-LOOP.md), [SAM-3-1.md](SAM-3-1.md).
 

@@ -54,6 +54,45 @@ class TestWonderJobsOnPhone(unittest.TestCase):
         self.assertEqual(ui["after_back"], ["build-view"])
         self.assertFalse(any("/jobs/" in r for r in result["requests"]))
 
+    def test_failed_poll_retries_then_shows_the_completed_design(self):
+        for failed in ([0, None], [503, {"detail": "temporarily unavailable"}]):
+            with self.subTest(failed=failed):
+                job = {"polls": [failed, [200, {"state": "done", "message": "Design ready", "build": {
+                    "title": "Test house", "status": "fit", "booklet_url": "/api/builds/7/booklet",
+                    "message": "Checked",
+                }}]]}
+                result = play(open_builds=True, build_options=options(), wonder_job=job)
+                ui = result["ui"]["wonder"]
+                # A network error also schedules the backend health-check timeout.
+                self.assertEqual([p["delay"] for p in ui["progress"]], [4000] * (3 if failed[0] == 0 else 2))
+                self.assertEqual(ui["status"], "Design ready")
+                self.assertFalse(ui["button_disabled"])
+                self.assertEqual(len(ui["links"]), 1)
+                self.assertEqual(len([r for r in result["requests"] if "/jobs/" in r]), 2)
+
+    def test_successful_poll_resets_the_consecutive_failure_count(self):
+        failed = [502, {"detail": "temporary error"}]
+        job = {"polls": [failed] * 3 + [
+            [200, {"state": "running", "message": "Still designing"}],
+        ] + [failed] * 3 + [
+            [200, {"state": "done", "message": "Design ready", "build": {
+                "title": "Test house", "status": "fit", "message": "Checked",
+            }}],
+        ]}
+        ui = play(open_builds=True, build_options=options(), wonder_job=job)["ui"]["wonder"]
+        self.assertEqual(len(ui["progress"]), 8)
+        self.assertEqual(ui["status"], "Design ready")
+        self.assertFalse(ui["button_disabled"])
+
+    def test_three_poll_retries_then_explains_where_to_find_the_result(self):
+        job = {"polls": [[503, {"detail": "offline"}]] * 5}
+        result = play(open_builds=True, build_options=options(), wonder_job=job)
+        ui = result["ui"]["wonder"]
+        self.assertEqual(len([r for r in result["requests"] if "/jobs/" in r]), 4)
+        self.assertEqual(ui["status"], "Lost contact with the design job. It may still finish: reopen What can I "
+                         "build? to see it under Designs made before.")
+        self.assertFalse(ui["button_disabled"])
+
     def test_job_failure_and_lost_job_are_shown(self):
         for response, message in [
             ([200, {"state": "failed", "message": "Wonder failed"}], "Wonder failed"),
@@ -65,6 +104,7 @@ class TestWonderJobsOnPhone(unittest.TestCase):
                 self.assertIn(message, ui["status"])
                 self.assertFalse(ui["button_disabled"])
                 self.assertEqual(ui["links"], [])
+                self.assertEqual(len(ui["progress"]), 1)
 
     def test_service_worker_cache_is_version_16(self):
         worker = (Path(__file__).resolve().parent.parent / "app" / "sw.js").read_text()

@@ -36,6 +36,7 @@ import shutil
 import sqlite3
 import threading
 import time
+import traceback
 from collections import Counter
 from contextlib import closing
 from datetime import datetime, timezone
@@ -462,7 +463,7 @@ def create_app() -> FastAPI:
                 except SamError as err:
                     raise HTTPException(503, f"SAM 3.1 is not set up: {err}")
             try:
-                spark = SparkClient.from_env(timeout=70, retries=0)
+                spark = SparkClient.from_env(timeout=100, retries=0)
                 run = {}
                 if batch["status"] != "classified" or force:
                     run = inventory_pipeline.classify_batch(
@@ -767,6 +768,7 @@ def create_app() -> FastAPI:
                         spark = SparkClient.from_env(timeout=90, retries=0)
                         stored["booklet"] = step_writer.write_steps(stored["booklet"], target, spark)
                     except Exception:
+                        traceback.print_exc()
                         stored["booklet"]["notes"].append(step_writer.FALLBACK_NOTE)
                     stored["title"] = stored["booklet"]["title"]
                 stored["seconds"] = round(time.monotonic() - started, 1)
@@ -775,8 +777,10 @@ def create_app() -> FastAPI:
                                                       {**build_plan.snapshot(summary), "batches": batches}, stored)
                 update(state="done", message=stored["message"], build=_build_reply(build))
             except WonderError as err:
+                traceback.print_exc()
                 update(state="failed", message=f"Muse Wonder failed: {err}")
             except Exception:
+                traceback.print_exc()
                 update(state="failed", message="The design job failed. Please try again.")
             finally:
                 _wonder_busy.release()

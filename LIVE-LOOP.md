@@ -21,7 +21,7 @@ keeps the checked pieces, placements, and pictures. If Spark cannot provide
 usable step words, the booklet retains BinBuild's original text.
 
 The sample bin contains the **Oct 28** kit photographs and corrections, plus
-pre-computed outlines from SAM replies recorded **Oct 29**. Loading it needs
+pre-computed outlines from SAM replies recorded **Oct 28 ET**. Loading it needs
 no model call. The recorded Wonder example is from an **Oct 29** run on the
 kit's inventory, not the viewer's bin; no model call is needed to see it.
 
@@ -29,12 +29,13 @@ kit's inventory, not the viewer's bin; no model call is needed to see it.
 
 These are individual prior runs, not guarantees for another bin or a new
 deployment. The whole-photo fixture records a run on the Oct 28 photo batch
-but does not specify the run's date. The SAM fixture dates its replies Oct 29.
+but does not specify the run's date. The SAM run was Oct 28 ET; the fixture
+uses a UTC date.
 
 | Recorded work | Result | Source |
 |---|---|---|
 | Spark whole-photo pass on the Oct 28 batch; run date unspecified | 50 pieces, 44 s | [Inventory loop](INVENTORY-LOOP.md) |
-| SAM replies from Oct 29, on that batch | 50 masks for 50 prompted points; four sequential requests took 11.2 s total and cost $0.01 | [SAM spike](SAM-3-1.md), [recorded fixture](tests/fixtures/kit-batch-sam-recorded.json) |
+| SAM replies from Oct 28 ET, on that batch | 50 masks for 50 prompted points; four sequential requests took 11.2 s total and cost $0.01 | [SAM spike](SAM-3-1.md), [recorded fixture](tests/fixtures/kit-batch-sam-recorded.json) |
 | Spark close-up check in the recorded SAM fixture; run date unspecified | 48 s for four contact sheets | [SAM spike](SAM-3-1.md) |
 | Wonder Simple House, Oct 29 | First attempt passed the validator; 88 s and $0.20 | [Wonder designer](WONDER-DESIGNER.md), [recorded fixture](tests/fixtures/wonder-house-recorded.json) |
 

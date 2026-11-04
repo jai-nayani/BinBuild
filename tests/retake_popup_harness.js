@@ -190,6 +190,7 @@ class FakeXHR {
     }
     this.status = reply[0];
     this.responseText = JSON.stringify(reply[1]);
+    if (this.status === 0) { this.onerror(); return; }
     this.onload();
   }
 }

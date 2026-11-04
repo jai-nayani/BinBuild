@@ -73,7 +73,7 @@ class SampleOutlines(unittest.TestCase):
             sample_bin.load(conn, Path(tmp) / "data")
             review = inventory_db.batch_review(conn, sample_bin.BATCH_ID)
             self.assertGreaterEqual(sum(bool(d["region"].get("mask")) for d in review["detections"]), 45)
-            self.assertIn("recorded SAM 3.1 run (Oct 29)", review["batch"]["classifier"])
+            self.assertIn("recorded SAM 3.1 run (Oct 28)", review["batch"]["classifier"])
             self.assertIn("no model call", review["batch"]["classifier"])
 
 

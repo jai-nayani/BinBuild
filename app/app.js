@@ -1181,6 +1181,7 @@ var ACCESS_KEY = (function () {
   }
 
   function generateDesign(target, btn, pick, out, status) {
+    var failedPolls = 0;
     btn.disabled = true;
     pick.disabled = true;
     out.innerHTML = '';
@@ -1196,10 +1197,24 @@ var ACCESS_KEY = (function () {
     function poll(jobId) {
       request('GET', '/api/builds/wonder/jobs/' + encodeURIComponent(jobId), null, BUILD_TIMEOUT_MS,
         function (xhr, body, failure) {
-          if (failure || xhr.status !== 200 || !body) {
+          if (xhr.status === 404) {
             finish();
             setStatus('✗ ' + (failure || detailOf(xhr, body)), 'error', status);
-          } else if (body.state === 'running') {
+            return;
+          }
+          if (failure || xhr.status !== 200 || !body) {
+            failedPolls += 1;
+            if (failedPolls <= 3) {
+              setTimeout(function () { poll(jobId); }, WONDER_POLL_MS);
+            } else {
+              finish();
+              setStatus('Lost contact with the design job. It may still finish: reopen What can I build? ' +
+                'to see it under Designs made before.', 'error', status);
+            }
+            return;
+          }
+          failedPolls = 0;
+          if (body.state === 'running') {
             setStatus(body.message || 'Muse Wonder is designing…', null, status);
             setTimeout(function () { poll(jobId); }, WONDER_POLL_MS);
           } else if (body.state === 'done' && body.build) {

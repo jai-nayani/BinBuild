@@ -184,8 +184,9 @@ class TestWonderInTheApp(unittest.TestCase):
             def respond(self, *a, **k):
                 raise WonderError("HTTP 500 from the Meta Model API: oops")
         self.wonder = Broken()
-        with mock.patch.dict(os.environ, FLAG_ON):
+        with mock.patch.dict(os.environ, FLAG_ON), mock.patch.object(main.traceback, "print_exc") as logged:
             status, body = self.generate()
+            logged.assert_called_once_with()
         self.assertEqual(status, 202)
         self.assertEqual(body["state"], "failed")
         self.assertIn("Muse Wonder failed", body["message"])
