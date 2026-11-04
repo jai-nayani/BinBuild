@@ -66,7 +66,8 @@ class TestWonderJobsOnPhone(unittest.TestCase):
         self.assertEqual([(x["tag"], x["className"], x["text"]) for x in ui["builds"]["list_order"]], [
             ("DIV", "wonder", ""), ("H3", "build-section", "Book designs that fit your pieces"), ("DIV", "build-carousel", "")])
         self.assertIn("Three ideas from my pieces", ui["wonder"]["text"])
-        self.assertTrue(any("up to 3 attempts" in text for text in ui["wonder"]["text"]))
+        self.assertIn("Muse Wonder looks at your pieces and invents three things to build. "
+                      "Every design is checked before you see it.", ui["wonder"]["text"])
         self.assertEqual([p["delay"] for p in ui["wonder"]["progress"]], [4000, 4000])
         self.assertIn("Try 1 of 3: the checker found 2 problems", ui["wonder"]["progress"][0]["after"])
         self.assertEqual([r for r in result["requests"] if "/api/builds/wonder" in r], [

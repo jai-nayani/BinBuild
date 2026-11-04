@@ -58,6 +58,7 @@ function deferred() { let resolve; const promise = new Promise(r => { resolve = 
 async function main() {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = 'http://127.0.0.1:' + server.address().port;
+  const splitOrigin = 'http://127.0.0.1:1'; // intercepted: no server or outbound call
   browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, serviceWorkers: 'block' });
   let review, sample = false, jobStage, ideasReady = false;
@@ -65,6 +66,9 @@ async function main() {
   let samSeen = deferred();
   await context.route('**/*', async route => {
     const url = new URL(route.request().url());
+    if (url.origin === splitOrigin && url.pathname === '/api/builds/7/booklet') {
+      return route.fulfill({ contentType: 'text/html', body: fixture.html, headers: { 'Access-Control-Allow-Origin': origin } });
+    }
     if (url.origin !== origin) { await route.abort(); throw new Error('Unexpected outbound request'); }
     const p = url.pathname;
     const json = body => route.fulfill({ json: body });
@@ -85,7 +89,7 @@ async function main() {
       return json({ pieces: 20, run: { sam_pass: { masks: 20, points: 20, sam: { seconds: 1.2 }, spark_tiles: { seconds: 4.5 } } } });
     }
     if (p.endsWith('/review')) { return json(review); }
-    if (p.endsWith('/confirm')) { review.batch.status = 'confirmed'; return json({ pieces_added: review.pieces, summary: { total_pieces: review.pieces } }); }
+    if (p.endsWith('/confirm')) { review.batch.status = 'confirmed'; return json({ pieces_added: review.pieces, pieces_in_batch: review.pieces, summary: { total_pieces: review.pieces } }); }
     if (p === '/api/builds/options') {
       return json({ inventory: { total_pieces: sample ? 50 : 20 }, options: [], wonder: {
         enabled: true, busy: false, max_tries: 3, supported_pieces: sample ? 50 : 20,
@@ -154,6 +158,15 @@ async function main() {
   await page.getByRole('link', { name: /Open the booklet/ }).waitFor({ timeout: 10000 });
   await page.getByRole('link', { name: /Open the booklet/ }).click();
   await shot('booklet-full-screen');
+  assert.equal(await page.frameLocator('#booklet-frame').locator('header h1').isVisible(), false, 'one visible booklet title');
+  const frameBox = await page.locator('#booklet-frame').boundingBox();
+  assert.equal(Math.round(frameBox.y + frameBox.height), 844, 'booklet fills the screen height');
+  await page.locator('#booklet-back-btn').click();
+  await page.evaluate(url => { BACKEND_URL = url; }, splitOrigin);
+  await page.getByRole('link', { name: /Open the booklet/ }).click();
+  await page.waitForFunction(() => document.getElementById('booklet-frame').srcdoc.includes('header h1{display:none}'));
+  await shot('booklet-split-origin');
+  assert.equal(await page.frameLocator('#booklet-frame').locator('header h1').isVisible(), false, 'split-port title is not repeated');
   await page.locator('#booklet-back-btn').click();
   await page.goto(origin);
   await page.locator('#sample-link').click();

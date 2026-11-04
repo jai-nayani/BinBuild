@@ -230,7 +230,7 @@ class TestTheApp(unittest.TestCase):
         button = html.index('id="sample-images-btn"')
         self.assertLess(grid_end, button)
         self.assertLess(button, html.index('id="gallery-btn"'))
-        self.assertIn(">Use sample images<", html)
+        self.assertIn(">No pieces handy? Use the sample pieces<", html)
 
 
 if __name__ == "__main__":

@@ -114,11 +114,11 @@
             <span class="pstate" id="state-left">Tap to take</span>
           </label>
         </div>
-        <button type="button" class="btn btn-sample" id="sample-images-btn">Use sample images<span>5 photos of the 50-piece kit, already identified</span></button>
+        <button type="button" class="btn btn-link" id="sample-images-btn">No pieces handy? Use the sample pieces</button>
         <label class="btn btn-link" for="gallery-input" id="gallery-btn">or pick the next photo from your gallery</label>
-        <button class="btn btn-primary" id="upload-btn" disabled>Check my 5 photos (0/5)</button>
+        <button class="btn btn-primary" id="upload-btn" disabled>Check my 5 photos</button>
         <progress id="upload-progress" class="hidden" max="100" value="0"></progress>
-        <button class="btn btn-done" id="identify-btn" disabled>Next: identify the pieces</button>
+        <button class="btn btn-done hidden" id="identify-btn" disabled>Next: identify the pieces</button>
         <div id="identify-tracker" class="hidden" role="status" aria-live="polite"></div>
         <p class="status" id="status" role="status" aria-live="polite"></p>
         <div class="callout hidden" id="sample-offer">
@@ -136,7 +136,7 @@
       <div class="card">
         <h2>Finished?</h2>
         <p id="finished-note">See your batches, check each one's pieces and add them to your inventory.</p>
-        <button class="btn btn-done" id="finished-btn" disabled>Finished — show my batches</button>
+        <button class="btn btn-secondary" id="finished-btn" disabled>Finished — show my batches</button>
       </div>
     </section>
 
@@ -206,15 +206,15 @@
 
     <!-- 6. One build's step-by-step booklet, opened from its carousel card -->
     <section id="booklet-view" class="hidden">
-      <div class="card">
+      <div class="booklet-bar">
+        <button type="button" id="booklet-back-btn">← Back</button>
         <h2 id="booklet-title">Booklet</h2>
-        <div id="booklet-models" class="model-chips hidden"></div>
-        <iframe id="booklet-frame" title="Step-by-step booklet"></iframe>
-        <button class="btn btn-secondary" id="booklet-back-btn">← Back to the builds</button>
       </div>
+      <div id="booklet-models" class="model-chips hidden"></div>
+      <iframe id="booklet-frame" title="Step-by-step booklet"></iframe>
     </section>
 
-    <p class="backend" id="backend-line" role="status"><span class="dot"></span><span id="backend-text">Backend: checking…</span><button type="button" id="backend-retry">Re-check</button></p>
+    <p class="backend hidden" id="backend-line" role="status"><span class="dot"></span><span id="backend-text">Backend: checking…</span><button type="button" id="backend-retry">Re-check</button></p>
   </main>
 
   <!-- Pop-up for a photo that failed the check: names the view and retakes only that photo. -->
@@ -251,7 +251,7 @@
         <label for="edit-count">How many</label>
         <input id="edit-count" type="number" min="1" max="99" value="1">
       </div>
-      <p class="hint" id="edit-generator"></p>
+      <button type="button" class="btn btn-link hidden" id="edit-remove-btn">Remove</button>
       <div class="row">
         <button class="btn btn-secondary" id="edit-cancel-btn">Cancel</button>
         <button class="btn btn-primary" id="edit-save-btn">Save</button>

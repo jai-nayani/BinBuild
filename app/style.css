@@ -174,7 +174,15 @@ h4.chapter { font-size: 14px; margin: 14px 0 2px; color: var(--ink); }
 .build-cover svg { max-width: 100%; height: auto; max-height: 240px; }
 .build-name { font-size: 19px; font-weight: 800; line-height: 1.2; text-align: center; }
 .build-pieces { font-size: 14px; font-weight: 600; color: var(--muted); }
-#booklet-frame { width: 100%; height: 68vh; border: 1px solid var(--line); border-radius: 12px; background: #fff; display: block; }
+#booklet-view { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+.on-booklet { overflow: hidden; }
+.on-booklet main { max-width: none; padding: 0; }
+.on-booklet #app-header, .on-booklet footer { display: none; }
+.booklet-bar { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--yellow); flex: none; }
+.booklet-bar h2 { margin: 0; min-width: 0; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
+.booklet-bar button { flex: none; min-height: 40px; border: none; border-radius: 10px; background: rgba(255,255,255,0.6); color: var(--ink); font: inherit; font-size: 14px; padding: 8px 10px; cursor: pointer; }
+#booklet-models { flex: none; margin: 0; padding: 6px 12px; }
+#booklet-frame { width: 100%; flex: 1; min-height: 0; border: 0; background: #fff; display: block; }
 .badge.unsure { background: #fde8e4; color: var(--red); }
 
 /* --- check the pieces (unchanged) ----------------------------------------------- */
@@ -221,6 +229,11 @@ h4.chapter { font-size: 14px; margin: 14px 0 2px; color: var(--ink); }
 .pg-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .small { font: inherit; padding: 8px 12px; font-size: 14px; border-radius: 10px; border: 1px solid var(--line); background: #faf8f2; color: var(--ink); cursor: pointer; }
 .small:disabled { opacity: 0.45; }
+.checked-pieces { margin: 12px 0; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.checked-pieces > summary { font-size: 15px; font-weight: 600; cursor: pointer; }
+.text-action { border: 0; background: none; color: var(--blue); padding: 8px 0; font: inherit; font-size: 13px; cursor: pointer; }
+.text-action:disabled { opacity: 0.45; }
+#edit-remove-btn { color: var(--red); }
 .pg-items { list-style: none; padding: 0; margin: 8px 0 0; }
 .pg-items li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
 .pg-items li .who { flex: 1; cursor: pointer; }

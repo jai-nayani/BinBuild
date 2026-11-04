@@ -137,6 +137,7 @@ const notices = scenario.notices;
 let failing = scenario.fail.slice();
 const uploads = [];
 let wonderPoll = 0;
+let batchConfirmed = false;
 const timers = [];
 
 class FakeXHR {
@@ -182,6 +183,14 @@ class FakeXHR {
         : [200, { batch_id: 'sample1', photos: 5, pieces: 50, loaded: false }];
     } else if (p === '/api/inventory/vocab') {
       reply = [200, scenario.vocab || { families: [], colors: [], shapes: [], generator_types: [] }];
+    } else if (scenario.confirm_undo && p === '/api/inventory/batch/sample1/confirm') {
+      batchConfirmed = true;
+      reply = [200, { pieces_in_batch: scenario.review.pieces, summary: { total_pieces: scenario.review.pieces } }];
+    } else if (scenario.confirm_undo && p === '/api/inventory/undo-last-batch?batch_id=sample1') {
+      batchConfirmed = false;
+      reply = [200, { pieces_removed: scenario.review.pieces }];
+    } else if (scenario.confirm_undo && p === '/api/inventory/batch/sample1/review') {
+      reply = [200, { ...scenario.review, batch: { ...scenario.review.batch, status: batchConfirmed ? 'confirmed' : 'classified' } }];
     } else if (p === '/api/inventory/batch/sample1/review' && this.method === 'POST') {
       reply = [200, scenario.review_reply || { batch: { id: 'sample1', status: 'classified' },
                       detections: [], pieces: 50, photos_ready: true }];
@@ -223,7 +232,8 @@ const sandbox = {
   XMLHttpRequest: FakeXHR,
   FormData: FakeFormData,
   URL: { createObjectURL: (f) => 'blob:' + f.name, revokeObjectURL() {} },
-  fetch: () => Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) }),
+  fetch: () => scenario.backend_down ? Promise.reject(new Error('offline fake'))
+    : Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) }),
   setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; },
   clearTimeout() {},
   setInterval: () => 0,
@@ -260,9 +270,11 @@ ui.panels_at_start = panels();
 });
 ui.panels_before_upload = panels();
 ui.next_enabled_before_upload = !byId('identify-btn').disabled;
+ui.capture_before = { upload: shown('upload-btn'), identify: shown('identify-btn') };
 byId('upload-btn').click();
 ui.panels_after_upload = panels();
 ui.next_enabled_after_upload = !byId('identify-btn').disabled;
+ui.capture_after = { upload: shown('upload-btn'), identify: shown('identify-btn') };
 
 const modal = byId('retake-modal');
 if (scenario.tap_failed) {
@@ -291,6 +303,7 @@ for (let k = 0; k < VIEWS.length + 1 && !modal.classList.contains('hidden'); k++
 
 ui.panels_at_end = panels();
 ui.next_enabled_at_end = !byId('identify-btn').disabled;
+ui.capture_end = { upload: shown('upload-btn'), identify: shown('identify-btn') };
 if (scenario.identify) {
   byId('identify-btn').click();
   ui.sample_offer = { shown: shown('sample-offer'), button: byId('sample-bin-btn').textContent };
@@ -320,6 +333,9 @@ const reviewSnapshot = () => ({
   outlines: byId('check-outlines').children.map((p) => ({ transform: p.attrs.transform, delay: p.style.animationDelay })),
   groups: byId('check-list').children.map((g) => ({
     texts: textsOf(g), buttons: buttonsIn(g).map((b) => b.textContent),
+  })),
+  folded: byId('check-list').children.filter((g) => g.tagName === 'DETAILS').map((g) => ({
+    summary: g.children[0].textContent, open: g.getAttribute('open') !== null,
   })),
   dots: byId('check-dots').children.map((d) => ({
     left: d.style.left, top: d.style.top,
@@ -364,16 +380,25 @@ if (scenario.review_actions) {
   const click = (text) => { const b = buttonsIn(byId('check-list')).filter((x) => x.textContent.indexOf(text) === 0)[0]
                              || (byId('add-piece-btn').textContent.indexOf(text) === 0 ? byId('add-piece-btn') : null);
                             if (b) { b.click(); } return !!b; };
-  ui.fix_opened = click('✎ Fix');
+  ui.fix_opened = click('Fix');
   ui.edit_modal_after_fix = !byId('edit-modal').classList.contains('hidden');
   byId('edit-save-btn').click();
-  ui.remove_clicked = click('✕ Remove');
+  ui.remove_clicked = click('Fix');
+  byId('edit-remove-btn').click();
   ui.put_back_clicked = click('↩ Put back');
   ui.add_opened = click('＋ Add a piece');
   ui.edit_modal_after_add = !byId('edit-modal').classList.contains('hidden');
   if (ui.add_opened) { byId('edit-count').value = '1'; byId('edit-save-btn').click(); }
   ui.review_after_actions = reviewSnapshot();
   ui.review_requests = uploads.slice(before).map((u) => ({ method: u.method, path: u.path, json: u.json, files: u.files }));
+}
+if (scenario.confirm_undo) {
+  const before = uploads.length;
+  byId('confirm-btn').click();
+  ui.after_confirm = reviewSnapshot();
+  byId('undo-btn').click();
+  ui.after_undo = reviewSnapshot();
+  ui.lifecycle_requests = uploads.slice(before).map((u) => ({ method: u.method, path: u.path, json: u.json }));
 }
 if (scenario.open_builds) {
   byId('build-open-btn').click();
@@ -445,6 +470,8 @@ if (scenario.open_builds) {
 
 const ids = [];
 walk(root, (e) => { if (e.id) { ids.push(e.id); } });
+setImmediate(() => {
+ui.backend = { shown: shown('backend-line'), text: byId('backend-text').textContent };
 process.stdout.write(JSON.stringify({
   popups,
   batch_upload: uploads.find((u) => u.path === '/api/inventory/batch').files,
@@ -454,3 +481,4 @@ process.stdout.write(JSON.stringify({
   ui,
   requests: uploads.map((u) => u.method + ' ' + u.path),
 }));
+});

@@ -158,6 +158,7 @@ var ACCESS_KEY = (function () {
       $(id).classList.toggle('hidden', id !== viewId);
     });
     document.body.classList.toggle('on-hero', viewId === 'hero-view'); // the hero has no header bar
+    document.body.classList.toggle('on-booklet', viewId === 'booklet-view');
     window.scrollTo(0, 0);
   }
 
@@ -235,9 +236,10 @@ var ACCESS_KEY = (function () {
       if (photo) { thumb.src = photo.url; thumb.classList.remove('hidden'); } else { thumb.removeAttribute('src'); thumb.classList.add('hidden'); }
     });
 
-    uploadBtn.classList.toggle('hidden', !!batch);
-    uploadBtn.disabled = !full || uploading;
-    uploadBtn.textContent = uploading ? 'Checking the photos…' : 'Check my 5 photos (' + filled() + '/5)';
+    uploadBtn.classList.toggle('hidden', !!batch && batch.ready);
+    uploadBtn.disabled = !full || uploading || !!batch;
+    uploadBtn.textContent = uploading ? 'Checking the photos…' : 'Check my 5 photos';
+    identifyBtn.classList.toggle('hidden', !(batch && batch.ready));
     identifyBtn.disabled = busy || !(batch && batch.ready); // Next: only once all 5 photos passed the check
     identifyBtn.textContent = busy ? 'Identifying…' : 'Next: identify the pieces';
     $('finished-btn').disabled = uploading || busy || !!batch;
@@ -598,7 +600,8 @@ var ACCESS_KEY = (function () {
           var keep = review && review.id === batchId ? review : null;
           review = { id: batchId, data: body, photo: body.count_photo, selected: keep ? keep.selected : null,
                      focus: null, open: keep ? keep.open : {}, confirmedText: keep ? keep.confirmedText : '',
-                     masks: keep ? keep.masks : true, expanded: keep ? keep.expanded : false };
+                     masks: keep ? keep.masks : true, expanded: keep ? keep.expanded : false,
+                     checkedOpen: keep ? keep.checkedOpen : false };
           if (!note) { setStatus('', null, checkStatus); }
           var img = $('check-img');
           if (review.photo) { img.src = BACKEND_URL + review.photo.url; img.classList.remove('hidden'); } else { img.classList.add('hidden'); }
@@ -638,7 +641,6 @@ var ACCESS_KEY = (function () {
     var confirmed = data.batch.status === 'confirmed';
     var kept = data.detections.filter(function (d) { return d.status !== 'rejected'; });
     var removed = data.detections.filter(function (d) { return d.status === 'rejected'; });
-    var gen = total(kept.filter(function (d) { return d.generator_type; }));
     var fixed = data.detections.filter(function (d) { return d.status === 'corrected' || d.source === 'manual'; }).length;
 
     var sample = (data.batch.classifier || '').indexOf('sample') === 0;
@@ -653,8 +655,7 @@ var ACCESS_KEY = (function () {
       : kept.length
         ? 'Tap a row to see those pieces on the photo. Fix anything that’s wrong, remove anything that isn’t a piece, then add them to your inventory.'
         : 'No pieces in this batch yet. Add the pieces Spark missed, or go back and identify it again.';
-    $('check-summary').textContent = plural(data.pieces, 'piece', 'pieces') + ' · ' +
-      plural(gen, 'plain brick', 'plain bricks') + ' BrickGPT can use' +
+    $('check-summary').textContent = plural(data.pieces, 'piece', 'pieces') +
       (fixed ? ' · ' + fixed + (sample ? ' fixed in its earlier review' : ' fixed by you') : '') +
       (removed.length ? ' · ' + removed.length + ' removed' : '');
     renderDots(kept);
@@ -664,7 +665,19 @@ var ACCESS_KEY = (function () {
 
     var list = $('check-list');
     list.innerHTML = '';
-    groupsOf(kept).forEach(function (g) { list.appendChild(groupCard(g, confirmed)); });
+    var unsure = kept.filter(function (d) { return d.unsure; });
+    var checked = kept.filter(function (d) { return !d.unsure; });
+    unsure.forEach(function (d) {
+      list.appendChild(groupCard({ key: groupKey(d), first: d, items: [d] }, confirmed));
+    });
+    if (checked.length) {
+      var folded = el('details', 'checked-pieces');
+      if (review.checkedOpen) { folded.setAttribute('open', ''); }
+      folded.appendChild(el('summary', null, '✓ ' + plural(total(checked), 'piece looks', 'pieces look') + ' right'));
+      groupsOf(checked).forEach(function (g) { folded.appendChild(groupCard(g, confirmed)); });
+      folded.addEventListener('toggle', function () { review.checkedOpen = folded.open; });
+      list.appendChild(folded);
+    }
     if (removed.length) {
       list.appendChild(el('p', 'section-label', 'Removed: not added to your inventory'));
       groupsOf(removed).forEach(function (g) { list.appendChild(groupCard(g, confirmed)); });
@@ -798,7 +811,6 @@ var ACCESS_KEY = (function () {
     swatch.style.background = colorHex(d.color);
     head.appendChild(swatch);
     head.appendChild(el('span', null, total(g.items) + '× ' + pieceLabel(d)));
-    if (d.generator_type) { head.appendChild(el('span', 'badge gen', 'BrickGPT brick')); }
     if (d.status === 'corrected') { head.appendChild(el('span', 'badge fixed', 'fixed')); }
     if (d.source === 'manual') { head.appendChild(el('span', 'badge fixed', 'added by you')); }
     if (!removed && g.items.some(function (item) { return item.unsure; })) {
@@ -813,20 +825,20 @@ var ACCESS_KEY = (function () {
       actions.appendChild(smallButton('↩ Put back' + (many ? ' all ' + g.items.length : ''),
         function () { setPieces(ids(g.items), 'accepted'); }));
     } else {
-      actions.appendChild(smallButton('✎ Fix' + (many ? ' all ' + g.items.length : ''),
+      actions.appendChild(smallButton('Fix',
         function () { openEditor({ ids: ids(g.items), from: d }); }));
-      actions.appendChild(smallButton('✕ Remove' + (many ? ' all ' + g.items.length : ''),
-        function () { setPieces(ids(g.items), 'rejected'); }));
       if (!many && d.unsure) {
         actions.appendChild(smallButton('📷 Retake this piece', function () { startPieceRetake(d); }));
       }
     }
     if (many) {
-      actions.appendChild(smallButton(review.open[g.key] ? 'Hide ▴' : 'One by one ▾', function () {
+      var oneByOne = smallButton(review.open[g.key] ? 'Hide ▴' : 'One by one ▾', function () {
         review.open[g.key] = !review.open[g.key];
         review.selected = g.key;
         renderReview();
-      }));
+      });
+      oneByOne.className = 'text-action';
+      actions.appendChild(oneByOne);
     }
     card.appendChild(actions);
 
@@ -840,8 +852,7 @@ var ACCESS_KEY = (function () {
         if (removed) {
           row.appendChild(smallButton('↩ Put back', function () { setPieces([item.id], 'accepted'); }));
         } else {
-          row.appendChild(smallButton('✎ Fix', function () { openEditor({ ids: [item.id], from: item }); }));
-          row.appendChild(smallButton('✕ Remove', function () { setPieces([item.id], 'rejected'); }));
+          row.appendChild(smallButton('Fix', function () { openEditor({ ids: [item.id], from: item }); }));
           if (item.unsure) {
             row.appendChild(smallButton('📷 Retake this piece', function () { startPieceRetake(item); }));
           }
@@ -914,8 +925,7 @@ var ACCESS_KEY = (function () {
         review.focus = id; // the same piece, still ringed on the photo
         renderReview();
         var updated = body.detection || {};
-        setStatus('✓ Updated: ' + pieceLabel(updated) +
-          (updated.confidence != null ? ' (' + Math.round(updated.confidence * 100) + '% sure)' : '') + '.', 'ok', $('check-status'));
+        setStatus('✓ Updated: ' + pieceLabel(updated) + '.', 'ok', $('check-status'));
       });
   });
 
@@ -955,9 +965,6 @@ var ACCESS_KEY = (function () {
   function updateEditorHint() {
     var f = editorFields();
     $('edit-swatch').style.background = colorHex(f.color);
-    $('edit-generator').textContent = isGenerator(f.family, f.size, f.plain)
-      ? '✓ A plain ' + f.size + ' brick: BrickGPT can build with it.'
-      : 'BrickGPT can’t build with this one (it only uses plain bricks: 1x1, 1x2, 1x4, 1x6, 1x8, 2x2, 2x4, 2x6). It still goes into your inventory.';
   }
 
   function openEditor(opts) {
@@ -979,6 +986,8 @@ var ACCESS_KEY = (function () {
     $('edit-plain').checked = !!d.plain;
     $('edit-count').value = 1;
     $('edit-count-row').classList.toggle('hidden', !opts.addition);
+    $('edit-remove-btn').classList.toggle('hidden', !!opts.addition);
+    $('edit-remove-btn').disabled = reviewBusy;
     setStatus('', null, $('edit-status'));
     updateEditorHint();
     $('edit-modal').classList.remove('hidden');
@@ -995,6 +1004,12 @@ var ACCESS_KEY = (function () {
     $(id).addEventListener('change', updateEditorHint);
   });
   $('edit-cancel-btn').addEventListener('click', closeEditor);
+  $('edit-remove-btn').addEventListener('click', function () {
+    if (!editing || editing.addition || reviewBusy) { return; }
+    var remove = editing.ids.slice();
+    closeEditor();
+    setPieces(remove, 'rejected');
+  });
   $('edit-save-btn').addEventListener('click', function () {
     if (!editing || reviewBusy) { return; }
     var f = editorFields();
@@ -1140,6 +1155,36 @@ var ACCESS_KEY = (function () {
   var carouselCards = {};     // build id -> its card, for the way back
   var manualReturn = null;    // { id, scrollLeft } of the card a booklet was opened from
 
+  function setBookletFrame(url) {
+    var frame = $('booklet-frame');
+    frame.removeAttribute('srcdoc');
+    frame.src = BACKEND_URL + url;
+  }
+
+  $('booklet-frame').addEventListener('load', function () {
+    var frame = $('booklet-frame');
+    try {
+      var doc = frame.contentDocument;
+      if (doc) {
+        var title = doc.querySelector('header h1');
+        if (title) { title.style.display = 'none'; }
+        return;
+      }
+    } catch (err) { /* separate app/backend ports: embed the same booklet below */ }
+    var url = frame.src;
+    // The development app may use port 8080 with the API on 8000. Its CORS
+    // response can be embedded locally so the top bar is still the only title.
+    if (url.indexOf(BACKEND_URL + '/api/') !== 0) { return; }
+    fetch(url).then(function (response) {
+      if (!response.ok) { throw new Error('Booklet unavailable'); }
+      return response.text();
+    }).then(function (html) {
+      if (frame.src === url) {
+        frame.srcdoc = html.replace('</head>', '<style>header h1{display:none}</style></head>');
+      }
+    }).catch(function () { /* keep the original frame and its error, if any */ });
+  });
+
   function carouselCard(o) {
     var card = el('button', 'build-card');
     card.type = 'button';
@@ -1162,7 +1207,7 @@ var ACCESS_KEY = (function () {
       if (!failure && xhr.status === 201 && body && body.booklet_url) {
         bookletChips(false);
         $('booklet-title').textContent = o.title;
-        $('booklet-frame').src = BACKEND_URL + body.booklet_url; // the booklet page, as before
+        setBookletFrame(body.booklet_url);
         setStatus('', null, $('build-status'));
         show('booklet-view');
       } else {
@@ -1268,9 +1313,8 @@ var ACCESS_KEY = (function () {
   function wonderSection(w, inv) {
     var wrap = el('div', 'wonder');
     section(wrap, inventorySource === 'sample' ? 'Three ideas from the sample pieces' : 'Three ideas from my pieces');
-    wrap.appendChild(el('p', 'note', 'Wonder chooses objects from the shapes, colours and quantities here. ' +
-      'Each preview must pass the piece and connection checks. Finding ideas calls Muse Wonder; ' +
-      'up to ' + w.max_tries + ' attempts. A checked design still needs a physical build test.'));
+    wrap.appendChild(el('p', 'note', 'Muse Wonder looks at your pieces and invents three things to build. ' +
+      'Every design is checked before you see it.'));
     var cards = el('div', 'idea-cards');
     var out = el('div', 'wresult');
     var status = el('p', 'status');
@@ -1351,7 +1395,7 @@ var ACCESS_KEY = (function () {
     manualReturn = null;
     bookletChips(true, stepWords);
     $('booklet-title').textContent = title;
-    $('booklet-frame').src = BACKEND_URL + url;
+    setBookletFrame(url);
     show('booklet-view');
   }
 
@@ -1472,10 +1516,12 @@ var ACCESS_KEY = (function () {
       .then(function (res) {
         if (!res.ok) { throw new Error('HTTP ' + res.status); }
         line.classList.add('up');
+        line.classList.add('hidden');
         text.textContent = 'Backend: connected (' + BACKEND_URL + ')';
       })
       .catch(function () {
         line.classList.add('down');
+        line.classList.remove('hidden');
         text.textContent = 'Backend: not reachable at ' + BACKEND_URL + '. Uploads will fail until it is.';
       })
       .then(function () { clearTimeout(timer); });

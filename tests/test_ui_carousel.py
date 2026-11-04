@@ -215,7 +215,7 @@ class TestCloseUpInTheApp(unittest.TestCase):
         ui = result["ui"]
         self.assertEqual(ui["retake_buttons_before"], 1, ui["review_before"])
         after = ui["review_after_retake"]
-        self.assertEqual(after["status"], "✓ Updated: orange 1x2 curved slope (97% sure).")
+        self.assertEqual(after["status"], "✓ Updated: orange 1x2 curved slope.")
         self.assertIn("orange 1x2 curved slope", " ".join(t for g in after["groups"] for t in g["texts"]))
         self.assertNotIn("red 1x2 brick", " ".join(t for g in after["groups"] for t in g["texts"]))
         self.assertEqual([(d["left"], d["top"]) for d in after["dots"]],
@@ -230,6 +230,12 @@ class TestCloseUpInTheApp(unittest.TestCase):
         payloads = [json.loads(r["json"]) for r in sent[1:] if r["json"]]
         self.assertTrue(any(p.get("corrections") for p in payloads), payloads)
         self.assertTrue(any(p.get("additions") for p in payloads), payloads)
+        self.assertEqual(payloads, [
+            {"corrections": [{"detection_id": 2, "family": "plate", "shape": "plate", "size": "1x2", "color": "blue", "plain": True}]},
+            {"corrections": [{"detection_id": 2, "status": "rejected"}]},
+            {"corrections": [{"detection_id": 3, "status": "accepted"}]},
+            {"additions": [{"family": "brick", "shape": "brick", "size": "1x2", "color": "unknown", "plain": True, "count": 1}]},
+        ], "same fix/remove/put-back/add payloads as before the UI polish")
 
 
 class FakeSpark:

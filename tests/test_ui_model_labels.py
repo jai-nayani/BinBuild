@@ -70,4 +70,3 @@ class TestModelPresentation(unittest.TestCase):
         css = (Path(__file__).resolve().parent.parent / "app/style.css").read_text()
         self.assertIn("animation: mask-appear 0.3s both", css)
         self.assertIn(".outlines path { animation: none; }", css.split("@media (prefers-reduced-motion: reduce)")[1])
-
