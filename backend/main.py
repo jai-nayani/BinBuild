@@ -760,6 +760,15 @@ def create_app() -> FastAPI:
                 result = wonder_designer.design(client, owned, target, limit, log=lambda *_: None,
                                                 on_attempt=on_attempt)
                 stored = wonder_designer.app_result(result, owned)
+                if "booklet" in stored:
+                    from . import step_writer
+                    update(message="Muse Spark is writing the booklet's step words.")
+                    try:
+                        spark = SparkClient.from_env(timeout=90, retries=0)
+                        stored["booklet"] = step_writer.write_steps(stored["booklet"], target, spark)
+                    except Exception:
+                        stored["booklet"]["notes"].append(step_writer.FALLBACK_NOTE)
+                    stored["title"] = stored["booklet"]["title"]
                 stored["seconds"] = round(time.monotonic() - started, 1)
                 with closing(inventory_db.connect()) as conn:
                     build = inventory_db.create_build(conn, {"wonder": True, "target": target},
