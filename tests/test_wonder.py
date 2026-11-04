@@ -180,7 +180,7 @@ class TestLoop(unittest.TestCase):
     def test_five_failures_name_the_shortfall(self):
         greedy = HOUSE + "2x1 (0,1,0) brick orange\n"
         wonder = Scripted([reply(greedy)] * 5)
-        result = wdr.design(wonder, OWNED, log=lambda *_: None)
+        result = wdr.design(wonder, OWNED, max_attempts=5, log=lambda *_: None)
         self.assertFalse(result.ok)
         self.assertEqual(len(result.attempts), 5)
         self.assertEqual(result.shortfall, {"orange 1x2 brick": 1})

@@ -20,6 +20,7 @@ booklet.html.
 
 import argparse
 import json
+import os
 import re
 import sqlite3
 import time
@@ -32,11 +33,19 @@ from pathlib import Path
 from . import booklet as bk
 from . import wonder_design as wd
 
-MAX_ATTEMPTS = 5
+MAX_ATTEMPTS = 3
 REPO = Path(__file__).resolve().parent.parent
 # What the app offers to design, and what one try costs (two live runs, Oct 29: $0.20-0.29, 88-145 s).
-TARGETS = ("a simple house", "a little car", "an animal", "a robot", "a boat")
+TARGETS = ("a chair", "a table", "a bed", "a boat", "a simple house", "a little car", "an animal", "a robot")
 PER_TRY = {"usd": 0.25, "seconds": 120}
+
+
+def configured_attempts() -> int:
+    """Configured tries, bounded so one request cannot run indefinitely."""
+    try:
+        return min(5, max(1, int(os.environ.get("BINBUILD_WONDER_TRIES", MAX_ATTEMPTS))))
+    except ValueError:
+        return MAX_ATTEMPTS
 
 TOP = {
     "all": "a stud on every cell",
@@ -132,6 +141,7 @@ class Attempt:
 class Result:
     ok: bool
     target: str
+    max_attempts: int = MAX_ATTEMPTS
     attempts: list = field(default_factory=list)
     title: str = ""
     design: str = ""
@@ -148,9 +158,10 @@ class Result:
         return round(sum(a.seconds for a in self.attempts), 1)
 
 
-def design(client, owned, target="a simple house", max_attempts=MAX_ATTEMPTS, log=print) -> Result:
+def design(client, owned, target="a simple house", max_attempts=None, log=print, on_attempt=None) -> Result:
     """Ask, check, feed the errors back, at most max_attempts times."""
-    result = Result(False, target)
+    max_attempts = configured_attempts() if max_attempts is None else min(5, max(1, int(max_attempts)))
+    result = Result(False, target, max_attempts=max_attempts)
     previous, text = None, design_request(target)
     for n in range(1, max_attempts + 1):
         reply = client.respond(text, instructions=instructions(owned) if previous is None else None,
@@ -161,6 +172,8 @@ def design(client, owned, target="a simple house", max_attempts=MAX_ATTEMPTS, lo
         result.attempts.append(Attempt(n, reply.id, title, body, check.errors, check.shortfall,
                                        reply.seconds, reply.usage, usd))
         log(f"attempt {n}: {check.parts} pieces, {len(check.errors)} errors, {reply.seconds} s, ${usd}")
+        if on_attempt:
+            on_attempt(n, len(check.errors), reply.seconds)
         if check.ok:
             result.ok, result.title, result.design, result.check = True, title, body, check
             return result
@@ -222,7 +235,7 @@ def app_result(result, owned) -> dict:
         return {**base, "status": "fit", "title": result.title, "pieces": len(pieces),
                 "parts": parts_list(pieces), "placements": [p.text() for p in pieces], "design": result.design,
                 "message": (f"A new design from your pieces: {len(pieces)} pieces, checked by BinBuild (only pieces "
-                            f"you own, every piece held by studs). Found on try {n} of {MAX_ATTEMPTS}. "
+                            f"you own, every piece held by studs). Found on try {n} of {result.max_attempts}. "
                             "Nobody has built it yet."),
                 "booklet": make_booklet(result.title, pieces, result.target)}
     last = result.attempts[-1] if result.attempts else None
@@ -289,7 +302,7 @@ def main():
     parser = argparse.ArgumentParser(description="Design a new model from the bin with Muse Wonder.")
     parser.add_argument("--target", default="a simple house")
     parser.add_argument("--effort", default="high", choices=["low", "medium", "high", "xhigh", "max"])
-    parser.add_argument("--attempts", type=int, default=MAX_ATTEMPTS)
+    parser.add_argument("--attempts", type=int, default=None, help="tries (default: BINBUILD_WONDER_TRIES, at most 5)")
     parser.add_argument("--replay", type=Path, help="a recorded run to play back instead of calling Wonder")
     parser.add_argument("--record", type=Path, help="also save Wonder's replies here (for --replay)")
     parser.add_argument("--booklet", type=Path, help="just check a design file and make its booklet")

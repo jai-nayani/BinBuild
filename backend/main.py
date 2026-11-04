@@ -35,6 +35,8 @@ import secrets
 import shutil
 import sqlite3
 import threading
+import time
+from collections import Counter
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
@@ -69,6 +71,8 @@ DEFAULT_SEGMENTER = os.environ.get("BINBUILD_SEGMENTER", "stub")
 # backend runs with BINBUILD_WONDER=1. Read on every request.
 WONDER_FLAG = "BINBUILD_WONDER"
 _wonder_busy = threading.Lock()   # one generation at a time
+_wonder_jobs = {}
+_wonder_jobs_lock = threading.Lock()
 # Every POST carries one of these (backend/guard.py; both are no-ops off the public deploy).
 PAID = [Depends(guard.paid)]     # calls a paid API: shared key + per-IP limit
 WRITE = [Depends(guard.write)]   # everything else that writes: per-IP limit
@@ -451,11 +455,14 @@ def create_app() -> FastAPI:
             sam = None
             if use == "sam":
                 try:
-                    sam = SamClient.from_env()
+                    # The phone requests Spark and SAM separately. Bound the
+                    # two network stages of the SAM request so retries cannot
+                    # leave the web request running for several minutes.
+                    sam = SamClient.from_env(timeout=30, retries=0)
                 except SamError as err:
                     raise HTTPException(503, f"SAM 3.1 is not set up: {err}")
             try:
-                spark = SparkClient.from_env()
+                spark = SparkClient.from_env(timeout=70, retries=0)
                 run = {}
                 if batch["status"] != "classified" or force:
                     run = inventory_pipeline.classify_batch(
@@ -694,23 +701,16 @@ def create_app() -> FastAPI:
         with inventory_db.reading() as conn:
             recent = [b for b in inventory_db.recent_builds(conn, 50) if b["request"].get("wonder")][:5]
         return {"enabled": True, "targets": list(wonder_designer.TARGETS), "per_try": wonder_designer.PER_TRY,
-                "max_tries": wonder_designer.MAX_ATTEMPTS, "busy": _wonder_busy.locked(),
+                "max_tries": wonder_designer.configured_attempts(), "busy": _wonder_busy.locked(),
                 "recent": [{"build_id": b["id"], "created_at": b["created_at"], "target": b["request"].get("target"),
                             "title": b["result"].get("title"), "status": b["result"].get("status"),
                             "pieces": b["result"].get("pieces"), "message": b["result"].get("message"),
                             **({"booklet_url": f"/api/builds/{b['id']}/booklet"} if b["has_booklet"] else {})}
                            for b in recent]}
 
-    @app.post("/api/builds/wonder", status_code=201, dependencies=PAID)
+    @app.post("/api/builds/wonder", status_code=202, dependencies=PAID)
     def generate_wonder_design(request: WonderRequest):
-        """Generate a new design from the confirmed inventory with Muse Wonder
-        (only with BINBUILD_WONDER=1). One request, one generation: Wonder
-        proposes, BinBuild's validator checks it against the owned pieces, and
-        the errors go back to Wonder, at most 5 tries (each about 90 s and
-        $0.20). A design that passes comes back with its parts list and a
-        booklet; otherwise a failure naming the shortfall. Stored as a build,
-        with the inventory and the batches it came from. Nothing calls this
-        but a tap on Generate."""
+        """Start one generation and return immediately; the phone polls it."""
         if not wonder_on():
             raise HTTPException(404, f"generating new designs is off (start the backend with {WONDER_FLAG}=1)")
         target = "".join(ch for ch in request.target if ch.isprintable()).strip()
@@ -725,22 +725,85 @@ def create_app() -> FastAPI:
         if not _wonder_busy.acquire(blocking=False):
             raise HTTPException(409, "a new design is already being made; wait for it to finish")
         try:
-            try:
-                client = WonderClient.from_env()
-            except WonderError as err:
-                raise HTTPException(503, f"Muse Wonder is not set up: {err}")
-            try:
-                result = wonder_designer.design(client, owned, target, wonder_designer.MAX_ATTEMPTS,
-                                                log=lambda *_: None)
-            except WonderError as err:
-                raise HTTPException(502, f"Muse Wonder failed: {err}")
-        finally:
+            client = WonderClient.from_env()
+        except WonderError as err:
             _wonder_busy.release()
-        stored = wonder_designer.app_result(result, owned)
-        with closing(inventory_db.connect()) as conn:
-            build = inventory_db.create_build(conn, {"wonder": True, "target": target},
-                                              {**build_plan.snapshot(summary), "batches": batches}, stored)
-        return _build_reply(build)
+            raise HTTPException(503, f"Muse Wonder is not set up: {err}")
+        except BaseException:
+            _wonder_busy.release()
+            raise
+
+        job_id = secrets.token_urlsafe(24)
+        limit = wonder_designer.configured_attempts()
+        with _wonder_jobs_lock:
+            _wonder_jobs[job_id] = {"state": "running", "attempt": 1, "max_attempts": limit,
+                                    "message": f"Try 1 of {limit}: Wonder is designing."}
+
+        def work():
+            started = time.monotonic()
+
+            def update(**values):
+                with _wonder_jobs_lock:
+                    _wonder_jobs[job_id].update(values)
+
+            def on_attempt(n, errors, seconds):
+                if errors and n < limit:
+                    update(attempt=n + 1, message=f"Try {n + 1} of {limit}: the checker found {errors} "
+                           f"problem{'s' if errors != 1 else ''}, Wonder is fixing them.")
+                elif errors:
+                    update(attempt=n, message=f"Try {n} of {limit}: the checker found {errors} "
+                           f"problem{'s' if errors != 1 else ''}.")
+                else:
+                    update(attempt=n, message="The design passed the checker; making its booklet.")
+
+            try:
+                result = wonder_designer.design(client, owned, target, limit, log=lambda *_: None,
+                                                on_attempt=on_attempt)
+                stored = wonder_designer.app_result(result, owned)
+                stored["seconds"] = round(time.monotonic() - started, 1)
+                with closing(inventory_db.connect()) as conn:
+                    build = inventory_db.create_build(conn, {"wonder": True, "target": target},
+                                                      {**build_plan.snapshot(summary), "batches": batches}, stored)
+                update(state="done", message=stored["message"], build=_build_reply(build))
+            except WonderError as err:
+                update(state="failed", message=f"Muse Wonder failed: {err}")
+            except Exception:
+                update(state="failed", message="The design job failed. Please try again.")
+            finally:
+                _wonder_busy.release()
+
+        try:
+            threading.Thread(target=work, daemon=True).start()
+        except Exception:
+            with _wonder_jobs_lock:
+                _wonder_jobs.pop(job_id, None)
+            _wonder_busy.release()
+            raise
+        return {"job_id": job_id}
+
+    @app.get("/api/builds/wonder/jobs/{job_id}")
+    def wonder_job(job_id: str):
+        with _wonder_jobs_lock:
+            job = _wonder_jobs.get(job_id)
+            if job is None:
+                raise HTTPException(404, "this design job was lost (the server restarted); try again")
+            return dict(job)
+
+    @app.get("/api/wonder/example", response_class=HTMLResponse)
+    def wonder_example():
+        """An openly viewable, clearly labelled recorded design."""
+        from . import wonder_design as wd, wonder_designer
+        source = (Path(__file__).resolve().parent / "designs" / "wonder-simple-house.txt").read_text()
+        pieces, errors = wd.parse(source)
+        check = wd.validate(source, Counter(p.key for p in pieces))
+        if errors or not check.ok:
+            raise HTTPException(500, "the recorded example could not be checked")
+        book = wonder_designer.make_booklet("Simple House", check.pieces, "a simple house")
+        book["source"] = "Recorded Muse Wonder example, not made from your bin"
+        book["notes"] = ["Recorded Muse Wonder design from the Oct 29 run; passed BinBuild's checker "
+                         "on try 1 (88 s, $0.20).",
+                         "This example was not made from your bin. Nobody has built it yet."]
+        return HTMLResponse(booklet.render_html(book))
 
     @app.get("/api/manual")
     def get_manual():

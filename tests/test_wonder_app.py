@@ -17,6 +17,7 @@ Standard-library unittest. Run from the repo root:
 import json
 import os
 import tempfile
+import time
 import unittest
 from contextlib import closing
 from pathlib import Path
@@ -67,7 +68,20 @@ class TestWonderInTheApp(unittest.TestCase):
         return self.wonder
 
     def generate(self, target="a simple house"):
-        return self.api.call("POST", "/api/builds/wonder", json_body={"target": target})
+        status, body = self.api.call("POST", "/api/builds/wonder", json_body={"target": target})
+        if status != 202:
+            return status, body
+        self.assertTrue(body.get("job_id"))
+        deadline = time.monotonic() + 15
+        while time.monotonic() < deadline:
+            poll_status, job = self.api.call("GET", "/api/builds/wonder/jobs/" + body["job_id"])
+            self.assertEqual(poll_status, 200)
+            if job["state"] == "done":
+                return status, job["build"]
+            if job["state"] == "failed":
+                return status, job
+            time.sleep(0.02)
+        self.fail("the design job did not finish")
 
     def test_flag_off_is_exactly_as_before(self):
         status, body = self.api.call("GET", "/api/builds/options")
@@ -87,7 +101,7 @@ class TestWonderInTheApp(unittest.TestCase):
         self.assertEqual(body["options"][0]["piece_status"], "verified")
         self.assertIn("house-and-tree", [o["id"] for o in body["options"] if o.get("piece_status") == "verified"])
         w = body["wonder"]
-        self.assertEqual((w["enabled"], w["max_tries"], w["busy"], w["recent"]), (True, 5, False, []))
+        self.assertEqual((w["enabled"], w["max_tries"], w["busy"], w["recent"]), (True, 3, False, []))
         self.assertIn("a simple house", w["targets"])
         self.assertEqual(self.calls, 0)
 
@@ -95,7 +109,7 @@ class TestWonderInTheApp(unittest.TestCase):
         self.wonder = wonder_designer.ReplayWonder(json.loads(RECORDED.read_text()))
         with mock.patch.dict(os.environ, FLAG_ON):
             status, build = self.generate()
-            self.assertEqual(status, 201, build)
+            self.assertEqual(status, 202, build)
             self.assertEqual((build["kind"], build["status"], build["title"]), ("wonder", "fit", "Simple House"))
             self.assertEqual((build["pieces"], sum(p["qty"] for p in build["parts"]), len(build["placements"])),
                              (20, 20, 20))
@@ -119,17 +133,17 @@ class TestWonderInTheApp(unittest.TestCase):
         self.wonder = Scripted([reply(broken), reply(HOUSE, "Little house")])
         with mock.patch.dict(os.environ, FLAG_ON):
             status, build = self.generate()
-        self.assertEqual((status, build["status"], len(build["tries"])), (201, "fit", 2))
+        self.assertEqual((status, build["status"], len(build["tries"])), (202, "fit", 2))
         self.assertEqual([t["errors"] for t in build["tries"]], [2, 0])  # two separate floating pieces, then none
-        self.assertIn("Found on try 2 of 5", build["message"])
+        self.assertIn("Found on try 2 of 3", build["message"])
         self.assertIn("booklet_url", build)
 
     def test_five_failures_name_the_shortfall_and_show_no_design(self):
         greedy = HOUSE + "2x1 (0,1,0) brick orange\n"
         self.wonder = Scripted([reply(greedy)] * 5)
-        with mock.patch.dict(os.environ, FLAG_ON):
+        with mock.patch.dict(os.environ, {**FLAG_ON, "BINBUILD_WONDER_TRIES": "5"}):
             status, build = self.generate()
-            self.assertEqual((status, build["status"]), (201, "short"))
+            self.assertEqual((status, build["status"]), (202, "short"))
             self.assertEqual(build["shortfall"], {"orange 1x2 brick": 1})
             self.assertEqual(build["message"], "No design fits your pieces after 5 tries. Short of 1× orange 1x2 brick.")
             for key in ("booklet_url", "parts", "placements", "design", "pieces"):
@@ -140,9 +154,9 @@ class TestWonderInTheApp(unittest.TestCase):
     def test_failures_without_a_shortfall(self):
         floating = HOUSE + "1x1 (9,9,0) round_tile white\n1x1 (9,9,5) round_plate lime\n"
         self.wonder = Scripted([reply(floating)] * 5)
-        with mock.patch.dict(os.environ, FLAG_ON):
+        with mock.patch.dict(os.environ, {**FLAG_ON, "BINBUILD_WONDER_TRIES": "5"}):
             status, build = self.generate("a robot")
-        self.assertEqual((status, build["status"]), (201, "failed"))
+        self.assertEqual((status, build["status"]), (202, "failed"))
         self.assertIn("No design passed BinBuild's check in 5 tries", build["message"])
         self.assertTrue(any("not held" in p for p in build["problems"]))
 
@@ -172,8 +186,9 @@ class TestWonderInTheApp(unittest.TestCase):
         self.wonder = Broken()
         with mock.patch.dict(os.environ, FLAG_ON):
             status, body = self.generate()
-        self.assertEqual(status, 502)
-        self.assertIn("Muse Wonder failed", body["detail"])
+        self.assertEqual(status, 202)
+        self.assertEqual(body["state"], "failed")
+        self.assertIn("Muse Wonder failed", body["message"])
         self.assertFalse(main._wonder_busy.locked())
 
 

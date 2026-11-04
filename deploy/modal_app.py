@@ -18,7 +18,8 @@ Deploy from the repo root:
                        that spend credits, backend/guard.py)
   The app refuses to start without BINBUILD_ACCESS_KEY, so the paid routes
   can't come up open.
-- "Generate a new design" (BINBUILD_WONDER) stays off.
+- "Generate a new design" runs as a polled background job, with up to three
+  Wonder attempts. Paid routes still require the shared key.
 """
 
 from pathlib import Path
@@ -36,6 +37,8 @@ image = (
         "BINBUILD_DB": "/tmp/binbuild/binbuild.db",     # container-local: fresh at every start
         "BINBUILD_DATA_DIR": "/tmp/binbuild/data",
         "BINBUILD_APP_DIR": f"{REMOTE}/app",
+        "BINBUILD_WONDER": "1",
+        "BINBUILD_WONDER_TRIES": "3",
     })
     .add_local_dir(REPO / "backend", f"{REMOTE}/backend", ignore=SKIP)
     .add_local_dir(REPO / "app", f"{REMOTE}/app", ignore=SKIP)
@@ -59,7 +62,5 @@ def web():
     if not os.environ.get("BINBUILD_ACCESS_KEY", "").strip():
         raise RuntimeError("BINBUILD_ACCESS_KEY is not set (Modal secret binbuild-access): "
                            "refusing to start with the paid routes open")
-    os.environ.pop("BINBUILD_WONDER", None)
-
     from backend.main import app as api
     return api
