@@ -9,17 +9,21 @@
 
 ## How it works
 
-1. **Snap a handful** — lay pieces on the table, take a photo with your phone.
-2. **Review and confirm** — the app names every piece it finds; you correct or
-   rescan, then confirm the batch into the running inventory.
-3. **Repeat until "Finished"** — sweep pieces aside, snap the next handful.
-4. **Ask for a build** — the app invents a brand-new model designed using only
-   the pieces in your bin, and hands you a step-by-step booklet.
+1. **Snap a handful** — lay pieces in one flat layer and take a top photo and
+   four side photos. A quality gate checks each view.
+2. **Review and confirm** — Muse Spark proposes pieces and centre points;
+   SAM 3.1 cuts out masks and Spark checks the close-ups. You correct or
+   rescan the proposals, then confirm the batch into the running inventory.
+3. **Repeat until "Finished"** — sweep pieces aside and scan the next handful.
+4. **Ask for a build** — Muse Wonder proposes a new model using supported,
+   confirmed pieces. The validator checks the placements against the inventory;
+   Spark can write the words for a step-by-step booklet. The kit's booklets
+   remain available too.
 
-Only 8 brick types feed generation (BrickGPT's library): 1×1, 1×2, 1×4, 1×6,
-1×8, 2×2, 2×4, 2×6. Every other piece still gets an inventory record under a
-broad family (plate, slope, wheel, …) or "unknown" — never forced into the
-nearest brick category.
+BrickGPT's separate, pre-generated designs use eight plain brick types: 1×1,
+1×2, 1×4, 1×6, 1×8, 2×2, 2×4, and 2×6. Wonder supports additional known
+part shapes; unknown and unsupported pieces remain in the inventory but cannot
+be used as exact placements until they can be identified and represented.
 
 Related work: BrickWright (Pun et al., 2026) generates LEGO builds with LLM agents in a plan-execute-validate loop — the same paradigm as our Wonder designer + validator; we add the inventory constraint (builds limited to exactly the pieces you own). [arXiv:2610.31651](https://arxiv.org/abs/2610.31651)
 
@@ -32,14 +36,15 @@ backend/        FastAPI backend (inventory + generation API)
   inventory_vocab.py     Generator types, families, colour names
   segmenter.py           Segmenter interface: whole-photo stub, SAM 3.1 (one region per piece)
   sam_client.py          SAM 3.1 via the Meta Model API (key from .env, never logged)
-  wonder_design.py       Designs with every kind of owned piece: format, LDraw geometry, validator
+  wonder_design.py       Supported piece geometry, design format, and validator
   wonder_client.py       Muse Wonder via the Meta Model API (key from .env, never logged)
-  wonder_designer.py     Wonder designs from the bin, validated, retried, booklet (parallel track)
+  wonder_designer.py     Wonder designs from confirmed pieces, validated and retried
   designs/               Validated Wonder designs (not yet hand-built)
   spark_client.py        Muse Spark via Baseten (key from .env, never logged)
+  step_writer.py         Spark words for checked booklet steps, with safe fallback
   inventory_pipeline.py  Classify a batch: segment, ask Spark, store proposals
   photo_gate.py          Per-photo checks before any Spark call (blur, light, pieces, fakes)
-  sample_bin.py          "Use sample images": the kit batch's 5 photos and verified pieces, pre-computed
+  sample_bin.py          Sample photos, verified pieces, and recorded SAM outlines; no model call
   sample/                Those 5 small photos (side views cropped to the tabletop) + kit.json
   build_plan.py          The build step: known sets, BrickGPT designs through Path A
   brickgpt_constraint.py Path A: generate (pre-generated designs) -> filter -> patch
@@ -64,8 +69,7 @@ app/            Phone client (PWA, no build step)
                 capture hub: a 3-column grid of 6 panels (tip out one flat layer + the
                 5 photos) → review → Next: identify → check the pieces → Finished
   style.css     The look; plain CSS motion, nothing moves with reduced motion
-  app.js        5-photo batches, upload, retake pop-up, Identify, Check the pieces,
-                What can I build? (BACKEND_URL at the top)
+  app.js        5-photo batches, two-pass Identify, review, and background design jobs
   manifest.json PWA manifest (standalone; PNG icons for home screens)
   sw.js         Service worker (offline app shell)
   icon.svg, icon-192.png, icon-512.png, icon-maskable-512.png,
@@ -113,59 +117,37 @@ saved under `data/batches/` (git-ignored). Step-by-step phone test:
 
 ## Status
 
-The capture loop and the inventory loop work end to end on a real batch:
-upload, classify with Muse Spark (whole-photo stub segmenter until SAM 3.1),
-review, confirm into SQLite, undo, summary. Results and API:
-[INVENTORY-LOOP.md](INVENTORY-LOOP.md). Every photo is checked before any
-Spark call, and a failed photo is retaken on its own:
-[IMAGE-GUARDRAILS.md](IMAGE-GUARDRAILS.md). The build step is wired on: the
-confirmed inventory goes to a known set or, through Path A, to a pre-generated
-BrickGPT design, and a build that fits gets a step-by-step booklet; one that
-doesn't gets a named shortfall. One batch runs through every stage with
-`python -m backend.full_loop`: [FULL-LOOP.md](FULL-LOOP.md). Live BrickGPT
-generation is off. SAM 3.1 (Meta Model API) is wired in behind the same
-segmenter interface: one mask per piece, close-ups checked by Spark, outlines
-in review. It is opt-in (`?segmenter=sam` or `BINBUILD_SEGMENTER=sam`); results
-on the kit batch: [SAM-3-1.md](SAM-3-1.md).
-The build API still lists every build in the manual that came with the kit
-(106; 39 have a verified piece list and a bin check — house-and-tree
-hand-checked, 38 more verified by two independent Muse Wonder reads of the
-page agreeing on every line, 9 in all with a validated step-by-step
-booklet), then BrickGPT designs: [MANUAL-CATALOG.md](MANUAL-CATALOG.md).
-In the app, "What can I build?" is a sideways carousel of just those 9
-booklet builds — each card the booklet's finished-model picture, its name
-and piece count — and tapping a card opens its step-by-step booklet, with
-Back returning to the same card. (The paintbrush has a verified piece list
-but no booklet: the book's brush lies on its side, which the physical
-validator cannot express, so it stays honestly labelled booklet-less. The
-two cakes' pictures show pieces their agreed lists don't have, so those
-lists went back to the hand-check queue.) The drawings use the parts' real
-shapes, at the angle the book shows each model:
-[BOOKLET-REDESIGN.md](BOOKLET-REDESIGN.md). Nothing is shown there until pieces are
-confirmed (or the sample bin is loaded and confirmed).
-Draft parts lists for the builds that print none were read from the pictures
-by Muse Wonder: [WONDER-TRANSCRIBE.md](WONDER-TRANSCRIBE.md); the second
-reads and auto-generated booklets: [MANUAL-VERIFY.md](MANUAL-VERIFY.md). The
-62 drafts whose reads differ (or whose picture disputes the list) wait in the
-hand-check queue, differing lines first.
-A hand-check records the build's steps too, so a hand-checked build gets a
-booklet like house and tree; the retake pop-up fix from the Oct 31 trial is in
-[TRIAL-FIXES.md](TRIAL-FIXES.md).
-Everything above is integrated into one app on `spike/integration`, with the
-trial-day run sheet: [INTEGRATION.md](INTEGRATION.md).
-Parallel track: Muse Wonder designs new models from every kind of piece in
-the bin (not just BrickGPT's 8 bricks), checked by a validator against the
-owned pieces and LDraw geometry: [WONDER-DESIGNER.md](WONDER-DESIGNER.md).
-With `BINBUILD_WONDER=1` (off by default, and off for the kid trials) "What
-can I build?" gains a third section, "Generate a new design", wired to that
-designer: [WONDER-IN-APP.md](WONDER-IN-APP.md).
-On the phone, **Check the pieces** reviews an identified batch (dots on the
-photo, fix / remove / add, then add to the inventory, with undo); a piece
-Spark flagged unsure also gets **Retake this piece** — one clean close-up of
-just that piece, named again on its own, its row updated where it sits:
-[REVIEW-SCREEN.md](REVIEW-SCREEN.md). Phone test steps: [TESTING.md](TESTING.md).
-No API keys or secrets live in this repo: the Baseten and Meta Model API keys
-are read from the git-ignored `.env` (`BASETEN_API_KEY`, `META_MODEL_API_KEY`).
+The app requests a whole-photo Muse Spark pass, then a SAM 3.1 mask and Spark
+close-up pass, before the user reviews and confirms the proposed inventory.
+A failed SAM pass leaves the whole-photo proposals available for review. The
+sample bin provides the Oct 28 kit batch, verified labels, and recorded SAM
+outlines from Oct 29 without a model call. The original recorded run still
+needed 11 label corrections after the SAM pass. Details and prior recorded
+measurements: [LIVE-LOOP.md](LIVE-LOOP.md), [SAM-3-1.md](SAM-3-1.md).
+
+When Wonder is enabled, "What can I build?" offers new designs from supported
+confirmed pieces. Generation runs as a polled background job; the validator
+checks piece counts and represented connections, and Spark can write the
+booklet's step text. If no design passes, the app reports the failure instead
+of offering a booklet. Generated designs have not yet been hand-built. The
+recorded Wonder example was made from the kit, not the viewer's bin. The
+updated flow still needs a live check by the owner.
+
+The repository's Modal configuration enables Wonder with up to three tries;
+local use can set `BINBUILD_WONDER=1`. Updating this configuration does not
+itself deploy the app. The public deploy requires the access key for paid
+routes. With no key, the recorded example is available without a model call.
+
+The kit's manual catalog and booklets remain available alongside generated
+builds: [MANUAL-CATALOG.md](MANUAL-CATALOG.md). BrickGPT's separate path uses
+pre-generated designs; live BrickGPT generation is off. On the phone, **Check
+the pieces** supports correction, removal, addition, and an individual retake
+for an unsure piece: [REVIEW-SCREEN.md](REVIEW-SCREEN.md). A step-by-step phone
+test is in [TESTING.md](TESTING.md). Earlier spike documents describe the
+behaviour and measurements of their original branches.
+
+No API keys or secrets live in this repo: Baseten and Meta Model API keys are
+read from the environment or the git-ignored `.env`.
 
 Part shapes in the booklet drawings (`backend/ldraw_kit.json.gz`) come from the
 [LDraw](https://www.ldraw.org) parts library, licensed CC BY 4.0.
